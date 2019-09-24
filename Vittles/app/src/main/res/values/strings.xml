@@ -10,7 +10,7 @@
     <string name="add_product_title">Add new Vittles</string>
     <string name="et_product_name">Product name</string>
     <string name="et_expiration_date">Expiration date</string>
-    <string name="expiration_format">%1$s-%2$s-%3$s</string>
+    <string name="expiration_format">%1$s/%2$s/%3$s</string>
     <string name="product_added">Product added!</string>
     <string name="product_failed">Could not add product!</string>
 

@@ -78,7 +78,7 @@ class AddProductActivity : AppCompatActivity() {
 
     /**
      * Initializes the date picker. Including the default date and listeners.
-     * TODO: CONSTRAINT ON SELECTING ELAPSED DATES.
+     *
      */
     private fun initDatePicker() {
         val year = calendar.get(Calendar.YEAR)
@@ -100,6 +100,7 @@ class AddProductActivity : AppCompatActivity() {
                     )
                 }, year, month, day
             )
+            dpd.datePicker.minDate = calendar.time.time
             dpd.show()
         }
     }
