@@ -9,11 +9,19 @@ data class Product(
         val PRODUCT_NAMES = arrayOf(
             "Milk",
             "Yoghurt",
-            "Chicken"
+            "Chicken",
+            "Apple",
+            "Peanut Butter",
+            "Apple",
+            "Peanut Butter"
         )
 
         val PRODUCT_EXPIRATION_DATES = arrayOf(
             "3-10-2019",
+            "10-11-2019",
+            "21-10-2019",
+            "20-10-2019",
+            "20-10-2019",
             "10-11-2019",
             "21-10-2019"
         )
@@ -21,7 +29,11 @@ data class Product(
         val PRODUCTS_DAYS_UNTIL_EXPIRATION = arrayOf(
             2,
             6,
-            17
+            17,
+            -1,
+            3,
+            80,
+            110
         )
     }
 }
