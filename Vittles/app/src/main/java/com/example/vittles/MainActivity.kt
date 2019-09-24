@@ -13,8 +13,8 @@ import kotlinx.android.synthetic.main.content_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    var products = arrayListOf<Product>()
-    val productAdapter = ProductAdapter(products)
+    private var products = arrayListOf<Product>()
+    private val productAdapter = ProductAdapter(products)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
         }
-        print("onCreateMethodCalled")
+
         initViews()
     }
 
@@ -60,6 +60,9 @@ class MainActivity : AppCompatActivity() {
      * Populates the RecyclerView with items
      */
     private fun populateRecyclerView(){
+
+        products.clear()
+
         for(i in Product.PRODUCT_NAMES.indices){
             products.add(Product(Product.PRODUCT_NAMES[i], Product.PRODUCT_EXPIRATION_DATES[i], Product.PRODUCTS_DAYS_UNTIL_EXPIRATION[i]))
         }

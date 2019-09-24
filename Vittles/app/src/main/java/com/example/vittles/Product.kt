@@ -4,7 +4,7 @@ data class Product(
     val name: String,
     val expirationDate: String,
     val daysUntilExpiration: Int
-) {
+) { //TODO: Delete dummy data if we have real data
     companion object {
         val PRODUCT_NAMES = arrayOf(
             "Milk",

@@ -60,7 +60,7 @@ class ProductAdapter(private val products: List<Product>) :
         /**
          * Sets the values of the itemView to the product values
          *
-         * @param product
+         * @param product The product that is bound to the itemView
          */
         fun bind(product: Product) {
             itemView.tvName.text = product.name
