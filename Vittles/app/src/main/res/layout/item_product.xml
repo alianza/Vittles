@@ -9,29 +9,53 @@
         android:id="@+id/tvName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="20dp"
-        android:text="textView"
-        android:textSize="20dp"
+        android:layout_marginStart="24dp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:text="textView"
+        app:layout_constraintStart_toEndOf="@+id/ivColor"
+        app:layout_constraintTop_toTopOf="@+id/ivColor" />
 
     <TextView
         android:id="@+id/tvDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
-        app:layout_constraintStart_toStartOf="@+id/tvName"
-        app:layout_constraintTop_toBottomOf="@+id/tvName" />
+        android:layout_marginBottom="1dp"
+        android:text="textView"
+        app:layout_constraintBottom_toBottomOf="@+id/ivColor"
+        app:layout_constraintStart_toStartOf="@+id/tvName" />
 
     <View
-        android:layout_width="match_parent"
+        android:id="@+id/view"
+        android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
         android:background="@android:color/darker_gray"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tvDate"
         app:layout_constraintTop_toBottomOf="@id/tvDate" />
+
+    <ImageView
+        android:id="@+id/ivColor"
+        android:layout_width="46dp"
+        android:layout_height="46dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:tint="@color/red"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_circle" />
+
+    <TextView
+        android:id="@+id/tvDaysLeft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="17"
+        android:textSize="24sp"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="@+id/ivColor"
+        app:layout_constraintEnd_toEndOf="@+id/ivColor"
+        app:layout_constraintStart_toStartOf="@+id/ivColor"
+        app:layout_constraintTop_toTopOf="@+id/ivColor" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

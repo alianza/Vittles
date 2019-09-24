@@ -19,8 +19,8 @@ data class Product(
         )
 
         val PRODUCTS_DAYS_UNTIL_EXPIRATION = arrayOf(
-            10,
-            39,
+            2,
+            6,
             17
         )
     }
