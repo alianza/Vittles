@@ -5,10 +5,16 @@ import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.content_main.*
 
 class MainActivity : AppCompatActivity() {
+
+    var products = arrayListOf<Product>()
+    val productAdapter = ProductAdapter(products)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,6 +25,8 @@ class MainActivity : AppCompatActivity() {
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
         }
+        print("onCreateMethodCalled")
+        initViews()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -35,5 +43,26 @@ class MainActivity : AppCompatActivity() {
             R.id.action_settings -> true
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    /**
+     * Initializes the RecyclerView
+     */
+    private fun initViews(){
+        rvProducts.layoutManager =
+            LinearLayoutManager(this@MainActivity, RecyclerView.VERTICAL, false)
+        rvProducts.adapter = productAdapter
+
+        populateRecyclerView()
+    }
+
+    /**
+     * Populates the RecyclerView with items
+     */
+    private fun populateRecyclerView(){
+        for(i in Product.PRODUCT_NAMES.indices){
+            products.add(Product(Product.PRODUCT_NAMES[i], Product.PRODUCT_EXPIRATION_DATES[i], Product.PRODUCTS_DAYS_UNTIL_EXPIRATION[i]))
+        }
+        productAdapter.notifyDataSetChanged()
     }
 }
