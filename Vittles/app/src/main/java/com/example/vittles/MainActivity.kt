@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import androidx.room.Room
+import com.crashlytics.android.Crashlytics
 
 import kotlinx.android.synthetic.main.activity_main.*
 
