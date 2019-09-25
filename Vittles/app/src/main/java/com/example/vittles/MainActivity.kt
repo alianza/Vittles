@@ -14,12 +14,24 @@ import com.example.vittles.model.Product
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 
+/**
+ * Activity class for the main activity. This is the activity that shows the list of products
+ *
+ * @author Arjen Simons
+ * @author Jeroen Flietstra
+ * @author Jan-Willem van Bremen
+ */
 class MainActivity : AppCompatActivity() {
 
-    private var products = mutableListOf<com.example.vittles.model.Product>()
+    private var products = mutableListOf<Product>()
     private val productAdapter = ProductAdapter(products)
     private val appDatabase = AppDatabase
 
+    /**
+     * Called when the MainActivity is created
+     *
+     * @param savedInstanceState
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -28,17 +40,33 @@ class MainActivity : AppCompatActivity() {
         initViews()
     }
 
+    /**
+     * Called when the mainActivity starts.
+     * Re-populates the RecyclerView
+     */
     override fun onStart() {
         super.onStart()
         populateRecyclerView()
     }
 
+    /**
+     * Called when the option menu is created
+     *
+     * @param menu
+     * @return true
+     */
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_main, menu)
         return true
     }
 
+    /**
+     * Handles action bar item clicks
+     *
+     * @param item
+     * @return
+     */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
@@ -49,6 +77,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Called when the add button is clicked
+     * It starts the addProduct activity
+     */
     private fun onAddButtonClick() {
         val addProductActivityIntent = Intent(
             this,

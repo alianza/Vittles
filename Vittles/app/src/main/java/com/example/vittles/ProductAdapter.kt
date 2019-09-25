@@ -80,26 +80,8 @@ class ProductAdapter(private val products: List<Product>) :
             itemView.tvDaysLeft.text = daysLeft.toString()
 
             //Set the colors
-            itemView.ivColor.setColorFilter(ContextCompat.getColor(context, getColor(daysLeft)), PorterDuff.Mode.MULTIPLY) //Circle
-            itemView.tvDaysLeft.setTextColor(ContextCompat.getColor(context, getColor(daysLeft))) //DaysLeft number
-        }
-
-        /**
-         * Gets the color which displays how close the product is to the expiration date
-         *
-         * @param daysLeft The amount of days left until expiring
-         * @return The color as an integer
-         */
-        private fun getColor(daysLeft: Int): Int {
-            if (daysLeft < 3) {
-                return R.color.red
-            }
-
-            if (daysLeft < 7) {
-                return R.color.yellow
-            }
-
-            return R.color.green
+            itemView.ivColor.setColorFilter(ContextCompat.getColor(context, product.indicationColor), PorterDuff.Mode.MULTIPLY) //Circle
+            itemView.tvDaysLeft.setTextColor(ContextCompat.getColor(context, product.indicationColor)) //DaysLeft number
         }
     }
 }
