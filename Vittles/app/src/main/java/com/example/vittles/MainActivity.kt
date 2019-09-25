@@ -23,10 +23,10 @@ import kotlinx.android.synthetic.main.content_main.*
  * @author Jan-Willem van Bremen
  */
 class MainActivity : AppCompatActivity() {
+    private lateinit var productDao: ProductDao
 
     private var products = mutableListOf<Product>()
     private val productAdapter = ProductAdapter(products)
-    private val productDao: ProductDao = AppDatabase.getDatabase(this@MainActivity).productDao()
 
     /**
      * Called when the MainActivity is created.
@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-        
+        productDao = AppDatabase.getDatabase(applicationContext).productDao()
         initViews()
     }
 

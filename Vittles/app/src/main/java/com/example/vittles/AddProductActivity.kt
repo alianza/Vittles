@@ -23,8 +23,9 @@ import java.util.*
  */
 @Suppress("DEPRECATION")
 class AddProductActivity : AppCompatActivity() {
+    private lateinit var productDao: ProductDao
+
     private val calendar = Calendar.getInstance()
-    private var productDao: ProductDao? = null
     private var expirationDate = Date()
 
     companion object{
@@ -120,8 +121,8 @@ class AddProductActivity : AppCompatActivity() {
                 this.expirationDate,
                 calendar.time
             )
-            val status = productDao?.insert(product)
-            if (status!! < 0) {
+            val status = productDao.insert(product)
+            if (status < 0) {
                 Snackbar.make(layout, getString(R.string.product_failed), Snackbar.LENGTH_LONG)
                     .show()
             } else {
