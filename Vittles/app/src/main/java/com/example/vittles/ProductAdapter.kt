@@ -1,23 +1,25 @@
 package com.example.vittles
 
 import android.content.Context
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.graphics.PorterDuff
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.example.vittles.model.Product
 import kotlinx.android.synthetic.main.item_product.view.*
 
 /**
  * Binds app-specific data to views that are displayed in the RecyclerView
  *
  * @author Arjen Simons
+ *
  * @property products The list of products that should be displayed in the RecyclerView
+ * @suppress DEPRECATION Suppress deprecation on 'Date' since the project is running on API 21.
  */
-class ProductAdapter(private val products: List<com.example.vittles.model.Product>) :
+@Suppress("DEPRECATION")
+class ProductAdapter(private val products: List<Product>) :
     RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
 
     lateinit var context: Context
@@ -67,11 +69,14 @@ class ProductAdapter(private val products: List<com.example.vittles.model.Produc
          *
          * @param product The product that is bound to the itemView
          */
-        fun bind(product: com.example.vittles.model.Product) {
+        fun bind(product: Product) {
             val daysLeft = product.daysRemaining
 
             itemView.tvName.text = product.productName
-            itemView.tvDate.text = product.expirationDate.toString()
+            itemView.tvDate.text = context.resources.getString(R.string.expiration_format,
+                product.expirationDate?.date.toString(),
+                product.expirationDate?.month?.plus(AddProductActivity.MONTHS_OFFSET).toString(),
+                product.expirationDate?.year?.plus(AddProductActivity.YEARS_OFFSET).toString())
             itemView.tvDaysLeft.text = daysLeft.toString()
 
             //Set the colors

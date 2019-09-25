@@ -12,12 +12,6 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_add_product.*
 import java.util.*
 
-/*
-These offsets are used to counter the default values from the Date object.
- */
-const val YEARS_OFFSET = 1900
-const val MONTHS_OFFSET = 1
-
 /**
  * Activity class for the Add Product component. This components makes it possible to
  * create a product manually and insert it into the local database.
@@ -32,6 +26,14 @@ class AddProductActivity : AppCompatActivity() {
     private val calendar = Calendar.getInstance()
     private var productDao: ProductDao? = null
     private var expirationDate = Date()
+
+    companion object{
+        /*
+        These offsets are used to counter the default values from the Date object.
+        */
+        const val YEARS_OFFSET = 1900
+        const val MONTHS_OFFSET = 1
+    }
 
     /**
      * {@inheritDoc}

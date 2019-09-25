@@ -20,7 +20,7 @@ interface ProductDao {
      *
      * @return list of products as a result from the query.
      */
-    @Query("SELECT * FROM product")
+    @Query("SELECT * FROM product ORDER BY expiration_date")
     fun getAll(): List<Product>
 
     /**
