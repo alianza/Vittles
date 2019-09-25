@@ -11,11 +11,11 @@ import com.example.vittles.model.Product
 import kotlinx.android.synthetic.main.item_product.view.*
 
 /**
- * Binds app-specific data to views that are displayed in the RecyclerView
+ * Binds app-specific data to views that are displayed in the RecyclerView.
  *
  * @author Arjen Simons
  *
- * @property products The list of products that should be displayed in the RecyclerView
+ * @property products The list of products that should be displayed in the RecyclerView.
  * @suppress DEPRECATION Suppress deprecation on 'Date' since the project is running on API 21.
  */
 @Suppress("DEPRECATION")
@@ -39,9 +39,9 @@ class ProductAdapter(private val products: List<Product>) :
     }
 
     /**
-     * Gets the amount of items in the ListView
+     * Gets the amount of items in the ListView.
      *
-     * @return The amount of items
+     * @return The amount of items.
      */
     override fun getItemCount(): Int {
         return products.size
@@ -50,24 +50,24 @@ class ProductAdapter(private val products: List<Product>) :
     /**
      * Updates the contents of the itemView to reflect the item at the given position.
      *
-     * @param The ViewHolder that should be updated
-     * @param position The position of the item to be updated
+     * @param The ViewHolder that should be updated.
+     * @param position The position of the item to be updated.
      */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(products[position])
     }
 
     /**
-     * Represents an element in the RecyclerView
+     * Represents an element in the RecyclerView.
      *
-     * @param itemView The xml file that represents an item
+     * @param itemView The xml file that represents an item.
      */
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         /**
-         * Sets the values of the itemView to the product values
+         * Sets the values of the itemView to the product values.
          *
-         * @param product The product that is bound to the itemView
+         * @param product The product that is bound to the itemView.
          */
         fun bind(product: Product) {
             val daysLeft = product.daysRemaining

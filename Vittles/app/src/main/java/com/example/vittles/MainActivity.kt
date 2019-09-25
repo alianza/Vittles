@@ -9,13 +9,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
 import com.example.vittles.data.AppDatabase
+import com.example.vittles.data.ProductDao
 import com.example.vittles.model.Product
 
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 
 /**
- * Activity class for the main activity. This is the activity that shows the list of products
+ * Activity class for the main activity. This is the activity that shows the list of products.
  *
  * @author Arjen Simons
  * @author Jeroen Flietstra
@@ -25,12 +26,11 @@ class MainActivity : AppCompatActivity() {
 
     private var products = mutableListOf<Product>()
     private val productAdapter = ProductAdapter(products)
-    private val appDatabase = AppDatabase
+    private val productDao: ProductDao = AppDatabase.getDatabase(this@MainActivity).productDao()
 
     /**
-     * Called when the MainActivity is created
+     * Called when the MainActivity is created.
      *
-     * @param savedInstanceState
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
 
     /**
      * Called when the mainActivity starts.
-     * Re-populates the RecyclerView
+     * Re-populates the RecyclerView.
      */
     override fun onStart() {
         super.onStart()
@@ -50,10 +50,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Called when the option menu is created
-     *
-     * @param menu
-     * @return true
+     * Called when the option menu is created.
+     *.
      */
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -62,10 +60,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Handles action bar item clicks
+     * Handles action bar item clicks.
      *
-     * @param item
-     * @return
      */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle action bar item clicks here. The action bar will
@@ -78,8 +74,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Called when the add button is clicked
-     * It starts the addProduct activity
+     * Called when the add button is clicked.
+     * It starts the addProduct activity.
      */
     private fun onAddButtonClick() {
         val addProductActivityIntent = Intent(
@@ -90,7 +86,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Initializes the RecyclerView
+     * Initializes the RecyclerView.
      */
     private fun initViews(){
         
@@ -104,13 +100,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Populates the RecyclerView with items from the local DataBase
+     * Populates the RecyclerView with items from the local DataBase.
      */
     private fun populateRecyclerView(){
 
         products.clear()
 
-        for (i in appDatabase.getDatabase(this@MainActivity).productDao().getAll()) {
+        for (i in productDao.getAll()) {
             products.add(i)
         }
 
