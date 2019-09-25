@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.item_product.view.*
  * @author Arjen Simons
  * @property products The list of products that should be displayed in the RecyclerView
  */
-class ProductAdapter(private val products: List<Product>) :
+class ProductAdapter(private val products: List<com.example.vittles.model.Product>) :
     RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
 
     lateinit var context: Context
@@ -67,11 +67,11 @@ class ProductAdapter(private val products: List<Product>) :
          *
          * @param product The product that is bound to the itemView
          */
-        fun bind(product: Product) {
-            val daysLeft = product.daysUntilExpiration
+        fun bind(product: com.example.vittles.model.Product) {
+            val daysLeft = product.daysRemaining
 
-            itemView.tvName.text = product.name
-            itemView.tvDate.text = product.expirationDate
+            itemView.tvName.text = product.productName
+            itemView.tvDate.text = product.expirationDate.toString()
             itemView.tvDaysLeft.text = daysLeft.toString()
 
             //Set the colors

@@ -8,14 +8,17 @@ import android.view.MenuItem
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
+import com.example.vittles.data.AppDatabase
+import com.example.vittles.model.Product
 
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    private var products = arrayListOf<Product>()
+    private var products = mutableListOf<com.example.vittles.model.Product>()
     private val productAdapter = ProductAdapter(products)
+    private val appDatabase = AppDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,7 +26,12 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         
         initViews()
-        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        populateRecyclerView()
+    }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -64,15 +72,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Populates the RecyclerView with items
+     * Populates the RecyclerView with items from the local DataBase
      */
     private fun populateRecyclerView(){
 
         products.clear()
 
-        for(i in Product.PRODUCT_NAMES.indices){
-            products.add(Product(Product.PRODUCT_NAMES[i], Product.PRODUCT_EXPIRATION_DATES[i], Product.PRODUCTS_DAYS_UNTIL_EXPIRATION[i]))
+        for (i in appDatabase.getDatabase(this@MainActivity).productDao().getAll()) {
+            products.add(i)
         }
+
         productAdapter.notifyDataSetChanged()
     }
 }
