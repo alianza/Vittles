@@ -1,12 +1,13 @@
 package com.example.vittles
 
+import android.content.Intent
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.room.Room
 
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
@@ -20,14 +21,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }
-
+        
         initViews()
-    }
+        }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -45,10 +41,21 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun onAddButtonClick() {
+        val addProductActivityIntent = Intent(
+            this,
+            AddProductActivity::class.java
+        )
+        startActivity(addProductActivityIntent)
+    }
+
     /**
      * Initializes the RecyclerView
      */
     private fun initViews(){
+        
+        fab.setOnClickListener { onAddButtonClick() }
+
         rvProducts.layoutManager =
             LinearLayoutManager(this@MainActivity, RecyclerView.VERTICAL, false)
         rvProducts.adapter = productAdapter
