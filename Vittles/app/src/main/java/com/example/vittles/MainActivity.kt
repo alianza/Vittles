@@ -1,12 +1,10 @@
 package com.example.vittles
 
+import android.content.Intent
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
-import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
-import com.crashlytics.android.Crashlytics
-
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -15,11 +13,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
+        initViews()
+    }
 
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }
+    private fun initViews() {
+        fab.setOnClickListener { onAddButtonClick() }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -36,5 +35,13 @@ class MainActivity : AppCompatActivity() {
             R.id.action_settings -> true
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun onAddButtonClick() {
+        val addProductActivityIntent = Intent(
+            this,
+            AddProductActivity::class.java
+        )
+        startActivity(addProductActivityIntent)
     }
 }
