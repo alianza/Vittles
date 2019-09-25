@@ -14,6 +14,7 @@ import kotlinx.android.synthetic.main.item_product.view.*
 /**
  * Binds app-specific data to views that are displayed in the RecyclerView
  *
+ * @author Arjen Simons
  * @property products The list of products that should be displayed in the RecyclerView
  */
 class ProductAdapter(private val products: List<Product>) :
@@ -85,11 +86,13 @@ class ProductAdapter(private val products: List<Product>) :
          * @return The color as an integer
          */
         private fun getColor(daysLeft: Int): Int {
-            if(daysLeft < 3)
+            if (daysLeft < 3) {
                 return R.color.red
+            }
 
-            if(daysLeft < 7)
+            if (daysLeft < 7) {
                 return R.color.yellow
+            }
 
             return R.color.green
         }
