@@ -29,8 +29,9 @@ android {
     }
 
     dokka {
+        includeNonPublic = true
         outputFormat = 'html'
-        outputDirectory = "$buildDir/javadoc"
+        outputDirectory = "E:\\Video's\\Software Engineering\\Mobile Development\\M2mobi\\VittlesDocumentation"
     }
 }
 
