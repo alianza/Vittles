@@ -29,6 +29,8 @@ class MainActivity : AppCompatActivity() {
     private var products = mutableListOf<Product>()
     private val productAdapter = ProductAdapter(products)
 
+    private val testchange = "hhhh"
+
     /**
      * Called when the MainActivity is created.
      *
