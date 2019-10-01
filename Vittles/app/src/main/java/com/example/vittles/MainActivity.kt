@@ -1,26 +1,19 @@
 package com.example.vittles
 
+
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import com.crashlytics.android.Crashlytics;
-import io.fabric.sdk.android.Fabric;
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.room.Room
+import com.crashlytics.android.Crashlytics
 import com.example.vittles.data.AppDatabase
 import com.example.vittles.data.ProductDao
 import com.example.vittles.model.Product
-
+import io.fabric.sdk.android.Fabric
 import kotlinx.android.synthetic.main.activity_main.*
-import androidx.core.app.ComponentActivity
-import androidx.core.app.ComponentActivity.ExtraData
-import androidx.core.content.ContextCompat.getSystemService
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-
-
 import kotlinx.android.synthetic.main.content_main.*
 
 /**
