@@ -18,10 +18,8 @@ import java.util.*
  *
  * @author Jeroen Flietstra
  * @author Jan-Willem van Bremen
- *
- * @suppress DEPRECATION Suppress deprecation on 'Date' since the project is running on API 21.
  */
-@Suppress("DEPRECATION")
+@Suppress("DEPRECATION") // Suppress deprecation on 'Date' since the project is running on API 21.
 class AddProductActivity : AppCompatActivity() {
     private lateinit var productDao: ProductDao
 
@@ -29,9 +27,10 @@ class AddProductActivity : AppCompatActivity() {
     private var expirationDate = Date()
 
     companion object{
-        /*
-        These offsets are used to counter the default values from the Date object.
-        */
+        /**
+         * These offsets are used to counter the default values from the Date object.
+         *
+         */
         const val YEARS_OFFSET = 1900
         const val MONTHS_OFFSET = 1
     }
