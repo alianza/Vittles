@@ -11,6 +11,7 @@ import com.example.data.AppDatabase
 import com.example.data.ProductDao
 import com.example.data.Product
 import com.example.vittles.R
+import com.example.vittles.di.AppComponent
 import com.example.vittles.productadd.AddProductActivity
 
 import kotlinx.android.synthetic.main.activity_main.*

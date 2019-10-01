@@ -6,6 +6,11 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
+fun createProductDao(context: Context): ProductDao {
+    return Room.databaseBuilder(context, AppDatabase::class.java, "notesdb")
+        .build().productDao()
+}
+
 /**
  * Room database singleton implementation. Used for CRUD in the database. Use the
  * getDatabase method to retrieve the singleton instance to select the needed dao.
