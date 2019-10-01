@@ -1,5 +1,6 @@
 package com.example.vittles
 
+
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -7,11 +8,11 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.room.Room
+import com.crashlytics.android.Crashlytics
 import com.example.vittles.data.AppDatabase
 import com.example.vittles.data.ProductDao
 import com.example.vittles.model.Product
-
+import io.fabric.sdk.android.Fabric
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 
@@ -34,6 +35,7 @@ class MainActivity : AppCompatActivity() {
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Fabric.with(this, Crashlytics())
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
         productDao = AppDatabase.getDatabase(applicationContext).productDao()
@@ -89,7 +91,7 @@ class MainActivity : AppCompatActivity() {
      * Initializes the RecyclerView.
      */
     private fun initViews(){
-        
+
         fab.setOnClickListener { onAddButtonClick() }
 
         rvProducts.layoutManager =
