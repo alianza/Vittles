@@ -1,4 +1,4 @@
-package com.example.vittles
+package com.example.vittles.productlist
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,13 +7,15 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.room.Room
-import com.example.vittles.data.AppDatabase
-import com.example.vittles.data.ProductDao
-import com.example.vittles.model.Product
+import com.example.data.AppDatabase
+import com.example.data.ProductDao
+import com.example.data.Product
+import com.example.vittles.R
+import com.example.vittles.productadd.AddProductActivity
 
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
+import javax.inject.Inject
 
 /**
  * Activity class for the main activity. This is the activity that shows the list of products.
@@ -23,9 +25,9 @@ import kotlinx.android.synthetic.main.content_main.*
  * @author Jan-Willem van Bremen
  */
 class MainActivity : AppCompatActivity() {
-    private lateinit var productDao: ProductDao
+    @Inject private lateinit var productDao: Prod
 
-    private var products = mutableListOf<Product>()
+    private var products = mutableListOf<com.example.data.Product>()
     private val productAdapter = ProductAdapter(products)
 
     /**
@@ -36,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-        productDao = AppDatabase.getDatabase(applicationContext).productDao()
+        productDao = com.example.data.AppDatabase.getDatabase(applicationContext).productDao()
         initViews()
     }
 

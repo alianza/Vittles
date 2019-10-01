@@ -1,13 +1,14 @@
-package com.example.vittles
+package com.example.vittles.productadd
 
 import android.app.DatePickerDialog
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import com.example.vittles.data.AppDatabase
-import com.example.vittles.data.ProductDao
-import com.example.vittles.model.Product
+import com.example.data.AppDatabase
+import com.example.data.ProductDao
+import com.example.data.Product
+import com.example.vittles.R
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_add_product.*
 import java.util.*
@@ -21,7 +22,7 @@ import java.util.*
  */
 @Suppress("DEPRECATION") // Suppress deprecation on 'Date' since the project is running on API 21.
 class AddProductActivity : AppCompatActivity() {
-    private lateinit var productDao: ProductDao
+    private lateinit var productDao: com.example.data.ProductDao
 
     private val calendar = Calendar.getInstance()
     private var expirationDate = Date()
@@ -43,7 +44,7 @@ class AddProductActivity : AppCompatActivity() {
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        productDao = AppDatabase.getDatabase(applicationContext).productDao()
+        productDao = com.example.data.AppDatabase.getDatabase(applicationContext).productDao()
         setContentView(R.layout.activity_add_product)
         initViews()
     }
@@ -114,7 +115,7 @@ class AddProductActivity : AppCompatActivity() {
      */
     private fun onConfirmButtonClick() {
         if (validate()) {
-            val product = Product(
+            val product = com.example.data.Product(
                 null,
                 etProductName.text.toString(),
                 this.expirationDate,

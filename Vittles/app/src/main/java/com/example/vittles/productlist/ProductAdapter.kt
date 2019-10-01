@@ -1,4 +1,4 @@
-package com.example.vittles
+package com.example.vittles.productlist
 
 import android.content.Context
 import android.graphics.PorterDuff
@@ -7,8 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.example.vittles.model.Product
+import com.example.domain.model.Product
+import com.example.vittles.R
+import com.example.vittles.productadd.AddProductActivity
 import kotlinx.android.synthetic.main.item_product.view.*
+import javax.inject.Inject
 
 /**
  * Binds app-specific data to views that are displayed in the RecyclerView.
@@ -19,7 +22,7 @@ import kotlinx.android.synthetic.main.item_product.view.*
  * @suppress DEPRECATION Suppress deprecation on 'Date' since the project is running on API 21.
  */
 @Suppress("DEPRECATION")
-class ProductAdapter(private val products: List<Product>) :
+class ProductAdapter @Inject constructor(private val products: List<Product>) :
     RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
 
     lateinit var context: Context
@@ -70,18 +73,19 @@ class ProductAdapter(private val products: List<Product>) :
          * @param product The product that is bound to the itemView.
          */
         fun bind(product: Product) {
-            val daysLeft = product.daysRemaining
+            val daysLeft = product.getDaysRemaining()
 
             itemView.tvName.text = product.productName
-            itemView.tvDate.text = context.resources.getString(R.string.expiration_format,
+            itemView.tvDate.text = context.resources.getString(
+                R.string.expiration_format,
                 product.expirationDate?.date.toString(),
                 product.expirationDate?.month?.plus(AddProductActivity.MONTHS_OFFSET).toString(),
                 product.expirationDate?.year?.plus(AddProductActivity.YEARS_OFFSET).toString())
             itemView.tvDaysLeft.text = daysLeft.toString()
 
             //Set the colors
-            itemView.ivColor.setColorFilter(ContextCompat.getColor(context, product.indicationColor), PorterDuff.Mode.MULTIPLY) //Circle
-            itemView.tvDaysLeft.setTextColor(ContextCompat.getColor(context, product.indicationColor)) //DaysLeft number
+            itemView.ivColor.setColorFilter(ContextCompat.getColor(context, product.getIndicationColor()), PorterDuff.Mode.MULTIPLY) //Circle
+            itemView.tvDaysLeft.setTextColor(ContextCompat.getColor(context, product.getIndicationColor())) //DaysLeft number
         }
     }
 }

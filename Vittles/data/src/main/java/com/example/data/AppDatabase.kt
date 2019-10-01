@@ -1,11 +1,10 @@
-package com.example.vittles.data
+package com.example.data
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.example.vittles.model.Product
 
 /**
  * Room database singleton implementation. Used for CRUD in the database. Use the

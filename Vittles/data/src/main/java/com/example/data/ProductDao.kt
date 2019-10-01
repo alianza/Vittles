@@ -1,10 +1,9 @@
-package com.example.vittles.data
+package com.example.data
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
-import com.example.vittles.model.Product
 
 /**
  * Interface dao for CRUD actions on the product data model.
@@ -49,7 +48,7 @@ interface ProductDao {
      * @return the newly generated uid used for checking if the insertion has succeeded.
      */
     @Insert
-    fun insert(product: Product): Long
+    fun insert(product: Product): Int
 
     /**
      * Delete the given product from the database.
@@ -57,6 +56,6 @@ interface ProductDao {
      * @param product product to be deleted.
      */
     @Delete
-    fun delete(product: Product)
+    fun delete(product: Product): Int
 
 }
