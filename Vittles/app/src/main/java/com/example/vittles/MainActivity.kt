@@ -29,7 +29,6 @@ class MainActivity : AppCompatActivity() {
     private var products = mutableListOf<Product>()
     private val productAdapter = ProductAdapter(products)
 
-    private val testchange = "hhhh"
 
     /**
      * Called when the MainActivity is created.
@@ -57,6 +56,7 @@ class MainActivity : AppCompatActivity() {
      * Called when the option menu is created.
      *.
      */
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_main, menu)
