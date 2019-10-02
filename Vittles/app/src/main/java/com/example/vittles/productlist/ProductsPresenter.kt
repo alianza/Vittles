@@ -12,11 +12,18 @@ import javax.inject.Inject
 /**
  * The presenter for the main product activity.
  *
- * @property fetchProductsUseCase
+ * @author Jeroen Flietstra
+ * @author Arjen Simons
+ *
+ * @property fetchProductsUseCase The FetchProductUseCase from the domain module
  */
 class ProductsPresenter @Inject internal constructor(private val fetchProductsUseCase: FetchProductsUseCase) :
     BasePresenter<ProductsActivity>() {
 
+    /**
+     * Loads the products
+     *
+     */
     fun loadProducts() {
         disposables.add(
             fetchProductsUseCase.fetch().subscribeOn(Schedulers.io())
@@ -25,6 +32,11 @@ class ProductsPresenter @Inject internal constructor(private val fetchProductsUs
         )
     }
 
+    /**
+     * Loads the indication colors for the products
+     *
+     * @param products The list containing the products that are shown in the ListView
+     */
     fun loadIndicationColors(products: List<Product>) {
         products.forEach { product ->
             val daysRemaining = product.getDaysRemaining()
