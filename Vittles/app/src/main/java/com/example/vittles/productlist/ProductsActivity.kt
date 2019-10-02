@@ -1,20 +1,19 @@
-package com.example.vittles
-
+package com.example.vittles.productlist
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.crashlytics.android.Crashlytics
-import com.example.vittles.data.AppDatabase
-import com.example.vittles.data.ProductDao
-import com.example.vittles.model.Product
-import io.fabric.sdk.android.Fabric
+import com.example.domain.model.Product
+import com.example.vittles.R
+import com.example.vittles.VittlesApp
+import com.example.vittles.mvp.BaseActivity
+import com.example.vittles.productadd.AddProductActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
+import javax.inject.Inject
 
 /**
  * Activity class for the main activity. This is the activity that shows the list of products.
@@ -23,24 +22,34 @@ import kotlinx.android.synthetic.main.content_main.*
  * @author Jeroen Flietstra
  * @author Jan-Willem van Bremen
  */
-class MainActivity : AppCompatActivity() {
-    private lateinit var productDao: ProductDao
+class ProductsActivity : BaseActivity() {
 
-    private var products = mutableListOf<Product>()
+    @Inject lateinit var presenter: ProductsPresenter
+
+    private var products = arrayListOf<Product>()
     private val productAdapter = ProductAdapter(products)
 
-
     /**
-     * Called when the MainActivity is created.
+     * Called when the ProductsActivity is created.
      *
      */
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.inject
         super.onCreate(savedInstanceState)
-        Fabric.with(this, Crashlytics())
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-        productDao = AppDatabase.getDatabase(applicationContext).productDao()
+        with(presenter) {
+            start(this@ProductsActivity)
+        }
         initViews()
+    }
+
+     override fun injectDependencies() {
+        DaggerProductsComponent.builder()
+            .appComponent(VittlesApp.component)
+            .productsModule(ProductsModule())
+            .build()
+            .inject(this)
     }
 
     /**
@@ -56,7 +65,6 @@ class MainActivity : AppCompatActivity() {
      * Called when the option menu is created.
      *.
      */
-
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_main, menu)
@@ -68,13 +76,21 @@ class MainActivity : AppCompatActivity() {
      *
      */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
             R.id.action_settings -> true
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    /**
+     * Initializes the RecyclerView.
+     */
+    private fun initViews(){
+        fab.setOnClickListener { onAddButtonClick() }
+
+        rvProducts.layoutManager =
+            LinearLayoutManager(this@ProductsActivity, RecyclerView.VERTICAL, false)
+        rvProducts.adapter = productAdapter
     }
 
     /**
@@ -90,30 +106,29 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Initializes the RecyclerView.
-     */
-    private fun initViews(){
-
-        fab.setOnClickListener { onAddButtonClick() }
-
-        rvProducts.layoutManager =
-            LinearLayoutManager(this@MainActivity, RecyclerView.VERTICAL, false)
-        rvProducts.adapter = productAdapter
-
-        populateRecyclerView()
-    }
-
-    /**
      * Populates the RecyclerView with items from the local DataBase.
      */
     private fun populateRecyclerView(){
-
         products.clear()
+        presenter.loadProducts()
+    }
 
-        for (i in productDao.getAll()) {
-            products.add(i)
-        }
-
+    /**
+     * When products are loaded, this method will add the products to the product list.
+     *
+     * @param products Products to be added to the product list.
+     */
+    fun onProductsLoadSucceed(products: List<Product>) {
+        this.products.addAll(products)
+        presenter.loadIndicationColors(this.products)
         productAdapter.notifyDataSetChanged()
+    }
+
+    /**
+     * If the products could not be loaded, this method will handle the error.
+     *
+     */
+    fun onProductsLoadFail() {
+        println("FAIL")
     }
 }

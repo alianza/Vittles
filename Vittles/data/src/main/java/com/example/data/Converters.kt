@@ -1,4 +1,4 @@
-package com.example.vittles.data
+package com.example.data
 
 import androidx.room.TypeConverter
 import java.util.*
