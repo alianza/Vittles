@@ -31,10 +31,14 @@ class AddProductActivity : BaseActivity() {
 
     companion object{
         /**
-         * These offsets are used to counter the default values from the Date object.
+         * This offset is used to counter the default values from the Date object.
          *
          */
         const val YEARS_OFFSET = 1900
+        /**
+         * This offset is used to counter the default values from the Date object.
+         *
+         */
         const val MONTHS_OFFSET = 1
     }
 
@@ -45,8 +49,8 @@ class AddProductActivity : BaseActivity() {
      * @param savedInstanceState {@inheritDoc}
      */
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.inject
         super.onCreate(savedInstanceState)
-        ButterKnife.bind(this)
         presenter.start(this@AddProductActivity)
         setContentView(R.layout.activity_add_product)
         initViews()
@@ -130,17 +134,10 @@ class AddProductActivity : BaseActivity() {
                 null,
                 etProductName.text.toString(),
                 this.expirationDate,
-                calendar.time
+                calendar.time,
+                null
             )
-//            val status = addProductUseCase.add(product).subscribe()
             presenter.addProduct(product)
-            if (false) {
-                Snackbar.make(layout, getString(R.string.product_failed), Snackbar.LENGTH_LONG)
-                    .show()
-            } else {
-                etProductName.setText("")
-                etExpirationDate.setText("")
-            }
         }
     }
 
@@ -159,8 +156,21 @@ class AddProductActivity : BaseActivity() {
         }
     }
 
-    fun onProductAdd() {
+    /**
+     * If product has been added, this method will reset the text fields.
+     *
+     */
+    fun onProductAddSucceed() {
         etProductName.setText("")
         etExpirationDate.setText("")
+    }
+
+    /**
+     * If product could not be added, this method will create a feedback Snackbar for the error.
+     *
+     */
+    fun onProductAddFail() {
+        Snackbar.make(layout, getString(R.string.product_failed), Snackbar.LENGTH_LONG)
+            .show()
     }
 }

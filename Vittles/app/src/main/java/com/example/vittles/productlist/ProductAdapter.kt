@@ -53,7 +53,7 @@ class ProductAdapter @Inject constructor(private val products: List<Product>) :
     /**
      * Updates the contents of the itemView to reflect the item at the given position.
      *
-     * @param The ViewHolder that should be updated.
+     * @param holder The ViewHolder that should be updated.
      * @param position The position of the item to be updated.
      */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -84,8 +84,8 @@ class ProductAdapter @Inject constructor(private val products: List<Product>) :
             itemView.tvDaysLeft.text = daysLeft.toString()
 
             //Set the colors
-//            itemView.ivColor.setColorFilter(ContextCompat.getColor(context, product.getIndicationColor()), PorterDuff.Mode.MULTIPLY) //Circle
-//            itemView.tvDaysLeft.setTextColor(ContextCompat.getColor(context, product.getIndicationColor())) //DaysLeft number
+            itemView.ivColor.setColorFilter(ContextCompat.getColor(context, product.indicationColor!!), PorterDuff.Mode.MULTIPLY) //Circle
+            itemView.tvDaysLeft.setTextColor(ContextCompat.getColor(context, product.indicationColor!!)) //DaysLeft number
         }
     }
 }

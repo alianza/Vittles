@@ -4,10 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.ButterKnife
 import com.example.domain.model.Product
 import com.example.vittles.R
 import com.example.vittles.VittlesApp
@@ -36,10 +34,10 @@ class ProductsActivity : BaseActivity() {
      *
      */
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.inject
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-        ButterKnife.bind(this)
         with(presenter) {
             start(this@ProductsActivity)
         }
@@ -78,13 +76,21 @@ class ProductsActivity : BaseActivity() {
      *
      */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
             R.id.action_settings -> true
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    /**
+     * Initializes the RecyclerView.
+     */
+    private fun initViews(){
+        fab.setOnClickListener { onAddButtonClick() }
+
+        rvProducts.layoutManager =
+            LinearLayoutManager(this@ProductsActivity, RecyclerView.VERTICAL, false)
+        rvProducts.adapter = productAdapter
     }
 
     /**
@@ -100,40 +106,28 @@ class ProductsActivity : BaseActivity() {
     }
 
     /**
-     * Initializes the RecyclerView.
-     */
-    private fun initViews(){
-        
-        fab.setOnClickListener { onAddButtonClick() }
-
-        rvProducts.layoutManager =
-            LinearLayoutManager(this@ProductsActivity, RecyclerView.VERTICAL, false)
-        rvProducts.adapter = productAdapter
-
-//        populateRecyclerView()
-    }
-
-    /**
      * Populates the RecyclerView with items from the local DataBase.
      */
     private fun populateRecyclerView(){
-
         products.clear()
-
         presenter.loadProducts()
-
-//        for (i in fetchProductUseCase.fetch().subscribe()) {
-//            products.add(i)
-//        }
-
-
     }
 
-    fun onProductsLoad(products: List<Product>) {
+    /**
+     * When products are loaded, this method will add the products to the product list.
+     *
+     * @param products Products to be added to the product list.
+     */
+    fun onProductsLoadSucceed(products: List<Product>) {
         this.products.addAll(products)
+        presenter.loadIndicationColors(this.products)
         productAdapter.notifyDataSetChanged()
     }
 
+    /**
+     * If the products could not be loaded, this method will handle the error.
+     *
+     */
     fun onProductsLoadFail() {
         println("FAIL")
     }
