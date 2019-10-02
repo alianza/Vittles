@@ -1,10 +1,12 @@
 package com.example.vittles
 
-
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
+import android.view.View
+import android.widget.SearchView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -27,8 +29,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var productDao: ProductDao
 
     private var products = mutableListOf<Product>()
+    private var filteredProducts = products
     private val productAdapter = ProductAdapter(products)
-
 
     /**
      * Called when the MainActivity is created.
@@ -43,6 +45,28 @@ class MainActivity : AppCompatActivity() {
         initViews()
     }
 
+
+    /**
+     * Initializes the RecyclerView and sets EventListeners.
+     */
+    private fun initViews(){
+
+        setListeners()
+
+        rvProducts.layoutManager =
+            LinearLayoutManager(this@MainActivity, RecyclerView.VERTICAL, false)
+        rvProducts.adapter = productAdapter
+
+        // Set searchView textColor
+        val id =
+            searchView.context.resources.getIdentifier("android:id/search_src_text", null, null)
+        val textView = searchView.findViewById(id) as TextView
+        textView.setTextColor(Color.BLACK)
+
+        populateRecyclerView()
+    }
+
+
     /**
      * Called when the mainActivity starts.
      * Re-populates the RecyclerView.
@@ -52,30 +76,49 @@ class MainActivity : AppCompatActivity() {
         populateRecyclerView()
     }
 
-    /**
-     * Called when the option menu is created.
-     *.
-     */
+    private fun setListeners() {
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.menu_main, menu)
-        return true
+        fab.setOnClickListener { onAddButtonClick() }
+
+        ibtnSearch.setOnClickListener { openSearchBar() }
+
+        searchView.setOnCloseListener { closeSearchBar(); false }
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+
+            override fun onQueryTextChange(newText: String): Boolean { filter(newText); return false }
+
+            override fun onQueryTextSubmit(query: String): Boolean { filter(query); return false }
+
+        })
+
+        imgbtnCloseSearch.setOnClickListener { closeSearchBar() }
     }
 
-    /**
-     * Handles action bar item clicks.
-     *
-     */
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        return when (item.itemId) {
-            R.id.action_settings -> true
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
+//    /**
+//     * Called when the option menu is created.
+//     *.
+//     */
+//
+//    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        menuInflater.inflate(R.menu.menu_main, menu)
+//        return true
+//    }
+
+//    /**
+//     * Handles action bar item clicks.
+//     *
+//     */
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        // Handle action bar item clicks here. The action bar will
+//        // automatically handle clicks on the Home/Up button, so long
+//        // as you specify a parent activity in AndroidManifest.xml.
+//        return when (item.itemId) {
+//            R.id.action_settings -> true
+//            else -> super.onOptionsItemSelected(item)
+//        }
+//    }
 
     /**
      * Called when the add button is clicked.
@@ -89,18 +132,33 @@ class MainActivity : AppCompatActivity() {
         startActivity(addProductActivityIntent)
     }
 
-    /**
-     * Initializes the RecyclerView.
-     */
-    private fun initViews(){
+    @SuppressLint("DefaultLocale")
+    private fun filter(query: String) {
+        filteredProducts = products.filter {
+                product -> product.productName!!.toLowerCase().contains(query.toLowerCase())
+        } as MutableList<Product>
 
-        fab.setOnClickListener { onAddButtonClick() }
+        println("filtered: $filteredProducts")
+        productAdapter.products = filteredProducts
+        productAdapter.notifyDataSetChanged()
 
-        rvProducts.layoutManager =
-            LinearLayoutManager(this@MainActivity, RecyclerView.VERTICAL, false)
-        rvProducts.adapter = productAdapter
+        if (filteredProducts.size == 0) {
+            tvNoResults.visibility = View.VISIBLE
+        } else {
+            tvNoResults.visibility = View.INVISIBLE
+        }
+    }
 
-        populateRecyclerView()
+    private fun openSearchBar() {
+        llSearch.visibility = View.VISIBLE
+        searchView.isIconified = false
+
+        toolbar.visibility = View.GONE
+    }
+
+    private fun closeSearchBar() {
+        llSearch.visibility = View.GONE
+        toolbar.visibility = View.VISIBLE
     }
 
     /**
