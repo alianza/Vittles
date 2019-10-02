@@ -19,11 +19,11 @@ import kotlinx.android.synthetic.main.item_product.view.*
  * @suppress DEPRECATION Suppress deprecation on 'Date' since the project is running on API 21.
  */
 @Suppress("DEPRECATION")
-class ProductAdapter(private val products: List<Product>) :
+class ProductAdapter(initialProducts: List<Product>) :
     RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
 
     lateinit var context: Context
-
+    var products: List<Product> = initialProducts
     /**
      * Creates a new ViewHolder.
      *
@@ -50,7 +50,7 @@ class ProductAdapter(private val products: List<Product>) :
     /**
      * Updates the contents of the itemView to reflect the item at the given position.
      *
-     * @param The ViewHolder that should be updated.
+     * @param holder ViewHolder that should be updated.
      * @param position The position of the item to be updated.
      */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
