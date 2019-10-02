@@ -4,8 +4,6 @@ import android.app.DatePickerDialog
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.MenuItem
-import androidx.appcompat.app.AppCompatActivity
-import butterknife.ButterKnife
 import com.example.domain.model.Product
 import com.example.vittles.R
 import com.example.vittles.VittlesApp
