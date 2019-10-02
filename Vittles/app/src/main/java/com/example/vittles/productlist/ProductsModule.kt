@@ -13,5 +13,6 @@ class ProductsModule {
 
 
     @Provides
-    fun providePresenter(fetchProductsUseCase: FetchProductsUseCase) = ProductsPresenter(fetchProductsUseCase)
+    fun providePresenter(fetchProductsUseCase: FetchProductsUseCase) =
+        ProductsPresenter(fetchProductsUseCase)
 }

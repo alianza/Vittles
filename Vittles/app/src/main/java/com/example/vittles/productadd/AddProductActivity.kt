@@ -9,6 +9,7 @@ import butterknife.ButterKnife
 import com.example.domain.model.Product
 import com.example.vittles.R
 import com.example.vittles.VittlesApp
+import com.example.vittles.mvp.BaseActivity
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_add_product.*
 import java.util.*
@@ -22,7 +23,7 @@ import javax.inject.Inject
  * @author Jan-Willem van Bremen
  */
 @Suppress("DEPRECATION") // Suppress deprecation on 'Date' since the project is running on API 21.
-class AddProductActivity : AppCompatActivity(), AddProductContract.View {
+class AddProductActivity : BaseActivity() {
     @Inject lateinit var presenter: AddProductPresenter
 
     private val calendar = Calendar.getInstance()
@@ -37,8 +38,6 @@ class AddProductActivity : AppCompatActivity(), AddProductContract.View {
         const val MONTHS_OFFSET = 1
     }
 
-    val inject by lazy { injectDependencies() }
-
     /**
      * {@inheritDoc}
      * Sets the content, assigns the dao and calls the initViews method.
@@ -46,16 +45,14 @@ class AddProductActivity : AppCompatActivity(), AddProductContract.View {
      * @param savedInstanceState {@inheritDoc}
      */
     override fun onCreate(savedInstanceState: Bundle?) {
-        inject
         super.onCreate(savedInstanceState)
         ButterKnife.bind(this)
         presenter.start(this@AddProductActivity)
-//        productDao = AppDatabase.getDatabase(applicationContext).productDao()
         setContentView(R.layout.activity_add_product)
         initViews()
     }
 
-    private fun injectDependencies() {
+    override fun injectDependencies() {
         DaggerAddProductComponent.builder()
             .appComponent(VittlesApp.component)
             .addProductModule(AddProductModule())
@@ -162,7 +159,7 @@ class AddProductActivity : AppCompatActivity(), AddProductContract.View {
         }
     }
 
-    override fun onProductAdd() {
+    fun onProductAdd() {
         etProductName.setText("")
         etExpirationDate.setText("")
     }

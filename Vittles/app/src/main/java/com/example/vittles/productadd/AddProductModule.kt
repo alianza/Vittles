@@ -12,5 +12,6 @@ class AddProductModule {
     fun provideAddProductUseCase(productsRepository: ProductsRepository) = AddProductUseCase(productsRepository)
 
     @Provides
-    fun providePresenter(addProductUseCase: AddProductUseCase) = AddProductPresenter(addProductUseCase)
+    fun providePresenter(addProductUseCase: AddProductUseCase) =
+        AddProductPresenter(addProductUseCase)
 }

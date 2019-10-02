@@ -12,7 +12,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".productadd.AddProductActivity"></activity>
         <activity
-            android:name=".productlist.MainActivity"
+            android:name=".productlist.ProductsActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>

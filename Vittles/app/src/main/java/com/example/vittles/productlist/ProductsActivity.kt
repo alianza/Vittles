@@ -11,6 +11,7 @@ import butterknife.ButterKnife
 import com.example.domain.model.Product
 import com.example.vittles.R
 import com.example.vittles.VittlesApp
+import com.example.vittles.mvp.BaseActivity
 import com.example.vittles.productadd.AddProductActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
@@ -23,36 +24,29 @@ import javax.inject.Inject
  * @author Jeroen Flietstra
  * @author Jan-Willem van Bremen
  */
-class MainActivity : AppCompatActivity(), ProductsContract.View {
-//    @Inject private lateinit var productDao: Prod
+class ProductsActivity : BaseActivity() {
 
     @Inject lateinit var presenter: ProductsPresenter
 
     private var products = arrayListOf<Product>()
     private val productAdapter = ProductAdapter(products)
 
-
-    val inject by lazy { injectDependencies() }
-
     /**
-     * Called when the MainActivity is created.
+     * Called when the ProductsActivity is created.
      *
      */
     override fun onCreate(savedInstanceState: Bundle?) {
-        inject
-//        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
         ButterKnife.bind(this)
         with(presenter) {
-            start(this@MainActivity)
+            start(this@ProductsActivity)
         }
-//        productDao = com.example.data.AppDatabase.getDatabase(applicationContext).productDao()
         initViews()
     }
 
-     private fun injectDependencies() {
+     override fun injectDependencies() {
         DaggerProductsComponent.builder()
             .appComponent(VittlesApp.component)
             .productsModule(ProductsModule())
@@ -113,7 +107,7 @@ class MainActivity : AppCompatActivity(), ProductsContract.View {
         fab.setOnClickListener { onAddButtonClick() }
 
         rvProducts.layoutManager =
-            LinearLayoutManager(this@MainActivity, RecyclerView.VERTICAL, false)
+            LinearLayoutManager(this@ProductsActivity, RecyclerView.VERTICAL, false)
         rvProducts.adapter = productAdapter
 
 //        populateRecyclerView()
@@ -135,12 +129,12 @@ class MainActivity : AppCompatActivity(), ProductsContract.View {
 
     }
 
-    override fun onProductsLoad(products: List<Product>) {
+    fun onProductsLoad(products: List<Product>) {
         this.products.addAll(products)
         productAdapter.notifyDataSetChanged()
     }
 
-    override fun onProductsLoadFail() {
+    fun onProductsLoadFail() {
         println("FAIL")
     }
 }
