@@ -1,14 +1,16 @@
 package com.example.domain
 
 import com.example.domain.model.Product
+import io.reactivex.Completable
+import io.reactivex.Single
 
 interface ProductsRepository {
 
-    fun get(): List<Product>
+    fun get(): Single<List<Product>>
 
-    fun patch(product: Product): Int
+    fun patch(product: Product): Completable
 
-    fun delete(uid: Int): Int
+    fun delete(product: Product): Completable
 
-    fun post(product: Product): Int
+    fun post(product: Product): Completable
 }

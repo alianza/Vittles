@@ -6,9 +6,8 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
-fun createProductDao(context: Context): ProductDao {
-    return Room.databaseBuilder(context, AppDatabase::class.java, "notesdb")
-        .build().productDao()
+fun createProductDao(context: Context): ProductDaoImpl {
+    return AppDatabase.getDatabase(context).productDao()
 }
 
 /**
@@ -18,10 +17,10 @@ fun createProductDao(context: Context): ProductDao {
  * @author Jeroen Flietstra
  * @author Jan-Willem van Bremen
  */
-@Database(entities = [Product::class], version = 1)
+@Database(entities = [ProductEntity::class], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
-    abstract fun productDao(): ProductDao
+    abstract fun productDao(): ProductDaoImpl
 
     companion object {
 

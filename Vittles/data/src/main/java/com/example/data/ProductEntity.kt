@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 import java.util.*
 
 /**
- * Product data model.
+ * ProductEntity data model.
  *
  * @author Jeroen Flietstra
  * @author Jan-Willem van Bremen
@@ -18,7 +18,7 @@ import java.util.*
  * @property creationDate date of when product was added to database.
  */
 @Entity
-data class Product(
+data class ProductEntity(
     @PrimaryKey(autoGenerate = true) val uid: Int?,
     @ColumnInfo(name = "product_name") val productName: String?,
     @ColumnInfo(name = "expiration_date") val expirationDate: Date?,

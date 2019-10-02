@@ -5,13 +5,14 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import com.example.data.AppDatabase
-import com.example.data.ProductDao
-import com.example.data.Product
+import butterknife.ButterKnife
+import com.example.domain.model.Product
 import com.example.vittles.R
+import com.example.vittles.VittlesApp
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_add_product.*
 import java.util.*
+import javax.inject.Inject
 
 /**
  * Activity class for the Add Product component. This components makes it possible to
@@ -21,8 +22,8 @@ import java.util.*
  * @author Jan-Willem van Bremen
  */
 @Suppress("DEPRECATION") // Suppress deprecation on 'Date' since the project is running on API 21.
-class AddProductActivity : AppCompatActivity() {
-    private lateinit var productDao: com.example.data.ProductDao
+class AddProductActivity : AppCompatActivity(), AddProductContract.View {
+    @Inject lateinit var presenter: AddProductPresenter
 
     private val calendar = Calendar.getInstance()
     private var expirationDate = Date()
@@ -36,6 +37,8 @@ class AddProductActivity : AppCompatActivity() {
         const val MONTHS_OFFSET = 1
     }
 
+    val inject by lazy { injectDependencies() }
+
     /**
      * {@inheritDoc}
      * Sets the content, assigns the dao and calls the initViews method.
@@ -43,10 +46,21 @@ class AddProductActivity : AppCompatActivity() {
      * @param savedInstanceState {@inheritDoc}
      */
     override fun onCreate(savedInstanceState: Bundle?) {
+        inject
         super.onCreate(savedInstanceState)
-        productDao = com.example.data.AppDatabase.getDatabase(applicationContext).productDao()
+        ButterKnife.bind(this)
+        presenter.start(this@AddProductActivity)
+//        productDao = AppDatabase.getDatabase(applicationContext).productDao()
         setContentView(R.layout.activity_add_product)
         initViews()
+    }
+
+    private fun injectDependencies() {
+        DaggerAddProductComponent.builder()
+            .appComponent(VittlesApp.component)
+            .addProductModule(AddProductModule())
+            .build()
+            .inject(this)
     }
 
     /**
@@ -115,14 +129,15 @@ class AddProductActivity : AppCompatActivity() {
      */
     private fun onConfirmButtonClick() {
         if (validate()) {
-            val product = com.example.data.Product(
+            val product = Product(
                 null,
                 etProductName.text.toString(),
                 this.expirationDate,
                 calendar.time
             )
-            val status = productDao.insert(product)
-            if (status < 0) {
+//            val status = addProductUseCase.add(product).subscribe()
+            presenter.addProduct(product)
+            if (false) {
                 Snackbar.make(layout, getString(R.string.product_failed), Snackbar.LENGTH_LONG)
                     .show()
             } else {
@@ -145,5 +160,10 @@ class AddProductActivity : AppCompatActivity() {
             Snackbar.make(layout, getString(R.string.empty_fields), Snackbar.LENGTH_LONG).show()
             false
         }
+    }
+
+    override fun onProductAdd() {
+        etProductName.setText("")
+        etExpirationDate.setText("")
     }
 }

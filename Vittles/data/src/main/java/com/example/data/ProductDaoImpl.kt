@@ -4,6 +4,8 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import com.example.domain.ProductDao
+import io.reactivex.Single
 
 /**
  * Interface dao for CRUD actions on the product data model.
@@ -12,15 +14,15 @@ import androidx.room.Query
  * @author Jan-Willem van Bremen
  */
 @Dao
-interface ProductDao {
+interface ProductDaoImpl : ProductDao {
 
     /**
      * Retrieves all products from the database.
      *
      * @return list of products as a result from the query.
      */
-    @Query("SELECT * FROM product ORDER BY expiration_date")
-    fun getAll(): List<Product>
+    @Query("SELECT * FROM ProductEntity ORDER BY expiration_date")
+    fun getAll(): Single<List<ProductEntity>>
 
     /**
      * Retrieves all products from the database with the given uid's in the parameters.
@@ -28,8 +30,8 @@ interface ProductDao {
      * @param uids unique id's of products.
      * @return list of products as a result from the query.
      */
-    @Query("SELECT * FROM product WHERE uid IN (:uids)")
-    fun loadAllByIds(uids: IntArray): List<Product>
+    @Query("SELECT * FROM ProductEntity WHERE uid IN (:uids)")
+    fun loadAllByIds(uids: IntArray): List<ProductEntity>
 
     /**
      * Retrieve single product from the database with the given product name in
@@ -38,8 +40,8 @@ interface ProductDao {
      * @param name name of the product
      * @return single product as a result from the query.
      */
-    @Query("SELECT * FROM product WHERE product_name LIKE :name")
-    fun findByName(name: String): Product
+    @Query("SELECT * FROM ProductEntity WHERE product_name LIKE :name")
+    fun findByName(name: String): ProductEntity
 
     /**
      * Insert the given product from the parameters into the database.
@@ -48,7 +50,7 @@ interface ProductDao {
      * @return the newly generated uid used for checking if the insertion has succeeded.
      */
     @Insert
-    fun insert(product: Product): Int
+    fun insert(product: ProductEntity): Long
 
     /**
      * Delete the given product from the database.
@@ -56,6 +58,6 @@ interface ProductDao {
      * @param product product to be deleted.
      */
     @Delete
-    fun delete(product: Product): Int
+    fun delete(product: ProductEntity): Int
 
 }

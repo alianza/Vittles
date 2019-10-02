@@ -84,8 +84,8 @@ class ProductAdapter @Inject constructor(private val products: List<Product>) :
             itemView.tvDaysLeft.text = daysLeft.toString()
 
             //Set the colors
-            itemView.ivColor.setColorFilter(ContextCompat.getColor(context, product.getIndicationColor()), PorterDuff.Mode.MULTIPLY) //Circle
-            itemView.tvDaysLeft.setTextColor(ContextCompat.getColor(context, product.getIndicationColor())) //DaysLeft number
+//            itemView.ivColor.setColorFilter(ContextCompat.getColor(context, product.getIndicationColor()), PorterDuff.Mode.MULTIPLY) //Circle
+//            itemView.tvDaysLeft.setTextColor(ContextCompat.getColor(context, product.getIndicationColor())) //DaysLeft number
         }
     }
 }

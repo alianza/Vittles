@@ -25,7 +25,7 @@ data class Product(
     }
 
     fun getIndicationColor(): Int {
-        var daysRemaining = getDaysRemaining()
+//        var daysRemaining = getDaysRemaining()
 //        var indicationColor: Int = when {
 //            daysRemaining < RED_COLOR_BOUNDARY -> R.color.red
 //            daysRemaining < YELLOW_COLOR_BOUNDARY -> R.color.yellow
@@ -33,4 +33,9 @@ data class Product(
 //        }
         return 1
     }
+
+    // TODO: Change methods for validity
+    fun isValidForEdit() = uid!! > 0 && productName!!.trim().length > 3
+
+    fun isValidForAdd() = productName!!.trim().length > 3
 }
