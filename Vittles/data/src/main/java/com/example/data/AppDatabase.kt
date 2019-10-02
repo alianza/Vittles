@@ -6,6 +6,12 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
+/**
+ * Creates the ProductDaoImpl.
+ *
+ * @param context The application context
+ * @return The ProductDaoImpl.
+ */
 fun createProductDaoImpl(context: Context): ProductDaoImpl {
     return AppDatabase.getDatabase(context).productDao()
 }
@@ -31,8 +37,8 @@ abstract class AppDatabase : RoomDatabase() {
          * If instance is not created, creates a new database instance. Otherwise it will
          * return the existing instance.
          *
-         * @param context application context.
-         * @return singleton instance of database.
+         * @param context Application context.
+         * @return Singleton instance of database.
          */
         fun getDatabase(context: Context): AppDatabase {
             val tempInstance = INSTANCE
