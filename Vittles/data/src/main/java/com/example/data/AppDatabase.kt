@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
-fun createProductDao(context: Context): ProductDaoImpl {
+fun createProductDaoImpl(context: Context): ProductDaoImpl {
     return AppDatabase.getDatabase(context).productDao()
 }
 
