@@ -6,6 +6,12 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
+/**
+ * Creates the ProductDao
+ *
+ * @param context The application context
+ * @return The ProductDao
+ */
 fun createProductDao(context: Context): ProductDaoImpl {
     return AppDatabase.getDatabase(context).productDao()
 }
