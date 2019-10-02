@@ -10,20 +10,19 @@
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#FFFFFF"
         android:tint="@color/lightGrey">
 
         <LinearLayout
             android:id="@+id/llSearch"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="#FFFFFF"
             android:orientation="vertical"
             android:visibility="gone">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:background="@color/white"
                 android:orientation="horizontal"
                 android:visibility="visible">
 
@@ -31,9 +30,10 @@
                     android:id="@+id/imgbtnCloseSearch"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="12dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
                     android:backgroundTint="#00FFFFFF"
                     android:contentDescription="@string/close_search"
                     android:scaleType="centerInside"
@@ -46,7 +46,8 @@
                     android:layout_marginEnd="24dp"
                     android:closeIcon="@drawable/ic_close"
                     android:commitIcon="@drawable/ic_magnifying_glass"
-                    android:queryBackground="@android:color/transparent"></SearchView>
+                    android:queryBackground="@android:color/transparent"
+                    android:searchIcon="@drawable/ic_magnifying_glass" />
 
             </LinearLayout>
 
@@ -77,7 +78,7 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_gravity="end"
-                android:layout_marginEnd="24dp"
+                android:layout_marginEnd="32dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/search"
                 android:src="@drawable/ic_magnifying_glass" />
