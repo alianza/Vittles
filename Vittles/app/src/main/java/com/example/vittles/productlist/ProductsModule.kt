@@ -1,6 +1,6 @@
 package com.example.vittles.productlist
 
-import com.example.domain.ProductsRepository
+import com.example.domain.repositories.ProductsRepository
 import com.example.domain.productfetch.FetchProductsUseCase
 import dagger.Module
 import dagger.Provides

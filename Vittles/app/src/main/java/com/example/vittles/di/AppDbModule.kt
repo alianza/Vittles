@@ -5,7 +5,7 @@ import com.example.data.ProductDaoImpl
 import com.example.data.ProductModelMapperImpl
 import com.example.data.ProductsRepositoryImpl
 import com.example.data.createProductDaoImpl
-import com.example.domain.ProductsRepository
+import com.example.domain.repositories.ProductsRepository
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton

@@ -1,6 +1,6 @@
 package com.example.domain.productfetch
 
-import com.example.domain.ProductsRepository
+import com.example.domain.repositories.ProductsRepository
 import com.example.domain.model.Product
 import io.reactivex.Single
 

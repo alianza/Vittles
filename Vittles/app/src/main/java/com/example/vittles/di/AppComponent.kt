@@ -1,7 +1,7 @@
 package com.example.vittles.di
 
 import android.app.Application
-import com.example.domain.ProductsRepository
+import com.example.domain.repositories.ProductsRepository
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton

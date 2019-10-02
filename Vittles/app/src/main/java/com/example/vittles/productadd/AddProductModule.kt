@@ -1,6 +1,6 @@
 package com.example.vittles.productadd
 
-import com.example.domain.ProductsRepository
+import com.example.domain.repositories.ProductsRepository
 import com.example.domain.productadd.AddProductUseCase
 import dagger.Module
 import dagger.Provides

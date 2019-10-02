@@ -1,4 +1,4 @@
-package com.example.domain
+package com.example.domain.repositories
 
 /**
  * Marker interface to satisfy Generics for {@link ProductsRepository}.
