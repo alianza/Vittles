@@ -124,14 +124,14 @@ class ProductsActivity : BaseActivity() {
         productAdapter.products = filteredProducts
         productAdapter.notifyDataSetChanged()
 
-        showOrHideNoResultsView()
+        setNoResultsView()
     }
 
 
     /**
      * Called after filtering products array to show or hide no results textview
      */
-    private fun showOrHideNoResultsView() {
+    private fun setNoResultsView() {
         if (productAdapter.itemCount == 0) {
             tvNoResults.visibility = View.VISIBLE
         } else {
