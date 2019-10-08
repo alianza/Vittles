@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.model.Product
@@ -94,6 +95,16 @@ class ProductsActivity : BaseActivity() {
     }
 
     /**
+     * Checks if emptyViw should be visible
+     */
+    private fun showOrHideEmptyView(){
+        if (productAdapter.itemCount == 0){
+            tvEmptyView.visibility = View.VISIBLE
+        }else{
+            tvEmptyView.visibility = View.GONE
+        }
+    }
+    /**
      * Called when the add button is clicked.
      * It starts the addProduct activity.
      */
@@ -122,6 +133,7 @@ class ProductsActivity : BaseActivity() {
         this.products.addAll(products)
         presenter.loadIndicationColors(this.products)
         productAdapter.notifyDataSetChanged()
+        showOrHideEmptyView()
     }
 
     /**
@@ -130,5 +142,6 @@ class ProductsActivity : BaseActivity() {
      */
     fun onProductsLoadFail() {
         println("FAIL")
+        showOrHideEmptyView()
     }
 }

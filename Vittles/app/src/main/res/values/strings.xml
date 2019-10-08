@@ -13,6 +13,7 @@
     <string name="expiration_format">%1$s/%2$s/%3$s</string>
     <string name="product_added">Product added!</string>
     <string name="product_failed">Could not add product!</string>
+    <string name="empty_state"><b>Nothing to Show :(</b>\nClick on button at the buttom to add vittles</string>
 
 <!--    Validations-->
     <string name="empty_fields">Please fill in all fields</string>
