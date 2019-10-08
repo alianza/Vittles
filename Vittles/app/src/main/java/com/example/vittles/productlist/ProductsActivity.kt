@@ -30,7 +30,8 @@ import javax.inject.Inject
  */
 class ProductsActivity : BaseActivity() {
 
-    @Inject lateinit var presenter: ProductsPresenter
+    @Inject
+    lateinit var presenter: ProductsPresenter
 
     private var products = mutableListOf<Product>()
     private var filteredProducts = products
@@ -51,7 +52,7 @@ class ProductsActivity : BaseActivity() {
         initViews()
     }
 
-     override fun injectDependencies() {
+    override fun injectDependencies() {
         DaggerProductsComponent.builder()
             .appComponent(VittlesApp.component)
             .productsModule(ProductsModule())
@@ -64,7 +65,7 @@ class ProductsActivity : BaseActivity() {
      * Initializes the RecyclerView and sets EventListeners.
      *
      */
-    private fun initViews(){
+    private fun initViews() {
         setListeners()
 
         rvProducts.layoutManager =
@@ -103,9 +104,13 @@ class ProductsActivity : BaseActivity() {
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
 
-            override fun onQueryTextChange(newText: String): Boolean { filter(newText); return false }
+            override fun onQueryTextChange(newText: String): Boolean {
+                filter(newText); return false
+            }
 
-            override fun onQueryTextSubmit(query: String): Boolean { filter(query); return false }
+            override fun onQueryTextSubmit(query: String): Boolean {
+                filter(query); return false
+            }
 
         })
 
@@ -115,13 +120,14 @@ class ProductsActivity : BaseActivity() {
     /**
      * Checks if emptyView should be visible based on the itemCount
      */
-    private fun showOrHideEmptyView(){
-        if (productAdapter.itemCount == 0){
+    private fun setEmptyView() {
+        if (productAdapter.itemCount == 0) {
             tvEmptyView.visibility = View.VISIBLE
-        }else{
+        } else {
             tvEmptyView.visibility = View.GONE
         }
     }
+
     /**
      * Called when the add button is clicked.
      * It starts the addProduct activity.
@@ -141,8 +147,8 @@ class ProductsActivity : BaseActivity() {
      */
     @SuppressLint("DefaultLocale")
     private fun filter(query: String) {
-        filteredProducts = products.filter {
-                product -> product.productName!!.toLowerCase().contains(query.toLowerCase())
+        filteredProducts = products.filter { product ->
+            product.productName!!.toLowerCase().contains(query.toLowerCase())
         } as MutableList<Product>
 
         productAdapter.products = filteredProducts
@@ -188,7 +194,7 @@ class ProductsActivity : BaseActivity() {
      * Populates the RecyclerView with items from the local DataBase.
      *
      */
-    private fun populateRecyclerView(){
+    private fun populateRecyclerView() {
         products.clear()
         presenter.loadProducts()
     }
@@ -202,7 +208,7 @@ class ProductsActivity : BaseActivity() {
         this.products.addAll(products)
         presenter.loadIndicationColors(this.products)
         productAdapter.notifyDataSetChanged()
-        showOrHideEmptyView()
+        setEmptyView()
     }
 
     /**
@@ -211,6 +217,5 @@ class ProductsActivity : BaseActivity() {
      */
     fun onProductsLoadFail() {
         println("FAIL")
-        showOrHideEmptyView()
     }
 }
