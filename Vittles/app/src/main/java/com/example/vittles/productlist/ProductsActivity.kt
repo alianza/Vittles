@@ -31,7 +31,7 @@ class ProductsActivity : BaseActivity() {
 
     @Inject lateinit var presenter: ProductsPresenter
 
-    private var products = arrayListOf<Product>()
+    private var products = mutableListOf<Product>()
     private var filteredProducts = products
     private val productAdapter = ProductAdapter(products)
 
@@ -63,11 +63,10 @@ class ProductsActivity : BaseActivity() {
      * Initializes the RecyclerView and sets EventListeners.
      */
     private fun initViews(){
-
         setListeners()
 
         rvProducts.layoutManager =
-            LinearLayoutManager(this@MainActivity, RecyclerView.VERTICAL, false)
+            LinearLayoutManager(this@ProductsActivity, RecyclerView.VERTICAL, false)
         rvProducts.adapter = productAdapter
 
         // Set searchView textColor
@@ -75,8 +74,6 @@ class ProductsActivity : BaseActivity() {
             searchView.context.resources.getIdentifier("android:id/search_src_text", null, null)
         val textView = searchView.findViewById(id) as TextView
         textView.setTextColor(Color.BLACK)
-
-        populateRecyclerView()
     }
 
 
@@ -106,17 +103,6 @@ class ProductsActivity : BaseActivity() {
         })
 
         imgbtnCloseSearch.setOnClickListener { closeSearchBar() }
-    }
-
-    /**
-     * Initializes the RecyclerView.
-     */
-    private fun initViews(){
-        fab.setOnClickListener { onAddButtonClick() }
-
-        rvProducts.layoutManager =
-            LinearLayoutManager(this@ProductsActivity, RecyclerView.VERTICAL, false)
-        rvProducts.adapter = productAdapter
     }
 
     /**
