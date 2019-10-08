@@ -59,6 +59,7 @@ class ProductsActivity : BaseActivity() {
 
     /**
      * Initializes the RecyclerView and sets EventListeners.
+     *
      */
     private fun initViews(){
         setListeners()
@@ -78,6 +79,7 @@ class ProductsActivity : BaseActivity() {
     /**
      * Called when the mainActivity starts.
      * Re-populates the RecyclerView.
+     *
      */
     override fun onStart() {
         super.onStart()
@@ -86,6 +88,7 @@ class ProductsActivity : BaseActivity() {
 
     /**
      * Sets all necessary event listeners on ui elements
+     *
      */
     private fun setListeners() {
 
@@ -138,6 +141,7 @@ class ProductsActivity : BaseActivity() {
 
     /**
      * Called after filtering products array to show or hide no results textview
+     *
      */
     private fun setNoResultsView() {
         if (productAdapter.itemCount == 0) {
@@ -149,6 +153,7 @@ class ProductsActivity : BaseActivity() {
 
     /**
      * Method to show the search bar and hide the toolbar
+     *
      */
     private fun openSearchBar() {
         llSearch.visibility = View.VISIBLE
@@ -159,6 +164,7 @@ class ProductsActivity : BaseActivity() {
 
     /**
      * Method to hide the search bar and show the toolbar
+     *
      */
     private fun closeSearchBar() {
         llSearch.visibility = View.GONE
@@ -167,6 +173,7 @@ class ProductsActivity : BaseActivity() {
 
     /**
      * Populates the RecyclerView with items from the local DataBase.
+     *
      */
     private fun populateRecyclerView(){
         products.clear()
