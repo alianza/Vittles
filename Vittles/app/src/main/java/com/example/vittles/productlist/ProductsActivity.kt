@@ -22,6 +22,7 @@ import javax.inject.Inject
  * @author Arjen Simons
  * @author Jeroen Flietstra
  * @author Jan-Willem van Bremen
+ * @author Fethi Tewelde
  */
 class ProductsActivity : BaseActivity() {
 
@@ -95,7 +96,7 @@ class ProductsActivity : BaseActivity() {
     }
 
     /**
-     * Checks if emptyViw should be visible
+     * Checks if emptyView should be visible based on the itemCount
      */
     private fun showOrHideEmptyView(){
         if (productAdapter.itemCount == 0){
