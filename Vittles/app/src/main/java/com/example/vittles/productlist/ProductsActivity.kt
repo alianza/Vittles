@@ -84,6 +84,9 @@ class ProductsActivity : BaseActivity() {
         populateRecyclerView()
     }
 
+    /**
+     * Sets all necessary event listeners on ui elements
+     */
     private fun setListeners() {
 
         fab.setOnClickListener { onAddButtonClick() }
@@ -115,6 +118,11 @@ class ProductsActivity : BaseActivity() {
         startActivity(addProductActivityIntent)
     }
 
+    /**
+     * Method that is called when text is entered in search view
+     *
+     * @param query entered string used as search query
+     */
     @SuppressLint("DefaultLocale")
     private fun filter(query: String) {
         filteredProducts = products.filter {
@@ -139,6 +147,9 @@ class ProductsActivity : BaseActivity() {
         }
     }
 
+    /**
+     * Method to show the search bar and hide the toolbar
+     */
     private fun openSearchBar() {
         llSearch.visibility = View.VISIBLE
         searchView.isIconified = false
@@ -146,6 +157,9 @@ class ProductsActivity : BaseActivity() {
         toolbar.visibility = View.GONE
     }
 
+    /**
+     * Method to hide the search bar and show the toolbar
+     */
     private fun closeSearchBar() {
         llSearch.visibility = View.GONE
         toolbar.visibility = View.VISIBLE
