@@ -1,11 +1,20 @@
-package com.example.vittles.data
+package com.example.data
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.example.vittles.model.Product
+
+/**
+ * Creates the ProductDaoImpl.
+ *
+ * @param context The application context
+ * @return The ProductDaoImpl.
+ */
+fun createProductDaoImpl(context: Context): ProductDaoImpl {
+    return AppDatabase.getDatabase(context).productDao()
+}
 
 /**
  * Room database singleton implementation. Used for CRUD in the database. Use the
@@ -14,10 +23,10 @@ import com.example.vittles.model.Product
  * @author Jeroen Flietstra
  * @author Jan-Willem van Bremen
  */
-@Database(entities = [Product::class], version = 1)
+@Database(entities = [ProductEntity::class], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
-    abstract fun productDao(): ProductDao
+    abstract fun productDao(): ProductDaoImpl
 
     companion object {
 
@@ -28,8 +37,8 @@ abstract class AppDatabase : RoomDatabase() {
          * If instance is not created, creates a new database instance. Otherwise it will
          * return the existing instance.
          *
-         * @param context application context.
-         * @return singleton instance of database.
+         * @param context Application context.
+         * @return Singleton instance of database.
          */
         fun getDatabase(context: Context): AppDatabase {
             val tempInstance = INSTANCE
