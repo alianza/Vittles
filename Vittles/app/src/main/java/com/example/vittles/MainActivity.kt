@@ -95,31 +95,6 @@ class MainActivity : AppCompatActivity() {
         imgbtnCloseSearch.setOnClickListener { closeSearchBar() }
     }
 
-//    /**
-//     * Called when the option menu is created.
-//     *.
-//     */
-//
-//    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        menuInflater.inflate(R.menu.menu_main, menu)
-//        return true
-//    }
-
-//    /**
-//     * Handles action bar item clicks.
-//     *
-//     */
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        // Handle action bar item clicks here. The action bar will
-//        // automatically handle clicks on the Home/Up button, so long
-//        // as you specify a parent activity in AndroidManifest.xml.
-//        return when (item.itemId) {
-//            R.id.action_settings -> true
-//            else -> super.onOptionsItemSelected(item)
-//        }
-//    }
-
     /**
      * Called when the add button is clicked.
      * It starts the addProduct activity.
@@ -138,11 +113,18 @@ class MainActivity : AppCompatActivity() {
                 product -> product.productName!!.toLowerCase().contains(query.toLowerCase())
         } as MutableList<Product>
 
-        println("filtered: $filteredProducts")
         productAdapter.products = filteredProducts
         productAdapter.notifyDataSetChanged()
 
-        if (filteredProducts.size == 0) {
+        showOrHideNoResultsView()
+    }
+
+
+    /**
+     * Called after filtering products array to show or hide no results textview
+     */
+    private fun showOrHideNoResultsView() {
+        if (productAdapter.itemCount == 0) {
             tvNoResults.visibility = View.VISIBLE
         } else {
             tvNoResults.visibility = View.INVISIBLE
@@ -165,7 +147,6 @@ class MainActivity : AppCompatActivity() {
      * Populates the RecyclerView with items from the local DataBase.
      */
     private fun populateRecyclerView(){
-
         products.clear()
 
         for (i in productDao.getAll()) {
