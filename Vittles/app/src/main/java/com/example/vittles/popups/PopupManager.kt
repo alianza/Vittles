@@ -1,12 +1,13 @@
 package com.example.vittles.popups
 
-import android.os.Handler
-import android.os.Bundle
 import java.util.*
 import kotlin.concurrent.schedule
-import kotlin.concurrent.timerTask
 
-
+/**
+ * This class is used to show custom popups
+ *
+ * @author Arjen Simons
+ */
 internal class PopupManager() {
 
     private var button: Unit? = null
