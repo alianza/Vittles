@@ -22,11 +22,11 @@ import javax.inject.Inject
  * @suppress DEPRECATION Suppress deprecation on 'Date' since the project is running on API 21.
  */
 @Suppress("DEPRECATION")
-class ProductAdapter @Inject constructor(private val products: List<Product>) :
+class ProductAdapter @Inject constructor(initialProducts: List<Product>) :
     RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
 
     lateinit var context: Context
-
+    var products: List<Product> = initialProducts
     /**
      * Creates a new ViewHolder.
      *
@@ -53,7 +53,7 @@ class ProductAdapter @Inject constructor(private val products: List<Product>) :
     /**
      * Updates the contents of the itemView to reflect the item at the given position.
      *
-     * @param holder The ViewHolder that should be updated.
+     * @param The ViewHolder that should be updated.
      * @param position The position of the item to be updated.
      */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
