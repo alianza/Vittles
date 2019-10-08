@@ -1,12 +1,13 @@
 <resources>
-<!--    Global-->
+    <!--    Global-->
     <string name="app_name">Vittles</string>
     <string name="action_settings">Settings</string>
 
-<!--    Global Buttons-->
+    <!--    Global Buttons-->
     <string name="btn_confirm">Confirm</string>
+    <string name="btn_sort">Sort</string>
 
-<!--    Add Product Manually-->
+    <!--    Add Product Manually-->
     <string name="add_product_title">Add new Vittles</string>
     <string name="et_product_name">Product name</string>
     <string name="et_expiration_date">Expiration date</string>
@@ -14,6 +15,17 @@
     <string name="product_added">Product added!</string>
     <string name="product_failed">Could not add product!</string>
 
-<!--    Validations-->
+    <!--    Sorting Popup-->
+    <string name="sort_by">Sort by</string>
+    <string name="sort_option">Sort option</string>
+    <string name="days_remaining">Days Remaining</string>
+    <string name="days_remaining_LH">Days Remaining (Low to High)</string>
+    <string name="days_remaining_HL">Days Remaining (High to Low)</string>
+    <string name="alfabetic">Alfabetic (A-Z)</string>
+    <string name="alfabetic_reverse">Alfabetic (Z-A)</string>
+    <string name="newest">Newest</string>
+    <string name="oldest">Oldest</string>
+
+    <!--    Validations-->
     <string name="empty_fields">Please fill in all fields</string>
 </resources>
