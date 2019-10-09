@@ -4,20 +4,89 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".productlist.ProductsActivity">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:tint="@color/lightGrey"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:background="#FFFFFF"
+        android:tint="@color/lightGrey">
+
+        <LinearLayout
+            android:id="@+id/llSearch"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:orientation="horizontal"
+                android:visibility="visible">
+
+                <ImageButton
+                    android:id="@+id/imgbtnCloseSearch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="22dp"
+                    android:layout_marginTop="18dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:backgroundTint="#00FFFFFF"
+                    android:contentDescription="@string/close_search"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/ic_arrow_left" />
+
+                <SearchView
+                    android:id="@+id/svSearch"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="24dp"
+                    android:closeIcon="@drawable/ic_close"
+                    android:commitIcon="@drawable/ic_magnifying_glass"
+                    android:paddingTop="4dp"
+                    android:queryBackground="@android:color/transparent"
+                    android:searchIcon="@drawable/ic_magnifying_glass" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/ivBorder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="78dp"
+                android:layout_marginTop="-4dp"
+                android:layout_marginEnd="32dp"
+                android:contentDescription="@string/border"
+                android:scaleType="fitXY"
+                android:visibility="visible"
+                app:srcCompat="@drawable/ic_border" />
+
+        </LinearLayout>
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            android:background="@color/white"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            app:titleMarginStart="24dp"
+            app:titleTextColor="#000000">
+
+            <ImageButton
+                android:id="@+id/ibtnSearch"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="end"
+                android:layout_marginEnd="32dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/search"
+                android:src="@drawable/ic_magnifying_glass" />
+
+        </androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
 

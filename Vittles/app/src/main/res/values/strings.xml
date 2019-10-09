@@ -5,27 +5,28 @@
 
     <!--    Global Buttons-->
     <string name="btn_confirm">Confirm</string>
-    <string name="btn_sort">Sort</string>
+
+    <!--    Products Overview-->
+    <string name="view_title">My Vittles</string>
 
     <!--    Add Product Manually-->
-    <string name="add_product_title">Add new Vittles</string>
+    <string name="add_product_title">Add Vittles</string>
     <string name="et_product_name">Product name</string>
     <string name="et_expiration_date">Expiration date</string>
     <string name="expiration_format">%1$s/%2$s/%3$s</string>
     <string name="product_added">Product added!</string>
     <string name="product_failed">Could not add product!</string>
+    <string name="empty_state"><b>Nothing to Show :(</b>\nClick on button at the buttom to add vittles</string>
 
-    <!--    Sorting Popup-->
-    <string name="sort_by">Sort by</string>
-    <string name="sort_option">Sort option</string>
-    <string name="days_remaining">Days Remaining</string>
-    <string name="days_remaining_LH">Days Remaining (Low to High)</string>
-    <string name="days_remaining_HL">Days Remaining (High to Low)</string>
-    <string name="alfabetic">Alfabetic (A-Z)</string>
-    <string name="alfabetic_reverse">Alfabetic (Z-A)</string>
-    <string name="newest">Newest</string>
-    <string name="oldest">Oldest</string>
+    <!--    Search-->
+    <string name="no_search_results">Nothing to show :(</string>
 
     <!--    Validations-->
     <string name="empty_fields">Please fill in all fields</string>
+
+    <!--    Image Content Descriptions-->
+    <string name="border">.</string>
+    <string name="close_search">Close Search</string>
+    <string name="search">Search</string>
+
 </resources>

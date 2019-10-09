@@ -1,16 +1,18 @@
-package com.example.vittles
+package com.example.vittles.productadd
 
 import android.app.DatePickerDialog
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.MenuItem
-import androidx.appcompat.app.AppCompatActivity
-import com.example.vittles.data.AppDatabase
-import com.example.vittles.data.ProductDao
-import com.example.vittles.model.Product
+import com.example.domain.model.Product
+import com.example.vittles.R
+import com.example.vittles.VittlesApp
+import com.example.vittles.mvp.BaseActivity
+import com.example.vittles.services.NotificationService
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_add_product.*
 import java.util.*
+import javax.inject.Inject
 
 /**
  * Activity class for the Add Product component. This components makes it possible to
@@ -20,18 +22,22 @@ import java.util.*
  * @author Jan-Willem van Bremen
  */
 @Suppress("DEPRECATION") // Suppress deprecation on 'Date' since the project is running on API 21.
-class AddProductActivity : AppCompatActivity() {
-    private lateinit var productDao: ProductDao
+class AddProductActivity : BaseActivity() {
+    @Inject lateinit var presenter: AddProductPresenter
 
     private val calendar = Calendar.getInstance()
     private var expirationDate = Date()
 
     companion object{
         /**
-         * These offsets are used to counter the default values from the Date object.
+         * This offset is used to counter the default values from the Date object.
          *
          */
         const val YEARS_OFFSET = 1900
+        /**
+         * This offset is used to counter the default values from the Date object.
+         *
+         */
         const val MONTHS_OFFSET = 1
     }
 
@@ -42,10 +48,21 @@ class AddProductActivity : AppCompatActivity() {
      * @param savedInstanceState {@inheritDoc}
      */
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.inject
         super.onCreate(savedInstanceState)
-        productDao = AppDatabase.getDatabase(applicationContext).productDao()
+        presenter.start(this@AddProductActivity)
         setContentView(R.layout.activity_add_product)
         initViews()
+
+
+    }
+
+    override fun injectDependencies() {
+        DaggerAddProductComponent.builder()
+            .appComponent(VittlesApp.component)
+            .addProductModule(AddProductModule())
+            .build()
+            .inject(this)
     }
 
     /**
@@ -118,18 +135,15 @@ class AddProductActivity : AppCompatActivity() {
                 null,
                 etProductName.text.toString(),
                 this.expirationDate,
-                calendar.time
+                calendar.time,
+                null
             )
-            val status = productDao.insert(product)
-            if (status < 0) {
-                Snackbar.make(layout, getString(R.string.product_failed), Snackbar.LENGTH_LONG)
-                    .show()
-            } else {
-                etProductName.setText("")
-                etExpirationDate.setText("")
-            }
+            presenter.addProduct(product)
+
         }
     }
+
+
 
     /**
      * Validates the input fields from this activity. Will show feedback based on the validity.
@@ -144,5 +158,28 @@ class AddProductActivity : AppCompatActivity() {
             Snackbar.make(layout, getString(R.string.empty_fields), Snackbar.LENGTH_LONG).show()
             false
         }
+    }
+
+    /**
+     * If product has been added, this method will reset the text fields.
+     *
+     */
+    fun onProductAddSucceed() {
+        etProductName.setText("")
+        etExpirationDate.setText("")
+        NotificationService.createDataNotification(this@AddProductActivity,
+            "hi",
+            "This is the message of the notification when it is not expanded",
+            "This is the message of the notification when it is expanded", false)
+
+    }
+
+    /**
+     * If product could not be added, this method will create a feedback Snackbar for the error.
+     *
+     */
+    fun onProductAddFail() {
+        Snackbar.make(layout, getString(R.string.product_failed), Snackbar.LENGTH_LONG)
+            .show()
     }
 }
