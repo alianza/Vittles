@@ -14,7 +14,6 @@ import com.crashlytics.android.Crashlytics
 import com.example.vittles.data.AppDatabase
 import com.example.vittles.data.ProductDao
 import com.example.vittles.model.Product
-import com.example.vittles.model.SortOption
 import io.fabric.sdk.android.Fabric
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_sort.*
@@ -32,8 +31,6 @@ class MainActivity : AppCompatActivity() {
 
     private var products = mutableListOf<Product>()
     private val productAdapter = ProductAdapter(products)
-    private val sortOptions =  arrayListOf<SortOption>()
-    private val sortAdapter = SortAdapter(sortOptions)
 
     /**
      * Called when the MainActivity is created.
@@ -100,11 +97,6 @@ class MainActivity : AppCompatActivity() {
             this).setView(mDialogView)
         val mAlertDialog = mBuilder.show()
 
-        for (i in SortOption.OPTION_NAMES.indices) {
-            sortOptions.add(SortOption(SortOption.OPTION_NAMES[i]))
-        }
-
-        sortAdapter.notifyDataSetChanged()
     }
 
     /**
@@ -118,10 +110,6 @@ class MainActivity : AppCompatActivity() {
         rvProducts.layoutManager =
             LinearLayoutManager(this@MainActivity, RecyclerView.VERTICAL, false)
         rvProducts.adapter = productAdapter
-
-        rvSorting.layoutManager =
-            LinearLayoutManager(this@MainActivity, RecyclerView.VERTICAL, false)
-        rvSorting.adapter = sortAdapter
 
         populateRecyclerView()
     }
