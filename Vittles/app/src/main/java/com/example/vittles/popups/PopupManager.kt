@@ -8,6 +8,7 @@ import com.example.vittles.R
 import kotlinx.android.synthetic.main.base_popup.view.tvHeader
 import kotlinx.android.synthetic.main.base_popup.view.tvsSubtext
 import kotlinx.android.synthetic.main.popup_button_one.view.*
+import kotlinx.android.synthetic.main.popup_button_two.view.*
 import java.util.*
 import kotlin.concurrent.schedule
 
@@ -33,6 +34,13 @@ internal class PopupManager {
             }
     }
 
+    /**
+     * Sets the AlertDialog and makes sure the popup xml is inflated
+     *
+     * @param context The context of the current activity
+     * @param popupBase An implementation of the IPopupBase
+     * @param view The view that should be displayed
+     */
     private fun showPopup(context: Context, popupBase: IPopupBase, view: View){
 
         view.tvHeader.text = popupBase.header
@@ -48,7 +56,7 @@ internal class PopupManager {
     /**
      * Displays a popup with a header and subText.
      *
-     * @param context The context of the application
+     * @param context The context of current activity
      * @param popupBase The PopupBase which contains a header and subText string
      */
     internal fun showPopup(context: Context, popupBase: IPopupBase){
@@ -60,7 +68,7 @@ internal class PopupManager {
     /**
      * Displays a popup with the header, subText and one button.
      *
-     * @param context The context of the application
+     * @param context The context of current activity
      * @param popupBase The PopupBase which contains a header and subText string
      * @param button The PopupButton which contains a string and a Unit
      */
@@ -75,17 +83,20 @@ internal class PopupManager {
     /**
      * Displays a popup with the header, subText and two buttons.
      *
-     * @param context The context of the application
+     * @param context The context of current activity
      * @param popupBase The PopupBase which contains a header and subText string
      * @param buttonLeft The PopupButton for the left button which contains a string and a Unit
      * @param buttonRight The PopupButton for the right button which contains a string and a Unit
      */
     internal fun showPopup(context: Context, popupBase: IPopupBase, buttonLeft: IPopupButton, buttonRight: IPopupButton){
 
+        val view = LayoutInflater.from(context).inflate(R.layout.popup_button_two, null)
+        view.btnLeft.text = buttonLeft.text
+        view.btnLeft.setOnClickListener { buttonAction(buttonLeft.action) }
+        view.btnRight.text = buttonRight.text
+        view.btnRight.setOnClickListener { buttonAction( buttonRight.action) }
 
-
-        showPopup(context, popupBase)
-        throw NotImplementedError()
+        showPopup(context, popupBase, view)
     }
 
     /**
