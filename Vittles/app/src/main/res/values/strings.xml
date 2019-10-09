@@ -1,13 +1,16 @@
 <resources>
-<!--    Global-->
+    <!--    Global-->
     <string name="app_name">Vittles</string>
     <string name="action_settings">Settings</string>
 
-<!--    Global Buttons-->
+    <!--    Global Buttons-->
     <string name="btn_confirm">Confirm</string>
 
-<!--    Add Product Manually-->
-    <string name="add_product_title">Add new Vittles</string>
+    <!--    Products Overview-->
+    <string name="view_title">My Vittles</string>
+
+    <!--    Add Product Manually-->
+    <string name="add_product_title">Add Vittles</string>
     <string name="et_product_name">Product name</string>
     <string name="et_expiration_date">Expiration date</string>
     <string name="expiration_format">%1$s/%2$s/%3$s</string>
@@ -15,13 +18,13 @@
     <string name="product_failed">Could not add product!</string>
     <string name="empty_state"><b>Nothing to Show :(</b>\nClick on button at the buttom to add vittles</string>
 
-<!--    Search-->
+    <!--    Search-->
     <string name="no_search_results">Nothing to show :(</string>
 
-<!--    Validations-->
+    <!--    Validations-->
     <string name="empty_fields">Please fill in all fields</string>
 
-<!--    Image Content Descriptions-->
+    <!--    Image Content Descriptions-->
     <string name="border">.</string>
     <string name="close_search">Close Search</string>
     <string name="search">Search</string>
