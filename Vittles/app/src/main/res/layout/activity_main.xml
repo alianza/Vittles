@@ -40,7 +40,7 @@
                     app:srcCompat="@drawable/ic_arrow_left" />
 
                 <SearchView
-                    android:id="@+id/searchView"
+                    android:id="@+id/svSearch"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginEnd="24dp"
