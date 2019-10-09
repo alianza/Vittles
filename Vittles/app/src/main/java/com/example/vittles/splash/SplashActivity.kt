@@ -9,6 +9,10 @@ import com.example.vittles.productlist.ProductsActivity
 
 class SplashActivity : AppCompatActivity() {
 
+    /**
+     * Called when the SplashActivity is created and opens the ProductsActivity
+     *
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
