@@ -25,6 +25,15 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <!--    MAIN PAGE-->
+    <style name="AppTheme.NoActionBar.Splash">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimary</item>
+        <item name="colorAccent">@color/black</item>
+    </style>
+
     <!--    ALREADY EXISTING STUFF-->
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="android:actionBarStyle">@style/AppTheme.ActionBarStyle</item>
