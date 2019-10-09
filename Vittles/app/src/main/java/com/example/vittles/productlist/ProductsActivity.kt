@@ -4,8 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.widget.SearchView
 import android.widget.TextView
@@ -74,8 +72,8 @@ class ProductsActivity : BaseActivity() {
 
         // Set searchView textColor
         val id =
-            searchView.context.resources.getIdentifier("android:id/search_src_text", null, null)
-        val textView = searchView.findViewById(id) as TextView
+            svSearch.context.resources.getIdentifier("android:id/search_src_text", null, null)
+        val textView = svSearch.findViewById(id) as TextView
         textView.setTextColor(Color.BLACK)
     }
 
@@ -100,9 +98,9 @@ class ProductsActivity : BaseActivity() {
 
         ibtnSearch.setOnClickListener { openSearchBar() }
 
-        searchView.setOnCloseListener { closeSearchBar(); false }
+        svSearch.setOnCloseListener { closeSearchBar(); false }
 
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        svSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
 
             override fun onQueryTextChange(newText: String): Boolean {
                 filter(newText); return false
@@ -138,6 +136,7 @@ class ProductsActivity : BaseActivity() {
             AddProductActivity::class.java
         )
         startActivity(addProductActivityIntent)
+        closeSearchBar()
     }
 
     /**
@@ -176,7 +175,7 @@ class ProductsActivity : BaseActivity() {
      */
     private fun openSearchBar() {
         llSearch.visibility = View.VISIBLE
-        searchView.isIconified = false
+        svSearch.isIconified = false
 
         toolbar.visibility = View.GONE
     }
@@ -187,6 +186,7 @@ class ProductsActivity : BaseActivity() {
      */
     private fun closeSearchBar() {
         llSearch.visibility = View.GONE
+        svSearch.setQuery("", true)
         toolbar.visibility = View.VISIBLE
     }
 
