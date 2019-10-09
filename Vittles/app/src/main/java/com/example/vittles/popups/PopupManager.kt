@@ -13,7 +13,7 @@ internal class PopupManager() {
     private var button: Unit? = null
     private var buttonLeft: Unit? = null
     private var buttonRight: Unit? = null
-    private var i = 1
+    private var i = 1 //TODO: Delete this placeholder variable
 
     //Singleton
     companion object{
@@ -36,10 +36,10 @@ internal class PopupManager() {
      * @param subText The subtext in a popup.
      * @param popupTime The amount of milliseconds the popup should be active. If it's null the popup stays active.
      */
-    internal fun showPopup(header: String, subText: String, popupTime: Int? = null){
+    internal fun showPopup(popupBase: IPopupBase){
 
         //TODO: Make sure the popup is shown with the right elements
-        autoClosePopup(popupTime)
+        autoClosePopup(popupBase.popupDuration)
         throw NotImplementedError()
     }
 
@@ -51,8 +51,8 @@ internal class PopupManager() {
      * @param button A unit that should be called when the button on the popup is clicked. If null the button will close the popup.
      * @param popupTime The amount of milliseconds the popup should be active. If it's null the popup stays active.
      */
-    internal fun showPopup(header: String, subText: String, button: (() -> Unit)?, popupTime: Int? = null){
-        showPopup(header, subText, popupTime)
+    internal fun showPopup(popupBase: IPopupBase, button: IPopupButton){
+        showPopup(popupBase)
         throw NotImplementedError()
     }
 
@@ -65,8 +65,8 @@ internal class PopupManager() {
      * @param buttonRight button A unit that should be called when the right button on the popup is clicked. If null the button will close the popup.
      * @param popupTime The amount of milliseconds the popup should be active. If it's null the popup stays active.
      */
-    internal fun showPopup(header: String, subText: String, buttonLeft: (() -> Unit)?, buttonRight: (() -> Unit)?, popupTime: Int? = null){
-        showPopup(header, subText, popupTime)
+    internal fun showPopup(popupBase: IPopupBase, buttonLeft: IPopupButton, buttonRight: IPopupButton){
+        showPopup(popupBase)
         throw NotImplementedError()
     }
 
@@ -75,7 +75,8 @@ internal class PopupManager() {
      *
      */
     internal fun closePopup(){
-        showPopup("ha", "ja", null, { printLine() })
+
+        showPopup(PopupBase("Header", "This is the subtext"), PopupButton("printLine") { printLine() })
         throw NotImplementedError()
     }
 
@@ -97,12 +98,12 @@ internal class PopupManager() {
      *
      * @param duration The amount of milliseconds the popup is active. If it's null the popup won't close automatically
      */
-    private fun autoClosePopup(duration: Int?) {
+    private fun autoClosePopup(duration: Long?) {
         if (duration == null){
             return
         }
 
-        Timer().schedule(duration.toLong()) {
+        Timer().schedule(duration) {
             closePopup()
         }
     }
