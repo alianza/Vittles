@@ -65,6 +65,7 @@ class ProductsActivity : BaseActivity() {
      */
     private fun initViews() {
         setListeners()
+        supportActionBar?.title = getString(R.string.view_title)
 
         rvProducts.layoutManager =
             LinearLayoutManager(this@ProductsActivity, RecyclerView.VERTICAL, false)
