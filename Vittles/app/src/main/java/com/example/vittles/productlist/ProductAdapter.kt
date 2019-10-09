@@ -75,6 +75,12 @@ class ProductAdapter @Inject constructor(initialProducts: List<Product>) :
         fun bind(product: Product) {
             val daysLeft = product.getDaysRemaining()
 
+            if(products[products.lastIndex] == product) {
+                itemView.borderDecorator.visibility = View.INVISIBLE
+            } else {
+                itemView.borderDecorator.visibility = View.VISIBLE
+            }
+
             itemView.tvName.text = product.productName
             itemView.tvDate.text = context.resources.getString(
                 R.string.expiration_format,
