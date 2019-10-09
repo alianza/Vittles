@@ -8,6 +8,7 @@ import com.example.domain.model.Product
 import com.example.vittles.R
 import com.example.vittles.VittlesApp
 import com.example.vittles.mvp.BaseActivity
+import com.example.vittles.services.NotificationService
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_add_product.*
 import java.util.*
@@ -52,6 +53,8 @@ class AddProductActivity : BaseActivity() {
         presenter.start(this@AddProductActivity)
         setContentView(R.layout.activity_add_product)
         initViews()
+
+
     }
 
     override fun injectDependencies() {
@@ -136,8 +139,11 @@ class AddProductActivity : BaseActivity() {
                 null
             )
             presenter.addProduct(product)
+
         }
     }
+
+
 
     /**
      * Validates the input fields from this activity. Will show feedback based on the validity.
@@ -161,6 +167,11 @@ class AddProductActivity : BaseActivity() {
     fun onProductAddSucceed() {
         etProductName.setText("")
         etExpirationDate.setText("")
+        NotificationService.createDataNotification(this@AddProductActivity,
+            "hi",
+            "This is the message of the notification when it is not expanded",
+            "This is the message of the notification when it is expanded", false)
+
     }
 
     /**
