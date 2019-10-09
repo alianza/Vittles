@@ -1,5 +1,13 @@
 package com.example.vittles.popups
 
+import android.app.AlertDialog
+import android.content.Context
+import android.view.LayoutInflater
+import android.view.View
+import com.example.vittles.R
+import kotlinx.android.synthetic.main.base_popup.view.tvHeader
+import kotlinx.android.synthetic.main.base_popup.view.tvsSubtext
+import kotlinx.android.synthetic.main.popup_button_one.view.*
 import java.util.*
 import kotlin.concurrent.schedule
 
@@ -8,12 +16,9 @@ import kotlin.concurrent.schedule
  *
  * @author Arjen Simons
  */
-internal class PopupManager() {
+internal class PopupManager {
 
-    private var button: Unit? = null
-    private var buttonLeft: Unit? = null
-    private var buttonRight: Unit? = null
-    private var i = 1 //TODO: Delete this placeholder variable
+    private var alertDialog: AlertDialog? = null
 
     //Singleton
     companion object{
@@ -24,49 +29,62 @@ internal class PopupManager() {
                 if(INSTANCE == null){
                     INSTANCE = PopupManager()
                 }
-
                 return INSTANCE!!
             }
+    }
+
+    private fun showPopup(context: Context, popupBase: IPopupBase, view: View){
+
+        view.tvHeader.text = popupBase.header
+        view.tvsSubtext.text = popupBase.subText
+
+        val builder = AlertDialog.Builder(context).setView(view)
+
+        alertDialog = builder.show()
+
+        autoClosePopup(popupBase.popupDuration)
     }
 
     /**
      * Displays a popup with a header and subText.
      *
-     * @param header The header of the popup.
-     * @param subText The subtext in a popup.
-     * @param popupTime The amount of milliseconds the popup should be active. If it's null the popup stays active.
+     * @param context The context of the application
+     * @param popupBase The PopupBase which contains a header and subText string
      */
-    internal fun showPopup(popupBase: IPopupBase){
+    internal fun showPopup(context: Context, popupBase: IPopupBase){
+        val view = LayoutInflater.from(context).inflate(R.layout.base_popup, null)
 
-        //TODO: Make sure the popup is shown with the right elements
-        autoClosePopup(popupBase.popupDuration)
-        throw NotImplementedError()
-    }
+        showPopup(context, popupBase, view)
+}
 
     /**
      * Displays a popup with the header, subText and one button.
      *
-     * @param header The header of the popup.
-     * @param subText The subtext in a popup.
-     * @param button A unit that should be called when the button on the popup is clicked. If null the button will close the popup.
-     * @param popupTime The amount of milliseconds the popup should be active. If it's null the popup stays active.
+     * @param context The context of the application
+     * @param popupBase The PopupBase which contains a header and subText string
+     * @param button The PopupButton which contains a string and a Unit
      */
-    internal fun showPopup(popupBase: IPopupBase, button: IPopupButton){
-        showPopup(popupBase)
-        throw NotImplementedError()
+    internal fun showPopup(context: Context, popupBase: IPopupBase, button: IPopupButton){
+        val view = LayoutInflater.from(context).inflate(R.layout.popup_button_one, null)
+        view.btn.text = button.text
+        view.btn.setOnClickListener { buttonAction(button.action) }
+
+        showPopup(context, popupBase, view)
     }
 
     /**
      * Displays a popup with the header, subText and two buttons.
      *
-     * @param header The header of the popup.
-     * @param subText The subtext in a popup.
-     * @param buttonLeft button A unit that should be called when the left button on the popup is clicked. If null the button will close the popup.
-     * @param buttonRight button A unit that should be called when the right button on the popup is clicked. If null the button will close the popup.
-     * @param popupTime The amount of milliseconds the popup should be active. If it's null the popup stays active.
+     * @param context The context of the application
+     * @param popupBase The PopupBase which contains a header and subText string
+     * @param buttonLeft The PopupButton for the left button which contains a string and a Unit
+     * @param buttonRight The PopupButton for the right button which contains a string and a Unit
      */
-    internal fun showPopup(popupBase: IPopupBase, buttonLeft: IPopupButton, buttonRight: IPopupButton){
-        showPopup(popupBase)
+    internal fun showPopup(context: Context, popupBase: IPopupBase, buttonLeft: IPopupButton, buttonRight: IPopupButton){
+
+
+
+        showPopup(context, popupBase)
         throw NotImplementedError()
     }
 
@@ -74,10 +92,11 @@ internal class PopupManager() {
      * Closes the active popup
      *
      */
-    internal fun closePopup(){
-
-        showPopup(PopupBase("Header", "This is the subtext"), PopupButton("printLine") { printLine() })
-        throw NotImplementedError()
+    private fun closePopup(){
+        if (alertDialog != null) {
+            alertDialog!!.dismiss()
+            alertDialog = null
+        }
     }
 
     /**
@@ -85,21 +104,18 @@ internal class PopupManager() {
      *
      * @param action The action to handle
      */
-    private fun buttonAction(action: Unit){
-        if (action != null) {
-            action
-        } else{
-            closePopup()
-        }
+    private fun buttonAction(action: (() ->Unit)?){
+        action?.invoke()
+        closePopup()
     }
 
     /**
-     * This method makes sure the popup is closed after a certain amount of milliseconds.
+     * Closes the active popup after a certain amount of milliseconds.
      *
-     * @param duration The amount of milliseconds the popup is active. If it's null the popup won't close automatically
+     * @param duration The amount of milliseconds the popup is active. If it's null <= 0 the popup won't close automatically
      */
     private fun autoClosePopup(duration: Long?) {
-        if (duration == null){
+        if (duration == null || duration <= 0 || alertDialog == null){
             return
         }
 
@@ -107,11 +123,4 @@ internal class PopupManager() {
             closePopup()
         }
     }
-
-    //TODO: Delete this placeholder method
-    private fun printLine(){
-        println("ja")
-    }
-
-
 }

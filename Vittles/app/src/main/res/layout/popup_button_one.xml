@@ -39,4 +39,13 @@
         android:text="This is the subtext. \n Here extra text can be added"
         android:textSize="14sp" />
 
+    <Button
+        android:id="@+id/btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/tvsSubtext"
+        android:paddingBottom="10dp"
+        android:text="Button" />
+
 </RelativeLayout>
