@@ -120,9 +120,9 @@ class ProductsActivity : BaseActivity() {
      */
     private fun setEmptyView() {
         if (productAdapter.itemCount == 0) {
-            tvEmptyView.visibility = View.VISIBLE
+            tvAddNewVittle.visibility = View.VISIBLE
         } else {
-            tvEmptyView.visibility = View.GONE
+            tvAddNewVittle.visibility = View.GONE
         }
     }
 
@@ -210,6 +210,7 @@ class ProductsActivity : BaseActivity() {
         productAdapter.products = products
         productAdapter.notifyDataSetChanged()
         setEmptyView()
+        setNoResultsView()
     }
 
     /**
