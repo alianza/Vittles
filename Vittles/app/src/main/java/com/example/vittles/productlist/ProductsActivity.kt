@@ -67,11 +67,6 @@ class ProductsActivity : BaseActivity() {
     private fun initViews(){
         setListeners()
 
-        PopupManager.instance.showPopup(
-            PopupBase("Printline", "Do you wan't to print a line", 1000),
-            PopupButton("cancel", null),
-            PopupButton("print") { print("The printed line")})
-
         rvProducts.layoutManager =
             LinearLayoutManager(this@ProductsActivity, RecyclerView.VERTICAL, false)
         rvProducts.adapter = productAdapter
