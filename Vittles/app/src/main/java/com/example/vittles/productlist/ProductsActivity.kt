@@ -41,6 +41,7 @@ class ProductsActivity : BaseActivity() {
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.inject
+        setTheme(R.style.AppTheme_NoActionBar)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
