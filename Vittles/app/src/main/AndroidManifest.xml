@@ -16,17 +16,13 @@
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".productadd.AddProductActivity"/>
         <activity
-            android:name=".splash.SplashActivity"
-            android:theme="@style/AppTheme.NoActionBar.Splash">
+            android:name=".productlist.ProductsActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.Launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".productlist.ProductsActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
         <meta-data
