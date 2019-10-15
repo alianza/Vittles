@@ -13,6 +13,9 @@ import com.example.domain.model.Product
 import com.example.vittles.R
 import com.example.vittles.VittlesApp
 import com.example.vittles.mvp.BaseActivity
+import com.example.vittles.popups.PopupBase
+import com.example.vittles.popups.PopupButton
+import com.example.vittles.popups.PopupManager
 import com.example.vittles.productadd.AddProductActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
