@@ -121,9 +121,9 @@ class ProductsActivity : BaseActivity() {
      */
     private fun setEmptyView() {
         if (productAdapter.itemCount == 0) {
-            tvEmptyView.visibility = View.VISIBLE
+            tvEmptyViewAddButton.visibility = View.VISIBLE
         } else {
-            tvEmptyView.visibility = View.GONE
+            tvEmptyViewAddButton.visibility = View.GONE
         }
     }
 
@@ -210,6 +210,7 @@ class ProductsActivity : BaseActivity() {
         presenter.loadIndicationColors(this.products)
         productAdapter.notifyDataSetChanged()
         setEmptyView()
+        setNoResultsView()
     }
 
     /**
