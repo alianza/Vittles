@@ -1,7 +1,7 @@
 package com.example.vittles.popups
 
 /**
- * The interface for the base of each popup
+ * The interface for the base of each popup.
  *
  * @author Arjen Simons
  */
@@ -12,7 +12,7 @@ internal interface IPopupBase{
 }
 
 /**
- * The interface for the button on a popup
+ * The interface for the button on a popup.
  *
  * @author Arjen Simons
  */

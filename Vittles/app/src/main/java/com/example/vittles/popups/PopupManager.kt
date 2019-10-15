@@ -14,11 +14,11 @@ import java.util.*
 import kotlin.concurrent.schedule
 
 /**
- * This class is used to show custom popups
+ * This class is used to show custom popups.
  *
  * @author Arjen Simons
  *
- * @property alertDialog This is the alerDialog used to show popups
+ * @property alertDialog This is the alerDialog used to show popups.
  */
 internal class PopupManager {
 
@@ -37,11 +37,11 @@ internal class PopupManager {
     }
 
     /**
-     * Sets the AlertDialog and makes sure the popup xml is inflated
+     * Sets the AlertDialog and makes sure the popup xml is inflated.
      *
-     * @param context The context of the current activity
-     * @param popupBase An implementation of the IPopupBase
-     * @param view The view that should be displayed
+     * @param context The context of the current activity.
+     * @param popupBase An implementation of the IPopupBase.
+     * @param view The view that should be displayed.
      */
     private fun showPopup(context: Context, popupBase: IPopupBase, view: View){
 
@@ -50,6 +50,8 @@ internal class PopupManager {
 
         val builder = AlertDialog.Builder(context).setView(view)
         alertDialog = builder.show()
+
+        //This is done so the default window of the alertDialog is not shown. If we don't do this, de design won't match.
         alertDialog!!.window?.setBackgroundDrawable(ColorDrawable(android.graphics.Color.TRANSPARENT))
         autoClosePopup(popupBase.popupDuration)
     }
@@ -57,8 +59,8 @@ internal class PopupManager {
     /**
      * Displays a popup with a header and subText.
      *
-     * @param context The context of current activity
-     * @param popupBase The PopupBase which contains a header and subText string
+     * @param context The context of current activity.
+     * @param popupBase The PopupBase which contains a header and subText string.
      */
     internal fun showPopup(context: Context, popupBase: IPopupBase){
         val view = LayoutInflater.from(context).inflate(R.layout.base_popup, null)
@@ -69,9 +71,9 @@ internal class PopupManager {
     /**
      * Displays a popup with the header, subText and one button.
      *
-     * @param context The context of current activity
-     * @param popupBase The PopupBase which contains a header and subText string
-     * @param button The PopupButton which contains a string and a Unit
+     * @param context The context of current activity.
+     * @param popupBase The PopupBase which contains a header and subText string.
+     * @param button The PopupButton which contains a string and a Unit.
      */
     internal fun showPopup(context: Context, popupBase: IPopupBase, button: IPopupButton){
         val view = LayoutInflater.from(context).inflate(R.layout.popup_button_one, null)
@@ -84,10 +86,10 @@ internal class PopupManager {
     /**
      * Displays a popup with the header, subText and two buttons.
      *
-     * @param context The context of current activity
-     * @param popupBase The PopupBase which contains a header and subText string
-     * @param buttonLeft The PopupButton for the left button which contains a string and a Unit
-     * @param buttonRight The PopupButton for the right button which contains a string and a Unit
+     * @param context The context of current activity.
+     * @param popupBase The PopupBase which contains a header and subText string.
+     * @param buttonLeft The PopupButton for the left button which contains a string and a Unit.
+     * @param buttonRight The PopupButton for the right button which contains a string and a Unit.
      */
     internal fun showPopup(context: Context, popupBase: IPopupBase, buttonLeft: IPopupButton, buttonRight: IPopupButton){
 
@@ -101,7 +103,7 @@ internal class PopupManager {
     }
 
     /**
-     * Closes the active popup
+     * Closes the active popup.
      *
      */
     private fun closePopup(){
@@ -112,9 +114,9 @@ internal class PopupManager {
     }
 
     /**
-     * Handles a button action
+     * Handles a button action.
      *
-     * @param action The action to handle
+     * @param action The action to handle.
      */
     private fun buttonAction(action: (() ->Unit)?){
         action?.invoke()
@@ -124,7 +126,7 @@ internal class PopupManager {
     /**
      * Closes the active popup after a certain amount of milliseconds.
      *
-     * @param duration The amount of milliseconds the popup is active. If it's null <= 0 the popup won't close automatically
+     * @param duration The amount of milliseconds the popup is active. If it's null <= 0 the popup won't close automatically.
      */
     private fun autoClosePopup(duration: Long?) {
         if (duration == null || duration <= 0 || alertDialog == null){
