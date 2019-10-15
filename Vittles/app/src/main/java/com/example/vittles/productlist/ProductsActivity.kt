@@ -58,7 +58,6 @@ class ProductsActivity : BaseActivity() {
             .inject(this)
     }
 
-
     /**
      * Initializes the RecyclerView and sets EventListeners.
      *
@@ -208,6 +207,7 @@ class ProductsActivity : BaseActivity() {
     fun onProductsLoadSucceed(products: List<Product>) {
         this.products.addAll(products)
         presenter.loadIndicationColors(this.products)
+        productAdapter.products = products
         productAdapter.notifyDataSetChanged()
         setEmptyView()
     }
