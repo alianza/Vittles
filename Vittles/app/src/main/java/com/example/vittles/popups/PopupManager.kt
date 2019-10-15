@@ -2,6 +2,7 @@ package com.example.vittles.popups
 
 import android.app.AlertDialog
 import android.content.Context
+import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.View
 import com.example.vittles.R
@@ -16,12 +17,13 @@ import kotlin.concurrent.schedule
  * This class is used to show custom popups
  *
  * @author Arjen Simons
+ *
+ * @property alertDialog This is the alerDialog used to show popups
  */
 internal class PopupManager {
 
     private var alertDialog: AlertDialog? = null
 
-    //Singleton
     companion object{
         private var INSTANCE: PopupManager? = null
 
@@ -47,9 +49,8 @@ internal class PopupManager {
         view.tvsSubtext.text = popupBase.subText
 
         val builder = AlertDialog.Builder(context).setView(view)
-
         alertDialog = builder.show()
-
+        alertDialog!!.window?.setBackgroundDrawable(ColorDrawable(android.graphics.Color.TRANSPARENT))
         autoClosePopup(popupBase.popupDuration)
     }
 
