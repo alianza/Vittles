@@ -44,6 +44,7 @@ internal class PopupManager {
      * @param view The view that should be displayed.
      */
     private fun showPopup(context: Context, popupBase: IPopupBase, view: View){
+        closePopup()
 
         view.tvHeader.text = popupBase.header
         view.tvsSubtext.text = popupBase.subText
