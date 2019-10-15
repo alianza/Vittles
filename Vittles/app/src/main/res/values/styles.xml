@@ -19,19 +19,19 @@
         <item name="android:datePickerDialogTheme">@style/AppTheme.DatePickerDialogTheme</item>
     </style>
 
-    <!--    MAIN PAGE-->
-    <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
-    <!--    MAIN PAGE-->
-    <style name="AppTheme.NoActionBar.Splash">
+    <!-- MAIN PAGE SPLASH -->
+    <style name="AppTheme.Launcher">
+        <item name="android:windowBackground">@drawable/splash_screen</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimary</item>
-        <item name="colorAccent">@color/black</item>
+    </style>
+
+    <!--    MAIN PAGE-->
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
     <!--    ALREADY EXISTING STUFF-->
