@@ -19,6 +19,11 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8
+    }
+
     compileSdkVersion 29
     defaultConfig {
         applicationId "com.example.vittles"
@@ -77,6 +82,8 @@ dependencies {
     api 'com.google.dagger:dagger-android:2.18'
     api 'com.google.dagger:dagger-android-support:2.18' // if you use the support libraries
     annotationProcessor 'com.google.dagger:dagger-android-processor:2.18'
+
+    implementation 'net.danlew:android.joda:2.10.3'
 
     implementation project(path: ':domain')
     implementation project(path: ':data')
