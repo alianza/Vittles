@@ -121,9 +121,9 @@ class ProductsActivity : BaseActivity() {
      */
     private fun setEmptyView() {
         if (productAdapter.itemCount == 0) {
-            tvEmptyViewAddButton.visibility = View.VISIBLE
+            tvAddNewVittle.visibility = View.VISIBLE
         } else {
-            tvEmptyViewAddButton.visibility = View.GONE
+            tvAddNewVittle.visibility = View.GONE
         }
     }
 
