@@ -3,6 +3,7 @@ package com.example.domain.productadd
 import com.example.domain.repositories.ProductsRepository
 import com.example.domain.model.Product
 import io.reactivex.Completable
+import javax.inject.Inject
 
 /**
  * This class handles te business logic of adding a new product to the application.
@@ -12,7 +13,7 @@ import io.reactivex.Completable
  *
  * @property repository The productsRepository.
  */
-class AddProductUseCase(private val repository: ProductsRepository) {
+class AddProductUseCase @Inject constructor(private val repository: ProductsRepository) {
 
     /**
      * This method is used to add a product to the database.
