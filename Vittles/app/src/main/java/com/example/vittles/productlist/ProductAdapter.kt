@@ -72,8 +72,8 @@ class ProductAdapter @Inject constructor(initialProducts: List<Product>) :
         fun bind(product: Product) {
             var daysLeft = product.getDaysRemaining().toString()
 
-            if (daysLeft.toInt() > 99) {
-                daysLeft = "99+"
+            if (daysLeft.toInt() > context.getString(R.string.maxDaysRemaining).toInt()) {
+                daysLeft = context.getString(R.string.maxDaysRemaining) + "+"
             }
 
             if(products[products.lastIndex] == product) {
