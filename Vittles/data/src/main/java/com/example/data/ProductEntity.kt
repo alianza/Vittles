@@ -3,7 +3,7 @@ package com.example.data
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.util.*
+import org.joda.time.DateTime
 
 /**
  * ProductEntity data model.
@@ -21,6 +21,6 @@ import java.util.*
 data class ProductEntity(
     @PrimaryKey(autoGenerate = true) val uid: Int?,
     @ColumnInfo(name = "product_name") val productName: String,
-    @ColumnInfo(name = "expiration_date") val expirationDate: Date,
-    @ColumnInfo(name = "creation_date") val creationDate: Date
+    @ColumnInfo(name = "expiration_date") val expirationDate: DateTime,
+    @ColumnInfo(name = "creation_date") val creationDate: DateTime
 )

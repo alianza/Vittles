@@ -1,15 +1,11 @@
 package com.example.domain.product
 
-import java.util.*
+import org.joda.time.*
 
-/**
- * An instance of the Calender.
- */
-val calendar: Calendar = Calendar.getInstance()
+
 /**
  * Represents the total amount of milliseconds in a day. This value is used to convert the remaining milliseconds to remaining days.
  */
-const val msInDay: Double = (0.000000277777778).div(24)
 
 /**
  * The product entity.
@@ -26,8 +22,8 @@ const val msInDay: Double = (0.000000277777778).div(24)
 data class Product(
     val uid: Int?,
     val productName: String,
-    val expirationDate: Date,
-    val creationDate: Date,
+    val expirationDate: DateTime,
+    val creationDate: DateTime,
     var indicationColor: Int?
 ) {
     /**
@@ -36,9 +32,7 @@ data class Product(
      * @return An integer with the amount of days left.
      */
     fun getDaysRemaining(): Int {
-        return (expirationDate.time.minus(calendar.time.time)).times(
-            msInDay
-        ).toInt()
+        return Days.daysBetween(DateTime.now(), expirationDate).days + 1
     }
 
     /**

@@ -1,7 +1,7 @@
 package com.example.data
 
 import androidx.room.TypeConverter
-import java.util.*
+import org.joda.time.DateTime
 
 /**
  * The converters in this class are used to convert non-persistable types in data models
@@ -11,12 +11,12 @@ import java.util.*
  */
 class Converters {
     @TypeConverter
-    fun fromTimestamp(value: Long?): Date? {
-        return value?.let { Date(it) }
+    fun fromTimestamp(value: Long?): DateTime? {
+        return DateTime(value)
     }
 
     @TypeConverter
-    fun dateToTimestamp(date: Date?): Long? {
-        return date?.time
+    fun dateToTimestamp(date: DateTime?): Long? {
+        return date!!.millis
     }
 }
