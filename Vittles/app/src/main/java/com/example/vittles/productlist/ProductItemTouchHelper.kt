@@ -10,16 +10,17 @@ import com.example.vittles.R
 import kotlinx.android.synthetic.main.item_product.view.*
 import android.graphics.*
 import android.graphics.drawable.Drawable
+import androidx.core.content.ContextCompat
 
 
 /**
- * Creates an ItemTouchHelper and defines what happens on swiping
+ * Creates an ItemTouchHelper and defines what happens on swiping.
  *
  * @author Sarah Lange
  *
- * @param initialProducts The List of products from the recycler View
- * @param initialPresenter The presenter what presents the product
- * @param context Application Context
+ * @param initialProducts The List of products from the recycler View.
+ * @param initialPresenter The presenter what presents the product.
+ * @param context Application Context.
  */
 class ProductItemTouchHelper(initialProducts: List<Product>, initialPresenter: ProductsPresenter,
                              var context: Context
@@ -60,7 +61,7 @@ class ProductItemTouchHelper(initialProducts: List<Product>, initialPresenter: P
     }
 
     /**
-     * Called when a ViewHolder is swiped by the user
+     * Called when a ViewHolder is swiped by the user.
      *
      * @param viewHolder The ViewHolder which has been swiped by the user.
      * @param direction  The direction to which the ViewHolder is swiped.
@@ -108,7 +109,6 @@ class ProductItemTouchHelper(initialProducts: List<Product>, initialPresenter: P
     ) {
 
         val isCanceled = dX == 0f && !isCurrentlyActive
-        val backgroundColor = Color.parseColor("#FF4B4B")
 
         if (isCanceled) {
             removeSwipeLines(viewHolder, recyclerView)
@@ -118,7 +118,7 @@ class ProductItemTouchHelper(initialProducts: List<Product>, initialPresenter: P
 
         showSwipeLines(viewHolder, recyclerView)
 
-        setBackgroundColor(c,  viewHolder, backgroundColor)
+        setBackgroundColor(c,  viewHolder, ContextCompat.getColor(context, R.color.red))
 
         drawIcon(c, viewHolder, context.getDrawable(R.drawable.ic_delete_white_24)!!)
 
@@ -128,7 +128,7 @@ class ProductItemTouchHelper(initialProducts: List<Product>, initialPresenter: P
     }
 
     /**
-     * Set the animation background color of a ViewHolder
+     * Set the animation background color of a ViewHolder.
      *
      * @param c The canvas which RecyclerView is drawing its children.
      * @param viewHolder The ViewHolder which is being interacted by the User.
@@ -143,11 +143,11 @@ class ProductItemTouchHelper(initialProducts: List<Product>, initialPresenter: P
     }
 
     /**
-     * Set an icon to the animation of a ViewHolder
+     * Set an icon to the animation of a ViewHolder.
      *
      * @param c The canvas which RecyclerView is drawing its children.
      * @param viewHolder The ViewHolder which is being interacted by the User.
-     * @param icon icon the animation should have
+     * @param icon icon the animation should have.
      */
     private fun drawIcon(c: Canvas, viewHolder: RecyclerView.ViewHolder, icon: Drawable){
 
@@ -165,7 +165,7 @@ class ProductItemTouchHelper(initialProducts: List<Product>, initialPresenter: P
     }
 
     /**
-     * Set the lines back to the original state
+     * Set the lines back to the original state.
      *
      * @param viewHolder The ViewHolder which is being interacted by the User.
      * @param recyclerView The RecyclerView to which ItemTouchHelper is attached to.
@@ -177,7 +177,6 @@ class ProductItemTouchHelper(initialProducts: List<Product>, initialPresenter: P
             viewHolderAbove!!.itemView.borderDecorator.visibility = View.VISIBLE
 
         }
-        // if(products.lastIndex != viewHolder.layoutPosition){
         viewHolder.itemView.borderDecorator.visibility = View.VISIBLE
         viewHolder.itemView.ivTest.visibility = View.INVISIBLE
     }
@@ -185,7 +184,7 @@ class ProductItemTouchHelper(initialProducts: List<Product>, initialPresenter: P
 
     /**
      *
-     * Customize the lines of the ItemView while swiping
+     * Customize the lines of the ItemView while swiping.
      *
      * @param viewHolder The ViewHolder which is being interacted by the User.
      * @param recyclerView The RecyclerView to which ItemTouchHelper is attached to.
