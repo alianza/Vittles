@@ -13,10 +13,13 @@ import javax.inject.Inject
  * @author Arjen Simons
  *
  * @property repository The productsRepository.
- * @property onProductCloseToExpiring Event that is fired when an added product is close to expiring.
  */
 class AddProduct @Inject constructor(private val repository: ProductsRepository) {
 
+    /**
+     *  Event that is fired when an added product is close to expiring.
+     *
+     */
     val onProductCloseToExpiring = Event<Int>()
 
     /**
@@ -51,7 +54,7 @@ class AddProduct @Inject constructor(private val repository: ProductsRepository)
      */
     private fun checkExpirationDate(daysRemaining: Int){
         if (daysRemaining <= DAYS_REMAINING_BOUNDARY){
-            onProductCloseToExpiring.invoke(daysRemaining)
+            onProductCloseToExpiring(daysRemaining)
         }
     }
 }

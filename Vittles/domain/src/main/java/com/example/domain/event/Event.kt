@@ -1,7 +1,7 @@
 package com.example.domain.event
 
 /**
- * Is used to declare and handle events .
+ * Is used to declare and handle events.
  * This is here so events like the ones in C# can be used.
  *
  * @author Arjen Simons
