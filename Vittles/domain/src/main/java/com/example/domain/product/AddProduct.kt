@@ -1,11 +1,8 @@
-package com.example.domain.productadd
+package com.example.domain.product
 
-import android.app.usage.UsageEvents
-import android.util.EventLog
-import com.example.domain.Event.Event
 import com.example.domain.consts.DAYS_REMAINING_BOUNDARY
+import com.example.domain.event.Event
 import com.example.domain.repositories.ProductsRepository
-import com.example.domain.model.Product
 import io.reactivex.Completable
 import javax.inject.Inject
 
@@ -18,17 +15,17 @@ import javax.inject.Inject
  * @property repository The productsRepository.
  * @property onProductCloseToExpiring Event that is fired when an added product is close to expiring.
  */
-class AddProductUseCase @Inject constructor(private val repository: ProductsRepository) {
+class AddProduct @Inject constructor(private val repository: ProductsRepository) {
 
     val onProductCloseToExpiring = Event<Int>()
 
     /**
-     * This method is used to add a product to the database.
+     * This method is used to invoke a product to the database.
      *
      * @param product The product that will be added.
      * @return The compatibility status of adding the product ot the database.
      */
-    fun add(product: Product): Completable = validate(product).andThen(repository.post(product))
+    fun invoke(product: Product): Completable = validate(product).andThen(repository.post(product))
 
     /**
      * Validates if the product can be added to the database.
@@ -41,7 +38,7 @@ class AddProductUseCase @Inject constructor(private val repository: ProductsRepo
         checkExpirationDate(product.getDaysRemaining())
 
         return if (!product.isValidForAdd()) {
-            Completable.error(IllegalArgumentException("product failed validation before add"))
+            Completable.error(IllegalArgumentException("product failed validation before invoke"))
         } else {
             Completable.complete()
         }

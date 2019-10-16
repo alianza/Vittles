@@ -1,7 +1,7 @@
 package com.example.vittles.productlist
 
-import com.example.domain.model.Product
-import com.example.domain.productfetch.FetchProductsUseCase
+import com.example.domain.product.Product
+import com.example.domain.product.GetProducts
 import com.example.vittles.Globals
 import com.example.vittles.enums.IndicationColor
 import com.example.vittles.mvp.BasePresenter
@@ -15,9 +15,9 @@ import javax.inject.Inject
  * @author Jeroen Flietstra
  * @author Arjen Simons
  *
- * @property fetchProductsUseCase The FetchProductUseCase from the domain module
+ * @property getProducts The FetchProductUseCase from the domain module
  */
-class ProductsPresenter @Inject internal constructor(private val fetchProductsUseCase: FetchProductsUseCase) :
+class ProductsPresenter @Inject internal constructor(private val getProducts: GetProducts) :
     BasePresenter<ProductsActivity>() {
 
     /**
@@ -26,7 +26,7 @@ class ProductsPresenter @Inject internal constructor(private val fetchProductsUs
      */
     fun loadProducts() {
         disposables.add(
-            fetchProductsUseCase.fetch().subscribeOn(Schedulers.io())
+            getProducts().subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ view?.onProductsLoadSucceed(it) }, { view?.onProductsLoadFail() })
         )

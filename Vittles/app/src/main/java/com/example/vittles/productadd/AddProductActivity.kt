@@ -4,12 +4,12 @@ import android.app.DatePickerDialog
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.MenuItem
-import com.example.domain.model.Product
+import com.example.domain.product.Product
 import com.example.vittles.R
-import com.example.vittles.popups.PopupBase
-import com.example.vittles.popups.PopupButton
-import com.example.vittles.popups.PopupManager
-import com.example.vittles.services.NotificationService
+import com.example.vittles.services.popups.PopupBase
+import com.example.vittles.services.popups.PopupButton
+import com.example.vittles.services.popups.PopupManager
+import com.example.vittles.services.notification.NotificationService
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_add_product.*
@@ -158,11 +158,6 @@ class AddProductActivity : DaggerAppCompatActivity() {
     fun onProductAddSucceed() {
         etProductName.setText("")
         etExpirationDate.setText("")
-        NotificationService.createDataNotification(this@AddProductActivity,
-            "hi",
-            "This is the message of the notification when it is not expanded",
-            "This is the message of the notification when it is expanded", false)
-
     }
 
     /**

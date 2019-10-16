@@ -1,6 +1,6 @@
 package com.example.data
 
-import com.example.domain.model.Product
+import com.example.domain.product.Product
 import com.example.domain.repositories.ProductModelMapper
 import javax.inject.Inject
 

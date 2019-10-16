@@ -1,7 +1,7 @@
 package com.example.data
 
 import com.example.domain.repositories.ProductsRepository
-import com.example.domain.model.Product
+import com.example.domain.product.Product
 import io.reactivex.Completable
 import io.reactivex.Single
 

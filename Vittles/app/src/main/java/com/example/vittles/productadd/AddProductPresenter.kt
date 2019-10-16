@@ -1,7 +1,7 @@
 package com.example.vittles.productadd
 
-import com.example.domain.model.Product
-import com.example.domain.productadd.AddProductUseCase
+import com.example.domain.product.Product
+import com.example.domain.product.AddProduct
 import com.example.vittles.mvp.BasePresenter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -13,9 +13,9 @@ import javax.inject.Inject
  * @author Jeroen Flietstra
  * @author Arjen Simons
  *
- * @property addProductUseCase The AddProductUseCase from the domain module.
+ * @property addProduct The AddProduct from the domain module.
  */
-class AddProductPresenter @Inject internal constructor(private val addProductUseCase: AddProductUseCase) : BasePresenter<AddProductActivity>() {
+class AddProductPresenter @Inject internal constructor(private val addProduct: AddProduct) : BasePresenter<AddProductActivity>() {
 
     /**
      * Method used to add a product.
@@ -24,13 +24,14 @@ class AddProductPresenter @Inject internal constructor(private val addProductUse
      */
     fun addProduct(product: Product) {
 
-        addProductUseCase.onProductCloseToExpiring += { view?.showCloseToExpirationPopup(product.getDaysRemaining()) }
+        addProduct.onProductCloseToExpiring += { view?.showCloseToExpirationPopup(product.getDaysRemaining()) }
 
-        disposables.add(addProductUseCase.add(product)
+        disposables.add(
+            addProduct.invoke(product)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ view?.onProductAddSucceed() }, {view?.onProductAddFail()}))
 
-        addProductUseCase.onProductCloseToExpiring -= { view?.showCloseToExpirationPopup(product.getDaysRemaining()) }
+        addProduct.onProductCloseToExpiring -= { view?.showCloseToExpirationPopup(product.getDaysRemaining()) }
     }
 }

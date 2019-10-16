@@ -9,7 +9,7 @@ import android.widget.SearchView
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.domain.model.Product
+import com.example.domain.product.Product
 import com.example.vittles.R
 import com.example.vittles.productadd.AddProductActivity
 import dagger.android.support.DaggerAppCompatActivity

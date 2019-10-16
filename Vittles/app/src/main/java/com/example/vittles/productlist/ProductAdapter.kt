@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.example.domain.model.Product
+import com.example.domain.product.Product
 import com.example.vittles.R
 import com.example.vittles.productadd.AddProductActivity
 import kotlinx.android.synthetic.main.item_product.view.*
