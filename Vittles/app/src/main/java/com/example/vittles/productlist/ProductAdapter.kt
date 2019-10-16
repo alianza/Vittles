@@ -18,9 +18,7 @@ import javax.inject.Inject
  * @author Arjen Simons
  *
  * @property products The list of products that should be displayed in the RecyclerView.
- * @suppress DEPRECATION Suppress deprecation on 'Date' since the project is running on API 21.
  */
-@Suppress("DEPRECATION")
 class ProductAdapter @Inject constructor(initialProducts: List<Product>) :
     RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
 
@@ -72,7 +70,11 @@ class ProductAdapter @Inject constructor(initialProducts: List<Product>) :
          * @param product The product that is bound to the itemView.
          */
         fun bind(product: Product) {
-            val daysLeft = product.getDaysRemaining()
+            var daysLeft = product.getDaysRemaining().toString()
+
+            if (daysLeft.toInt() > 99) {
+                daysLeft = "99+"
+            }
 
             if(products[products.lastIndex] == product) {
                 itemView.borderDecorator.visibility = View.INVISIBLE
@@ -86,7 +88,7 @@ class ProductAdapter @Inject constructor(initialProducts: List<Product>) :
                 product.expirationDate?.dayOfMonth.toString(),
                 product.expirationDate?.monthOfYear.toString(),
                 product.expirationDate?.year.toString())
-            itemView.tvDaysLeft.text = daysLeft.toString()
+            itemView.tvDaysLeft.text = daysLeft
 
             //Set the colors
             itemView.ivColor.setColorFilter(ContextCompat.getColor(context, product.indicationColor!!), PorterDuff.Mode.MULTIPLY) //Circle
