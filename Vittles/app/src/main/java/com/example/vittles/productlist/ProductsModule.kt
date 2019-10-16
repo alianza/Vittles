@@ -1,3 +1,4 @@
+
 package com.example.vittles.productlist
 
 import com.example.domain.productdelete.DeleteProductUseCase
@@ -5,7 +6,6 @@ import com.example.domain.repositories.ProductsRepository
 import com.example.domain.productfetch.FetchProductsUseCase
 import dagger.Module
 import dagger.Provides
-
 /**
  * Module for main product dependency injections.
  *

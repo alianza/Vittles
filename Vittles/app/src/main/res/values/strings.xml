@@ -18,7 +18,7 @@
     <string name="product_failed">Could not add product!</string>
     <string name="product_deleted">Product deleted!</string>
     <string name="product_deleted_failed">Could not delete product!</string>
-    <string name="empty_state"><b>Nothing to Show :(</b>\nClick on button at the buttom to add vittles</string>
+    <string name="empty_state_Add_New_Vittle">\n\nClick on button at the button to add vittles</string>
 
     <!--    Search-->
     <string name="no_search_results">Nothing to show :(</string>

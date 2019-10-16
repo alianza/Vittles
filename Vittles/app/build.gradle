@@ -19,6 +19,11 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8
+    }
+
     compileSdkVersion 29
     defaultConfig {
         applicationId "com.example.vittles"
@@ -34,6 +39,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    buildToolsVersion = '29.0.2'
 
     dokka {
         includeNonPublic = true
@@ -61,7 +67,7 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
-    compile('com.crashlytics.sdk.android:crashlytics:2.10.1@aar') {
+    implementation('com.crashlytics.sdk.android:crashlytics:2.10.1@aar') {
         transitive = true
     }
     androidTestImplementation 'androidx.test:runner:1.2.0'
@@ -71,12 +77,15 @@ dependencies {
     implementation libs.rxJava
     implementation libs.rxAndroid
 
-    def dagger_version = '2.18'
+    def dagger_version = '2.24'
     implementation "com.google.dagger:dagger:$dagger_version"
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
-    api 'com.google.dagger:dagger-android:2.18'
-    api 'com.google.dagger:dagger-android-support:2.18' // if you use the support libraries
-    annotationProcessor 'com.google.dagger:dagger-android-processor:2.18'
+    kapt "com.google.dagger:dagger-android-processor:$dagger_version"
+    api "com.google.dagger:dagger-android:$dagger_version"
+    api "com.google.dagger:dagger-android-support:$dagger_version" // if you use the support libraries
+    annotationProcessor "com.google.dagger:dagger-android-processor:$dagger_version"
+
+    implementation 'net.danlew:android.joda:2.10.3'
 
     implementation project(path: ':domain')
     implementation project(path: ':data')
@@ -96,7 +105,5 @@ buildscript {
         classpath 'io.fabric.tools:gradle:1.+'
     }
 }
-
-
 
 apply plugin: 'com.google.gms.google-services'

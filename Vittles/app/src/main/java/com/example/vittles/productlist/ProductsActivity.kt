@@ -12,9 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.model.Product
 import com.example.vittles.R
-import com.example.vittles.VittlesApp
-import com.example.vittles.mvp.BaseActivity
 import com.example.vittles.productadd.AddProductActivity
+import dagger.android.support.DaggerAppCompatActivity
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
@@ -28,7 +27,7 @@ import javax.inject.Inject
  * @author Jan-Willem van Bremen
  * @author Fethi Tewelde
  */
-class ProductsActivity : BaseActivity() {
+class ProductsActivity : DaggerAppCompatActivity() {
 
     @Inject
     lateinit var presenter: ProductsPresenter
@@ -43,7 +42,7 @@ class ProductsActivity : BaseActivity() {
      *
      */
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.inject
+        setTheme(R.style.AppTheme_NoActionBar)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
@@ -51,14 +50,6 @@ class ProductsActivity : BaseActivity() {
             start(this@ProductsActivity)
         }
         initViews()
-    }
-
-    override fun injectDependencies() {
-        DaggerProductsComponent.builder()
-            .appComponent(VittlesApp.component)
-            .productsModule(ProductsModule())
-            .build()
-            .inject(this)
     }
 
 
@@ -135,9 +126,9 @@ class ProductsActivity : BaseActivity() {
      */
     private fun setEmptyView() {
         if (productAdapter.itemCount == 0) {
-            tvEmptyView.visibility = View.VISIBLE
+            tvAddNewVittle.visibility = View.VISIBLE
         } else {
-            tvEmptyView.visibility = View.GONE
+            tvAddNewVittle.visibility = View.GONE
         }
     }
 
@@ -222,8 +213,10 @@ class ProductsActivity : BaseActivity() {
     fun onProductsLoadSucceed(products: List<Product>) {
         this.products.addAll(products)
         presenter.loadIndicationColors(this.products)
+        productAdapter.products = products
         productAdapter.notifyDataSetChanged()
         setEmptyView()
+        setNoResultsView()
     }
 
     /**

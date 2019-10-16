@@ -3,6 +3,7 @@ package com.example.domain.productfetch
 import com.example.domain.repositories.ProductsRepository
 import com.example.domain.model.Product
 import io.reactivex.Single
+import javax.inject.Inject
 
 /**
  * This class handles the business logic of fetching all the products received from the local database.
@@ -12,7 +13,7 @@ import io.reactivex.Single
  *
  * @property repository The ProductsRepository.
  */
-class FetchProductsUseCase(private val repository: ProductsRepository) {
+class FetchProductsUseCase @Inject constructor(private val repository: ProductsRepository) {
     /**
      * Gets all the products from the local database.
      *
