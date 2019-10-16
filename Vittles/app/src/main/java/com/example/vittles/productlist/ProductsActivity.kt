@@ -2,7 +2,7 @@ package com.example.vittles.productlist
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.*
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.SearchView
@@ -13,8 +13,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.product.Product
 import com.example.vittles.R
 import com.example.vittles.productadd.AddProductActivity
-import dagger.android.support.DaggerAppCompatActivity
 import com.google.android.material.snackbar.Snackbar
+import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import javax.inject.Inject
@@ -51,7 +51,6 @@ class ProductsActivity : DaggerAppCompatActivity() {
         }
         initViews()
     }
-
 
     /**
      * Initializes the RecyclerView and sets EventListeners.
