@@ -25,11 +25,11 @@ class ProductsPresenter @Inject internal constructor(private val getProducts: Ge
      * Loads the products.
      *
      */
-    fun loadProducts() {
+    fun startPresenting() {
         disposables.add(
             getProducts().subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ view?.onProductsLoadSucceed(it) }, { view?.onProductsLoadFail() })
+                .subscribe({ view?.showProducts(it) }, { view?.showLoadError() })
         )
     }
 

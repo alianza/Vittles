@@ -52,6 +52,11 @@ class ProductsActivity : DaggerAppCompatActivity() {
         initViews()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        presenter.destroy()
+    }
+
 
     /**
      * Initializes the RecyclerView and sets EventListeners.
@@ -202,7 +207,7 @@ class ProductsActivity : DaggerAppCompatActivity() {
      */
     private fun populateRecyclerView() {
         products.clear()
-        presenter.loadProducts()
+        presenter.startPresenting()
     }
 
     /**
@@ -210,7 +215,7 @@ class ProductsActivity : DaggerAppCompatActivity() {
      *
      * @param products Products to be added to the product list.
      */
-    fun onProductsLoadSucceed(products: List<Product>) {
+    fun showProducts(products: List<Product>) {
         this.products.addAll(products)
         presenter.loadIndicationColors(this.products)
         productAdapter.products = products
@@ -223,7 +228,7 @@ class ProductsActivity : DaggerAppCompatActivity() {
      * If the products could not be loaded, this method will handle the error.
      *
      */
-    fun onProductsLoadFail() {
+    fun showLoadError() {
         println("FAIL")
     }
 

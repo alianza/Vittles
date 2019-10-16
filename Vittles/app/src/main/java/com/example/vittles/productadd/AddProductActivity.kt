@@ -9,7 +9,6 @@ import com.example.vittles.R
 import com.example.vittles.services.popups.PopupBase
 import com.example.vittles.services.popups.PopupButton
 import com.example.vittles.services.popups.PopupManager
-import com.example.vittles.services.notification.NotificationService
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_add_product.*
@@ -56,6 +55,11 @@ class AddProductActivity : DaggerAppCompatActivity() {
         initViews()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        presenter.destroy()
+    }
+
     /**
      * Initializes the view elements including the back button, date picker and
      * button click listeners.
@@ -98,7 +102,7 @@ class AddProductActivity : DaggerAppCompatActivity() {
         etExpirationDate.setOnClickListener {
             val dpd = DatePickerDialog(
                 this,
-                DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+                DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
                     this.expirationDate = Date((year - YEARS_OFFSET), monthOfYear, dayOfMonth)
                     etExpirationDate.setText(
                         getString(
@@ -161,7 +165,7 @@ class AddProductActivity : DaggerAppCompatActivity() {
     }
 
     /**
-     * If product could not be added, this method will create a feedback Snackbar for the error.
+     * If product could not be added, this method will create a feedback snack bar for the error.
      *
      */
     fun onProductAddFail() {

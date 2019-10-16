@@ -32,10 +32,10 @@ class AddProductPresenter @Inject internal constructor(private val addProduct: A
             .subscribe({ view?.onProductAddSucceed() },
                 {
                     if (it is IllegalArgumentException){
-                    view?.onProductAddFail() //Show Snackbar that tells it failed
+                    view?.onProductAddFail() // Show snack bar that tells it failed
                     }
                     else if (it is Exception){
-                        view?.showCloseToExpirationPopup(product) //Show close to expiring popup
+                        view?.showCloseToExpirationPopup(product) // Show close to expiring popup
                     }
                 }
             )
