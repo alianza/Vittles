@@ -13,7 +13,7 @@ import com.example.vittles.services.NotificationService
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_add_product.*
-import java.util.*
+import org.joda.time.DateTime
 import javax.inject.Inject
 
 /**
@@ -23,19 +23,12 @@ import javax.inject.Inject
  * @author Jeroen Flietstra
  * @author Jan-Willem van Bremen
  */
-@Suppress("DEPRECATION") // Suppress deprecation on 'Date' since the project is running on API 21.
 class AddProductActivity : DaggerAppCompatActivity() {
     @Inject lateinit var presenter: AddProductPresenter
 
-    private val calendar = Calendar.getInstance()
-    private var expirationDate = Date()
+    private var expirationDate = DateTime()
 
     companion object{
-        /**
-         * This offset is used to counter the default values from the Date object.
-         *
-         */
-        const val YEARS_OFFSET = 1900
         /**
          * This offset is used to counter the default values from the Date object.
          *
@@ -91,26 +84,29 @@ class AddProductActivity : DaggerAppCompatActivity() {
      *
      */
     private fun initDatePicker() {
-        val year = calendar.get(Calendar.YEAR)
-        val month = calendar.get(Calendar.MONTH)
-        val day = calendar.get(Calendar.DAY_OF_MONTH)
+        val currentDate = DateTime.now()
+
+        val year = currentDate.year
+        val month = currentDate.monthOfYear
+        val day = currentDate.dayOfMonth
+
+        println("$year / $month / $day")
 
         etExpirationDate.setOnClickListener {
             val dpd = DatePickerDialog(
                 this,
                 DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
-                    this.expirationDate = Date((year - YEARS_OFFSET), monthOfYear, dayOfMonth)
-                    etExpirationDate.setText(
-                        getString(
-                            R.string.expiration_format,
-                            this.expirationDate.date.toString(),
-                            (this.expirationDate.month + MONTHS_OFFSET).toString(),
-                            (this.expirationDate.year + YEARS_OFFSET).toString()
+                    this.expirationDate = DateTime(year, monthOfYear + MONTHS_OFFSET, dayOfMonth, 0, 0)
+                            etExpirationDate.setText(getString(
+                             R.string.expiration_format,
+                            (this.expirationDate.dayOfMonth).toString(),
+                            (this.expirationDate.monthOfYear).toString(),
+                            (this.expirationDate.year).toString()
                         )
                     )
-                }, year, month, day
+                }, year, month - MONTHS_OFFSET, day
             )
-            dpd.datePicker.minDate = calendar.time.time
+            dpd.datePicker.minDate = currentDate.millis
             dpd.show()
         }
     }
@@ -126,7 +122,7 @@ class AddProductActivity : DaggerAppCompatActivity() {
                 null,
                 etProductName.text.toString(),
                 this.expirationDate,
-                calendar.time,
+                DateTime.now(),
                 null
             )
             presenter.addProduct(product)
