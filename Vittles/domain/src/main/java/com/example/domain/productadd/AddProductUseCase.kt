@@ -54,7 +54,7 @@ class AddProductUseCase @Inject constructor(private val repository: ProductsRepo
      */
     private fun checkExpirationDate(daysRemaining: Int){
         if (daysRemaining <= DAYS_REMAINING_BOUNDARY){
-            onProductCloseToExpiring.invoke(daysRemaining)
+            onProductCloseToExpiring(daysRemaining)
         }
     }
 }
