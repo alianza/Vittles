@@ -3,7 +3,7 @@ package com.example.vittles
 import androidx.core.app.NotificationManagerCompat
 import com.example.vittles.di.AppModule
 import com.example.vittles.di.DaggerAppComponent
-import com.example.vittles.services.NotificationService
+import com.example.vittles.services.notification.NotificationService
 import com.example.vittles.services.notification.NotificationScheduleService
 import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication

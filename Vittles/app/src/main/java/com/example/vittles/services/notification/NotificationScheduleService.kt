@@ -4,9 +4,10 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import com.example.domain.model.Product
-import com.example.domain.productfetch.FetchProductsUseCase
-import com.example.vittles.services.NotificationService
+import com.crashlytics.android.Crashlytics
+import com.example.domain.exceptions.NotificationDataException
+import com.example.domain.notification.GetNotificationProductsExpired
+import com.example.domain.notification.Notification
 import dagger.android.DaggerBroadcastReceiver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -15,21 +16,15 @@ import org.joda.time.DateTime
 import javax.inject.Inject
 
 /**
- * Final constant for the minimum days remaining to be considered 'expiring soon'.
- */
-const val DAYS_REMAINING_BOUNDARY = 2
-
-/**
  * Background scheduler for the notification service.
  *
  * @author Jeroen Flietstra
  */
 class NotificationScheduleService : DaggerBroadcastReceiver() {
     @Inject
-    lateinit var fetchProductsUseCase: FetchProductsUseCase
+    lateinit var getNotification: GetNotificationProductsExpired
 
     private val disposables: CompositeDisposable = CompositeDisposable()
-    private var totalProductsToExpire = 0
 
 
     /**
@@ -49,44 +44,36 @@ class NotificationScheduleService : DaggerBroadcastReceiver() {
      */
     private fun auditNotification(context: Context?) {
         disposables.add(
-            fetchProductsUseCase.fetch().subscribeOn(Schedulers.io())
+            getNotification.invoke().subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ generateData(it, context) }, { })
+                .subscribe({ notify(it, context) }, { onNotifyFail(it, context) })
         )
     }
 
-    /**
-     * Method that calculates the data for the notification.
-     *
-     * @param products The products in the products list.
-     * @param context The application context needed to pass on to the notify method.
-     */
-    private fun generateData(products: List<Product>, context: Context?) {
-        totalProductsToExpire = 0
-        products.forEach { product ->
-            if (product.getDaysRemaining() <= DAYS_REMAINING_BOUNDARY) {
-                totalProductsToExpire++
-            }
-        }
-        notify(context)
-    }
 
     /**
      * Creates the notification in the notification tray.
      *
      * @param context The application context needed for the notification service.
      */
-    private fun notify(context: Context?) {
-        val message = "You have $totalProductsToExpire product(s) expiring within 2 days."
+    private fun notify(notification: Notification, context: Context?) {
         NotificationService.createDataNotification(
-            context!!,
-            "Vittles",
-            "Reduce food waste",
-            message,
-            false
+            context!!, notification
         )
         // Schedule alarm again
         scheduleNotificationAudit(context)
+    }
+
+    /**
+     * If no notification can be shown, log if the error is not the NotificationDataException.
+     *
+     * @param error The throwable thrown by the observable.
+     */
+    private fun onNotifyFail(error: Throwable, context: Context?) {
+        if (error !is NotificationDataException) {
+            Crashlytics.logException(error)
+        }
+        context?.let { scheduleNotificationAudit(it) }
     }
 
     companion object {

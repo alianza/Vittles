@@ -1,7 +1,7 @@
 package com.example.vittles.productadd
 
-import com.example.domain.model.Product
-import com.example.domain.productadd.AddProductUseCase
+import com.example.domain.product.Product
+import com.example.domain.product.AddProduct
 import com.example.vittles.mvp.BasePresenter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -9,14 +9,14 @@ import java.lang.Exception
 import javax.inject.Inject
 
 /**
- * This is the presenter for the add product activity.
+ * This is the presenter for the invoke product activity.
  *
  * @author Jeroen Flietstra
  * @author Arjen Simons
  *
- * @property addProductUseCase The AddProductUseCase from the domain module.
+ * @property addProduct The AddProduct from the domain module.
  */
-class AddProductPresenter @Inject internal constructor(private val addProductUseCase: AddProductUseCase) : BasePresenter<AddProductActivity>() {
+class AddProductPresenter @Inject internal constructor(private val addProduct: AddProduct) : BasePresenter<AddProductActivity>() {
 
     /**
      * Method used to add a product.
@@ -26,7 +26,7 @@ class AddProductPresenter @Inject internal constructor(private val addProductUse
      */
     fun addProduct(product: Product, checkDate: Boolean = true) {
 
-        disposables.add(addProductUseCase.add(product, checkDate)
+        disposables.add(addProduct.invoke(product, checkDate)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ view?.onProductAddSucceed() },

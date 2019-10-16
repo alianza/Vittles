@@ -1,4 +1,4 @@
-package com.example.vittles.popups
+package com.example.vittles.services.popups
 
 /**
  * The basePopup implementation.

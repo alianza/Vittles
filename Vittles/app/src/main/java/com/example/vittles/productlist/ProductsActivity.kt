@@ -10,7 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.domain.model.Product
+import com.example.domain.product.Product
 import com.example.vittles.R
 import com.example.vittles.productadd.AddProductActivity
 import dagger.android.support.DaggerAppCompatActivity
@@ -206,7 +206,7 @@ class ProductsActivity : DaggerAppCompatActivity() {
     }
 
     /**
-     * When products are loaded, this method will add the products to the product list.
+     * When products are loaded, this method will get the products to the product list.
      *
      * @param products Products to be added to the product list.
      */
@@ -235,7 +235,6 @@ class ProductsActivity : DaggerAppCompatActivity() {
      */
     fun onProductDeleteSucceed() {
         populateRecyclerView()
-
     }
 
 
