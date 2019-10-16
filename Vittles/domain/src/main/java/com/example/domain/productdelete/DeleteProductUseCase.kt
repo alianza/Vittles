@@ -3,6 +3,7 @@ package com.example.domain.productdelete
 import com.example.domain.model.Product
 import com.example.domain.repositories.ProductsRepository
 import io.reactivex.Completable
+import javax.inject.Inject
 
 /**
  * This class handles te business logic of deleting a product from the application.
@@ -11,7 +12,7 @@ import io.reactivex.Completable
  *
  * @property repository The productsRepository.
  */
-class DeleteProductUseCase(private val repository: ProductsRepository) {
+class DeleteProductUseCase @Inject constructor(private val repository: ProductsRepository) {
 
     /**
      * This method is used to delete a product from the database.
