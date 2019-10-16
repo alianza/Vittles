@@ -174,11 +174,11 @@ class ProductItemTouchHelper(initialProducts: List<Product>, initialPresenter: P
         if(viewHolder.layoutPosition > 0) {
             val viewHolderAbove =
                 recyclerView.findViewHolderForLayoutPosition(viewHolder.layoutPosition - 1)
-            viewHolderAbove!!.itemView.view.visibility = View.VISIBLE
+            viewHolderAbove!!.itemView.borderDecorator.visibility = View.VISIBLE
 
         }
         // if(products.lastIndex != viewHolder.layoutPosition){
-        viewHolder.itemView.view.visibility = View.VISIBLE
+        viewHolder.itemView.borderDecorator.visibility = View.VISIBLE
         viewHolder.itemView.ivTest.visibility = View.INVISIBLE
     }
 
@@ -194,9 +194,9 @@ class ProductItemTouchHelper(initialProducts: List<Product>, initialPresenter: P
         if (viewHolder.layoutPosition != 0) {
             val viewHolderAbove =
                 recyclerView.findViewHolderForLayoutPosition(viewHolder.layoutPosition - 1)
-            viewHolderAbove!!.itemView.view.visibility = View.INVISIBLE
+            viewHolderAbove!!.itemView.borderDecorator.visibility = View.INVISIBLE
         }
-        viewHolder.itemView.view.visibility = View.INVISIBLE
+        viewHolder.itemView.borderDecorator.visibility = View.INVISIBLE
         viewHolder.itemView.ivTest.visibility = View.VISIBLE
     }
 }
