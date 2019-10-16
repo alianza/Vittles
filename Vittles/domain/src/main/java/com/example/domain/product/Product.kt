@@ -25,9 +25,9 @@ const val msInDay: Double = (0.000000277777778).div(24)
  */
 data class Product(
     val uid: Int?,
-    val productName: String?,
-    val expirationDate: Date?,
-    val creationDate: Date?,
+    val productName: String,
+    val expirationDate: Date,
+    val creationDate: Date,
     var indicationColor: Int?
 ) {
     /**
@@ -36,21 +36,20 @@ data class Product(
      * @return An integer with the amount of days left.
      */
     fun getDaysRemaining(): Int {
-        return (expirationDate!!.time.minus(calendar.time.time)).times(
+        return (expirationDate.time.minus(calendar.time.time)).times(
             msInDay
         ).toInt()
     }
 
-    // TODO: Change methods for validity
     /**
      * Checks if the change to a product is valid.
      *
      */
-    fun isValidForEdit() = uid!! > 0 && productName!!.trim().isNotEmpty() && expirationDate.toString().trim().isNotEmpty()
+    fun isValidForEdit() = uid!! > 0 && productName.trim().isNotEmpty() && expirationDate.toString().trim().isNotEmpty()
 
     /**
      * Checks if the input for a product is valid.
      *
      */
-    fun isValidForAdd() = productName!!.trim().isNotEmpty() && expirationDate.toString().trim().isNotEmpty()
+    fun isValidForAdd() = productName.trim().isNotEmpty() && expirationDate.toString().trim().isNotEmpty()
 }

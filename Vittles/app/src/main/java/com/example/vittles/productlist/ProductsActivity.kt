@@ -158,7 +158,7 @@ class ProductsActivity : DaggerAppCompatActivity() {
     @SuppressLint("DefaultLocale")
     private fun filter(query: String) {
         filteredProducts = products.filter { product ->
-            product.productName!!.toLowerCase().contains(query.toLowerCase())
+            product.productName.toLowerCase().contains(query.toLowerCase())
         } as MutableList<Product>
 
         productAdapter.products = filteredProducts

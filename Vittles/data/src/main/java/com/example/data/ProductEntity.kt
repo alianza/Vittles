@@ -20,7 +20,7 @@ import java.util.*
 @Entity
 data class ProductEntity(
     @PrimaryKey(autoGenerate = true) val uid: Int?,
-    @ColumnInfo(name = "product_name") val productName: String?,
-    @ColumnInfo(name = "expiration_date") val expirationDate: Date?,
-    @ColumnInfo(name = "creation_date") val creationDate: Date?
+    @ColumnInfo(name = "product_name") val productName: String,
+    @ColumnInfo(name = "expiration_date") val expirationDate: Date,
+    @ColumnInfo(name = "creation_date") val creationDate: Date
 )
