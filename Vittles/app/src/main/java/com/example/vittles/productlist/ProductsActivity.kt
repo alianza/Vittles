@@ -32,7 +32,7 @@ class ProductsActivity : DaggerAppCompatActivity(), ProductsContract.View {
     @Inject
     lateinit var presenter: ProductsPresenter
 
-    lateinit var itemTouchHelper: ItemTouchHelper
+    private lateinit var itemTouchHelper: ItemTouchHelper
     private var products = mutableListOf<Product>()
     private var filteredProducts = products
     private val productAdapter = ProductAdapter(products)

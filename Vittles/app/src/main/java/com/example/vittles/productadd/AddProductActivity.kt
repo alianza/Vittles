@@ -96,7 +96,7 @@ class AddProductActivity : DaggerAppCompatActivity(), AddProductContract.View {
         etExpirationDate.setOnClickListener {
             val dpd = DatePickerDialog(
                 this,
-                DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+                DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
                     this.expirationDate = DateTime(year, monthOfYear + MONTHS_OFFSET, dayOfMonth, 0, 0)
                             etExpirationDate.setText(getString(
                              R.string.expiration_format,
