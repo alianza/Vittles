@@ -26,7 +26,7 @@ class AddProductPresenter @Inject internal constructor(private val addProduct: A
      */
     fun addProduct(product: Product, checkDate: Boolean = true) {
 
-        disposables.add(addProductUseCase.add(product, checkDate)
+        disposables.add(addProduct.invoke(product, checkDate)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ view?.onProductAddSucceed() },

@@ -4,6 +4,7 @@ import com.example.domain.consts.DAYS_REMAINING_BOUNDARY
 import com.example.domain.event.Event
 import com.example.domain.repositories.ProductsRepository
 import io.reactivex.Completable
+import java.lang.Exception
 import javax.inject.Inject
 
 /**
@@ -17,18 +18,12 @@ import javax.inject.Inject
 class AddProduct @Inject constructor(private val repository: ProductsRepository) {
 
     /**
-     *  Event that is fired when an added product is close to expiring.
-     *
-     */
-    val onProductCloseToExpiring = Event<Int>()
-
-    /**
      * This method is used to add a product to the database.
      *
      * @param product The product that will be added.
      * @return The compatibility status of adding the product ot the database.
      */
-    fun invoke(product: Product): Completable = validate(product).andThen(repository.post(product))
+    fun invoke(product: Product, checkDate: Boolean): Completable = validate(product, checkDate).andThen(repository.post(product))
 
     /**
      * Validates if the product can be added to the database.
@@ -36,12 +31,12 @@ class AddProduct @Inject constructor(private val repository: ProductsRepository)
      * @param product The product that will be added to the database.
      * @return The compatibility status.
      */
-    private fun validate(product: Product): Completable {
-
-        checkExpirationDate(product.getDaysRemaining())
+    private fun validate(product: Product, checkDate: Boolean): Completable {
 
         return if (!product.isValidForAdd()) {
             Completable.error(IllegalArgumentException("product failed validation before add"))
+        }else if (checkDate && expirationDateIsClose(product.getDaysRemaining())){
+            Completable.error(Exception("Date is to close, show popup"))
         } else {
             Completable.complete()
         }
@@ -52,9 +47,7 @@ class AddProduct @Inject constructor(private val repository: ProductsRepository)
      *
      * @param daysRemaining The amount of days until expiring.
      */
-    private fun checkExpirationDate(daysRemaining: Int){
-        if (daysRemaining <= DAYS_REMAINING_BOUNDARY){
-            onProductCloseToExpiring(daysRemaining)
-        }
+    private fun expirationDateIsClose(daysRemaining: Int): Boolean{
+        return daysRemaining <= DAYS_REMAINING_BOUNDARY
     }
 }

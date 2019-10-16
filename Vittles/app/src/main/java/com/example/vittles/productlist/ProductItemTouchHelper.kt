@@ -5,12 +5,12 @@ import android.graphics.drawable.ColorDrawable
 import android.view.View
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.example.domain.model.Product
 import com.example.vittles.R
 import kotlinx.android.synthetic.main.item_product.view.*
 import android.graphics.*
 import android.graphics.drawable.Drawable
 import androidx.core.content.ContextCompat
+import com.example.domain.product.Product
 
 
 /**
