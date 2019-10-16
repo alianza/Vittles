@@ -5,6 +5,7 @@
         <!--        COLOR-->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/lightGrey</item>
+        <item name="android:statusBarColor">@color/darkGrey</item>
         <item name="colorAccent">@color/black</item>
 
         <!--        BUTTONS-->
@@ -56,7 +57,7 @@
 
     <!--    DATE PICKER-->
     <style name="AppTheme.DatePickerDialogTheme" parent="android:Theme.Material.Light.Dialog">
-        <item name="android:colorAccent">@color/black</item>
+        <item name="android:colorAccent">@color/darkGrey</item>
         <item name="android:buttonBarButtonStyle">@style/AppTheme.DatePickerButtonTextStyle</item>
         <item name="android:colorButtonNormal">@color/white</item>
     </style>
