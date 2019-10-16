@@ -128,7 +128,7 @@ class ProductsActivity : DaggerAppCompatActivity() {
      /**
      * Called when the sort button is clicked.
      * It opens the sorting menu.
-     * It handels all click events of the dialog window
+     * It handles all click events of the dialog window
      * It sort the products list
      * It sort the products list
      */
@@ -145,12 +145,12 @@ class ProductsActivity : DaggerAppCompatActivity() {
             setSortMenuColor(selectedSortMethod)
         }
         else {
-            selectedSortMethod = when {
-                selectedSortNumber == 1 -> mDialogView.daysRemainingAsc
-                selectedSortNumber == 2 -> mDialogView.daysRemainingDesc
-                selectedSortNumber == 3 -> mDialogView.alfabeticAz
-                selectedSortNumber == 4 -> mDialogView.alfabeticZa
-                selectedSortNumber == 5 -> mDialogView.newestSelected
+            selectedSortMethod = when (selectedSortNumber) {
+                1 -> mDialogView.daysRemainingAsc
+                2 -> mDialogView.daysRemainingDesc
+                3 -> mDialogView.alfabeticAz
+                4 -> mDialogView.alfabeticZa
+                5 -> mDialogView.newestSelected
                 else -> mDialogView.oldestSelected
             }
             setSortMenuColor(selectedSortMethod)
@@ -158,6 +158,7 @@ class ProductsActivity : DaggerAppCompatActivity() {
 
         mDialogView.daysRemainingLH.setOnClickListener {
             products.sortBy { it.expirationDate }
+            productAdapter.products = products
             btnSort.text = mDialogView.daysRemainingLH.text
             selectedSortNumber = 1
             productAdapter.notifyDataSetChanged()
@@ -165,6 +166,7 @@ class ProductsActivity : DaggerAppCompatActivity() {
         }
         mDialogView.daysRemainingHL.setOnClickListener {
             products.sortByDescending { it.expirationDate }
+            productAdapter.products = products
             btnSort.text = mDialogView.daysRemainingHL.text
             selectedSortNumber = 2
             productAdapter.notifyDataSetChanged()
@@ -172,6 +174,7 @@ class ProductsActivity : DaggerAppCompatActivity() {
         }
         mDialogView.alfabeticAZ.setOnClickListener {
             products.sortBy { it.productName }
+            productAdapter.products = products
             btnSort.text = mDialogView.alfabeticAZ.text
             selectedSortNumber = 3
             productAdapter.notifyDataSetChanged()
@@ -179,6 +182,7 @@ class ProductsActivity : DaggerAppCompatActivity() {
         }
         mDialogView.alfabeticZA.setOnClickListener {
             products.sortByDescending { it.productName }
+            productAdapter.products = products
             btnSort.text = mDialogView.alfabeticZA.text
             selectedSortNumber = 4
             productAdapter.notifyDataSetChanged()
@@ -186,6 +190,7 @@ class ProductsActivity : DaggerAppCompatActivity() {
         }
         mDialogView.newest.setOnClickListener {
             products.sortByDescending { it.creationDate }
+            productAdapter.products = products
             btnSort.text = mDialogView.newest.text
             selectedSortNumber = 5
             productAdapter.notifyDataSetChanged()
@@ -193,6 +198,7 @@ class ProductsActivity : DaggerAppCompatActivity() {
         }
         mDialogView.oldest.setOnClickListener {
             products.sortBy { it.creationDate }
+            productAdapter.products = products
             btnSort.text = mDialogView.oldest.text
             selectedSortNumber = 6
             productAdapter.notifyDataSetChanged()
@@ -203,9 +209,9 @@ class ProductsActivity : DaggerAppCompatActivity() {
     /**
      * Sets the circle alpha to 1 of the selected sorting method.
      *
-     * @param circle The Imageview that represents the selected sorting method.
+     * @param circle The ImageView that represents the selected sorting method.
      */
-    fun setSortMenuColor(circle: ImageView) {
+    private fun setSortMenuColor(circle: ImageView) {
         circle.alpha = 1f
     }
 
@@ -218,8 +224,10 @@ class ProductsActivity : DaggerAppCompatActivity() {
         itemTouchHelper = ItemTouchHelper(callback)
         itemTouchHelper.attachToRecyclerView(rvProducts)
     }
+
     /**
      * Checks if emptyView should be visible based on the itemCount.
+     *
      */
     private fun setEmptyView() {
         if (productAdapter.itemCount == 0) {
@@ -232,6 +240,7 @@ class ProductsActivity : DaggerAppCompatActivity() {
     /**
      * Called when the add button is clicked.
      * It starts the addProduct activity.
+     *
      */
     private fun onAddButtonClick() {
         val addProductActivityIntent = Intent(
