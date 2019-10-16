@@ -1,7 +1,6 @@
 package com.example.domain.product
 
-import com.example.domain.consts.DAYS_REMAINING_BOUNDARY
-import com.example.domain.event.Event
+import com.example.domain.consts.DAYS_REMAINING_BOUNDARY_CLOSE
 import com.example.domain.repositories.ProductsRepository
 import io.reactivex.Completable
 import java.lang.Exception
@@ -48,6 +47,6 @@ class AddProduct @Inject constructor(private val repository: ProductsRepository)
      * @param daysRemaining The amount of days until expiring.
      */
     private fun expirationDateIsClose(daysRemaining: Int): Boolean{
-        return daysRemaining <= DAYS_REMAINING_BOUNDARY
+        return daysRemaining <= DAYS_REMAINING_BOUNDARY_CLOSE
     }
 }

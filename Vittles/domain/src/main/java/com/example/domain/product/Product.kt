@@ -1,5 +1,8 @@
 package com.example.domain.product
 
+import com.example.domain.consts.DAYS_REMAINING_BOUNDARY_CLOSE
+import com.example.domain.consts.DAYS_REMAINING_EXPIRED
+import com.example.domain.enums.ExpirationIndicationColor
 import org.joda.time.*
 
 
@@ -33,6 +36,22 @@ data class Product(
      */
     fun getDaysRemaining(): Int {
         return Days.daysBetween(DateTime.now().withTimeAtStartOfDay(), expirationDate).days
+    }
+
+    /**
+     * Calculates the indication color of a product
+     *
+     * @return
+     */
+    fun getIndicationColor(): ExpirationIndicationColor{
+
+        val daysRemaining = getDaysRemaining()
+
+        return when {
+            daysRemaining < DAYS_REMAINING_EXPIRED -> ExpirationIndicationColor.RED
+            daysRemaining < DAYS_REMAINING_BOUNDARY_CLOSE -> ExpirationIndicationColor.YELLOW
+            else -> ExpirationIndicationColor.GREEN
+        }
     }
 
     /**

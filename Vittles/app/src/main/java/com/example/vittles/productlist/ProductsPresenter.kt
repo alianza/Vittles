@@ -1,5 +1,6 @@
 package com.example.vittles.productlist
 
+import com.example.domain.enums.ExpirationIndicationColor
 import com.example.domain.product.DeleteProduct
 import com.example.domain.product.Product
 import com.example.domain.product.GetProducts
@@ -43,11 +44,10 @@ class ProductsPresenter @Inject internal constructor(
      */
     override fun loadIndicationColors(products: List<Product>) {
         products.forEach { product ->
-            val daysRemaining = product.getDaysRemaining()
-            product.indicationColor = when {
-                daysRemaining < Globals.RED_COLOR_BOUNDARY -> IndicationColor.RED.value
-                daysRemaining < Globals.YELLOW_COLOR_BOUNDARY -> IndicationColor.YELLOW.value
-                else -> IndicationColor.GREEN.value
+            product.indicationColor = when (product.getIndicationColor()) {
+                ExpirationIndicationColor.RED -> IndicationColor.RED.value
+                ExpirationIndicationColor.YELLOW -> IndicationColor.YELLOW.value
+                ExpirationIndicationColor.GREEN -> IndicationColor.GREEN.value
             }
         }
     }
