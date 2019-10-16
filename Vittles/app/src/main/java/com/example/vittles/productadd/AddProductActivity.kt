@@ -138,7 +138,6 @@ class AddProductActivity : DaggerAppCompatActivity(), AddProductContract.View {
      */
     override fun validate(): Boolean {
         return if (!TextUtils.isEmpty(etProductName.text) && !TextUtils.isEmpty(etExpirationDate.text)) {
-            Snackbar.make(layout, getString(R.string.product_added), Snackbar.LENGTH_SHORT).show()
             true
         } else {
             Snackbar.make(layout, getString(R.string.empty_fields), Snackbar.LENGTH_LONG).show()
@@ -162,6 +161,14 @@ class AddProductActivity : DaggerAppCompatActivity(), AddProductContract.View {
     override fun showAddProductError() {
         Snackbar.make(layout, getString(R.string.product_failed), Snackbar.LENGTH_LONG)
             .show()
+    }
+
+    /**
+     * If product is added successfully, this method will show a toast displaying a success state.
+     *
+     */
+    override fun showAddProductSucceed() {
+        Snackbar.make(layout, getString(R.string.product_added), Snackbar.LENGTH_SHORT).show()
     }
 
     /**
