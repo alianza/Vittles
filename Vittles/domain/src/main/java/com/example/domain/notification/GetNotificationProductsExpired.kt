@@ -27,7 +27,7 @@ class GetNotificationProductsExpired @Inject constructor(private val repository:
             .map { products ->
                 val expiring =
                     products.count {
-                        it.getDaysRemaining() in (DAYS_REMAINING_EXPIRED + 1) until DAYS_REMAINING_BOUNDARY
+                        it.getDaysRemaining() in (DAYS_REMAINING_EXPIRED + 1) until DAYS_REMAINING_BOUNDARY_CLOSE
                     }
                 val expired =
                     products.count { it.getDaysRemaining() <= DAYS_REMAINING_EXPIRED }
