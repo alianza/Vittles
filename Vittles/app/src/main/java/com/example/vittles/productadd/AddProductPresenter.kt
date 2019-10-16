@@ -24,6 +24,7 @@ class AddProductPresenter @Inject internal constructor(private val addProductUse
      */
     fun addProduct(product: Product) {
 
+        //Subscribe to the onProductsCloseToExpiring event.
         addProductUseCase.onProductCloseToExpiring += { view?.showCloseToExpirationPopup(product.getDaysRemaining()) }
 
         disposables.add(addProductUseCase.add(product)
@@ -31,6 +32,7 @@ class AddProductPresenter @Inject internal constructor(private val addProductUse
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ view?.onProductAddSucceed() }, {view?.onProductAddFail()}))
 
+        //Unsubscribe from the onProductsCloseToExpiring event.
         addProductUseCase.onProductCloseToExpiring -= { view?.showCloseToExpirationPopup(product.getDaysRemaining()) }
     }
 }
