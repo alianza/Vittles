@@ -24,9 +24,9 @@ import org.joda.time.*
  */
 data class Product(
     val uid: Int?,
-    val productName: String?,
-    val expirationDate: DateTime?,
-    val creationDate: DateTime?,
+    val productName: String,
+    val expirationDate: DateTime,
+    val creationDate: DateTime,
     var indicationColor: Int?
 ) {
     /**
@@ -35,7 +35,7 @@ data class Product(
      * @return An integer with the amount of days left.
      */
     fun getDaysRemaining(): Int {
-        return Days.daysBetween(DateTime.now(), expirationDate).days + 1
+        return Days.daysBetween(DateTime.now().withTimeAtStartOfDay(), expirationDate).days
     }
 
     /**
@@ -58,11 +58,11 @@ data class Product(
      * Checks if the change to a product is valid.
      *
      */
-    fun isValidForEdit() = uid!! > 0 && productName!!.trim().isNotEmpty() && expirationDate.toString().trim().isNotEmpty()
+    fun isValidForEdit() = uid!! > 0 && productName.trim().isNotEmpty() && expirationDate.toString().trim().isNotEmpty()
 
     /**
      * Checks if the input for a product is valid.
      *
      */
-    fun isValidForAdd() = productName!!.trim().isNotEmpty() && expirationDate.toString().trim().isNotEmpty()
+    fun isValidForAdd() = productName.trim().isNotEmpty() && expirationDate.toString().trim().isNotEmpty()
 }

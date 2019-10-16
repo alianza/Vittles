@@ -11,21 +11,21 @@ import io.reactivex.Single
  * @author Jeroen Flietstra
  * @author Arjen Simons
  *
- * @property productDaoImpl Reference to the ProductDaoImpl.
+ * @property productDao Reference to the ProductDao.
  * @property mapper The mapper used to map the product data class.
  */
-class ProductsRepositoryImpl(private val productDaoImpl: ProductDaoImpl,
-                             private val mapper: ProductModelMapperImpl) :
+class ProductsRepositoryImpl(private val productDao: ProductDao,
+                             private val mapper: ProductModelMapper) :
     ProductsRepository {
 
     override fun get(): Single<List<Product>> {
-        return productDaoImpl.getAll()
+        return productDao.getAll()
             .map { it.map(mapper::fromEntity) }
     }
 
-    override fun patch(product: Product): Completable = Completable.fromAction { productDaoImpl.insert(mapper.toEntity(product)) }
+    override fun patch(product: Product): Completable = Completable.fromAction { productDao.insert(mapper.toEntity(product)) }
 
-    override fun delete(product: Product): Completable = Completable.fromAction { productDaoImpl.delete(mapper.toEntity(product)) }
+    override fun delete(product: Product): Completable = Completable.fromAction { productDao.delete(mapper.toEntity(product)) }
 
-    override fun post(product: Product): Completable = Completable.fromAction { productDaoImpl.insert(mapper.toEntity(product)) }
+    override fun post(product: Product): Completable = Completable.fromAction { productDao.insert(mapper.toEntity(product)) }
 }
