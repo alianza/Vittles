@@ -72,6 +72,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/white"
+            android:elevation="2dp"
             app:popupTheme="@style/AppTheme.PopupOverlay"
             app:titleMarginStart="24dp"
             app:titleTextColor="#000000">
@@ -87,6 +88,23 @@
                 android:src="@drawable/ic_magnifying_glass" />
 
         </androidx.appcompat.widget.Toolbar>
+
+        <Button
+            android:id="@+id/btnSort"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:height="56dp"
+            android:background="@color/common_google_signin_btn_tint"
+            android:backgroundTint="@color/black"
+            android:elevation="-1dp"
+            android:fontFamily="sans-serif-light"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:text="@string/days_remaining_lh"
+            android:textAlignment="textStart"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:textSize="12sp" />
 
     </com.google.android.material.appbar.AppBarLayout>
 

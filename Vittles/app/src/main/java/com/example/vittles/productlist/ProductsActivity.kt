@@ -1,10 +1,14 @@
 package com.example.vittles.productlist
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.PorterDuff
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.widget.ImageView
 import android.widget.SearchView
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,6 +19,9 @@ import com.example.vittles.VittlesApp
 import com.example.vittles.mvp.BaseActivity
 import com.example.vittles.productadd.AddProductActivity
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_sort.*
+import kotlinx.android.synthetic.main.activity_sort.view.*
+import kotlinx.android.synthetic.main.activity_sort.view.daysRemainingLH
 import kotlinx.android.synthetic.main.content_main.*
 import javax.inject.Inject
 
@@ -25,6 +32,7 @@ import javax.inject.Inject
  * @author Jeroen Flietstra
  * @author Jan-Willem van Bremen
  * @author Fethi Tewelde
+ * @author Marc van Spronsen
  */
 class ProductsActivity : BaseActivity() {
 
@@ -34,6 +42,8 @@ class ProductsActivity : BaseActivity() {
     private var products = mutableListOf<Product>()
     private var filteredProducts = products
     private val productAdapter = ProductAdapter(products)
+    private var selectedSortNumber = 1
+    lateinit var selectedSortMethod: ImageView
 
     /**
      * Called when the ProductsActivity is created.
@@ -97,6 +107,8 @@ class ProductsActivity : BaseActivity() {
 
         fab.setOnClickListener { onAddButtonClick() }
 
+        btnSort.setOnClickListener { openSortMenu() }
+
         ibtnSearch.setOnClickListener { openSearchBar() }
 
         svSearch.setOnCloseListener { closeSearchBar(); false }
@@ -114,6 +126,89 @@ class ProductsActivity : BaseActivity() {
         })
 
         imgbtnCloseSearch.setOnClickListener { closeSearchBar() }
+    }
+
+    /**
+     * Called when the sort button is clicked.
+     * It opens the sorting menu.
+     * It handels all click events of the dialog window
+     * It sort the products list
+     */
+    private fun openSortMenu() {
+
+        val mDialogView =
+            LayoutInflater.from(this).inflate(R.layout.activity_sort, null)
+        val mBuilder =
+            AlertDialog.Builder(this).setView(mDialogView)
+        val  mAlertDialog = mBuilder.show()
+
+        if (!::selectedSortMethod.isInitialized) {
+            selectedSortMethod = mDialogView.daysRemainingAsc
+            setSortMenuColor(selectedSortMethod)
+        }
+        else {
+            selectedSortMethod = when {
+                selectedSortNumber == 1 -> mDialogView.daysRemainingAsc
+                selectedSortNumber == 2 -> mDialogView.daysRemainingDesc
+                selectedSortNumber == 3 -> mDialogView.alfabeticAz
+                selectedSortNumber == 4 -> mDialogView.alfabeticZa
+                selectedSortNumber == 5 -> mDialogView.newestSelected
+                else -> mDialogView.oldestSelected
+            }
+            setSortMenuColor(selectedSortMethod)
+        }
+
+        mDialogView.daysRemainingLH.setOnClickListener {
+            products.sortBy { it.expirationDate }
+            btnSort.text = mDialogView.daysRemainingLH.text
+            selectedSortNumber = 1
+            productAdapter.notifyDataSetChanged()
+            mAlertDialog.dismiss()
+        }
+        mDialogView.daysRemainingHL.setOnClickListener {
+            products.sortByDescending { it.expirationDate }
+            btnSort.text = mDialogView.daysRemainingHL.text
+            selectedSortNumber = 2
+            productAdapter.notifyDataSetChanged()
+            mAlertDialog.dismiss()
+        }
+        mDialogView.alfabeticAZ.setOnClickListener {
+            products.sortBy { it.productName }
+            btnSort.text = mDialogView.alfabeticAZ.text
+            selectedSortNumber = 3
+            productAdapter.notifyDataSetChanged()
+            mAlertDialog.dismiss()
+        }
+        mDialogView.alfabeticZA.setOnClickListener {
+            products.sortByDescending { it.productName }
+            btnSort.text = mDialogView.alfabeticZA.text
+            selectedSortNumber = 4
+            productAdapter.notifyDataSetChanged()
+            mAlertDialog.dismiss()
+        }
+        mDialogView.newest.setOnClickListener {
+            products.sortByDescending { it.creationDate }
+            btnSort.text = mDialogView.newest.text
+            selectedSortNumber = 5
+            productAdapter.notifyDataSetChanged()
+            mAlertDialog.dismiss()
+        }
+        mDialogView.oldest.setOnClickListener {
+            products.sortBy { it.creationDate }
+            btnSort.text = mDialogView.oldest.text
+            selectedSortNumber = 6
+            productAdapter.notifyDataSetChanged()
+            mAlertDialog.dismiss()
+        }
+    }
+
+    /**
+     * Sets the circle alpha to 1 of the selected sorting method.
+     *
+     * @param circle The Imageview that represents the selected sorting method.
+     */
+    fun setSortMenuColor(circle: ImageView) {
+        circle.alpha = 1f
     }
 
     /**

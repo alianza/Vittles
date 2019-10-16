@@ -5,10 +5,11 @@
     <color name="colorAccent">#D81B60</color>
     <color name="lightGrey">#F1F1F1</color>
     <color name="white">#FFF</color>
-    <color name="black">#000</color>
+    <color name="black">#000000</color>
 
 <!--    Expiration indicator colors-->
     <color name="green">#26F391</color>
     <color name="yellow">#FFCB47</color>
     <color name="red">#FF4B4B</color>
-    </resources>
+    <color name="mediumGrey">#BEBEBE</color>
+</resources>

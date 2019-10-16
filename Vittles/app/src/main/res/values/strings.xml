@@ -29,4 +29,14 @@
     <string name="close_search">Close Search</string>
     <string name="search">Search</string>
 
+    <!--    Sorting-->
+    <string name="sort_by">Sort by</string>
+    <string name="days_remaining">Days Remaining</string>
+    <string name="days_remaining_lh">Days Remaining (Asc)</string>
+    <string name="days_remaining_hl">Days Remaining (Desc)</string>
+    <string name="alfabetic_az">Alfabetic (A-Z)</string>
+    <string name="alfabetic_za">Alfabetic (Z-A)</string>
+    <string name="newest">Newest</string>
+    <string name="oldest">Oldest</string>
+
 </resources>
