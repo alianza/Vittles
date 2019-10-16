@@ -25,7 +25,7 @@ class AddProductPresenter @Inject internal constructor(private val addProduct: A
     fun addProduct(product: Product) {
 
         //Subscribe to the onProductsCloseToExpiring event.
-        addProduct.onProductCloseToExpiring += { view?.showCloseToExpirationPopup(product.getDaysRemaining()) }
+        addProductUseCase.onProductCloseToExpiring += { view?.showCloseToExpirationPopup(product.getDaysRemaining()) }
 
         disposables.add(
             addProduct.invoke(product)
@@ -34,6 +34,6 @@ class AddProductPresenter @Inject internal constructor(private val addProduct: A
             .subscribe({ view?.onProductAddSucceed() }, {view?.onProductAddFail()}))
 
         //Unsubscribe from the onProductsCloseToExpiring event.
-        addProduct.onProductCloseToExpiring -= { view?.showCloseToExpirationPopup(product.getDaysRemaining()) }
+        addProductUseCase.onProductCloseToExpiring -= { view?.showCloseToExpirationPopup(product.getDaysRemaining()) }
     }
 }
