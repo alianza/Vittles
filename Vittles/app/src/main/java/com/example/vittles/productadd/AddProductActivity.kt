@@ -90,8 +90,6 @@ class AddProductActivity : DaggerAppCompatActivity() {
         val month = currentDate.monthOfYear
         val day = currentDate.dayOfMonth
 
-        println("$year / $month / $day")
-
         etExpirationDate.setOnClickListener {
             val dpd = DatePickerDialog(
                 this,
