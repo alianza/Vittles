@@ -5,5 +5,5 @@ package com.example.domain.enums
  *
  */
 enum class ExpirationIndicationColor {
-    GREEN, YELLOW, ORANGE, RED
+    GREEN, YELLOW, RED
 }
