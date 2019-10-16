@@ -53,7 +53,7 @@ class ProductAdapter @Inject constructor(initialProducts: List<Product>) :
     /**
      * Updates the contents of the itemView to reflect the item at the given position.
      *
-     * @param The ViewHolder that should be updated.
+     * @param holder The ViewHolder that should be updated.
      * @param position The position of the item to be updated.
      */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -74,6 +74,12 @@ class ProductAdapter @Inject constructor(initialProducts: List<Product>) :
          */
         fun bind(product: Product) {
             val daysLeft = product.getDaysRemaining()
+
+            if(products[products.lastIndex] == product) {
+                itemView.borderDecorator.visibility = View.INVISIBLE
+            } else {
+                itemView.borderDecorator.visibility = View.VISIBLE
+            }
 
             itemView.tvName.text = product.productName
             itemView.tvDate.text = context.resources.getString(
