@@ -1,6 +1,6 @@
 package com.example.domain.repositories
 
-import com.example.domain.model.Product
+import com.example.domain.product.Product
 import io.reactivex.Completable
 import io.reactivex.Single
 
@@ -38,7 +38,7 @@ interface ProductsRepository {
     /**
      * Adds a product in the database.
      *
-     * @param product The product to add.
+     * @param product The product to invoke.
      * @return A completable status.
      */
     fun post(product: Product): Completable

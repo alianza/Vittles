@@ -1,4 +1,4 @@
-package com.example.domain.Event
+package com.example.domain.event
 
 /**
  * Is used to declare and handle events .
