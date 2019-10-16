@@ -175,9 +175,9 @@ class AddProductActivity : DaggerAppCompatActivity() {
     }
 
     /**
-     * Shows the CloseToExpiring popup
+     * Shows the CloseToExpiring popup.
      *
-     * @param daysRemaining The amount of days until the product is expired
+     * @param daysRemaining The amount of days until the product is expired.
      */
     fun showCloseToExpirationPopup(daysRemaining: Int){
         PopupManager.instance.showPopup(
