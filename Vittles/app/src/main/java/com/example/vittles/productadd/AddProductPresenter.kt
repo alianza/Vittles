@@ -29,7 +29,11 @@ class AddProductPresenter @Inject internal constructor(private val addProduct: A
         disposables.add(addProduct.invoke(product, checkDate)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ view?.resetView() },
+            .subscribe(
+                {
+                    view?.showAddProductSucceed()
+                    view?.resetView()
+                },
                 {
                     if (it is IllegalArgumentException) {
                         view?.showAddProductError() // Show snack bar that tells it failed
