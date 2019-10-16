@@ -27,12 +27,12 @@ import javax.inject.Inject
  * @author Jan-Willem van Bremen
  * @author Fethi Tewelde
  */
-class ProductsActivity : DaggerAppCompatActivity() {
+class ProductsActivity : DaggerAppCompatActivity(), ProductsContract.View {
 
     @Inject
     lateinit var presenter: ProductsPresenter
 
-    lateinit var itemTouchHelper: ItemTouchHelper
+    private lateinit var itemTouchHelper: ItemTouchHelper
     private var products = mutableListOf<Product>()
     private var filteredProducts = products
     private val productAdapter = ProductAdapter(products)
@@ -52,11 +52,17 @@ class ProductsActivity : DaggerAppCompatActivity() {
         initViews()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        presenter.destroy()
+    }
+
+
     /**
      * Initializes the RecyclerView and sets EventListeners.
      *
      */
-    private fun initViews() {
+    override fun initViews() {
         setListeners()
         supportActionBar?.title = getString(R.string.view_title)
 
@@ -88,7 +94,7 @@ class ProductsActivity : DaggerAppCompatActivity() {
      * Sets all necessary event listeners on ui elements
      *
      */
-    private fun setListeners() {
+    override fun setListeners() {
 
         fab.setOnClickListener { onAddButtonClick() }
 
@@ -115,7 +121,7 @@ class ProductsActivity : DaggerAppCompatActivity() {
      * Attaches the ItemTouchHelper to the RecyclerView.
      *
      */
-    private fun setItemTouchHelper() {
+    override fun setItemTouchHelper() {
         val callback = ProductItemTouchHelper(products,presenter,this)
         itemTouchHelper = ItemTouchHelper(callback)
         itemTouchHelper.attachToRecyclerView(rvProducts)
@@ -123,7 +129,7 @@ class ProductsActivity : DaggerAppCompatActivity() {
     /**
      * Checks if emptyView should be visible based on the itemCount.
      */
-    private fun setEmptyView() {
+    override fun setEmptyView() {
         if (productAdapter.itemCount == 0) {
             tvAddNewVittle.visibility = View.VISIBLE
         } else {
@@ -135,7 +141,7 @@ class ProductsActivity : DaggerAppCompatActivity() {
      * Called when the add button is clicked.
      * It starts the addProduct activity.
      */
-    private fun onAddButtonClick() {
+    override fun onAddButtonClick() {
         val addProductActivityIntent = Intent(
             this,
             AddProductActivity::class.java
@@ -150,9 +156,9 @@ class ProductsActivity : DaggerAppCompatActivity() {
      * @param query entered string used as search query
      */
     @SuppressLint("DefaultLocale")
-    private fun filter(query: String) {
+    override fun filter(query: String) {
         filteredProducts = products.filter { product ->
-            product.productName!!.toLowerCase().contains(query.toLowerCase())
+            product.productName.toLowerCase().contains(query.toLowerCase())
         } as MutableList<Product>
 
         productAdapter.products = filteredProducts
@@ -166,7 +172,7 @@ class ProductsActivity : DaggerAppCompatActivity() {
      * Called after filtering products array to show or hide no results textview
      *
      */
-    private fun setNoResultsView() {
+    override fun setNoResultsView() {
         if (productAdapter.itemCount == 0) {
             tvNoResults.visibility = View.VISIBLE
         } else {
@@ -178,7 +184,7 @@ class ProductsActivity : DaggerAppCompatActivity() {
      * Method to show the search bar and hide the toolbar
      *
      */
-    private fun openSearchBar() {
+    override fun openSearchBar() {
         llSearch.visibility = View.VISIBLE
         svSearch.isIconified = false
 
@@ -189,7 +195,7 @@ class ProductsActivity : DaggerAppCompatActivity() {
      * Method to hide the search bar and show the toolbar
      *
      */
-    private fun closeSearchBar() {
+    override fun closeSearchBar() {
         llSearch.visibility = View.GONE
         svSearch.setQuery("", true)
         toolbar.visibility = View.VISIBLE
@@ -199,9 +205,9 @@ class ProductsActivity : DaggerAppCompatActivity() {
      * Populates the RecyclerView with items from the local DataBase.
      *
      */
-    private fun populateRecyclerView() {
+    override fun populateRecyclerView() {
         products.clear()
-        presenter.loadProducts()
+        presenter.startPresenting()
     }
 
     /**
@@ -209,7 +215,7 @@ class ProductsActivity : DaggerAppCompatActivity() {
      *
      * @param products Products to be added to the product list.
      */
-    fun onProductsLoadSucceed(products: List<Product>) {
+    override fun showProducts(products: List<Product>) {
         this.products.addAll(products)
         presenter.loadIndicationColors(this.products)
         productAdapter.products = products
@@ -218,30 +224,12 @@ class ProductsActivity : DaggerAppCompatActivity() {
         setNoResultsView()
     }
 
-    /**
-     * If the products could not be loaded, this method will handle the error.
-     *
-     */
-    fun onProductsLoadFail() {
-        println("FAIL")
-    }
-
-
-
-    /**
-     * If product has been deleted, this method will reload the list.
-     *
-     */
-    fun onProductDeleteSucceed() {
-        populateRecyclerView()
-    }
-
 
     /**
      * If product could not be deleted, this method will create a feedback Snackbar for the error.
      *
      */
-    fun onProductDeleteFail() {
+    override fun showProductDeleteError() {
         Snackbar.make(rvProducts, getString(R.string.product_deleted_failed), Snackbar.LENGTH_LONG)
             .show()
     }
