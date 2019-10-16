@@ -5,6 +5,7 @@ import com.example.domain.productadd.AddProductUseCase
 import com.example.vittles.mvp.BasePresenter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import java.lang.Exception
 import javax.inject.Inject
 
 /**
@@ -21,18 +22,23 @@ class AddProductPresenter @Inject internal constructor(private val addProductUse
      * Method used to add a product.
      *
      * @param product The product to add.
+     * @param checkDate If the date should be checked to show a popup.
      */
-    fun addProduct(product: Product) {
+    fun addProduct(product: Product, checkDate: Boolean = true) {
 
-        //Subscribe to the onProductsCloseToExpiring event.
-        addProductUseCase.onProductCloseToExpiring += { view?.showCloseToExpirationPopup(product.getDaysRemaining()) }
-
-        disposables.add(addProductUseCase.add(product)
+        disposables.add(addProductUseCase.add(product, checkDate)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ view?.onProductAddSucceed() }, {view?.onProductAddFail()}))
-
-        //Unsubscribe from the onProductsCloseToExpiring event.
-        addProductUseCase.onProductCloseToExpiring -= { view?.showCloseToExpirationPopup(product.getDaysRemaining()) }
+            .subscribe({ view?.onProductAddSucceed() },
+                {
+                    if (it is IllegalArgumentException){
+                    view?.onProductAddFail() //Show Snackbar that tells it failed
+                    }
+                    else if (it is Exception){
+                        view?.showCloseToExpirationPopup(product) //Show close to expiring popup
+                    }
+                }
+            )
+        )
     }
 }
