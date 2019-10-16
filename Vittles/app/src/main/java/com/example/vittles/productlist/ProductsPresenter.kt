@@ -1,6 +1,7 @@
 package com.example.vittles.productlist
 
 import com.example.domain.model.Product
+import com.example.domain.productdelete.DeleteProductUseCase
 import com.example.domain.productfetch.FetchProductsUseCase
 import com.example.vittles.Globals
 import com.example.vittles.enums.IndicationColor
@@ -17,7 +18,7 @@ import javax.inject.Inject
  *
  * @property fetchProductsUseCase The FetchProductUseCase from the domain module
  */
-class ProductsPresenter @Inject internal constructor(private val fetchProductsUseCase: FetchProductsUseCase) :
+class ProductsPresenter @Inject internal constructor(private val fetchProductsUseCase: FetchProductsUseCase, private val deleteProductUseCase: DeleteProductUseCase) :
     BasePresenter<ProductsActivity>() {
 
     /**
@@ -46,5 +47,17 @@ class ProductsPresenter @Inject internal constructor(private val fetchProductsUs
                 else -> IndicationColor.GREEN.value
             }
         }
+    }
+
+    /**
+     * Deletes a product.
+     *
+     * @param product The product that will be deleted.
+     */
+    fun deleteProduct(product : Product) {
+        disposables.add(deleteProductUseCase.delete(product)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ view?.onProductDeleteSucceed() }, {view?.onProductDeleteFail()}))
     }
 }
