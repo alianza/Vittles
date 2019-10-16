@@ -23,13 +23,14 @@ import javax.inject.Inject
  * @author Jan-Willem van Bremen
  */
 @Suppress("DEPRECATION") // Suppress deprecation on 'Date' since the project is running on API 21.
-class AddProductActivity : DaggerAppCompatActivity() {
-    @Inject lateinit var presenter: AddProductPresenter
+class AddProductActivity : DaggerAppCompatActivity(), AddProductContract.View {
+    @Inject
+    lateinit var presenter: AddProductPresenter
 
     private val calendar = Calendar.getInstance()
     private var expirationDate = Date()
 
-    companion object{
+    companion object {
         /**
          * This offset is used to counter the default values from the Date object.
          *
@@ -43,10 +44,8 @@ class AddProductActivity : DaggerAppCompatActivity() {
     }
 
     /**
-     * {@inheritDoc}
      * Sets the content, assigns the dao and calls the initViews method.
      *
-     * @param savedInstanceState {@inheritDoc}
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,7 +64,7 @@ class AddProductActivity : DaggerAppCompatActivity() {
      * button click listeners.
      *
      */
-    private fun initViews() {
+    override fun initViews() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = getString(R.string.add_product_title)
         initDatePicker()
@@ -74,7 +73,7 @@ class AddProductActivity : DaggerAppCompatActivity() {
 
 
     /**
-     * {@inheritDoc}
+     * Listener of the back button.
      */
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         return onBackButtonClick()
@@ -85,7 +84,7 @@ class AddProductActivity : DaggerAppCompatActivity() {
      *
      * @return boolean that represents if action succeeded
      */
-    private fun onBackButtonClick(): Boolean {
+    override fun onBackButtonClick(): Boolean {
         finish()
         return true
     }
@@ -94,7 +93,7 @@ class AddProductActivity : DaggerAppCompatActivity() {
      * Initializes the date picker. Including the default date and listeners.
      *
      */
-    private fun initDatePicker() {
+    override fun initDatePicker() {
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
         val day = calendar.get(Calendar.DAY_OF_MONTH)
@@ -124,7 +123,7 @@ class AddProductActivity : DaggerAppCompatActivity() {
      * create a product from the filled-in fields to finally try to insert it into the database.
      *
      */
-    private fun onConfirmButtonClick() {
+    override fun onConfirmButtonClick() {
         if (validate()) {
             val product = Product(
                 null,
@@ -138,14 +137,12 @@ class AddProductActivity : DaggerAppCompatActivity() {
         }
     }
 
-
-
     /**
      * Validates the input fields from this activity. Will show feedback based on the validity.
      *
      * @return boolean that represents if the given values are valid.
      */
-    private fun validate(): Boolean {
+    override fun validate(): Boolean {
         return if (!TextUtils.isEmpty(etProductName.text) && !TextUtils.isEmpty(etExpirationDate.text)) {
             Snackbar.make(layout, getString(R.string.product_added), Snackbar.LENGTH_SHORT).show()
             true
@@ -159,7 +156,7 @@ class AddProductActivity : DaggerAppCompatActivity() {
      * If product has been added, this method will reset the text fields.
      *
      */
-    fun onProductAddSucceed() {
+    override fun resetView() {
         etProductName.setText("")
         etExpirationDate.setText("")
     }
@@ -168,7 +165,7 @@ class AddProductActivity : DaggerAppCompatActivity() {
      * If product could not be added, this method will create a feedback snack bar for the error.
      *
      */
-    fun onProductAddFail() {
+    override fun showAddProductError() {
         Snackbar.make(layout, getString(R.string.product_failed), Snackbar.LENGTH_LONG)
             .show()
     }
@@ -177,11 +174,14 @@ class AddProductActivity : DaggerAppCompatActivity() {
      * Shows the CloseToExpiring popup.
      *
      */
-    fun showCloseToExpirationPopup(product: Product){
+    override fun showCloseToExpirationPopup(product: Product) {
         PopupManager.instance.showPopup(
             this,
-            PopupBase("Almost expired!", String.format("The scanned product expires in %d days ", product.getDaysRemaining())),
-            PopupButton("Add"){ presenter.addProduct(product, false) },
+            PopupBase(
+                "Almost expired!",
+                String.format("The scanned product expires in %d days ", product.getDaysRemaining())
+            ),
+            PopupButton("Add") { presenter.addProduct(product, false) },
             PopupButton("Don't add")
         )
     }
