@@ -1,6 +1,6 @@
 package com.example.vittles.productlist
 
-import com.example.domain.productdelete.DeleteProductUseCase
+import com.example.domain.product.DeleteProduct
 import com.example.domain.product.Product
 import com.example.domain.product.GetProducts
 import com.example.vittles.Globals
@@ -18,7 +18,7 @@ import javax.inject.Inject
  *
  * @property getProducts The GetProducts use case from the domain module
  */
-class ProductsPresenter @Inject internal constructor(private val getProducts: GetProducts, private val deleteProductUseCase: DeleteProductUseCase) :
+class ProductsPresenter @Inject internal constructor(private val getProducts: GetProducts, private val deleteProduct: DeleteProduct) :
     BasePresenter<ProductsActivity>() {
 
     /**
@@ -55,7 +55,7 @@ class ProductsPresenter @Inject internal constructor(private val getProducts: Ge
      * @param product The product that will be deleted.
      */
     fun deleteProduct(product : Product) {
-        disposables.add(deleteProductUseCase.delete(product)
+        disposables.add(deleteProduct.invoke(product)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ view?.onProductDeleteSucceed() }, {view?.onProductDeleteFail()}))
