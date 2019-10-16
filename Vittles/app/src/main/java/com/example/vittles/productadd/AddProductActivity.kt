@@ -6,14 +6,11 @@ import android.text.TextUtils
 import android.view.MenuItem
 import com.example.domain.model.Product
 import com.example.vittles.R
-import com.example.vittles.VittlesApp
-import com.example.vittles.mvp.BaseActivity
 import com.example.vittles.popups.PopupBase
 import com.example.vittles.popups.PopupButton
 import com.example.vittles.popups.PopupManager
 import com.example.vittles.services.NotificationService
 import com.google.android.material.snackbar.Snackbar
-import dagger.android.AndroidInjection
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_add_product.*
 import java.util.*
