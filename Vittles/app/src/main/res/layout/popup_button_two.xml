@@ -63,7 +63,7 @@
 
     <Button
         android:id="@+id/btnLeft"
-        android:layout_width="0dp"
+        android:layout_width="100dp"
         android:layout_height="50dp"
         android:layout_below="@+id/tvsSubtext"
         android:layout_alignParentStart="true"
@@ -81,7 +81,7 @@
 
     <Button
         android:id="@+id/btnRight"
-        android:layout_width="0dp"
+        android:layout_width="100dp"
         android:layout_height="50dp"
         android:layout_below="@+id/tvsSubtext"
         android:layout_alignParentEnd="true"
