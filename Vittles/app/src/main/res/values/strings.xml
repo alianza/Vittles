@@ -8,6 +8,7 @@
 
     <!--    Products Overview-->
     <string name="view_title">My Vittles</string>
+    <string name="maxDaysRemaining">99</string>
 
     <!--    Add Product Manually-->
     <string name="add_product_title">Add Vittles</string>
