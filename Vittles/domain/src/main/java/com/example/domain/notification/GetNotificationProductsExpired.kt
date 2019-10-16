@@ -1,6 +1,6 @@
 package com.example.domain.notification
 
-import com.example.domain.consts.DAYS_REMAINING_BOUNDARY
+import com.example.domain.consts.DAYS_REMAINING_BOUNDARY_CLOSE
 import com.example.domain.consts.DAYS_REMAINING_EXPIRED
 import com.example.domain.exceptions.NotificationDataException
 import com.example.domain.repositories.ProductsRepository
@@ -27,7 +27,7 @@ class GetNotificationProductsExpired @Inject constructor(private val repository:
             .map { products ->
                 val expiring =
                     products.count {
-                        it.getDaysRemaining() < DAYS_REMAINING_BOUNDARY
+                        it.getDaysRemaining() < DAYS_REMAINING_BOUNDARY_CLOSE
                                 && it.getDaysRemaining() != DAYS_REMAINING_EXPIRED
                     }
                 val expired =
