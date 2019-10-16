@@ -2,13 +2,14 @@ package com.example.vittles.productlist
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Color
+import android.graphics.*
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.SearchView
 import android.widget.TextView
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.model.Product
@@ -16,6 +17,7 @@ import com.example.vittles.R
 import com.example.vittles.VittlesApp
 import com.example.vittles.mvp.BaseActivity
 import com.example.vittles.productadd.AddProductActivity
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import javax.inject.Inject
@@ -33,6 +35,7 @@ class ProductsActivity : BaseActivity() {
     @Inject
     lateinit var presenter: ProductsPresenter
 
+    lateinit var itemTouchHelper: ItemTouchHelper
     private var products = mutableListOf<Product>()
     private var filteredProducts = products
     private val productAdapter = ProductAdapter(products)
@@ -77,6 +80,8 @@ class ProductsActivity : BaseActivity() {
             searchView.context.resources.getIdentifier("android:id/search_src_text", null, null)
         val textView = searchView.findViewById(id) as TextView
         textView.setTextColor(Color.BLACK)
+
+        setItemTouchHelper()
     }
 
 
@@ -117,6 +122,15 @@ class ProductsActivity : BaseActivity() {
         imgbtnCloseSearch.setOnClickListener { closeSearchBar() }
     }
 
+    /**
+     * Attaches the ItemTochHelper to the RecyclerView
+     *
+     */
+    private fun setItemTouchHelper() {
+        val callback = ProductItemTouchHelper(products,presenter,this)
+        itemTouchHelper = ItemTouchHelper(callback)
+        itemTouchHelper.attachToRecyclerView(rvProducts)
+    }
     /**
      * Checks if emptyView should be visible based on the itemCount
      */
@@ -217,5 +231,26 @@ class ProductsActivity : BaseActivity() {
      */
     fun onProductsLoadFail() {
         println("FAIL")
+    }
+
+
+
+    /**
+     * If product has been deleted, this method will reload the list.
+     *
+     */
+    fun onProductDeleteSucceed() {
+        populateRecyclerView()
+
+    }
+
+
+    /**
+     * If product could not be deleted, this method will create a feedback Snackbar for the error.
+     *
+     */
+    fun onProductDeleteFail() {
+        Snackbar.make(rvProducts, getString(R.string.product_deleted_failed), Snackbar.LENGTH_LONG)
+            .show()
     }
 }
