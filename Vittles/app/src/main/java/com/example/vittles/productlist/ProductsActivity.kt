@@ -5,19 +5,21 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.PorterDuff
+import android.graphics.*
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import android.widget.SearchView
 import android.widget.TextView
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.domain.model.Product
+import com.example.domain.product.Product
 import com.example.vittles.R
-import com.example.vittles.VittlesApp
-import com.example.vittles.mvp.BaseActivity
 import com.example.vittles.productadd.AddProductActivity
+import dagger.android.support.DaggerAppCompatActivity
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_sort.*
 import kotlinx.android.synthetic.main.activity_sort.view.*
@@ -34,11 +36,12 @@ import javax.inject.Inject
  * @author Fethi Tewelde
  * @author Marc van Spronsen
  */
-class ProductsActivity : BaseActivity() {
+class ProductsActivity : DaggerAppCompatActivity() {
 
     @Inject
     lateinit var presenter: ProductsPresenter
 
+    lateinit var itemTouchHelper: ItemTouchHelper
     private var products = mutableListOf<Product>()
     private var filteredProducts = products
     private val productAdapter = ProductAdapter(products)
@@ -50,7 +53,7 @@ class ProductsActivity : BaseActivity() {
      *
      */
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.inject
+        setTheme(R.style.AppTheme_NoActionBar)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
@@ -58,14 +61,6 @@ class ProductsActivity : BaseActivity() {
             start(this@ProductsActivity)
         }
         initViews()
-    }
-
-    override fun injectDependencies() {
-        DaggerProductsComponent.builder()
-            .appComponent(VittlesApp.component)
-            .productsModule(ProductsModule())
-            .build()
-            .inject(this)
     }
 
 
@@ -86,6 +81,8 @@ class ProductsActivity : BaseActivity() {
             svSearch.context.resources.getIdentifier("android:id/search_src_text", null, null)
         val textView = svSearch.findViewById(id) as TextView
         textView.setTextColor(Color.BLACK)
+
+        setItemTouchHelper()
     }
 
 
@@ -127,11 +124,12 @@ class ProductsActivity : BaseActivity() {
 
         imgbtnCloseSearch.setOnClickListener { closeSearchBar() }
     }
-
-    /**
+    
+     /**
      * Called when the sort button is clicked.
      * It opens the sorting menu.
      * It handels all click events of the dialog window
+     * It sort the products list
      * It sort the products list
      */
     private fun openSortMenu() {
@@ -212,13 +210,22 @@ class ProductsActivity : BaseActivity() {
     }
 
     /**
-     * Checks if emptyView should be visible based on the itemCount
+     * Attaches the ItemTouchHelper to the RecyclerView.
+    
+     */
+    private fun setItemTouchHelper() {
+        val callback = ProductItemTouchHelper(products,presenter,this)
+        itemTouchHelper = ItemTouchHelper(callback)
+        itemTouchHelper.attachToRecyclerView(rvProducts)
+    }
+    /**
+     * Checks if emptyView should be visible based on the itemCount.
      */
     private fun setEmptyView() {
         if (productAdapter.itemCount == 0) {
-            tvEmptyView.visibility = View.VISIBLE
+            tvAddNewVittle.visibility = View.VISIBLE
         } else {
-            tvEmptyView.visibility = View.GONE
+            tvAddNewVittle.visibility = View.GONE
         }
     }
 
@@ -296,15 +303,17 @@ class ProductsActivity : BaseActivity() {
     }
 
     /**
-     * When products are loaded, this method will add the products to the product list.
+     * When products are loaded, this method will get the products to the product list.
      *
      * @param products Products to be added to the product list.
      */
     fun onProductsLoadSucceed(products: List<Product>) {
         this.products.addAll(products)
         presenter.loadIndicationColors(this.products)
+        productAdapter.products = products
         productAdapter.notifyDataSetChanged()
         setEmptyView()
+        setNoResultsView()
     }
 
     /**
@@ -313,5 +322,25 @@ class ProductsActivity : BaseActivity() {
      */
     fun onProductsLoadFail() {
         println("FAIL")
+    }
+
+
+
+    /**
+     * If product has been deleted, this method will reload the list.
+     *
+     */
+    fun onProductDeleteSucceed() {
+        populateRecyclerView()
+    }
+
+
+    /**
+     * If product could not be deleted, this method will create a feedback Snackbar for the error.
+     *
+     */
+    fun onProductDeleteFail() {
+        Snackbar.make(rvProducts, getString(R.string.product_deleted_failed), Snackbar.LENGTH_LONG)
+            .show()
     }
 }

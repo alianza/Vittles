@@ -4,14 +4,16 @@ import android.app.DatePickerDialog
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.MenuItem
-import com.example.domain.model.Product
+import com.example.domain.product.Product
 import com.example.vittles.R
-import com.example.vittles.VittlesApp
-import com.example.vittles.mvp.BaseActivity
-import com.example.vittles.services.NotificationService
+import com.example.vittles.services.popups.PopupBase
+import com.example.vittles.services.popups.PopupButton
+import com.example.vittles.services.popups.PopupManager
+import com.example.vittles.services.notification.NotificationService
 import com.google.android.material.snackbar.Snackbar
+import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_add_product.*
-import java.util.*
+import org.joda.time.DateTime
 import javax.inject.Inject
 
 /**
@@ -21,19 +23,12 @@ import javax.inject.Inject
  * @author Jeroen Flietstra
  * @author Jan-Willem van Bremen
  */
-@Suppress("DEPRECATION") // Suppress deprecation on 'Date' since the project is running on API 21.
-class AddProductActivity : BaseActivity() {
+class AddProductActivity : DaggerAppCompatActivity() {
     @Inject lateinit var presenter: AddProductPresenter
 
-    private val calendar = Calendar.getInstance()
-    private var expirationDate = Date()
+    private var expirationDate = DateTime()
 
     companion object{
-        /**
-         * This offset is used to counter the default values from the Date object.
-         *
-         */
-        const val YEARS_OFFSET = 1900
         /**
          * This offset is used to counter the default values from the Date object.
          *
@@ -48,21 +43,10 @@ class AddProductActivity : BaseActivity() {
      * @param savedInstanceState {@inheritDoc}
      */
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.inject
         super.onCreate(savedInstanceState)
         presenter.start(this@AddProductActivity)
         setContentView(R.layout.activity_add_product)
         initViews()
-
-
-    }
-
-    override fun injectDependencies() {
-        DaggerAddProductComponent.builder()
-            .appComponent(VittlesApp.component)
-            .addProductModule(AddProductModule())
-            .build()
-            .inject(this)
     }
 
     /**
@@ -100,26 +84,27 @@ class AddProductActivity : BaseActivity() {
      *
      */
     private fun initDatePicker() {
-        val year = calendar.get(Calendar.YEAR)
-        val month = calendar.get(Calendar.MONTH)
-        val day = calendar.get(Calendar.DAY_OF_MONTH)
+        val currentDate = DateTime.now()
+
+        val year = currentDate.year
+        val month = currentDate.monthOfYear
+        val day = currentDate.dayOfMonth
 
         etExpirationDate.setOnClickListener {
             val dpd = DatePickerDialog(
                 this,
                 DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
-                    this.expirationDate = Date((year - YEARS_OFFSET), monthOfYear, dayOfMonth)
-                    etExpirationDate.setText(
-                        getString(
-                            R.string.expiration_format,
-                            this.expirationDate.date.toString(),
-                            (this.expirationDate.month + MONTHS_OFFSET).toString(),
-                            (this.expirationDate.year + YEARS_OFFSET).toString()
+                    this.expirationDate = DateTime(year, monthOfYear + MONTHS_OFFSET, dayOfMonth, 0, 0)
+                            etExpirationDate.setText(getString(
+                             R.string.expiration_format,
+                            (this.expirationDate.dayOfMonth).toString(),
+                            (this.expirationDate.monthOfYear).toString(),
+                            (this.expirationDate.year).toString()
                         )
                     )
-                }, year, month, day
+                }, year, month - MONTHS_OFFSET, day
             )
-            dpd.datePicker.minDate = calendar.time.time
+            dpd.datePicker.minDate = currentDate.millis
             dpd.show()
         }
     }
@@ -135,7 +120,7 @@ class AddProductActivity : BaseActivity() {
                 null,
                 etProductName.text.toString(),
                 this.expirationDate,
-                calendar.time,
+                DateTime.now(),
                 null
             )
             presenter.addProduct(product)
@@ -167,11 +152,6 @@ class AddProductActivity : BaseActivity() {
     fun onProductAddSucceed() {
         etProductName.setText("")
         etExpirationDate.setText("")
-        NotificationService.createDataNotification(this@AddProductActivity,
-            "hi",
-            "This is the message of the notification when it is not expanded",
-            "This is the message of the notification when it is expanded", false)
-
     }
 
     /**
@@ -181,5 +161,18 @@ class AddProductActivity : BaseActivity() {
     fun onProductAddFail() {
         Snackbar.make(layout, getString(R.string.product_failed), Snackbar.LENGTH_LONG)
             .show()
+    }
+
+    /**
+     * Shows the CloseToExpiring popup.
+     *
+     */
+    fun showCloseToExpirationPopup(product: Product){
+        PopupManager.instance.showPopup(
+            this,
+            PopupBase("Almost expired!", String.format("The scanned product expires in %d days ", product.getDaysRemaining())),
+            PopupButton("Add"){ presenter.addProduct(product, false) },
+            PopupButton("Don't add")
+        )
     }
 }

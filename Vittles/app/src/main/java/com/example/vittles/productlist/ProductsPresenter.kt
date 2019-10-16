@@ -1,7 +1,8 @@
 package com.example.vittles.productlist
 
-import com.example.domain.model.Product
-import com.example.domain.productfetch.FetchProductsUseCase
+import com.example.domain.product.DeleteProduct
+import com.example.domain.product.Product
+import com.example.domain.product.GetProducts
 import com.example.vittles.Globals
 import com.example.vittles.enums.IndicationColor
 import com.example.vittles.mvp.BasePresenter
@@ -17,9 +18,9 @@ import javax.inject.Inject
  * @author Jeroen Flietstra
  * @author Arjen Simons
  *
- * @property fetchProductsUseCase The FetchProductUseCase from the domain module
+ * @property getProducts The GetProducts use case from the domain module
  */
-class ProductsPresenter @Inject internal constructor(private val fetchProductsUseCase: FetchProductsUseCase) :
+class ProductsPresenter @Inject internal constructor(private val getProducts: GetProducts, private val deleteProduct: DeleteProduct) :
     BasePresenter<ProductsActivity>() {
 
     /**
@@ -28,7 +29,7 @@ class ProductsPresenter @Inject internal constructor(private val fetchProductsUs
      */
     fun loadProducts() {
         disposables.add(
-            fetchProductsUseCase.fetch().subscribeOn(Schedulers.io())
+            getProducts().subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ view?.onProductsLoadSucceed(it) }, { view?.onProductsLoadFail() })
         )
@@ -48,5 +49,17 @@ class ProductsPresenter @Inject internal constructor(private val fetchProductsUs
                 else -> IndicationColor.GREEN.value
             }
         }
+    }
+
+    /**
+     * Deletes a product.
+     *
+     * @param product The product that will be deleted.
+     */
+    fun deleteProduct(product : Product) {
+        disposables.add(deleteProduct.invoke(product)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ view?.onProductDeleteSucceed() }, {view?.onProductDeleteFail()}))
     }
 }

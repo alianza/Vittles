@@ -1,6 +1,6 @@
 @file:Suppress("DEPRECATION")
 
-package com.example.vittles.services
+package com.example.vittles.services.notification
 
 
 import android.app.NotificationChannel
@@ -13,8 +13,8 @@ import android.os.Build
 
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.example.domain.notification.Notification
 import com.example.vittles.R
-import com.example.vittles.VittlesApp
 import com.example.vittles.productlist.ProductsActivity
 
 /**
@@ -59,14 +59,10 @@ object NotificationService {
      * Creates a Notification
      *
      * @param context   application context
-     * @param title   title of the notification
-     * @param message   message of the notification when it is not expanded
-     * @param bigText   message of the notification when it is expanded
-     * @param autoCancel whether the notification should automatically dismissed when the user touches it or not
+     * @param notification The notification to be displayed.
      */
     fun createDataNotification(
-        context: Context, title: String, message: String,
-        bigText: String, autoCancel: Boolean
+        context: Context, notification: Notification
     ) {
 
         val channelId = "${context.packageName}-${context.getString(R.string.app_name)}"
@@ -74,11 +70,11 @@ object NotificationService {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationBuilder = NotificationCompat.Builder(context, channelId).apply {
                 setSmallIcon(R.drawable.logo)
-                setContentTitle(title)
-                setContentText(message)
-                setStyle(NotificationCompat.BigTextStyle().bigText(bigText))
+                setContentTitle(notification.title)
+                setContentText(notification.message)
+                setStyle(NotificationCompat.BigTextStyle().bigText(notification.bigText))
                 priority = NotificationCompat.PRIORITY_DEFAULT
-                setAutoCancel(autoCancel)
+                setAutoCancel(notification.autoCancel)
 
                 //Open on Click
                 val intent = Intent(context, ProductsActivity::class.java)
@@ -93,11 +89,11 @@ object NotificationService {
         } else {
             val notificationBuilder = NotificationCompat.Builder(context).apply {
                 setSmallIcon(R.drawable.logo) // 3
-                setContentTitle(title) // 4
-                setContentText(message) // 5
-                setStyle(NotificationCompat.BigTextStyle().bigText(bigText)) // 6
+                setContentTitle(notification.title) // 4
+                setContentText(notification.message) // 5
+                setStyle(NotificationCompat.BigTextStyle().bigText(notification.bigText)) // 6
                 priority = NotificationCompat.PRIORITY_DEFAULT // 7
-                setAutoCancel(autoCancel) // 8
+                setAutoCancel(notification.autoCancel) // 8
 
                 //open on click
                 val intent = Intent(context, ProductsActivity::class.java)
