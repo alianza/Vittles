@@ -177,13 +177,13 @@ class AddProductActivity : DaggerAppCompatActivity() {
     /**
      * Shows the CloseToExpiring popup.
      *
-     * @param daysRemaining The amount of days until the product is expired.
      */
-    fun showCloseToExpirationPopup(daysRemaining: Int){
+    fun showCloseToExpirationPopup(product: Product){
         PopupManager.instance.showPopup(
             this,
-            PopupBase("Almost expired!", String.format("The scanned product expires in %d days ", daysRemaining), 5000),
-            PopupButton("Dismiss")
+            PopupBase("Almost expired!", String.format("The scanned product expires in %d days ", product.getDaysRemaining())),
+            PopupButton("Add"){ presenter.addProduct(product, false) },
+            PopupButton("Don't add")
         )
     }
 }
