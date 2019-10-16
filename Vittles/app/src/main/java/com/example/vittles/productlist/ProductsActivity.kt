@@ -7,12 +7,15 @@ import android.os.Bundle
 import android.view.View
 import android.widget.SearchView
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.model.Product
 import com.example.vittles.R
 import com.example.vittles.VittlesApp
+import com.example.vittles.mvp.BaseActivity
+import com.example.vittles.popups.PopupBase
+import com.example.vittles.popups.PopupButton
+import com.example.vittles.popups.PopupManager
 import com.example.vittles.productadd.AddProductActivity
 import dagger.android.AndroidInjection
 import dagger.android.support.DaggerAppCompatActivity
@@ -42,6 +45,7 @@ class ProductsActivity : DaggerAppCompatActivity() {
      *
      */
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.AppTheme_NoActionBar)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
@@ -114,9 +118,9 @@ class ProductsActivity : DaggerAppCompatActivity() {
      */
     private fun setEmptyView() {
         if (productAdapter.itemCount == 0) {
-            tvEmptyView.visibility = View.VISIBLE
+            tvAddNewVittle.visibility = View.VISIBLE
         } else {
-            tvEmptyView.visibility = View.GONE
+            tvAddNewVittle.visibility = View.GONE
         }
     }
 
@@ -201,8 +205,10 @@ class ProductsActivity : DaggerAppCompatActivity() {
     fun onProductsLoadSucceed(products: List<Product>) {
         this.products.addAll(products)
         presenter.loadIndicationColors(this.products)
+        productAdapter.products = products
         productAdapter.notifyDataSetChanged()
         setEmptyView()
+        setNoResultsView()
     }
 
     /**

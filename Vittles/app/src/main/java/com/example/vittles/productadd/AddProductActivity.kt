@@ -4,9 +4,13 @@ import android.app.DatePickerDialog
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.MenuItem
-import androidx.appcompat.app.AppCompatActivity
 import com.example.domain.model.Product
 import com.example.vittles.R
+import com.example.vittles.VittlesApp
+import com.example.vittles.mvp.BaseActivity
+import com.example.vittles.popups.PopupBase
+import com.example.vittles.popups.PopupButton
+import com.example.vittles.popups.PopupManager
 import com.example.vittles.services.NotificationService
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.AndroidInjection
@@ -171,5 +175,18 @@ class AddProductActivity : DaggerAppCompatActivity() {
     fun onProductAddFail() {
         Snackbar.make(layout, getString(R.string.product_failed), Snackbar.LENGTH_LONG)
             .show()
+    }
+
+    /**
+     * Shows the CloseToExpiring popup
+     *
+     * @param daysRemaining The amount of days until the product is expired
+     */
+    fun showCloseToExpirationPopup(daysRemaining: Int){
+        PopupManager.instance.showPopup(
+            this,
+            PopupBase("Almost expired!", String.format("The scanned product expires in %d days ", daysRemaining), 5000),
+            PopupButton("Dismiss")
+        )
     }
 }
