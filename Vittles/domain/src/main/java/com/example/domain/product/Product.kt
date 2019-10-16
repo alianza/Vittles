@@ -32,7 +32,7 @@ data class Product(
      * @return An integer with the amount of days left.
      */
     fun getDaysRemaining(): Int {
-        return Days.daysBetween(DateTime.now(), expirationDate).days + 1
+        return Days.daysBetween(DateTime.now().withTimeAtStartOfDay(), expirationDate).days
     }
 
     /**
