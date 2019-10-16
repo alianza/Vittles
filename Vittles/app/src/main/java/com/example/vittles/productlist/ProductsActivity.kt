@@ -113,7 +113,7 @@ class ProductsActivity : DaggerAppCompatActivity() {
     }
 
     /**
-     * Attaches the ItemTochHelper to the RecyclerView
+     * Attaches the ItemTouchHelper to the RecyclerView.
      *
      */
     private fun setItemTouchHelper() {
@@ -122,7 +122,7 @@ class ProductsActivity : DaggerAppCompatActivity() {
         itemTouchHelper.attachToRecyclerView(rvProducts)
     }
     /**
-     * Checks if emptyView should be visible based on the itemCount
+     * Checks if emptyView should be visible based on the itemCount.
      */
     private fun setEmptyView() {
         if (productAdapter.itemCount == 0) {
