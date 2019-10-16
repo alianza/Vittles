@@ -23,7 +23,7 @@ class AddProduct @Inject constructor(private val repository: ProductsRepository)
     val onProductCloseToExpiring = Event<Int>()
 
     /**
-     * This method is used to invoke a product to the database.
+     * This method is used to add a product to the database.
      *
      * @param product The product that will be added.
      * @return The compatibility status of adding the product ot the database.
@@ -41,7 +41,7 @@ class AddProduct @Inject constructor(private val repository: ProductsRepository)
         checkExpirationDate(product.getDaysRemaining())
 
         return if (!product.isValidForAdd()) {
-            Completable.error(IllegalArgumentException("product failed validation before invoke"))
+            Completable.error(IllegalArgumentException("product failed validation before add"))
         } else {
             Completable.complete()
         }

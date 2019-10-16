@@ -206,7 +206,7 @@ class ProductsActivity : DaggerAppCompatActivity() {
     }
 
     /**
-     * When products are loaded, this method will add the products to the product list.
+     * When products are loaded, this method will get the products to the product list.
      *
      * @param products Products to be added to the product list.
      */
@@ -235,7 +235,6 @@ class ProductsActivity : DaggerAppCompatActivity() {
      */
     fun onProductDeleteSucceed() {
         populateRecyclerView()
-
     }
 
 

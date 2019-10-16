@@ -8,7 +8,7 @@ import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 /**
- * This is the presenter for the add product activity.
+ * This is the presenter for the invoke product activity.
  *
  * @author Jeroen Flietstra
  * @author Arjen Simons
