@@ -1,11 +1,12 @@
 package com.example.vittles
 
-import android.app.Application
 import androidx.core.app.NotificationManagerCompat
-import com.example.vittles.di.AppComponent
+import com.example.vittles.di.AppModule
 import com.example.vittles.di.DaggerAppComponent
 import com.example.vittles.services.NotificationService
 import com.example.vittles.services.notification.NotificationScheduleService
+import dagger.android.AndroidInjector
+import dagger.android.DaggerApplication
 import net.danlew.android.joda.JodaTimeAndroid
 
 /**
@@ -13,18 +14,19 @@ import net.danlew.android.joda.JodaTimeAndroid
  *
  * @author Jeroen Flietstra
  */
-class VittlesApp : Application() {
+class VittlesApp : DaggerApplication() {
+    override fun applicationInjector(): AndroidInjector<VittlesApp> {
+        val appComponent = DaggerAppComponent.builder()
+            .applicationBind(this)
+            .appModule(AppModule(this))
+            .build()
+        appComponent.inject(this)
 
-    companion object {
-        lateinit var component: AppComponent
-            private set
+        return appComponent
     }
 
     override fun onCreate() {
         super.onCreate()
-        component = DaggerAppComponent.builder()
-            .application(this)
-            .build()
 
         // Initialize Joda-Time
         JodaTimeAndroid.init(this)

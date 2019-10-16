@@ -11,12 +11,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.model.Product
 import com.example.vittles.R
-import com.example.vittles.VittlesApp
-import com.example.vittles.mvp.BaseActivity
-import com.example.vittles.popups.PopupBase
-import com.example.vittles.popups.PopupButton
-import com.example.vittles.popups.PopupManager
 import com.example.vittles.productadd.AddProductActivity
+import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import javax.inject.Inject
@@ -29,7 +25,7 @@ import javax.inject.Inject
  * @author Jan-Willem van Bremen
  * @author Fethi Tewelde
  */
-class ProductsActivity : BaseActivity() {
+class ProductsActivity : DaggerAppCompatActivity() {
 
     @Inject
     lateinit var presenter: ProductsPresenter
@@ -43,7 +39,6 @@ class ProductsActivity : BaseActivity() {
      *
      */
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.inject
         setTheme(R.style.AppTheme_NoActionBar)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -54,13 +49,6 @@ class ProductsActivity : BaseActivity() {
         initViews()
     }
 
-    override fun injectDependencies() {
-        DaggerProductsComponent.builder()
-            .appComponent(VittlesApp.component)
-            .productsModule(ProductsModule())
-            .build()
-            .inject(this)
-    }
 
     /**
      * Initializes the RecyclerView and sets EventListeners.

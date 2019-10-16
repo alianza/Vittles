@@ -6,13 +6,12 @@ import android.text.TextUtils
 import android.view.MenuItem
 import com.example.domain.model.Product
 import com.example.vittles.R
-import com.example.vittles.VittlesApp
-import com.example.vittles.mvp.BaseActivity
 import com.example.vittles.popups.PopupBase
 import com.example.vittles.popups.PopupButton
 import com.example.vittles.popups.PopupManager
 import com.example.vittles.services.NotificationService
 import com.google.android.material.snackbar.Snackbar
+import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_add_product.*
 import java.util.*
 import javax.inject.Inject
@@ -25,7 +24,7 @@ import javax.inject.Inject
  * @author Jan-Willem van Bremen
  */
 @Suppress("DEPRECATION") // Suppress deprecation on 'Date' since the project is running on API 21.
-class AddProductActivity : BaseActivity() {
+class AddProductActivity : DaggerAppCompatActivity() {
     @Inject lateinit var presenter: AddProductPresenter
 
     private val calendar = Calendar.getInstance()
@@ -51,21 +50,10 @@ class AddProductActivity : BaseActivity() {
      * @param savedInstanceState {@inheritDoc}
      */
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.inject
         super.onCreate(savedInstanceState)
         presenter.start(this@AddProductActivity)
         setContentView(R.layout.activity_add_product)
         initViews()
-
-
-    }
-
-    override fun injectDependencies() {
-        DaggerAddProductComponent.builder()
-            .appComponent(VittlesApp.component)
-            .addProductModule(AddProductModule())
-            .build()
-            .inject(this)
     }
 
     /**

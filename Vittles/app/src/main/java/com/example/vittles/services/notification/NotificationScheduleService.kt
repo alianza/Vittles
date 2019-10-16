@@ -2,13 +2,12 @@ package com.example.vittles.services.notification
 
 import android.app.AlarmManager
 import android.app.PendingIntent
-import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import com.example.domain.model.Product
 import com.example.domain.productfetch.FetchProductsUseCase
-import com.example.vittles.VittlesApp
 import com.example.vittles.services.NotificationService
+import dagger.android.DaggerBroadcastReceiver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -25,23 +24,13 @@ const val DAYS_REMAINING_BOUNDARY = 2
  *
  * @author Jeroen Flietstra
  */
-class NotificationScheduleService : BroadcastReceiver() {
+class NotificationScheduleService : DaggerBroadcastReceiver() {
     @Inject
     lateinit var fetchProductsUseCase: FetchProductsUseCase
 
     private val disposables: CompositeDisposable = CompositeDisposable()
     private var totalProductsToExpire = 0
 
-    /**
-     * Inject dependencies.
-     */
-    init {
-        DaggerNotificationComponent.builder()
-            .appComponent(VittlesApp.component)
-            .notificationModule(NotificationModule())
-            .build()
-            .inject(this)
-    }
 
     /**
      * Overridden function that calls the audit notification method every time the audit timestamp
@@ -49,6 +38,7 @@ class NotificationScheduleService : BroadcastReceiver() {
      *
      */
     override fun onReceive(p0: Context?, p1: Intent?) {
+        super.onReceive(p0, p1)
         auditNotification(p0)
     }
 

@@ -7,6 +7,7 @@ import com.example.domain.consts.DAYS_REMAINING_BOUNDARY
 import com.example.domain.repositories.ProductsRepository
 import com.example.domain.model.Product
 import io.reactivex.Completable
+import javax.inject.Inject
 
 /**
  * This class handles te business logic of adding a new product to the application.
@@ -17,7 +18,7 @@ import io.reactivex.Completable
  * @property repository The productsRepository.
  * @property onProductCloseToExpiring Event that is fired when an added product is close to expiring.
  */
-class AddProductUseCase(private val repository: ProductsRepository) {
+class AddProductUseCase @Inject constructor(private val repository: ProductsRepository) {
 
     val onProductCloseToExpiring = Event<Int>()
 
