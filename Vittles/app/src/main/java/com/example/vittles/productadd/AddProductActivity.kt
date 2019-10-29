@@ -183,8 +183,8 @@ class AddProductActivity : DaggerAppCompatActivity(), AddProductContract.View {
                 String.format("The scanned product expires in %d days. \n Are you sure you want to add it?",
                     product.getDaysRemaining())
             ),
-            PopupButton("CANCEL"),
-            PopupButton("CONFIRM") { presenter.addProduct(product, false) }
+            PopupButton("NO"),
+            PopupButton("YES") { presenter.addProduct(product, false) }
         )
     }
 }
