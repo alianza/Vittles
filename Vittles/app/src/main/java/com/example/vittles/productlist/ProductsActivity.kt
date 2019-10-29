@@ -1,10 +1,13 @@
 package com.example.vittles.productlist
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.widget.ImageView
 import android.widget.SearchView
 import android.widget.TextView
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -13,9 +16,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.product.Product
 import com.example.vittles.R
 import com.example.vittles.productadd.AddProductActivity
+import com.example.vittles.services.Sorting.SortMenu
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_sort.view.*
 import kotlinx.android.synthetic.main.content_main.*
 import javax.inject.Inject
 
@@ -26,6 +31,7 @@ import javax.inject.Inject
  * @author Jeroen Flietstra
  * @author Jan-Willem van Bremen
  * @author Fethi Tewelde
+ * @author Marc van Spronsen
  */
 class ProductsActivity : DaggerAppCompatActivity(), ProductsContract.View {
 
@@ -36,6 +42,7 @@ class ProductsActivity : DaggerAppCompatActivity(), ProductsContract.View {
     private var products = mutableListOf<Product>()
     private var filteredProducts = products
     private val productAdapter = ProductAdapter(products)
+    private val sortMenu = SortMenu(products, productAdapter)
 
     /**
      * Called when the ProductsActivity is created.
@@ -50,6 +57,7 @@ class ProductsActivity : DaggerAppCompatActivity(), ProductsContract.View {
             start(this@ProductsActivity)
         }
         initViews()
+
     }
 
     override fun onDestroy() {
@@ -98,6 +106,8 @@ class ProductsActivity : DaggerAppCompatActivity(), ProductsContract.View {
 
         fab.setOnClickListener { onAddButtonClick() }
 
+        btnSort.setOnClickListener { openSortMenu() }
+
         ibtnSearch.setOnClickListener { openSearchBar() }
 
         svSearch.setOnCloseListener { closeSearchBar(); false }
@@ -116,18 +126,28 @@ class ProductsActivity : DaggerAppCompatActivity(), ProductsContract.View {
 
         imgbtnCloseSearch.setOnClickListener { closeSearchBar() }
     }
+    
+     /**
+     * Called when the sort button is clicked.
+     *
+     */
+    private fun openSortMenu() {
+        sortMenu.openMenu(this, btnSort)
+    }
 
     /**
      * Attaches the ItemTouchHelper to the RecyclerView.
-     *
+    
      */
     override fun setItemTouchHelper() {
         val callback = ProductItemTouchHelper(products,presenter,this)
         itemTouchHelper = ItemTouchHelper(callback)
         itemTouchHelper.attachToRecyclerView(rvProducts)
     }
+
     /**
      * Checks if emptyView should be visible based on the itemCount.
+     *
      */
     override fun setEmptyView() {
         if (productAdapter.itemCount == 0) {
@@ -140,6 +160,7 @@ class ProductsActivity : DaggerAppCompatActivity(), ProductsContract.View {
     /**
      * Called when the add button is clicked.
      * It starts the addProduct activity.
+     *
      */
     override fun onAddButtonClick() {
         val addProductActivityIntent = Intent(
