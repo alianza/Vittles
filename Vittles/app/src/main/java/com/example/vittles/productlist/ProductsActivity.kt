@@ -16,12 +16,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.product.Product
 import com.example.vittles.R
 import com.example.vittles.productadd.AddProductActivity
+import com.example.vittles.services.Sorting.SortMenu
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_sort.*
 import kotlinx.android.synthetic.main.activity_sort.view.*
-import kotlinx.android.synthetic.main.activity_sort.view.daysRemainingLH
 import kotlinx.android.synthetic.main.content_main.*
 import javax.inject.Inject
 
@@ -43,8 +42,7 @@ class ProductsActivity : DaggerAppCompatActivity() {
     private var products = mutableListOf<Product>()
     private var filteredProducts = products
     private val productAdapter = ProductAdapter(products)
-    private var selectedSortNumber = 1
-    lateinit var selectedSortMethod: ImageView
+    private val sortMenu = SortMenu(products, productAdapter)
 
     /**
      * Called when the ProductsActivity is created.
@@ -59,6 +57,7 @@ class ProductsActivity : DaggerAppCompatActivity() {
             start(this@ProductsActivity)
         }
         initViews()
+
     }
 
     /**
@@ -124,92 +123,10 @@ class ProductsActivity : DaggerAppCompatActivity() {
     
      /**
      * Called when the sort button is clicked.
-     * It opens the sorting menu.
-     * It handles all click events of the dialog window
-     * It sort the products list
-     * It sort the products list
+     *
      */
     private fun openSortMenu() {
-
-        val mDialogView =
-            LayoutInflater.from(this).inflate(R.layout.activity_sort, null)
-        val mBuilder =
-            AlertDialog.Builder(this).setView(mDialogView)
-        val  mAlertDialog = mBuilder.show()
-
-        if (!::selectedSortMethod.isInitialized) {
-            selectedSortMethod = mDialogView.daysRemainingAsc
-            setSortMenuColor(selectedSortMethod)
-        }
-        else {
-            selectedSortMethod = when (selectedSortNumber) {
-                1 -> mDialogView.daysRemainingAsc
-                2 -> mDialogView.daysRemainingDesc
-                3 -> mDialogView.alfabeticAz
-                4 -> mDialogView.alfabeticZa
-                5 -> mDialogView.newestSelected
-                else -> mDialogView.oldestSelected
-            }
-            setSortMenuColor(selectedSortMethod)
-        }
-
-        mDialogView.daysRemainingLH.setOnClickListener {
-            products.sortBy { it.expirationDate }
-            productAdapter.products = products
-            btnSort.text = mDialogView.daysRemainingLH.text
-            selectedSortNumber = 1
-            productAdapter.notifyDataSetChanged()
-            mAlertDialog.dismiss()
-        }
-        mDialogView.daysRemainingHL.setOnClickListener {
-            products.sortByDescending { it.expirationDate }
-            productAdapter.products = products
-            btnSort.text = mDialogView.daysRemainingHL.text
-            selectedSortNumber = 2
-            productAdapter.notifyDataSetChanged()
-            mAlertDialog.dismiss()
-        }
-        mDialogView.alfabeticAZ.setOnClickListener {
-            products.sortBy { it.productName }
-            productAdapter.products = products
-            btnSort.text = mDialogView.alfabeticAZ.text
-            selectedSortNumber = 3
-            productAdapter.notifyDataSetChanged()
-            mAlertDialog.dismiss()
-        }
-        mDialogView.alfabeticZA.setOnClickListener {
-            products.sortByDescending { it.productName }
-            productAdapter.products = products
-            btnSort.text = mDialogView.alfabeticZA.text
-            selectedSortNumber = 4
-            productAdapter.notifyDataSetChanged()
-            mAlertDialog.dismiss()
-        }
-        mDialogView.newest.setOnClickListener {
-            products.sortByDescending { it.creationDate }
-            productAdapter.products = products
-            btnSort.text = mDialogView.newest.text
-            selectedSortNumber = 5
-            productAdapter.notifyDataSetChanged()
-            mAlertDialog.dismiss()
-        }
-        mDialogView.oldest.setOnClickListener {
-            products.sortBy { it.creationDate }
-            productAdapter.products = products
-            btnSort.text = mDialogView.oldest.text
-            selectedSortNumber = 6
-            productAdapter.notifyDataSetChanged()
-            mAlertDialog.dismiss()
-        }
-    }
-
-    /**
-     * Sets the circle alpha to 1 of the selected sorting method.
-     *
-     * @param circle The ImageView that represents the selected sorting method.
-     */
-    private fun setSortMenuColor(circle: ImageView) {
-        circle.alpha = 1f
+        sortMenu.openMenu(this, btnSort)
     }
 
     /**
