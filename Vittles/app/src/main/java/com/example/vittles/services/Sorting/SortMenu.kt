@@ -12,7 +12,15 @@ import com.example.vittles.productlist.ProductsActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_sort.view.*
 
-
+/**
+ * Class for the sorting Menu, This menu shows all the sorting types and the current sorting type.
+ *
+ * @author Marc van Spronsen
+ *
+ * @property currentSortingType The current sorting type that is used.
+ * @property sortList The list that should be sorted.
+ * @property adapter the adapter for the list that should be sorted.
+ */
 class SortMenu (sortList: MutableList<Product>, adapter: ProductAdapter) {
 
     private var currentSortingType: SortingType = SortingType.DAYS_REMAINING_ASC
