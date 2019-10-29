@@ -16,7 +16,8 @@ import javax.inject.Inject
  *
  * @property addProduct The AddProduct from the domain module.
  */
-class AddProductPresenter @Inject internal constructor(private val addProduct: AddProduct) : BasePresenter<AddProductActivity>() {
+class AddProductPresenter @Inject internal constructor(private val addProduct: AddProduct) :
+    BasePresenter<AddProductActivity>(), AddProductContract.Presenter {
 
     /**
      * Method used to add a product.
@@ -24,18 +25,20 @@ class AddProductPresenter @Inject internal constructor(private val addProduct: A
      * @param product The product to add.
      * @param checkDate If the date should be checked to show a popup.
      */
-    fun addProduct(product: Product, checkDate: Boolean = true) {
-
+    override fun addProduct(product: Product, checkDate: Boolean) {
         disposables.add(addProduct.invoke(product, checkDate)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ view?.onProductAddSucceed() },
+            .subscribe(
                 {
-                    if (it is IllegalArgumentException){
-                    view?.onProductAddFail() //Show Snackbar that tells it failed
-                    }
-                    else if (it is Exception){
-                        view?.showCloseToExpirationPopup(product) //Show close to expiring popup
+                    view?.showAddProductSucceed()
+                    view?.resetView()
+                },
+                {
+                    if (it is IllegalArgumentException) {
+                        view?.showAddProductError() // Show snack bar that tells it failed
+                    } else if (it is Exception) {
+                        view?.showCloseToExpirationPopup(product) // Show close to expiring popup
                     }
                 }
             )

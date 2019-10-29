@@ -1,5 +1,8 @@
 package com.example.domain.product
 
+import com.example.domain.consts.DAYS_REMAINING_BOUNDARY_CLOSE
+import com.example.domain.consts.DAYS_REMAINING_EXPIRED
+import com.example.domain.enums.ExpirationIndicationColor
 import org.joda.time.*
 
 
@@ -21,9 +24,9 @@ import org.joda.time.*
  */
 data class Product(
     val uid: Int?,
-    val productName: String?,
-    val expirationDate: DateTime?,
-    val creationDate: DateTime?,
+    val productName: String,
+    val expirationDate: DateTime,
+    val creationDate: DateTime,
     var indicationColor: Int?
 ) {
     /**
@@ -32,18 +35,34 @@ data class Product(
      * @return An integer with the amount of days left.
      */
     fun getDaysRemaining(): Int {
-        return Days.daysBetween(DateTime.now(), expirationDate).days + 1
+        return Days.daysBetween(DateTime.now().withTimeAtStartOfDay(), expirationDate).days
+    }
+
+    /**
+     * Calculates the indication color of a product
+     *
+     * @return
+     */
+    fun getIndicationColor(): ExpirationIndicationColor{
+
+        val daysRemaining = getDaysRemaining()
+
+        return when {
+            daysRemaining < DAYS_REMAINING_EXPIRED -> ExpirationIndicationColor.RED
+            daysRemaining < DAYS_REMAINING_BOUNDARY_CLOSE -> ExpirationIndicationColor.YELLOW
+            else -> ExpirationIndicationColor.GREEN
+        }
     }
 
     /**
      * Checks if the change to a product is valid.
      *
      */
-    fun isValidForEdit() = uid!! > 0 && productName!!.trim().isNotEmpty() && expirationDate.toString().trim().isNotEmpty()
+    fun isValidForEdit() = uid!! > 0 && productName.trim().isNotEmpty() && expirationDate.toString().trim().isNotEmpty()
 
     /**
      * Checks if the input for a product is valid.
      *
      */
-    fun isValidForAdd() = productName!!.trim().isNotEmpty() && expirationDate.toString().trim().isNotEmpty()
+    fun isValidForAdd() = productName.trim().isNotEmpty() && expirationDate.toString().trim().isNotEmpty()
 }

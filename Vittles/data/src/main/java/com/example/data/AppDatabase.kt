@@ -7,12 +7,12 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
 /**
- * Creates the ProductDaoImpl.
+ * Creates the ProductDao.
  *
  * @param context The application context
- * @return The ProductDaoImpl.
+ * @return The ProductDao.
  */
-fun createProductDaoImpl(context: Context): ProductDaoImpl {
+fun createProductDaoImpl(context: Context): ProductDao {
     return AppDatabase.getDatabase(context).productDao()
 }
 
@@ -26,7 +26,7 @@ fun createProductDaoImpl(context: Context): ProductDaoImpl {
 @Database(entities = [ProductEntity::class], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
-    abstract fun productDao(): ProductDaoImpl
+    abstract fun productDao(): ProductDao
 
     companion object {
 

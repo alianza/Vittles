@@ -4,7 +4,6 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
-import com.example.domain.repositories.ProductDao
 import io.reactivex.Single
 
 /**
@@ -14,7 +13,7 @@ import io.reactivex.Single
  * @author Jan-Willem van Bremen
  */
 @Dao
-interface ProductDaoImpl : ProductDao {
+interface ProductDao {
 
     /**
      * Retrieves all products from the database.

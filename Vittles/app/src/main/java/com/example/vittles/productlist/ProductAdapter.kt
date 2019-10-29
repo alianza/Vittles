@@ -85,9 +85,9 @@ class ProductAdapter @Inject constructor(initialProducts: List<Product>) :
             itemView.tvName.text = product.productName
             itemView.tvDate.text = context.resources.getString(
                 R.string.expiration_format,
-                product.expirationDate?.dayOfMonth.toString(),
-                product.expirationDate?.monthOfYear.toString(),
-                product.expirationDate?.year.toString())
+                product.expirationDate.dayOfMonth.toString(),
+                product.expirationDate.monthOfYear.toString(),
+                product.expirationDate.year.toString())
             itemView.tvDaysLeft.text = daysLeft
 
             //Set the colors

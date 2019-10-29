@@ -1,5 +1,6 @@
 package com.example.vittles.productlist
 
+import com.example.domain.enums.ExpirationIndicationColor
 import com.example.domain.product.DeleteProduct
 import com.example.domain.product.Product
 import com.example.domain.product.GetProducts
@@ -20,18 +21,21 @@ import javax.inject.Inject
  *
  * @property getProducts The GetProducts use case from the domain module
  */
-class ProductsPresenter @Inject internal constructor(private val getProducts: GetProducts, private val deleteProduct: DeleteProduct) :
-    BasePresenter<ProductsActivity>() {
+class ProductsPresenter @Inject internal constructor(
+    private val getProducts: GetProducts,
+    private val deleteProduct: DeleteProduct
+) :
+    BasePresenter<ProductsActivity>(), ProductsContract.Presenter {
 
     /**
      * Loads the products.
      *
      */
-    fun loadProducts() {
+    override fun startPresenting() {
         disposables.add(
             getProducts().subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ view?.onProductsLoadSucceed(it) }, { view?.onProductsLoadFail() })
+                .subscribe({ view?.showProducts(it) }, { view?.setNoResultsView() })
         )
     }
 
@@ -40,13 +44,12 @@ class ProductsPresenter @Inject internal constructor(private val getProducts: Ge
      *
      * @param products The list containing the products that are shown in the ListView.
      */
-    fun loadIndicationColors(products: List<Product>) {
+    override fun loadIndicationColors(products: List<Product>) {
         products.forEach { product ->
-            val daysRemaining = product.getDaysRemaining()
-            product.indicationColor = when {
-                daysRemaining < Globals.RED_COLOR_BOUNDARY -> IndicationColor.RED.value
-                daysRemaining < Globals.YELLOW_COLOR_BOUNDARY -> IndicationColor.YELLOW.value
-                else -> IndicationColor.GREEN.value
+            product.indicationColor = when (product.getIndicationColor()) {
+                ExpirationIndicationColor.RED -> IndicationColor.RED.value
+                ExpirationIndicationColor.YELLOW -> IndicationColor.YELLOW.value
+                ExpirationIndicationColor.GREEN -> IndicationColor.GREEN.value
             }
         }
     }
@@ -56,10 +59,11 @@ class ProductsPresenter @Inject internal constructor(private val getProducts: Ge
      *
      * @param product The product that will be deleted.
      */
-    fun deleteProduct(product : Product) {
+    override fun deleteProduct(product: Product) {
         disposables.add(deleteProduct.invoke(product)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ view?.onProductDeleteSucceed() }, {view?.onProductDeleteFail()}))
+            .subscribe({ view?.populateRecyclerView() }, { view?.showProductDeleteError() })
+        )
     }
 }
