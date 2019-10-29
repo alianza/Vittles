@@ -13,12 +13,16 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_sort.view.*
 
 
-class SortMenu (mutableList: MutableList<Product>, adapter: ProductAdapter) {
+class SortMenu (sortList: MutableList<Product>, adapter: ProductAdapter) {
 
     private var currentSortingType: SortingType = SortingType.DAYS_REMAINING_ASC
-    private var products = mutableList
+    private var sortList = sortList
     private var adapter = adapter
 
+    /**
+     * Sets enums for all of the different sorting options
+     *
+     */
     enum class SortingType() {
         DAYS_REMAINING_ASC,
         DAYS_REMAINING_DESC,
@@ -28,6 +32,12 @@ class SortMenu (mutableList: MutableList<Product>, adapter: ProductAdapter) {
         OLDEST
     }
 
+    /**
+     * Inflates the sortingMenu.
+     *
+     * @param context The context in which the sortingMenu is active.
+     * @param button The button which shows the current sortingType.
+     */
     fun openMenu(context: Context, button: Button) {
 
         val mDialogView =
@@ -40,6 +50,13 @@ class SortMenu (mutableList: MutableList<Product>, adapter: ProductAdapter) {
         setListeners(mDialogView, mAlertDialog, button)
     }
 
+    /**
+     * Sets all the onClickListeners
+     *
+     * @param view The View which holds the sortingMenu.
+     * @param alertDialog The entire alertdialog of the sortMenu.
+     * @param button The button which shows the current sortingType.
+     */
     private fun setListeners(view: View, alertDialog: AlertDialog, button: Button) {
         view.daysRemainingLH.setOnClickListener { onSortClick(SortingType.DAYS_REMAINING_ASC, view, alertDialog, button)  }
         view.daysRemainingHL.setOnClickListener { onSortClick(SortingType.DAYS_REMAINING_DESC, view, alertDialog, button) }
@@ -49,18 +66,26 @@ class SortMenu (mutableList: MutableList<Product>, adapter: ProductAdapter) {
         view.oldest.setOnClickListener { onSortClick(SortingType.OLDEST, view, alertDialog, button) }
     }
 
+    /**
+     * Handles all actions that happen when a button is clicked
+     *
+     * @param sortingType The sortingType which was selected by the user.
+     * @param view The View which holds the sortingMenu.
+     * @param alertDialog The entire alertdialog of the sortMenu.
+     * @param button The button which shows the current sortingType.
+     */
     private fun onSortClick(sortingType: SortingType, view: View, alertDialog: AlertDialog, button: Button) {
         when(sortingType) {
-            SortingType.DAYS_REMAINING_ASC -> products.sortBy { it.expirationDate }
-            SortingType.DAYS_REMAINING_DESC -> products.sortByDescending { it.expirationDate }
-            SortingType.ALFABETIC_AZ -> products.sortBy { it.productName }
-            SortingType.ALFABETIC_ZA -> products.sortByDescending { it.productName }
-            SortingType.NEWEST -> products.sortByDescending { it.creationDate }
-            else -> products.sortBy { it.creationDate }
+            SortingType.DAYS_REMAINING_ASC -> sortList.sortBy { it.expirationDate }
+            SortingType.DAYS_REMAINING_DESC -> sortList.sortByDescending { it.expirationDate }
+            SortingType.ALFABETIC_AZ -> sortList.sortBy { it.productName }
+            SortingType.ALFABETIC_ZA -> sortList.sortByDescending { it.productName }
+            SortingType.NEWEST -> sortList.sortByDescending { it.creationDate }
+            else -> sortList.sortBy { it.creationDate }
         }
         setSortbtnText(sortingType, view, button)
         currentSortingType = sortingType
-        adapter.products = products
+        adapter.products = sortList
         adapter.notifyDataSetChanged()
         alertDialog.dismiss()
     }
@@ -81,6 +106,13 @@ class SortMenu (mutableList: MutableList<Product>, adapter: ProductAdapter) {
         }
     }
 
+    /**
+     * Sets the buttonText to the current sorting method.
+     *
+     * @param sortingType The sortingType which was selected by the user.
+     * @param view The View in which the button is active.
+     * @param btnSort The button of which the text needs to be replaced.
+     */
     private fun setSortbtnText(sortingType: SortingType, view: View, btnSort: Button) {
         when(sortingType) {
             SortingType.DAYS_REMAINING_ASC -> btnSort.text = view.daysRemainingLH.text
