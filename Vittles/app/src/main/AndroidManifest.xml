@@ -29,6 +29,9 @@
             android:name="io.fabric.ApiKey"
             android:value="4838ec19460fdfb32acef2d2035595bb8248cc75"
             />
+        <meta-data
+            android:name="com.google.firebase.ml.vision.DEPENDENCIES"
+            android:value="barcode,ocr" />
         <receiver android:name=".services.notification.NotificationScheduleService"
             android:exported="true"
             android:enabled="true"/>
