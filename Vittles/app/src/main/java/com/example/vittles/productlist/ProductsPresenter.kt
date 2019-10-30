@@ -5,6 +5,7 @@ import com.example.domain.product.DeleteProduct
 import com.example.domain.product.Product
 import com.example.domain.product.GetProducts
 import com.example.vittles.Globals
+import com.example.vittles.enums.DeleteType
 import com.example.vittles.enums.IndicationColor
 import com.example.vittles.mvp.BasePresenter
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -58,8 +59,9 @@ class ProductsPresenter @Inject internal constructor(
      * Deletes a product.
      *
      * @param product The product that will be deleted.
+     * @param deleteType The Delete Type, EATEN, THROWN_AWAY or REMOVED
      */
-    override fun deleteProduct(product: Product) {
+    override fun deleteProduct(product: Product, deleteType: DeleteType) {
         disposables.add(deleteProduct.invoke(product)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
