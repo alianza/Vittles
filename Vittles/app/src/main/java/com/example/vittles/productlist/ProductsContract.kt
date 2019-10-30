@@ -1,6 +1,7 @@
 package com.example.vittles.productlist
 
 import com.example.domain.product.Product
+import com.example.vittles.enums.DeleteType
 
 /**
  * MVP Contract for products overview.
@@ -28,6 +29,6 @@ interface ProductsContract {
     interface Presenter {
         fun startPresenting()
         fun loadIndicationColors(products: List<Product>)
-        fun deleteProduct(product: Product)
+        fun deleteProduct(product: Product, deleteType: DeleteType)
     }
 }
