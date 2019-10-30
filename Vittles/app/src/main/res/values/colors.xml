@@ -5,8 +5,9 @@
     <color name="colorAccent">#D81B60</color>
     <color name="lightGrey">#F1F1F1</color>
     <color name="darkGrey">#797979</color>
-    <color name="white">#FFF</color>
+    <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
+    <color name="transparent">#00000000</color>
 
 <!--    Expiration indicator colors-->
     <color name="green">#26F391</color>
