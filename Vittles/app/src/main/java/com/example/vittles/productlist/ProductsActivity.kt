@@ -128,7 +128,7 @@ class ProductsActivity : DaggerAppCompatActivity(), ProductsContract.View {
      *
      */
     private fun openSortMenu() {
-        sortMenu.openMenu(this, btnSort)
+        sortMenu.openMenu(this, btnSort, filteredProducts)
     }
 
     /**
@@ -180,6 +180,7 @@ class ProductsActivity : DaggerAppCompatActivity(), ProductsContract.View {
 
         productAdapter.products = filteredProducts
         productAdapter.notifyDataSetChanged()
+        sortMenu.sortFilteredList(filteredProducts)
 
         setNoResultsView()
     }
