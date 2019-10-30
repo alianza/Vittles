@@ -42,4 +42,7 @@
     <string name="newest">Newest</string>
     <string name="oldest">Oldest</string>
 
+    <!--    Scan Vittles-->
+    <string name="scan_vittles_title">Scan Vittles</string>
+
 </resources>

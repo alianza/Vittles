@@ -4,6 +4,7 @@
     package="com.example.vittles">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:name=".VittlesApp"
@@ -14,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".ScannerActivity"></activity>
+        <activity android:name=".camera.CameraActivity"/>
         <activity android:name=".productadd.AddProductActivity" />
         <activity
             android:name=".productlist.ProductsActivity"

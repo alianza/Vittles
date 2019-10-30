@@ -1,11 +1,13 @@
 package com.example.vittles.productadd
 
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.MenuItem
 import com.example.domain.product.Product
 import com.example.vittles.R
+import com.example.vittles.camera.CameraActivity
 import com.example.vittles.services.popups.PopupBase
 import com.example.vittles.services.popups.PopupButton
 import com.example.vittles.services.popups.PopupManager
@@ -62,6 +64,15 @@ class AddProductActivity : DaggerAppCompatActivity(), AddProductContract.View {
         supportActionBar?.title = getString(R.string.add_product_title)
         initDatePicker()
         btnConfirm.setOnClickListener { onConfirmButtonClick() }
+        btnScan.setOnClickListener { onScanButtonClick() }
+    }
+
+    private fun onScanButtonClick() {
+        val scannerActivity = Intent(
+            this,
+            CameraActivity::class.java
+        )
+        startActivity(scannerActivity)
     }
 
 
