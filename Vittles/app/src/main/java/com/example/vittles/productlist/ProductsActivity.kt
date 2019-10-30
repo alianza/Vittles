@@ -238,6 +238,7 @@ class ProductsActivity : DaggerAppCompatActivity(), ProductsContract.View {
         presenter.loadIndicationColors(this.products)
         productAdapter.products = products
         productAdapter.notifyDataSetChanged()
+        filteredProducts = this.products
         setEmptyView()
         setNoResultsView()
     }
