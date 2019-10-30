@@ -1,13 +1,10 @@
 package com.example.vittles.productlist
 
 import android.annotation.SuppressLint
-import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.widget.ImageView
 import android.widget.SearchView
 import android.widget.TextView
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -16,11 +13,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.product.Product
 import com.example.vittles.R
 import com.example.vittles.productadd.AddProductActivity
-import com.example.vittles.services.Sorting.SortMenu
+import com.example.vittles.services.sorting.SortMenu
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_sort.view.*
 import kotlinx.android.synthetic.main.content_main.*
 import javax.inject.Inject
 

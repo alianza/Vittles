@@ -1,5 +1,6 @@
 package com.example.vittles.productlist
 
+import android.content.ClipData
 import android.content.Context
 import android.graphics.drawable.ColorDrawable
 import android.view.View
@@ -9,8 +10,10 @@ import com.example.vittles.R
 import kotlinx.android.synthetic.main.item_product.view.*
 import android.graphics.*
 import android.graphics.drawable.Drawable
+import android.util.Log
 import androidx.core.content.ContextCompat
 import com.example.domain.product.Product
+import com.example.vittles.enums.DeleteType
 
 
 /**
@@ -28,6 +31,14 @@ class ProductItemTouchHelper(initialProducts: List<Product>, initialPresenter: P
 
     private var products: List<Product> = initialProducts
     private var presenter: ProductsPresenter = initialPresenter
+
+    /**
+     * Enum to determain where the swipe icon should be located.
+     *
+     */
+    enum class IconLocation {
+        LEFT, RIGHT
+    }
 
     /**
      * Called when ItemTouchHelper wants to move the dragged item from its old position to the new position.
@@ -57,18 +68,25 @@ class ProductItemTouchHelper(initialProducts: List<Product>, initialPresenter: P
         viewHolder: RecyclerView.ViewHolder
     ): Int {
 
-        return makeMovementFlags(0, ItemTouchHelper.LEFT)
+        return makeMovementFlags(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT)
     }
 
     /**
      * Called when a ViewHolder is swiped by the user.
      *
      * @param viewHolder The ViewHolder which has been swiped by the user.
-     * @param direction  The direction to which the ViewHolder is swiped.
+     * @param direction  The direction to which the ViewHolder is swiped (8 = to the left and 4 = to the right).
      */
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
         val product = products[viewHolder.adapterPosition]
-        presenter.deleteProduct(product)
+
+        var deleteType =  if (direction == 8){
+            DeleteType.EATEN
+        }else{
+            DeleteType.THROWN_AWAY
+        }
+
+        presenter.deleteProduct(product, deleteType)
     }
 
 
@@ -118,10 +136,13 @@ class ProductItemTouchHelper(initialProducts: List<Product>, initialPresenter: P
 
         showSwipeLines(viewHolder, recyclerView)
 
-        setBackgroundColor(c,  viewHolder, ContextCompat.getColor(context, R.color.red))
-
-        drawIcon(c, viewHolder, context.getDrawable(R.drawable.ic_delete_white_24)!!)
-
+        if (dX < 0) {
+            setBackgroundColor(c, viewHolder, ContextCompat.getColor(context, R.color.red))
+            drawIcon(c, viewHolder, context.getDrawable(R.drawable.ic_delete_white_24)!!, IconLocation.RIGHT)
+        }else{
+            setBackgroundColor(c, viewHolder, ContextCompat.getColor(context, R.color.green))
+            drawIcon(c, viewHolder, context.getDrawable(R.drawable.ic_eaten_white)!!, IconLocation.LEFT)
+        }
 
 
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
@@ -149,16 +170,27 @@ class ProductItemTouchHelper(initialProducts: List<Product>, initialPresenter: P
      * @param viewHolder The ViewHolder which is being interacted by the User.
      * @param icon icon the animation should have.
      */
-    private fun drawIcon(c: Canvas, viewHolder: RecyclerView.ViewHolder, icon: Drawable){
+    private fun drawIcon(c: Canvas, viewHolder: RecyclerView.ViewHolder, icon: Drawable, iconLocation: IconLocation){
 
         val itemView = viewHolder.itemView
 
         val itemHeight = itemView.bottom - itemView.top
         val iconTop = itemView.top + (itemHeight - icon.intrinsicHeight) / 2
         val iconMargin = (itemHeight - icon.intrinsicHeight) / 2
-        val iconLeft = itemView.right - iconMargin - icon.intrinsicWidth
-        val iconRight = itemView.right - iconMargin
         val iconBottom = iconTop + icon.intrinsicHeight
+        var iconLeft = 0
+        var iconRight = 0
+
+        when(iconLocation){
+            IconLocation.RIGHT -> {
+                iconLeft = itemView.right - iconMargin - icon.intrinsicWidth
+                iconRight = itemView.right - iconMargin
+            }
+            IconLocation.LEFT -> {
+                iconLeft = itemView.left + iconMargin
+                iconRight = itemView.left + iconMargin + icon.intrinsicWidth
+            }
+        }
 
         icon.setBounds(iconLeft, iconTop, iconRight, iconBottom)
         icon.draw(c)

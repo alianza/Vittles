@@ -1,4 +1,4 @@
-package com.example.vittles.services.Sorting
+package com.example.vittles.services.sorting
 
 import android.app.AlertDialog
 import android.content.Context
@@ -8,8 +8,6 @@ import android.widget.Button
 import com.example.domain.product.Product
 import com.example.vittles.R
 import com.example.vittles.productlist.ProductAdapter
-import com.example.vittles.productlist.ProductsActivity
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_sort.view.*
 
 /**
