@@ -89,22 +89,42 @@
 
         </androidx.appcompat.widget.Toolbar>
 
-        <Button
-            android:id="@+id/btnSort"
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:height="56dp"
-            android:background="@color/common_google_signin_btn_tint"
-            android:backgroundTint="@color/black"
-            android:elevation="-1dp"
-            android:fontFamily="sans-serif-light"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:text="@string/days_remaining_lh"
-            android:textAlignment="textStart"
-            android:textAllCaps="false"
-            android:textColor="@color/black"
-            android:textSize="12sp" />
+            android:background="@color/white"
+            android:elevation="1dp"
+            app:contentInsetStart="14dp"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            app:titleMarginStart="0dp"
+            app:titleTextColor="#000000">
+
+            <Button
+                android:id="@+id/btnSort"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:height="56dp"
+                android:backgroundTint="@color/white"
+                android:fontFamily="sans-serif-medium"
+                android:minWidth="100dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:text="@string/days_remaining_lh"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+
+            <ImageView
+                android:id="@+id/imageView7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_expand_more_24px" />
+
+        </androidx.appcompat.widget.Toolbar>
+
 
     </com.google.android.material.appbar.AppBarLayout>
 
