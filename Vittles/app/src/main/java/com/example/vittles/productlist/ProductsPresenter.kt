@@ -59,6 +59,7 @@ class ProductsPresenter @Inject internal constructor(
      * Deletes a product.
      *
      * @param product The product that will be deleted.
+     * @param deleteType The Delete Type, EATEN, THROWN_AWAY or REMOVED
      */
     override fun deleteProduct(product: Product, deleteType: DeleteType) {
         disposables.add(deleteProduct.invoke(product)
