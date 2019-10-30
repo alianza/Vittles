@@ -10,8 +10,10 @@ import com.example.vittles.R
 import kotlinx.android.synthetic.main.item_product.view.*
 import android.graphics.*
 import android.graphics.drawable.Drawable
+import android.util.Log
 import androidx.core.content.ContextCompat
 import com.example.domain.product.Product
+import com.example.vittles.enums.DeleteType
 
 
 /**
@@ -73,11 +75,18 @@ class ProductItemTouchHelper(initialProducts: List<Product>, initialPresenter: P
      * Called when a ViewHolder is swiped by the user.
      *
      * @param viewHolder The ViewHolder which has been swiped by the user.
-     * @param direction  The direction to which the ViewHolder is swiped.
+     * @param direction  The direction to which the ViewHolder is swiped (8 = to the left and 4 = to the right).
      */
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
         val product = products[viewHolder.adapterPosition]
-        presenter.deleteProduct(product)
+
+        var deleteType =  if (direction == 8){
+            DeleteType.EATEN
+        }else{
+            DeleteType.THROWN_AWAY
+        }
+
+        presenter.deleteProduct(product, deleteType)
     }
 
 
@@ -133,7 +142,6 @@ class ProductItemTouchHelper(initialProducts: List<Product>, initialPresenter: P
         }else{
             setBackgroundColor(c, viewHolder, ContextCompat.getColor(context, R.color.green))
             drawIcon(c, viewHolder, context.getDrawable(R.drawable.ic_eaten_white)!!, IconLocation.LEFT)
-
         }
 
 
