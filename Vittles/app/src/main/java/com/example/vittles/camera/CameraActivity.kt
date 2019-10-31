@@ -2,10 +2,8 @@ package com.example.vittles.camera
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.graphics.Color
 import android.graphics.Matrix
 import android.os.Bundle
-import android.util.Rational
 import android.util.Size
 import android.view.MenuItem
 import android.view.Surface
@@ -13,16 +11,13 @@ import android.view.TextureView
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.camera.core.CameraX
-import androidx.camera.core.Preview
-import androidx.camera.core.PreviewConfig
+import androidx.camera.core.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.LifecycleOwner
 import com.example.vittles.R
 import dagger.android.support.DaggerAppCompatActivity
-import kotlinx.android.synthetic.main.activity_camera.*
 import java.util.concurrent.Executors
+import javax.inject.Inject
 
 // This is an arbitrary number we are using to keep track of the permission
 // request. Where an app has multiple context for requesting permission,
@@ -32,84 +27,90 @@ private const val REQUEST_CODE_PERMISSIONS = 10
 // This is an array of all the permission specified in the manifest.
 private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
 
-class CameraActivity : AppCompatActivity() {
+class CameraActivity @Inject internal constructor(): DaggerAppCompatActivity() {
+
+    @Inject
+    private lateinit var presenter: CameraPresenter
 
     private lateinit var textureView: TextureView
 
+    private lateinit var preview: Preview
+
+    private lateinit var imageAnalysis: ImageAnalysis
+
+    private val executor = Executors.newSingleThreadExecutor()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        presenter.start(this@CameraActivity)
         setContentView(R.layout.activity_camera)
+        initViews()
+        checkPermissions()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        presenter.destroy()
+    }
+
+    private fun initViews() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = getString(R.string.scan_vittles_title)
 
-        viewFinder = findViewById(R.id.textureView)
+        textureView = findViewById(R.id.textureView)
+    }
 
+    private fun checkPermissions() {
         // Request camera permissions
         if (allPermissionsGranted()) {
-            viewFinder.post { startCamera() }
+            textureView.post { startCamera() }
         } else {
             ActivityCompat.requestPermissions(
-                this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
-        }
-
-        // Every time the provided texture view changes, recompute layout
-        viewFinder.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
-            updateTransform()
+                this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS
+            )
         }
     }
 
-    private val executor = Executors.newSingleThreadExecutor()
-    private lateinit var viewFinder: TextureView
-
     private fun startCamera() {
+        imageAnalysis = getImageAnalysis()
+        preview = getPreview()
+
+        CameraX.bindToLifecycle(this, preview, imageAnalysis)
+    }
+
+    private fun getPreview(): Preview {
         // Create configuration object for the viewfinder use case
         val previewConfig = PreviewConfig.Builder().apply {
-//            setTargetAspectRatio(Rational(1,1))
             setLensFacing(CameraX.LensFacing.BACK)
         }.build()
-
 
         // Build the viewfinder use case
         val preview = Preview(previewConfig)
 
+
         // Every time the viewfinder is updated, recompute layout
         preview.setOnPreviewOutputUpdateListener {
-
             // To update the SurfaceTexture, we have to remove it and re-add it
-            val parent = viewFinder.parent as ViewGroup
-            parent.removeView(viewFinder)
-            parent.addView(viewFinder, 0)
+            val parent = textureView.parent as ViewGroup
+            parent.removeView(textureView)
+            parent.addView(textureView, 0)
 
-            viewFinder.surfaceTexture = it.surfaceTexture
-            updateTransform()
+            textureView.surfaceTexture = it.surfaceTexture
         }
-
-        // Bind use cases to lifecycle
-        // If Android Studio complains about "this" being not a LifecycleOwner
-        // try rebuilding the project or updating the appcompat dependency to
-        // version 1.1.0 or higher.
-        CameraX.bindToLifecycle(this, preview)
+        return preview
     }
 
-    private fun updateTransform() {
-        val matrix = Matrix()
+    private fun getImageAnalysis(): ImageAnalysis {
+        // Setup image analysis pipeline that computes average pixel luminance
+        val analyzerConfig = ImageAnalysisConfig.Builder().apply {
+            setTargetResolution(Size(720, 480)) // 480p resolution
+            setImageReaderMode(ImageAnalysis.ImageReaderMode.ACQUIRE_LATEST_IMAGE) // Take newest available frame on analyze call
+        }.build()
 
-        // Compute the center of the view finder
-        val centerX = viewFinder.width / 2f
-        val centerY = viewFinder.height / 2f
-
-        // Correct preview output to account for display rotation
-        val rotationDegrees = when(viewFinder.display.rotation) {
-            Surface.ROTATION_0 -> 0
-            Surface.ROTATION_90 -> 90
-            Surface.ROTATION_180 -> 180
-            Surface.ROTATION_270 -> 270
-            else -> return
+        // Build the image analysis use case and instantiate our analyzer
+        return ImageAnalysis(analyzerConfig).apply {
+            setAnalyzer(executor, PreviewAnalyzer())
         }
-        matrix.postRotate(-rotationDegrees.toFloat(), centerX, centerY)
-
-        // Finally, apply transformations to our TextureView
-        viewFinder.setTransform(matrix)
     }
 
     /**
@@ -117,14 +118,17 @@ class CameraActivity : AppCompatActivity() {
      * been granted? If yes, start Camera. Otherwise display a toast
      */
     override fun onRequestPermissionsResult(
-        requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        requestCode: Int, permissions: Array<String>, grantResults: IntArray
+    ) {
         if (requestCode == REQUEST_CODE_PERMISSIONS) {
             if (allPermissionsGranted()) {
-                viewFinder.post { startCamera() }
+                textureView.post { startCamera() }
             } else {
-                Toast.makeText(this,
+                Toast.makeText(
+                    this,
                     "Permissions not granted by the user.",
-                    Toast.LENGTH_SHORT).show()
+                    Toast.LENGTH_SHORT
+                ).show()
                 finish()
             }
         }
@@ -135,7 +139,8 @@ class CameraActivity : AppCompatActivity() {
      */
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
         ContextCompat.checkSelfPermission(
-            baseContext, it) == PackageManager.PERMISSION_GRANTED
+            baseContext, it
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
     /**
@@ -146,11 +151,12 @@ class CameraActivity : AppCompatActivity() {
     }
 
     /**
-     * Terminates the add product activity.
+     * Terminates the scan product activity.
      *
      * @return boolean that represents if action succeeded
      */
     fun onBackButtonClick(): Boolean {
+        CameraX.unbindAll()
         finish()
         return true
     }

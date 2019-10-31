@@ -39,6 +39,7 @@
             android:name=".services.notification.NotificationScheduleService"
             android:enabled="true"
             android:exported="true" />
+        <service android:name=".services.scanner.ScanningService"/>
     </application>
 
 </manifest>
