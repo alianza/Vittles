@@ -2,20 +2,19 @@ package com.example.vittles.camera
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.graphics.Matrix
 import android.os.Bundle
 import android.util.Size
 import android.view.MenuItem
-import android.view.Surface
 import android.view.TextureView
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.vittles.R
 import dagger.android.support.DaggerAppCompatActivity
+import kotlinx.android.synthetic.main.activity_camera.*
 import java.util.concurrent.Executors
 import javax.inject.Inject
 
@@ -30,7 +29,7 @@ private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
 class CameraActivity @Inject internal constructor(): DaggerAppCompatActivity() {
 
     @Inject
-    private lateinit var presenter: CameraPresenter
+    lateinit var presenter: CameraPresenter
 
     private lateinit var textureView: TextureView
 
@@ -39,6 +38,8 @@ class CameraActivity @Inject internal constructor(): DaggerAppCompatActivity() {
     private lateinit var imageAnalysis: ImageAnalysis
 
     private val executor = Executors.newSingleThreadExecutor()
+
+    private lateinit var analyzer: PreviewAnalyzer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,6 +59,12 @@ class CameraActivity @Inject internal constructor(): DaggerAppCompatActivity() {
         supportActionBar?.title = getString(R.string.scan_vittles_title)
 
         textureView = findViewById(R.id.textureView)
+
+        btnScanVittle.setOnClickListener { onAddVittleButtonClick() }
+    }
+
+    private fun onAddVittleButtonClick() {
+
     }
 
     private fun checkPermissions() {
@@ -76,6 +83,7 @@ class CameraActivity @Inject internal constructor(): DaggerAppCompatActivity() {
         preview = getPreview()
 
         CameraX.bindToLifecycle(this, preview, imageAnalysis)
+        analyzer = imageAnalysis.analyzer as PreviewAnalyzer
     }
 
     private fun getPreview(): Preview {
@@ -109,7 +117,13 @@ class CameraActivity @Inject internal constructor(): DaggerAppCompatActivity() {
 
         // Build the image analysis use case and instantiate our analyzer
         return ImageAnalysis(analyzerConfig).apply {
-            setAnalyzer(executor, PreviewAnalyzer())
+            setAnalyzer(executor, PreviewAnalyzer { barcodes ->
+                barcodes.forEach { barcode ->
+                    tvBarcode.text = barcode.rawValue
+                    ivCheckbox.setImageDrawable(getDrawable(R.drawable.ic_circle_darkened_filled))
+                }
+
+            })
         }
     }
 

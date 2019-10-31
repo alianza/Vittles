@@ -6,4 +6,7 @@ import javax.inject.Inject
 
 class CameraPresenter @Inject internal constructor(private val getProductByBarcode: GetProductByBarcode) : BasePresenter<CameraActivity>() {
 
+    fun startCamera() {
+
+    }
 }

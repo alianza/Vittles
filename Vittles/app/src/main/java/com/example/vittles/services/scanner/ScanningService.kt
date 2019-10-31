@@ -9,7 +9,7 @@ object ScanningService {
 
     private var barcodeValue: String? = null
 
-    fun scanForBarcode(image: FirebaseVisionImage) : String? {
+    fun scanForBarcode(image: FirebaseVisionImage, onBarcodesSuccess: (barcodes: List<FirebaseVisionBarcode>) -> Unit) : String? {
         val options = FirebaseVisionBarcodeDetectorOptions.Builder()
             .setBarcodeFormats(
                 FirebaseVisionBarcode.FORMAT_EAN_13,
@@ -19,12 +19,13 @@ object ScanningService {
             .getVisionBarcodeDetector(options)
         val result = detector.detectInImage(image)
             .addOnSuccessListener { barcodes ->
-                for (barcode in barcodes) {
-                    if(barcode.rawValue != barcodeValue) {
-                        barcodeValue = barcode.rawValue
-                        println(barcodeValue)
-                    }
-                }
+//                for (barcode in barcodes) {
+//                    if(barcode.rawValue != barcodeValue) {
+//                        barcodeValue = barcode.rawValue
+//                        println(barcodeValue)
+//                    }
+//                }
+                onBarcodesSuccess(barcodes)
             }
             .addOnFailureListener {
 

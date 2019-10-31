@@ -1,10 +1,8 @@
 package com.example.vittles.di
 
 import android.content.Context
-import com.example.data.ProductDao
-import com.example.data.ProductModelMapper
-import com.example.data.ProductsRepositoryImpl
-import com.example.data.createProductDaoImpl
+import com.example.data.*
+import com.example.domain.repositories.ProductsApi
 import com.example.domain.repositories.ProductsRepository
 import dagger.Module
 import dagger.Provides
@@ -20,4 +18,8 @@ class DataModule {
     @Singleton
     @Provides
     fun provideProductsRepository(productDao: ProductDao, mapper: ProductModelMapper): ProductsRepository = ProductsRepositoryImpl(productDao, mapper)
+
+    @Singleton
+    @Provides
+    fun provideProductsApi(): ProductsApi = ProductsApiImpl()
 }

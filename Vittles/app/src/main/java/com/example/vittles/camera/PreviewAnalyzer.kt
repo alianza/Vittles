@@ -3,12 +3,16 @@ package com.example.vittles.camera
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import com.example.vittles.services.scanner.ScanningService
+import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.google.firebase.ml.vision.common.FirebaseVisionImageMetadata
 import java.util.concurrent.TimeUnit
 
-class PreviewAnalyzer : ImageAnalysis.Analyzer {
+class PreviewAnalyzer(
+    private val onBarcodeSuccess: (barcodes: List<FirebaseVisionBarcode>) -> Unit
+) : ImageAnalysis.Analyzer {
     private var lastAnalyzedTimestamp = 0L
+    private lateinit var barcode: String
 
     private fun degreesToFirebaseRotation(degrees: Int): Int = when (degrees) {
         0 -> FirebaseVisionImageMetadata.ROTATION_0
@@ -27,9 +31,13 @@ class PreviewAnalyzer : ImageAnalysis.Analyzer {
             val imageRotation = degreesToFirebaseRotation(degrees)
             if (mediaImage != null) {
                 val image = FirebaseVisionImage.fromMediaImage(mediaImage, imageRotation)
-                ScanningService.scanForBarcode(image)
+                barcode = ScanningService.scanForBarcode(image, onBarcodeSuccess).toString()
             }
             lastAnalyzedTimestamp = currentTimestamp
         }
+    }
+
+    fun getBarcode(): String {
+        return barcode
     }
 }
