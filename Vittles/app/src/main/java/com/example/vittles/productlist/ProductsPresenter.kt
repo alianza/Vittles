@@ -20,7 +20,7 @@ import javax.inject.Inject
  * @author Jeroen Flietstra
  * @author Arjen Simons
  *
- * @property getProducts The GetProducts use case from the domain module
+ * @property getProducts The GetProducts use case from the domain module.
  */
 class ProductsPresenter @Inject internal constructor(
     private val getProducts: GetProducts,

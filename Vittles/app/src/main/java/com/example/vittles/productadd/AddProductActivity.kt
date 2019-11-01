@@ -1,5 +1,6 @@
 package com.example.vittles.productadd
 
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
@@ -7,7 +8,8 @@ import android.text.TextUtils
 import android.view.MenuItem
 import com.example.domain.product.Product
 import com.example.vittles.R
-import com.example.vittles.camera.CameraActivity
+import com.example.vittles.scanning.SCAN_RESULT
+import com.example.vittles.scanning.ScannerActivity
 import com.example.vittles.services.popups.PopupBase
 import com.example.vittles.services.popups.PopupButton
 import com.example.vittles.services.popups.PopupManager
@@ -16,6 +18,8 @@ import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_add_product.*
 import org.joda.time.DateTime
 import javax.inject.Inject
+
+const val SCAN_PRODUCT_REQUEST_CODE = 100
 
 /**
  * Activity class for the Add Product component. This components makes it possible to
@@ -67,12 +71,33 @@ class AddProductActivity : DaggerAppCompatActivity(), AddProductContract.View {
         btnScan.setOnClickListener { onScanButtonClick() }
     }
 
+    /**
+     * Retrieve the result from the activity.
+     *
+     */
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                SCAN_PRODUCT_REQUEST_CODE -> {
+                    val scanResult =
+                        data!!.getParcelableExtra<ScannerActivity.ScanResult>(SCAN_RESULT)
+                    etProductName.setText(scanResult?.productName)
+                }
+            }
+        }
+    }
+
+    /**
+     * Temporary button action.
+     *
+     */
     private fun onScanButtonClick() {
         val scannerActivity = Intent(
             this,
-            CameraActivity::class.java
+            ScannerActivity::class.java
         )
-        startActivity(scannerActivity)
+        startActivityForResult(scannerActivity, SCAN_PRODUCT_REQUEST_CODE)
     }
 
 
@@ -108,9 +133,11 @@ class AddProductActivity : DaggerAppCompatActivity(), AddProductContract.View {
             val dpd = DatePickerDialog(
                 this,
                 DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
-                    this.expirationDate = DateTime(year, monthOfYear + MONTHS_OFFSET, dayOfMonth, 0, 0)
-                            etExpirationDate.setText(getString(
-                             R.string.expiration_format,
+                    this.expirationDate =
+                        DateTime(year, monthOfYear + MONTHS_OFFSET, dayOfMonth, 0, 0)
+                    etExpirationDate.setText(
+                        getString(
+                            R.string.expiration_format,
                             (this.expirationDate.dayOfMonth).toString(),
                             (this.expirationDate.monthOfYear).toString(),
                             (this.expirationDate.year).toString()
@@ -191,8 +218,10 @@ class AddProductActivity : DaggerAppCompatActivity(), AddProductContract.View {
             this,
             PopupBase(
                 "Almost expired!",
-                String.format("The scanned product expires in %d days. \n Are you sure you want to add it?",
-                    product.getDaysRemaining())
+                String.format(
+                    "The scanned product expires in %d days. \n Are you sure you want to add it?",
+                    product.getDaysRemaining()
+                )
             ),
             PopupButton("NO"),
             PopupButton("YES") { presenter.addProduct(product, false) }

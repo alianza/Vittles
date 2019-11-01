@@ -1,6 +1,6 @@
 package com.example.vittles.di
 
-import com.example.vittles.camera.CameraActivity
+import com.example.vittles.scanning.ScannerActivity
 import com.example.vittles.productadd.AddProductActivity
 import com.example.vittles.productlist.ProductsActivity
 import com.example.vittles.services.notification.NotificationScheduleService
@@ -16,7 +16,7 @@ abstract class BindingsModule {
     abstract fun bindAddProductActivity(): AddProductActivity
 
     @ContributesAndroidInjector
-    abstract fun bindCameraActivity(): CameraActivity
+    abstract fun bindCameraActivity(): ScannerActivity
 
     @ContributesAndroidInjector
     abstract fun bindNotificationScheduleService(): NotificationScheduleService

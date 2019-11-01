@@ -44,5 +44,12 @@
 
     <!--    Scan Vittles-->
     <string name="scan_vittles_title">Scan Vittles</string>
+    <string name="cd_checklist_image">Checklist checkbox</string>
+    <string name="product_name_scanner">PRODUCT NAME</string>
+    <string name="date_format_scanner">DD/MM/YYYY</string>
+    <string name="barcode_title_scanner">Barcode</string>
+    <string name="exp_date_title_scanner">Expiration date</string>
+    <string name="cd_scanning_pane">Scanning pane</string>
+    <string name="btn_add_vittle">Add Vittle</string>
 
 </resources>

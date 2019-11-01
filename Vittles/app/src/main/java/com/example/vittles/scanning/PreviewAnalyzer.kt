@@ -1,4 +1,4 @@
-package com.example.vittles.camera
+package com.example.vittles.scanning
 
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
@@ -8,12 +8,27 @@ import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.google.firebase.ml.vision.common.FirebaseVisionImageMetadata
 import java.util.concurrent.TimeUnit
 
+/**
+ * Analyzer used by CameraX to analyze frames from the camera preview.
+ *
+ * @author Jeroen Flietstra
+ *
+ * @property onBarcodeSuccess Callback function for successful scan.
+ * @property onBarcodeFailure Callback function for unsuccessful scan.
+ */
 class PreviewAnalyzer(
+    private val onBarcodeFailure: (exception: Exception) -> Unit,
     private val onBarcodeSuccess: (barcodes: List<FirebaseVisionBarcode>) -> Unit
 ) : ImageAnalysis.Analyzer {
+    // Value used for the scanning
     private var lastAnalyzedTimestamp = 0L
-    private lateinit var barcode: String
 
+    /**
+     * Convert the rotation degree to firebase rotation degree.
+     *
+     * @param degrees The degrees value from CameraX.
+     * @return Firebase rotation degree value.
+     */
     private fun degreesToFirebaseRotation(degrees: Int): Int = when (degrees) {
         0 -> FirebaseVisionImageMetadata.ROTATION_0
         90 -> FirebaseVisionImageMetadata.ROTATION_90
@@ -22,7 +37,15 @@ class PreviewAnalyzer(
         else -> throw Exception("Rotation must be 0, 90, 180, or 270.")
     }
 
+    /**
+     * {@link ImageAnalysis.Analyzer}
+     *  Processes the frames of the camera.
+     *
+     * @param imageProxy Current frame of the camera.
+     * @param degrees Rotation degree of the camera.
+     */
     override fun analyze(imageProxy: ImageProxy?, degrees: Int) {
+        // Scan only each second instead of every frame.
         val currentTimestamp = System.currentTimeMillis()
         if (currentTimestamp - lastAnalyzedTimestamp >=
             TimeUnit.SECONDS.toMillis(1)
@@ -31,13 +54,9 @@ class PreviewAnalyzer(
             val imageRotation = degreesToFirebaseRotation(degrees)
             if (mediaImage != null) {
                 val image = FirebaseVisionImage.fromMediaImage(mediaImage, imageRotation)
-                barcode = ScanningService.scanForBarcode(image, onBarcodeSuccess).toString()
+                ScanningService.scanForBarcode(image, onBarcodeSuccess, onBarcodeFailure)
             }
             lastAnalyzedTimestamp = currentTimestamp
         }
-    }
-
-    fun getBarcode(): String {
-        return barcode
     }
 }

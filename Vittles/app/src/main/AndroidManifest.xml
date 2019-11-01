@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".camera.CameraActivity"/>
+        <activity android:name=".scanning.ScannerActivity"/>
         <activity android:name=".productadd.AddProductActivity" />
         <activity
             android:name=".productlist.ProductsActivity"
