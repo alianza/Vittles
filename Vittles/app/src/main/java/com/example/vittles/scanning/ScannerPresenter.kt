@@ -94,8 +94,11 @@ class ScannerPresenter @Inject internal constructor(private val getProductByBarc
         // Build the image analysis use case and instantiate our analyzer
         return ImageAnalysis(analyzerConfig).apply {
             setAnalyzer(executor, PreviewAnalyzer(
+                onBarcodeFailure = {view?.onBarcodeNotFound()},
                 onBarcodeSuccess = {view?.onBarcodeScanned(it)},
-                onBarcodeFailure = {view?.onBarcodeNotFound() }))
+                onOcrFailure = {view?.onTextNotFound()},
+                onOcrSuccess = {view?.onTextScanned(it)}
+            ))
         }
     }
 
