@@ -17,6 +17,8 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_add_product.*
 import org.joda.time.DateTime
+import org.joda.time.format.DateTimeFormat
+import org.joda.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 const val SCAN_PRODUCT_REQUEST_CODE = 100
@@ -33,6 +35,8 @@ class AddProductActivity : DaggerAppCompatActivity(), AddProductContract.View {
     lateinit var presenter: AddProductPresenter
 
     private var expirationDate = DateTime()
+
+    private val formatter: DateTimeFormatter = DateTimeFormat.forPattern("dd/MM/yyyy")
 
     companion object {
         /**
@@ -83,6 +87,8 @@ class AddProductActivity : DaggerAppCompatActivity(), AddProductContract.View {
                     val scanResult =
                         data!!.getParcelableExtra<ScannerActivity.ScanResult>(SCAN_RESULT)
                     etProductName.setText(scanResult?.productName)
+                    etExpirationDate.setText(formatter.print(scanResult?.expirationDate))
+                    expirationDate = scanResult?.expirationDate!!
                 }
             }
         }
