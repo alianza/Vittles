@@ -95,23 +95,19 @@
                 app:layout_constraintEnd_toStartOf="@+id/textView2"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/textView2"
-                app:srcCompat="@drawable/ic_restore_24px"
-                tools:visibility="gone" />
+                app:srcCompat="@drawable/ic_restore_24px" />
 
             <ImageButton
                 android:id="@+id/resetExperationDate"
                 style="@style/TextAppearance.AppCompat.Widget.Button.Borderless.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 app:layout_constraintBottom_toBottomOf="@+id/tvExpirationDate"
                 app:layout_constraintEnd_toStartOf="@+id/textView5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/textView5"
-                app:srcCompat="@drawable/ic_restore_24px"
-                tools:visibility="gone" />
+                app:srcCompat="@drawable/ic_restore_24px" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -61,6 +61,9 @@ class ScannerActivity @Inject internal constructor(): DaggerAppCompatActivity(),
 
         textureView = findViewById(R.id.textureView)
 
+        resetProductName.visibility = View.INVISIBLE
+        resetExperationDate.visibility = View.INVISIBLE
+
         btnScanVittle.setOnClickListener { onAddVittleButtonClick() }
     }
 
@@ -124,6 +127,7 @@ class ScannerActivity @Inject internal constructor(): DaggerAppCompatActivity(),
         tvExpirationDate.text = numberFormat.print(expirationDate)
         ivCheckboxExpirationDate.setImageDrawable(getDrawable(R.drawable.ic_circle_darkened_filled))
 
+        //Original thread error
         resetExperationDate.visibility = View.VISIBLE
     }
 
