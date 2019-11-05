@@ -13,6 +13,9 @@ import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.activity_camera.*
+import org.joda.time.DateTime
+import org.joda.time.format.DateTimeFormat
+import org.joda.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 const val SCAN_RESULT = "SCAN_RESULT"
@@ -22,13 +25,17 @@ class ScannerActivity @Inject internal constructor(): DaggerAppCompatActivity(),
     @Parcelize
     data class ScanResult (
         val productName: String?,
-        val expirationDate: String?
+        val expirationDate: DateTime?
     ) : Parcelable
 
     @Inject
     lateinit var presenter: ScannerPresenter
 
     private lateinit var textureView: TextureView
+
+    private lateinit var expirationDate: DateTime
+
+    private val regex = Regex("^([0-9&/:.-]*)\$")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,7 +69,7 @@ class ScannerActivity @Inject internal constructor(): DaggerAppCompatActivity(),
      */
     override fun onAddVittleButtonClick() {
         if (tvBarcode.text.toString().isNotBlank()) {
-            val scanResult = ScanResult(tvBarcode.text.toString(), null)
+            val scanResult = ScanResult(tvBarcode.text.toString(), expirationDate)
             val resultIntent = Intent()
             resultIntent.putExtra(SCAN_RESULT, scanResult)
             setResult(Activity.RESULT_OK, resultIntent)
@@ -81,12 +88,43 @@ class ScannerActivity @Inject internal constructor(): DaggerAppCompatActivity(),
     override fun onBarcodeScanned(barcodes: List<FirebaseVisionBarcode>) {
         if (barcodes.isNotEmpty()) {
             tvBarcode.text = barcodes[0].rawValue
-            ivCheckbox.setImageDrawable(getDrawable(R.drawable.ic_circle_darkened_filled))
+            ivCheckboxBarcode.setImageDrawable(getDrawable(R.drawable.ic_circle_darkened_filled))
         }
     }
 
     /**
-     * When error occurs show toast with error message.
+     * Handles interface actions once the expirationDate has been successfully scanned
+     *
+     * @param text The text that has been retrieved from the camera
+     */
+    override fun onTextScanned(text: String) {
+        val numberFormat = DateTimeFormat.forPattern("dd/MM/yyyy")
+        val charFormat = DateTimeFormat.forPattern("dd/MMM/yyyy")
+
+        val formatter = if (text.matches(regex)) {
+            numberFormat
+        } else {
+            charFormat
+        }
+
+//      Replace all dividers to slashes for yodaTime
+        var replacedText = text.replace('-', '/').replace(':', '/').replace('.', '/').replace(' ', '/')
+
+//      Replace dutch abbreviated month names with english equivalents
+        replacedText = replacedText.replace("okt", "oct").replace("mei", "may").replace("mrt", "mar")
+
+//        var date = LocalDate.parse(replacedText, formatter)
+
+        expirationDate = formatter.parseDateTime(replacedText)
+
+        println(formatter.print(expirationDate))
+
+        tvExpirationDate.text = numberFormat.print(expirationDate)
+        ivCheckboxExpirationDate.setImageDrawable(getDrawable(R.drawable.ic_circle_darkened_filled))
+    }
+
+    /**
+     * When error occurs with barcode show toast with error message.
      *
      */
     override fun onBarcodeNotFound() {
@@ -95,6 +133,18 @@ class ScannerActivity @Inject internal constructor(): DaggerAppCompatActivity(),
                 "Something went wrong!",
                 Toast.LENGTH_SHORT
             ).show()
+    }
+
+    /**
+     * When error occurs with text recognition show toast with error message.
+     *
+     */
+    override fun onTextNotFound() {
+        Toast.makeText(
+            this,
+            "Something went wrong! TEXt",
+            Toast.LENGTH_SHORT
+        ).show()
     }
 
     /**
