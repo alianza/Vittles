@@ -61,13 +61,15 @@ class ScannerActivity @Inject internal constructor(): DaggerAppCompatActivity(),
      *
      */
     override fun onAddVittleButtonClick() {
-        if (tvBarcode.text.toString().isNotBlank()) {
+        if (tvBarcode.text.toString().isNotBlank() && tvBarcode.text.toString() != "PRODUCT NAME") {
             val scanResult = ScanResult(tvBarcode.text.toString(), null)
             val resultIntent = Intent()
             resultIntent.putExtra(SCAN_RESULT, scanResult)
             setResult(Activity.RESULT_OK, resultIntent)
+            CameraX.unbindAll()
             finish()
         } else {
+            CameraX.unbindAll()
             finish()
         }
 
