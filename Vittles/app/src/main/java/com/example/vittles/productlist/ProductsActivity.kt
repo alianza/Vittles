@@ -106,8 +106,6 @@ class ProductsActivity : DaggerAppCompatActivity(), ProductsContract.View {
 
         fab.setOnClickListener { onAddButtonClick() }
 
-//        btnSort.setOnClickListener { openSortMenu() }
-
         sortLayout.setOnClickListener { openSortMenu() }
 
         ibtnSearch.setOnClickListener { openSearchBar() }
