@@ -141,7 +141,7 @@ class ProductsActivity : DaggerAppCompatActivity(), ProductsContract.View {
      */
     private fun onRemoveButtonClicked(product: Product){
         PopupManager.instance.showPopup(this,
-            PopupBase("Remove Product", "Do you want to remove this product? \n It won't be used for your statistics."),
+            PopupBase("Remove Product", "Do you want to remove this product? \n It won't be used for the food waste report."),
             PopupButton("NO") {},
             PopupButton("YES") { presenter.deleteProduct(product, DeleteType.REMOVED) })
     }
