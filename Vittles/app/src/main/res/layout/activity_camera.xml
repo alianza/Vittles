@@ -85,6 +85,27 @@
                 app:layout_constraintStart_toEndOf="@+id/ivCheckbox"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <ImageButton
+                android:id="@+id/imageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/transparent"
+                app:layout_constraintBottom_toBottomOf="@+id/tvBarcode"
+                app:layout_constraintStart_toEndOf="@+id/tvBarcode"
+                app:layout_constraintTop_toTopOf="@+id/textView2"
+                app:srcCompat="@drawable/ic_edit_black_24dp" />
+
+            <ImageButton
+                android:id="@+id/imageButton3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/transparent"
+                app:layout_constraintBottom_toBottomOf="@+id/tvBarcode5"
+                app:layout_constraintStart_toEndOf="@+id/tvBarcode5"
+                app:layout_constraintTop_toTopOf="@+id/textView5"
+                app:layout_constraintVertical_bias="0.0"
+                app:srcCompat="@drawable/ic_edit_black_24dp" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextureView
