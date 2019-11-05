@@ -239,6 +239,7 @@ class ProductsActivity : DaggerAppCompatActivity(), ProductsContract.View {
         productAdapter.products = products
         productAdapter.notifyDataSetChanged()
         filteredProducts = this.products
+        sortMenu.sortFilteredList(filteredProducts)
         setEmptyView()
         setNoResultsView()
     }
