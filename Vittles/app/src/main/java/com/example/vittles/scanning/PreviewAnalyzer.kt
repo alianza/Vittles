@@ -6,6 +6,7 @@ import com.example.vittles.services.scanner.ScanningService
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.google.firebase.ml.vision.common.FirebaseVisionImageMetadata
+import com.google.firebase.ml.vision.text.FirebaseVisionText
 import java.util.concurrent.TimeUnit
 
 /**
@@ -18,7 +19,9 @@ import java.util.concurrent.TimeUnit
  */
 class PreviewAnalyzer(
     private val onBarcodeFailure: (exception: Exception) -> Unit,
-    private val onBarcodeSuccess: (barcodes: List<FirebaseVisionBarcode>) -> Unit
+    private val onBarcodeSuccess: (barcodes: List<FirebaseVisionBarcode>) -> Unit,
+    private val onOcrFailure: (exception: Exception) -> Unit,
+    private val onOcrSuccess: (text: String) -> Unit
 ) : ImageAnalysis.Analyzer {
     // Value used for the scanning
     private var lastAnalyzedTimestamp = 0L
@@ -55,6 +58,7 @@ class PreviewAnalyzer(
             if (mediaImage != null) {
                 val image = FirebaseVisionImage.fromMediaImage(mediaImage, imageRotation)
                 ScanningService.scanForBarcode(image, onBarcodeSuccess, onBarcodeFailure)
+                ScanningService.scanForExpirationDate(image, onOcrSuccess, onOcrFailure)
             }
             lastAnalyzedTimestamp = currentTimestamp
         }
