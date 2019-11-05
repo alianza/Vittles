@@ -20,7 +20,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
-                android:id="@+id/ivCheckbox"
+                android:id="@+id/ivCheckboxBarcode"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_marginEnd="16dp"
@@ -31,12 +31,12 @@
                 app:srcCompat="@drawable/ic_circle_darkened" />
 
             <ImageView
-                android:id="@+id/ivCheckbox2"
+                android:id="@+id/ivCheckboxExpirationDate"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_marginEnd="16dp"
                 android:contentDescription="@string/cd_checklist_image"
-                app:layout_constraintBottom_toBottomOf="@+id/tvBarcode5"
+                app:layout_constraintBottom_toBottomOf="@+id/tvExpirationDate"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/textView5"
                 app:srcCompat="@drawable/ic_circle_darkened" />
@@ -64,7 +64,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
             <TextView
-                android:id="@+id/tvBarcode5"
+                android:id="@+id/tvExpirationDate"
                 android:layout_width="0dp"
                 android:layout_height="26dp"
                 android:text="@string/date_format_scanner"
