@@ -37,8 +37,8 @@
     <string name="sorting">Sorting </string>
     <string name="days_remaining_lh">Days Remaining (Asc)</string>
     <string name="days_remaining_hl">Days Remaining (Desc)</string>
-    <string name="alfabetic_az">Alfabetic (A-Z)</string>
-    <string name="alfabetic_za">Alfabetic (Z-A)</string>
+    <string name="alphabetic_az">Alphabetic (A-Z)</string>
+    <string name="alphabetic_za">Alphabetic (Z-A)</string>
     <string name="newest">Newest</string>
     <string name="oldest">Oldest</string>
 

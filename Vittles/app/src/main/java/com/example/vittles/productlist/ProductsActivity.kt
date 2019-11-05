@@ -12,7 +12,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.product.Product
 import com.example.vittles.R
+import com.example.vittles.enums.DeleteType
 import com.example.vittles.productadd.AddProductActivity
+import com.example.vittles.services.popups.PopupBase
+import com.example.vittles.services.popups.PopupButton
+import com.example.vittles.services.popups.PopupManager
 import com.example.vittles.services.sorting.SortMenu
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerAppCompatActivity
@@ -37,7 +41,7 @@ class ProductsActivity : DaggerAppCompatActivity(), ProductsContract.View {
     private lateinit var itemTouchHelper: ItemTouchHelper
     private var products = mutableListOf<Product>()
     private var filteredProducts = products
-    private val productAdapter = ProductAdapter(products)
+    private val productAdapter = ProductAdapter(products, this::onRemoveButtonClicked)
     private val sortMenu = SortMenu(products, productAdapter)
 
     /**
@@ -102,7 +106,7 @@ class ProductsActivity : DaggerAppCompatActivity(), ProductsContract.View {
 
         fab.setOnClickListener { onAddButtonClick() }
 
-        btnSort.setOnClickListener { openSortMenu() }
+        sortLayout.setOnClickListener { openSortMenu() }
 
         ibtnSearch.setOnClickListener { openSearchBar() }
 
@@ -129,6 +133,17 @@ class ProductsActivity : DaggerAppCompatActivity(), ProductsContract.View {
      */
     private fun openSortMenu() {
         sortMenu.openMenu(this, btnSort, filteredProducts)
+    }
+
+    /**
+     * Handles the action of the remove button on a product
+     *
+     */
+    private fun onRemoveButtonClicked(product: Product){
+        PopupManager.instance.showPopup(this,
+            PopupBase("Remove Product", "Do you want to remove this product? \n It won't be used for the food waste report."),
+            PopupButton("NO") {},
+            PopupButton("YES") { presenter.deleteProduct(product, DeleteType.REMOVED) })
     }
 
     /**
@@ -239,6 +254,7 @@ class ProductsActivity : DaggerAppCompatActivity(), ProductsContract.View {
         productAdapter.products = products
         productAdapter.notifyDataSetChanged()
         filteredProducts = this.products
+        sortMenu.sortFilteredList(filteredProducts)
         setEmptyView()
         setNoResultsView()
     }

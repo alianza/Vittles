@@ -55,6 +55,10 @@
         <item name="android:height">50dp</item>
     </style>
 
+    <style name="AppTheme.SortButton" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:padding">0dp</item>
+    </style>
+
     <!--    DATE PICKER-->
     <style name="AppTheme.DatePickerDialogTheme" parent="android:Theme.Material.Light.Dialog">
         <item name="android:colorAccent">@color/darkGrey</item>
