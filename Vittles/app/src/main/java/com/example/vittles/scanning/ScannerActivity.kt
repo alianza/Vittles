@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.view.MenuItem
 import android.view.TextureView
+import android.view.View
 import android.widget.Toast
 import androidx.camera.core.CameraX
 import com.example.vittles.R
@@ -89,6 +90,7 @@ class ScannerActivity @Inject internal constructor(): DaggerAppCompatActivity(),
         if (barcodes.isNotEmpty()) {
             tvBarcode.text = barcodes[0].rawValue
             ivCheckboxBarcode.setImageDrawable(getDrawable(R.drawable.ic_circle_darkened_filled))
+            resetProductName.visibility = View.VISIBLE
         }
     }
 
@@ -121,6 +123,8 @@ class ScannerActivity @Inject internal constructor(): DaggerAppCompatActivity(),
 
         tvExpirationDate.text = numberFormat.print(expirationDate)
         ivCheckboxExpirationDate.setImageDrawable(getDrawable(R.drawable.ic_circle_darkened_filled))
+
+        resetExperationDate.visibility = View.VISIBLE
     }
 
     /**
