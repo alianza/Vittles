@@ -19,7 +19,7 @@ import javax.inject.Inject
  *
  * @property products The list of products that should be displayed in the RecyclerView.
  */
-class ProductAdapter @Inject constructor(initialProducts: List<Product>) :
+class ProductAdapter @Inject constructor(initialProducts: List<Product>, private val clickListener: (Product) -> Unit) :
     RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
 
     lateinit var context: Context
@@ -54,7 +54,7 @@ class ProductAdapter @Inject constructor(initialProducts: List<Product>) :
      * @param position The position of the item to be updated.
      */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(products[position])
+        holder.bind(products[position], clickListener)
     }
 
     /**
@@ -69,7 +69,7 @@ class ProductAdapter @Inject constructor(initialProducts: List<Product>) :
          *
          * @param product The product that is bound to the itemView.
          */
-        fun bind(product: Product) {
+        fun bind(product: Product, clickListener: (Product) -> Unit) {
             var daysLeft = product.getDaysRemaining().toString()
 
             if (daysLeft.toInt() > context.getString(R.string.maxDaysRemaining).toInt()) {
@@ -89,6 +89,7 @@ class ProductAdapter @Inject constructor(initialProducts: List<Product>) :
                 product.expirationDate.monthOfYear.toString(),
                 product.expirationDate.year.toString())
             itemView.tvDaysLeft.text = daysLeft
+            itemView.btnRemove.setOnClickListener{ clickListener(product) }
 
             //Set the colors
             itemView.ivColor.setColorFilter(ContextCompat.getColor(context, product.indicationColor!!), PorterDuff.Mode.MULTIPLY) //Circle
