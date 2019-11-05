@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.SearchView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,9 +19,11 @@ import com.example.vittles.services.popups.PopupBase
 import com.example.vittles.services.popups.PopupButton
 import com.example.vittles.services.popups.PopupManager
 import com.example.vittles.services.sorting.SortMenu
+import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.base_popup.*
 import kotlinx.android.synthetic.main.content_main.*
 import javax.inject.Inject
 
@@ -126,6 +129,29 @@ class ProductsActivity : DaggerAppCompatActivity(), ProductsContract.View {
 
         imgbtnCloseSearch.setOnClickListener { closeSearchBar() }
     }
+
+    private fun saveDeleteProduct(product: Product, deleteType: DeleteType){
+        val i: Int = products.indexOf(product)
+        products.remove(product)
+        productAdapter.notifyItemRemoved(i)
+
+        val snackbar = Snackbar.make(findViewById(android.R.id.content), product.productName + " has been " + deleteType.toString().toLowerCase(), Snackbar.LENGTH_SHORT)
+        snackbar.setAction("UNDO") {}
+        snackbar.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
+            override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                super.onDismissed(transientBottomBar, event)
+
+                if(event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT){
+                    presenter.deleteProduct(product, deleteType)
+                }
+                else{
+                    products.add(index = i, element = product)
+                    productAdapter.notifyItemInserted(i)
+                }
+            }
+        })
+        snackbar.show()
+    }
     
      /**
      * Called when the sort button is clicked.
@@ -143,7 +169,7 @@ class ProductsActivity : DaggerAppCompatActivity(), ProductsContract.View {
         PopupManager.instance.showPopup(this,
             PopupBase("Remove Product", "Do you want to remove this product? \n It won't be used for the food waste report."),
             PopupButton("NO") {},
-            PopupButton("YES") { presenter.deleteProduct(product, DeleteType.REMOVED) })
+            PopupButton("YES") { saveDeleteProduct(product, DeleteType.REMOVED) })
     }
 
     /**
