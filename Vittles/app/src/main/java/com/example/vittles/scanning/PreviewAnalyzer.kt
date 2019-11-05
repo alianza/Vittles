@@ -45,10 +45,10 @@ class PreviewAnalyzer(
      * @param degrees Rotation degree of the camera.
      */
     override fun analyze(imageProxy: ImageProxy?, degrees: Int) {
-        // Scan only each second instead of every frame.
+        // Scan only every 500 ms instead of every frame.
         val currentTimestamp = System.currentTimeMillis()
         if (currentTimestamp - lastAnalyzedTimestamp >=
-            TimeUnit.SECONDS.toMillis(1)
+            TimeUnit.MILLISECONDS.toMillis(500)
         ) {
             val mediaImage = imageProxy?.image
             val imageRotation = degreesToFirebaseRotation(degrees)
