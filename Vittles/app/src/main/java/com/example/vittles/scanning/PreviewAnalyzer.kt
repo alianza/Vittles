@@ -20,7 +20,7 @@ class PreviewAnalyzer(
     private val onBarcodeFailure: (exception: Exception) -> Unit,
     private val onBarcodeSuccess: (barcodes: List<FirebaseVisionBarcode>) -> Unit
 ) : ImageAnalysis.Analyzer {
-    // Value used for the scanning
+    // Value used for the scanning delay
     private var lastAnalyzedTimestamp = 0L
 
     /**
