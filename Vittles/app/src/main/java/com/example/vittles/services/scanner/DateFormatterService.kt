@@ -6,9 +6,7 @@ import org.joda.time.format.DateTimeFormat
 object DateFormatterService {
 
     private val regex = Regex("^([0-9&/]*)\$")
-    private val shortCharFormat = DateTimeFormat.forPattern("dd/MMM/yy")
     private val charFormat = DateTimeFormat.forPattern("dd/MMM/yyyy")
-    private val shortNumberFormat = DateTimeFormat.forPattern("dd/MM/yy")
     val numberFormat = DateTimeFormat.forPattern("dd/MM/yyyy")
 
     /**
