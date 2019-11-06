@@ -1,10 +1,34 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.vittles.productlist.ProductsFragment">
+    tools:context="com.example.vittles.MainActivity">
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
+        android:id="@+id/home"
+        android:orderInCategory="1"
+        android:title="Home"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_home_black_24dp"/>
+    <item
+        android:id="@+id/search"
+        android:orderInCategory="2"
+        android:title="Search"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_magnifying_glass"/>
+    <item
+        android:id="@+id/placeholder"
+        android:orderInCategory="3"
+        app:showAsAction="always"
+        android:title="" />
+    <item
+        android:id="@+id/reports"
+        android:orderInCategory="4"
+        android:title="Reports"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_show_chart_black_24dp"/>
+    <item
+        android:id="@+id/settings"
+        android:orderInCategory="5"
+        android:title="Settings"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_settings_black_24dp"/>
 </menu>

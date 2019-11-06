@@ -5,12 +5,14 @@ import android.graphics.PorterDuff
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.product.Product
 import com.example.vittles.R
 import kotlinx.android.synthetic.main.item_product.view.*
 import javax.inject.Inject
+
 
 /**
  * Binds app-specific data to views that are displayed in the RecyclerView.
@@ -78,6 +80,15 @@ class ProductAdapter @Inject constructor(initialProducts: List<Product>, private
 
             if(products[products.lastIndex] == product) {
                 itemView.borderDecorator.visibility = View.INVISIBLE
+                /*
+                TODO Add margin to last record
+                 */
+//                val lp = ConstraintLayout.LayoutParams(
+//                    ConstraintLayout.LayoutParams.MATCH_PARENT,
+//                    ConstraintLayout.LayoutParams.WRAP_CONTENT
+//                )
+//                lp.setMargins(0, 0, 0, 175)
+//                itemView.layoutParams = lp
             } else {
                 itemView.borderDecorator.visibility = View.VISIBLE
             }

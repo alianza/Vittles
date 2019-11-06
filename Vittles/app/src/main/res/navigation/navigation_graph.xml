@@ -9,14 +9,26 @@
         android:id="@+id/productsFragment"
         android:name="com.example.vittles.productlist.ProductsFragment"
         android:label="@string/view_title"
-        tools:layout="@layout/content_main" >
+        tools:layout="@layout/fragment_productlist" >
         <action
             android:id="@+id/action_productsFragment_to_addProductActivity2"
-            app:destination="@id/addProductActivity2" />
+            app:destination="@id/addProductFragment"/>
+        <action
+            android:id="@+id/action_productsFragment_to_reportsFragment"
+            app:destination="@id/reportsFragment"/>
     </fragment>
     <fragment
-        android:id="@+id/addProductActivity2"
+        android:id="@+id/addProductFragment"
         android:name="com.example.vittles.productadd.AddProductFragment"
         android:label="@string/add_product_title"
         tools:layout="@layout/activity_add_product" />
+    <fragment
+        android:id="@+id/reportsFragment"
+        android:name="com.example.vittles.Reports.ReportsFragment"
+        android:label="fragment_reports"
+        tools:layout="@layout/fragment_reports" >
+        <action
+            android:id="@+id/action_reportsFragment_to_productsFragment"
+            app:destination="@id/productsFragment" />
+    </fragment>
 </navigation>
