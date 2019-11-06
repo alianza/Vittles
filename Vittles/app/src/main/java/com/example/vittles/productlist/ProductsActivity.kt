@@ -23,7 +23,6 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
-import java.util.*
 import javax.inject.Inject
 
 /**
@@ -42,9 +41,9 @@ class ProductsActivity : DaggerAppCompatActivity(), ProductsContract.View {
 
     private lateinit var itemTouchHelper: ItemTouchHelper
     private lateinit var undoSnackbar: Snackbar
-    private var deletedProduct: Deque<Product> = ArrayDeque()
-    private var deletedProductDeleteType: Deque<DeleteType> = ArrayDeque()
-    private var deletedProductIndex: Deque<Int> = ArrayDeque()
+    private lateinit var deletedProduct: Product
+    private lateinit var deletedProductDeleteType: DeleteType
+    private var deletedProductIndex: Int = 0
     private var products = mutableListOf<Product>()
     private var filteredProducts = products
     private val productAdapter = ProductAdapter(products, this::onRemoveButtonClicked)
@@ -140,18 +139,21 @@ class ProductsActivity : DaggerAppCompatActivity(), ProductsContract.View {
      */
     private fun saveDeleteProduct(product: Product, deleteType: DeleteType) {
 
+        if (undoSnackbar.isShown) {
+            presenter.deleteProduct(deletedProduct, deletedProductDeleteType)
+            //removeItem(deletedProductIndex)
+        }
         //set deleted product
-        deletedProduct.push(product)
-        deletedProductIndex.push(products.indexOf(product))
-        deletedProductDeleteType.push(deleteType)
+        deletedProduct = product
+        deletedProductIndex = products.indexOf(product)
+        deletedProductDeleteType = deleteType
 
         products.remove(product)
         //It crashes when you use notifyItemRemoved(0). This has been a known issue for quit a while.
-        if (deletedProductIndex.peekFirst() == 0) {
+        if (deletedProductIndex == 0) {
             productAdapter.notifyDataSetChanged()
         } else {
-            productAdapter.notifyItemRemoved(deletedProductIndex.first)
-            //productAdapter.notifyDataSetChanged()
+            removeItem(deletedProductIndex)
         }
 
         showUndoSnackbar()
@@ -170,30 +172,42 @@ class ProductsActivity : DaggerAppCompatActivity(), ProductsContract.View {
         undoSnackbar.setAction("UNDO") {}
         undoSnackbar.setActionTextColor(Color.WHITE)
         undoSnackbar.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
+
             override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
                 super.onDismissed(transientBottomBar, event)
 
-                if(event != Snackbar.Callback.DISMISS_EVENT_ACTION){
-                    presenter.deleteProduct(deletedProduct.removeLast(), deletedProductDeleteType.removeLast())
-                    deletedProductIndex.removeLast()
+                if(event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT){
+                    presenter.deleteProduct(deletedProduct, deletedProductDeleteType)
                 }
                 else{
-                    products.add(index = deletedProductIndex.first, element = deletedProduct.removeFirst())
-                    productAdapter.notifyItemInserted(deletedProductIndex.removeFirst())
-                    //productAdapter.notifyDataSetChanged()
-
-                    deletedProductDeleteType.removeLast()
+                    products.add(index = deletedProductIndex, element = deletedProduct)
+                    productAdapter.notifyItemInserted(deletedProductIndex)
                 }
             }
         })
     }
 
     /**
+     * Removes an item from the adapter and draws a new divider
+     *
+     * @param index
+     */
+    private fun removeItem(index: Int){
+        productAdapter.notifyItemRemoved(index)
+
+        //Makes sure the divider on the element above is drawn
+        if(deletedProductIndex != 0) {
+            productAdapter.notifyItemChanged(index - 1)
+        }
+    }
+
+    /**
      * Shows the undo snackbar and sets the text.
      *
      */
+    @SuppressLint("DefaultLocale")
     private fun showUndoSnackbar(){
-        if (undoSnackbar.isShown) { undoSnackbar.dismiss() }
+        //if (undoSnackbar.isShown) { undoSnackbar.dismiss() }
 
 //        undoSnackbar = Snackbar.make(
 //            findViewById(android.R.id.content),
@@ -203,8 +217,9 @@ class ProductsActivity : DaggerAppCompatActivity(), ProductsContract.View {
 //                .replace("_", " "),
 //            Snackbar.LENGTH_SHORT
 //        )
+       // undoSnackbar.
 
-        undoSnackbar.setText(deletedProduct.first.productName + " has been " + deletedProductDeleteType.first
+        undoSnackbar.setText(deletedProduct.productName + " has been " + deletedProductDeleteType
             .toString()
             .toLowerCase()
             .replace("_", " ")
@@ -344,7 +359,6 @@ class ProductsActivity : DaggerAppCompatActivity(), ProductsContract.View {
         setEmptyView()
         setNoResultsView()
     }
-
 
     /**
      * If product could not be deleted, this method will create a feedback Snackbar for the error.
