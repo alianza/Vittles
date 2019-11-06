@@ -61,9 +61,6 @@ class ScannerActivity @Inject internal constructor(): DaggerAppCompatActivity(),
 
         textureView = findViewById(R.id.textureView)
 
-        resetProductName.visibility = View.INVISIBLE
-        resetExperationDate.visibility = View.INVISIBLE
-
         btnScanVittle.setOnClickListener { onAddVittleButtonClick() }
     }
 
@@ -93,7 +90,6 @@ class ScannerActivity @Inject internal constructor(): DaggerAppCompatActivity(),
         if (barcodes.isNotEmpty()) {
             tvBarcode.text = barcodes[0].rawValue
             ivCheckboxBarcode.setImageDrawable(getDrawable(R.drawable.ic_circle_darkened_filled))
-            resetProductName.visibility = View.VISIBLE
         }
     }
 
@@ -102,6 +98,7 @@ class ScannerActivity @Inject internal constructor(): DaggerAppCompatActivity(),
      *
      * @param text The text that has been retrieved from the camera
      */
+
     override fun onTextScanned(text: String) {
         val numberFormat = DateTimeFormat.forPattern("dd/MM/yyyy")
         val charFormat = DateTimeFormat.forPattern("dd/MMM/yyyy")
@@ -126,9 +123,6 @@ class ScannerActivity @Inject internal constructor(): DaggerAppCompatActivity(),
 
         tvExpirationDate.text = numberFormat.print(expirationDate)
         ivCheckboxExpirationDate.setImageDrawable(getDrawable(R.drawable.ic_circle_darkened_filled))
-
-        //Original thread error
-        resetExperationDate.visibility = View.VISIBLE
     }
 
     /**
