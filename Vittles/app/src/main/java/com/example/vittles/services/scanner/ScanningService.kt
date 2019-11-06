@@ -7,6 +7,7 @@ import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.google.firebase.ml.vision.text.FirebaseVisionCloudTextRecognizerOptions
 import com.google.firebase.ml.vision.text.FirebaseVisionText
 import java.lang.Exception
+import java.util.*
 
 /**
  * Service for scanning barcodes and recognizing text.
@@ -16,8 +17,8 @@ import java.lang.Exception
 object ScanningService {
 
     //    Regex to match against dates (12/12/19, 12-12-2019, 12.dec.19, 12:12:2019)
-    val regex =
-        Regex("(?:(?:31(\\/|\\-|\\.|\\:)(?:0?[13578]|1[02]|(?:jan|mar|may|jul|aug|oct|dec|okt|mei|mrt)))\\1|(?:(?:29|30)(\\/|\\-|\\.|\\:)(?:0?[1,3-9]|1[0-2]|(?:jan|mar|apr|may|jun|jul|aug|sep|oct|nov|dec|okt|mei|mrt))\\2))(?:(?:1[6-9]|[2-9]\\d)?\\d{2})|(?:29(\\/|\\-|\\.|\\:)(?:0?2|(?:feb))\\3(?:(?:(?:1[6-9]|[2-9]\\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))|(?:0?[1-9]|1\\d|2[0-8])(\\/|\\-|\\.|\\:)(?:(?:0?[1-9]|(?:jan|feb|mar|apr|may|jun|jul|aug|sep|mei|mrt))|(?:1[0-2]|(?:oct|nov|dec|okt)))\\4(?:(?:1[6-9]|[2-9]\\d)?\\d{2})")
+    private val regex =
+            Regex("(?:(?:31([/\\-.:])(?:0?[13578]|1[02]|(?:jan|mar|may|jul|aug|oct|dec|okt|mei|mrt)))\\1|(?:(?:29|30)([/\\-.:])(?:0?[1,3-9]|1[0-2]|(?:jan|mar|apr|may|jun|jul|aug|sep|oct|nov|dec|okt|mei|mrt))\\2))(?:(?:1[6-9]|[2-9]\\d)?\\d{2})|(?:29([/\\-.:])(?:0?2|(?:feb))\\3(?:(?:(?:1[6-9]|[2-9]\\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))|(?:0?[1-9]|1\\d|2[0-8])([/\\-.:])(?:(?:0?[1-9]|(?:jan|feb|mar|apr|may|jun|jul|aug|sep|mei|mrt))|(?:1[0-2]|(?:oct|nov|dec|okt)))\\4(?:(?:1[6-9]|[2-9]\\d)?\\d{2})")
 
     /**
      * Scans the image for barcodes and retrieves the value from the barcodes to return it to
@@ -57,20 +58,20 @@ object ScanningService {
     ) {
 //        val detector = FirebaseVision.getInstance().cloudTextRecognizer
 //
-//        val result = detector.processImage(image)
+//        detector.processImage(image)
 //            .addOnSuccessListener { firebaseVisionText ->
 //                val matchedText = regex.find(firebaseVisionText.text.toLowerCase(), 0)
 //
 //                if (matchedText !== null) {
 //                    println(matchedText)
-//                    onOcrSuccess(matchedText.toString())
+//                    onOcrSuccess(matchedText.value)
 //                }
 //            }
 //            .addOnFailureListener {
 //                onOcrFailure(it)
 //            }
 
-        val scannedText = "awd10.11.2019awdawd"
+        val scannedText = "awd10.9.2019awdawd"
 
         val matchedText = regex.find(scannedText.toLowerCase(), 0)
 
