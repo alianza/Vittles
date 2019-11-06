@@ -17,7 +17,7 @@ import javax.inject.Inject
  * @property addProduct The AddProduct from the domain module.
  */
 class AddProductPresenter @Inject internal constructor(private val addProduct: AddProduct) :
-    BasePresenter<AddProductActivity>(), AddProductContract.Presenter {
+    BasePresenter<AddProductFragment>(), AddProductContract.Presenter {
 
     /**
      * Method used to add a product.

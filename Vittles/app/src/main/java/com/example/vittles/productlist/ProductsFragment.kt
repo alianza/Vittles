@@ -4,7 +4,9 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.SearchView
 import android.widget.TextView
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -13,15 +15,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.product.Product
 import com.example.vittles.R
 import com.example.vittles.enums.DeleteType
-import com.example.vittles.productadd.AddProductActivity
+import com.example.vittles.productadd.AddProductFragment
 import com.example.vittles.services.popups.PopupBase
 import com.example.vittles.services.popups.PopupButton
 import com.example.vittles.services.popups.PopupManager
 import com.example.vittles.services.sorting.SortMenu
 import com.google.android.material.snackbar.Snackbar
-import dagger.android.support.DaggerAppCompatActivity
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.content_main.*
+import dagger.android.support.DaggerFragment
+import kotlinx.android.synthetic.main.fragment_productlist.*
 import javax.inject.Inject
 
 /**
@@ -33,7 +34,7 @@ import javax.inject.Inject
  * @author Fethi Tewelde
  * @author Marc van Spronsen
  */
-class ProductsActivity : DaggerAppCompatActivity(), ProductsContract.View {
+class ProductsFragment : DaggerFragment(), ProductsContract.View {
 
     @Inject
     lateinit var presenter: ProductsPresenter
@@ -44,21 +45,42 @@ class ProductsActivity : DaggerAppCompatActivity(), ProductsContract.View {
     private val productAdapter = ProductAdapter(products, this::onRemoveButtonClicked)
     private val sortMenu = SortMenu(products, productAdapter)
 
-    /**
-     * Called when the ProductsActivity is created.
-     *
-     */
-    override fun onCreate(savedInstanceState: Bundle?) {
-        setTheme(R.style.AppTheme_NoActionBar)
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        setSupportActionBar(toolbar)
-        with(presenter) {
-            start(this@ProductsActivity)
-        }
-        initViews()
+    lateinit var rvProducts: RecyclerView
 
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        with(presenter) {
+            start(this@ProductsFragment)
+        }
+
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_productlist, container, false)
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        rvProducts = view.findViewById(R.id.rvProducts)
+        initViews()
+    }
+
+
+//    /**
+//     * Called when the ProductsFragment is created.
+//     *
+//     */
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        setTheme(R.style.AppTheme_NoActionBar)
+//        super.onCreate(savedInstanceState)
+//        setContentView(R.layout.activity_main)
+//        setSupportActionBar(toolbar)
+//        with(presenter) {
+//            start(this@ProductsFragment)
+//        }
+//        initViews()
+//
+//    }
 
     override fun onDestroy() {
         super.onDestroy()
@@ -72,17 +94,19 @@ class ProductsActivity : DaggerAppCompatActivity(), ProductsContract.View {
      */
     override fun initViews() {
         setListeners()
-        supportActionBar?.title = getString(R.string.view_title)
+//        supportActionBar?.title = getString(R.string.view_title)
 
         rvProducts.layoutManager =
-            LinearLayoutManager(this@ProductsActivity, RecyclerView.VERTICAL, false)
+            LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         rvProducts.adapter = productAdapter
 
+        // TODO searching
         // Set searchView textColor
         val id =
             svSearch.context.resources.getIdentifier("android:id/search_src_text", null, null)
         val textView = svSearch.findViewById(id) as TextView
         textView.setTextColor(Color.BLACK)
+        setListeners()
 
         setItemTouchHelper()
     }
@@ -103,8 +127,9 @@ class ProductsActivity : DaggerAppCompatActivity(), ProductsContract.View {
      *
      */
     override fun setListeners() {
+        // TODO implement onclicklisteners
 
-        fab.setOnClickListener { onAddButtonClick() }
+//        fab.setOnClickListener { onAddButtonClick() }
 
         sortLayout.setOnClickListener { openSortMenu() }
 
@@ -126,32 +151,28 @@ class ProductsActivity : DaggerAppCompatActivity(), ProductsContract.View {
 
         imgbtnCloseSearch.setOnClickListener { closeSearchBar() }
     }
-    
-     /**
-     * Called when the sort button is clicked.
-     *
-     */
-    private fun openSortMenu() {
-        sortMenu.openMenu(this, btnSort, filteredProducts)
-    }
+
 
     /**
      * Handles the action of the remove button on a product
      *
      */
-    private fun onRemoveButtonClicked(product: Product){
-        PopupManager.instance.showPopup(this,
-            PopupBase("Remove Product", "Do you want to remove this product? \n It won't be used for the food waste report."),
+    private fun onRemoveButtonClicked(product: Product) {
+        PopupManager.instance.showPopup(context!!,
+            PopupBase(
+                "Remove Product",
+                "Do you want to remove this product? \n It won't be used for the food waste report."
+            ),
             PopupButton("NO") {},
             PopupButton("YES") { presenter.deleteProduct(product, DeleteType.REMOVED) })
     }
 
     /**
      * Attaches the ItemTouchHelper to the RecyclerView.
-    
+
      */
     override fun setItemTouchHelper() {
-        val callback = ProductItemTouchHelper(products,presenter,this)
+        val callback = ProductItemTouchHelper(products, presenter, context!!)
         itemTouchHelper = ItemTouchHelper(callback)
         itemTouchHelper.attachToRecyclerView(rvProducts)
     }
@@ -175,29 +196,11 @@ class ProductsActivity : DaggerAppCompatActivity(), ProductsContract.View {
      */
     override fun onAddButtonClick() {
         val addProductActivityIntent = Intent(
-            this,
-            AddProductActivity::class.java
+            context,
+            AddProductFragment::class.java
         )
         startActivity(addProductActivityIntent)
-        closeSearchBar()
-    }
-
-    /**
-     * Method that is called when text is entered in search view
-     *
-     * @param query entered string used as search query
-     */
-    @SuppressLint("DefaultLocale")
-    override fun filter(query: String) {
-        filteredProducts = products.filter { product ->
-            product.productName.toLowerCase().contains(query.toLowerCase())
-        } as MutableList<Product>
-
-        productAdapter.products = filteredProducts
-        productAdapter.notifyDataSetChanged()
-        sortMenu.sortFilteredList(filteredProducts)
-
-        setNoResultsView()
+//        closeSearchBar()
     }
 
 
@@ -213,26 +216,6 @@ class ProductsActivity : DaggerAppCompatActivity(), ProductsContract.View {
         }
     }
 
-    /**
-     * Method to show the search bar and hide the toolbar
-     *
-     */
-    override fun openSearchBar() {
-        llSearch.visibility = View.VISIBLE
-        svSearch.isIconified = false
-
-        toolbar.visibility = View.GONE
-    }
-
-    /**
-     * Method to hide the search bar and show the toolbar
-     *
-     */
-    override fun closeSearchBar() {
-        llSearch.visibility = View.GONE
-        svSearch.setQuery("", true)
-        toolbar.visibility = View.VISIBLE
-    }
 
     /**
      * Populates the RecyclerView with items from the local DataBase.
@@ -267,5 +250,55 @@ class ProductsActivity : DaggerAppCompatActivity(), ProductsContract.View {
     override fun showProductDeleteError() {
         Snackbar.make(rvProducts, getString(R.string.product_deleted_failed), Snackbar.LENGTH_LONG)
             .show()
+    }
+
+    /**
+     * Method that is called when text is entered in search view
+     *
+     * @param query entered string used as search query
+     */
+    @SuppressLint("DefaultLocale")
+    override fun filter(query: String) {
+        filteredProducts = products.filter { product ->
+            product.productName.toLowerCase().contains(query.toLowerCase())
+        } as MutableList<Product>
+
+        productAdapter.products = filteredProducts
+        productAdapter.notifyDataSetChanged()
+        sortMenu.sortFilteredList(filteredProducts)
+
+        setNoResultsView()
+    }
+
+    /**
+     * Called when the sort button is clicked.
+     *
+     */
+    // TODO sorting
+    private fun openSortMenu() {
+        sortMenu.openMenu(context!!, btnSort, filteredProducts)
+    }
+
+    // TODO searching
+
+    /**
+     * Method to show the search bar and hide the toolbar
+     *
+     */
+    fun openSearchBar() {
+        llSearch.visibility = View.VISIBLE
+        svSearch.isIconified = false
+
+        toolbar.visibility = View.GONE
+    }
+
+    /**
+     * Method to hide the search bar and show the toolbar
+     *
+     */
+    fun closeSearchBar() {
+        llSearch.visibility = View.GONE
+        svSearch.setQuery("", true)
+        toolbar.visibility = View.VISIBLE
     }
 }

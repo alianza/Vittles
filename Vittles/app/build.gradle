@@ -10,6 +10,8 @@ apply plugin: 'io.fabric'
 
 apply plugin: 'kotlin-kapt'
 
+apply plugin: "androidx.navigation.safeargs.kotlin"
+
 repositories {
     maven { url 'https://maven.fabric.io/public' }
 }
@@ -97,6 +99,8 @@ dependencies {
 
     implementation project(path: ':domain')
     implementation project(path: ':data')
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.1.0'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.1.0'
 }
 
 buildscript {

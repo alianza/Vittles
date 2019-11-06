@@ -3,14 +3,18 @@ package com.example.vittles.productadd
 import android.app.DatePickerDialog
 import android.os.Bundle
 import android.text.TextUtils
-import android.view.MenuItem
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
 import com.example.domain.product.Product
 import com.example.vittles.R
 import com.example.vittles.services.popups.PopupBase
 import com.example.vittles.services.popups.PopupButton
 import com.example.vittles.services.popups.PopupManager
 import com.google.android.material.snackbar.Snackbar
-import dagger.android.support.DaggerAppCompatActivity
+import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.activity_add_product.*
 import org.joda.time.DateTime
 import javax.inject.Inject
@@ -22,11 +26,14 @@ import javax.inject.Inject
  * @author Jeroen Flietstra
  * @author Jan-Willem van Bremen
  */
-class AddProductActivity : DaggerAppCompatActivity(), AddProductContract.View {
+class AddProductFragment : DaggerFragment(), AddProductContract.View {
     @Inject
     lateinit var presenter: AddProductPresenter
 
     private var expirationDate = DateTime()
+
+    lateinit var etExpirationDate: EditText
+    lateinit var btnConfirm: Button
 
     companion object {
         /**
@@ -36,16 +43,33 @@ class AddProductActivity : DaggerAppCompatActivity(), AddProductContract.View {
         const val MONTHS_OFFSET = 1
     }
 
-    /**
-     * Sets the content, assigns the dao and calls the initViews method.
-     *
-     */
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        presenter.start(this@AddProductActivity)
-        setContentView(R.layout.activity_add_product)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        presenter.start(this@AddProductFragment)
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.activity_add_product, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        etExpirationDate = view.findViewById(R.id.etExpirationDate)
+        btnConfirm = view.findViewById(R.id.btnConfirm)
         initViews()
     }
+
+
+//    /**
+//     * Sets the content, assigns the dao and calls the initViews method.
+//     *
+//     */
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//        presenter.start(this@AddProductFragment)
+//        setContentView(R.layout.activity_add_product)
+//        initViews()
+//    }
 
     override fun onDestroy() {
         super.onDestroy()
@@ -58,29 +82,30 @@ class AddProductActivity : DaggerAppCompatActivity(), AddProductContract.View {
      *
      */
     override fun initViews() {
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = getString(R.string.add_product_title)
+//        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+//        supportActionBar?.title = getString(R.string.add_product_title)
+
         initDatePicker()
         btnConfirm.setOnClickListener { onConfirmButtonClick() }
     }
 
 
-    /**
-     * Listener of the back button.
-     */
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        return onBackButtonClick()
-    }
-
-    /**
-     * Terminates the add product activity.
-     *
-     * @return boolean that represents if action succeeded
-     */
-    override fun onBackButtonClick(): Boolean {
-        finish()
-        return true
-    }
+//    /**
+//     * Listener of the back button.
+//     */
+//    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+//        return onBackButtonClick()
+//    }
+//
+//    /**
+//     * Terminates the add product activity.
+//     *
+//     * @return boolean that represents if action succeeded
+//     */
+//    override fun onBackButtonClick(): Boolean {
+//        finish()
+//        return true
+//    }
 
     /**
      * Initializes the date picker. Including the default date and listeners.
@@ -95,7 +120,7 @@ class AddProductActivity : DaggerAppCompatActivity(), AddProductContract.View {
 
         etExpirationDate.setOnClickListener {
             val dpd = DatePickerDialog(
-                this,
+                context!!,
                 DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
                     this.expirationDate = DateTime(year, monthOfYear + MONTHS_OFFSET, dayOfMonth, 0, 0)
                             etExpirationDate.setText(getString(
@@ -177,7 +202,7 @@ class AddProductActivity : DaggerAppCompatActivity(), AddProductContract.View {
      */
     override fun showCloseToExpirationPopup(product: Product) {
         PopupManager.instance.showPopup(
-            this,
+            context!!,
             PopupBase(
                 "Almost expired!",
                 String.format("The scanned product expires in %d days. \n Are you sure you want to add it?",

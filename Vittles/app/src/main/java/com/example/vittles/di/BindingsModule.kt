@@ -1,7 +1,7 @@
 package com.example.vittles.di
 
-import com.example.vittles.productadd.AddProductActivity
-import com.example.vittles.productlist.ProductsActivity
+import com.example.vittles.productadd.AddProductFragment
+import com.example.vittles.productlist.ProductsFragment
 import com.example.vittles.services.notification.NotificationScheduleService
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -9,10 +9,10 @@ import dagger.android.ContributesAndroidInjector
 @Module
 abstract class BindingsModule {
     @ContributesAndroidInjector
-    abstract fun bindProductsActivity(): ProductsActivity
+    abstract fun bindProductsActivity(): ProductsFragment
 
     @ContributesAndroidInjector
-    abstract fun bindAddProductActivity(): AddProductActivity
+    abstract fun bindAddProductActivity(): AddProductFragment
 
     @ContributesAndroidInjector
     abstract fun bindNotificationScheduleService(): NotificationScheduleService

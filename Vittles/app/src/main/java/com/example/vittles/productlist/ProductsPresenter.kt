@@ -4,14 +4,11 @@ import com.example.domain.enums.ExpirationIndicationColor
 import com.example.domain.product.DeleteProduct
 import com.example.domain.product.Product
 import com.example.domain.product.GetProducts
-import com.example.vittles.Globals
 import com.example.vittles.enums.DeleteType
 import com.example.vittles.enums.IndicationColor
 import com.example.vittles.mvp.BasePresenter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import java.sql.Date
-import java.util.*
 import javax.inject.Inject
 
 /**
@@ -26,7 +23,7 @@ class ProductsPresenter @Inject internal constructor(
     private val getProducts: GetProducts,
     private val deleteProduct: DeleteProduct
 ) :
-    BasePresenter<ProductsActivity>(), ProductsContract.Presenter {
+    BasePresenter<ProductsFragment>(), ProductsContract.Presenter {
 
     /**
      * Loads the products.
