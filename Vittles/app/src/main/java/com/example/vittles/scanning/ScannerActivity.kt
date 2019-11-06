@@ -99,6 +99,7 @@ class ScannerActivity @Inject internal constructor(): DaggerAppCompatActivity(),
             tvBarcode.text = barcodes[0].rawValue
             ivCheckboxBarcode.setImageDrawable(getDrawable(R.drawable.ic_circle_darkened_filled))
         }
+        PreviewAnalyzer.hasBarCode = true
     }
 
     /**
@@ -110,6 +111,7 @@ class ScannerActivity @Inject internal constructor(): DaggerAppCompatActivity(),
         tvExpirationDate.text = DateFormatterService.numberFormat.print(DateFormatterService.expirationDateFormatter(text))
         expirationDate = DateFormatterService.expirationDateFormatter(text)!!
         ivCheckboxExpirationDate.setImageDrawable(getDrawable(R.drawable.ic_circle_darkened_filled))
+        PreviewAnalyzer.hasExpirationDate = true
     }
 
     /**
