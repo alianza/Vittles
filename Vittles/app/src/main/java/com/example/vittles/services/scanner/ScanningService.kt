@@ -38,7 +38,11 @@ object ScanningService {
         val options = FirebaseVisionBarcodeDetectorOptions.Builder()
             .setBarcodeFormats(
                 FirebaseVisionBarcode.FORMAT_EAN_13,
-                FirebaseVisionBarcode.FORMAT_EAN_8
+                FirebaseVisionBarcode.FORMAT_EAN_8,
+                FirebaseVisionBarcode.FORMAT_UPC_A,
+                FirebaseVisionBarcode.FORMAT_UPC_E,
+                FirebaseVisionBarcode.FORMAT_ITF,
+                FirebaseVisionBarcode.TYPE_ISBN
             )
             .build()
         val detector = FirebaseVision.getInstance()
@@ -57,7 +61,7 @@ object ScanningService {
         onOcrSuccess: (text: String) -> Unit,
         onOcrFailure: (exception: Exception) -> Unit
     ) {
-        val detector = FirebaseVision.getInstance().cloudTextRecognizer
+        val detector = FirebaseVision.getInstance() .onDeviceTextRecognizer
 
                 detector.processImage(image)
                     .addOnSuccessListener { firebaseVisionText ->
