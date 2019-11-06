@@ -9,6 +9,7 @@ import android.view.TextureView
 import android.widget.Toast
 import androidx.camera.core.CameraX
 import com.example.vittles.R
+import com.example.vittles.scanning.productaddmanual.ProductNameEditView
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.parcel.Parcelize
@@ -54,6 +55,8 @@ class ScannerActivity @Inject internal constructor(): DaggerAppCompatActivity(),
         textureView = findViewById(R.id.textureView)
 
         btnScanVittle.setOnClickListener { onAddVittleButtonClick() }
+
+        ibEditName.setOnClickListener { onEditNameButtonClick() }
     }
 
     /**
@@ -126,6 +129,11 @@ class ScannerActivity @Inject internal constructor(): DaggerAppCompatActivity(),
             Toast.LENGTH_SHORT
         ).show()
         finish()
+    }
+
+    fun onEditNameButtonClick() {
+        val dialog = ProductNameEditView()
+        dialog.openDialog(this, tvBarcode)
     }
 
     /**
