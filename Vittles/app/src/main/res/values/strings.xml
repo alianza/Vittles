@@ -56,4 +56,7 @@
     <!--    Add product manually-->
     <string name="edit_product_name">Edit product name</string>
     <string name="edit_expiration_date">Edit expiration date</string>
+
+    <!--    Scan Products-->
+    <string name="edit_icon">Edit</string>
 </resources>
