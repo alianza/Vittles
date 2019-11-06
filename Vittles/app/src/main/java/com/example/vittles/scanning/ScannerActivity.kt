@@ -37,8 +37,6 @@ class ScannerActivity @Inject internal constructor(): DaggerAppCompatActivity(),
 
     private lateinit var expirationDate: DateTime
 
-    private val regex = Regex("^([0-9& /:.-]*)\$")
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         presenter.start(this@ScannerActivity)

@@ -59,11 +59,6 @@ object ScanningService {
     ) {
         val detector = FirebaseVision.getInstance().cloudTextRecognizer
 
-        detector.processImage(image)
-            .addOnSuccessListener { firebaseVisionText ->
-                val matchedText = regex.find(firebaseVisionText.text.toLowerCase(), 0)
-                val detector = FirebaseVision.getInstance().cloudTextRecognizer
-
                 detector.processImage(image)
                     .addOnSuccessListener { firebaseVisionText ->
                         val matchedText = regex.find(firebaseVisionText.text.toLowerCase(), 0)
@@ -87,6 +82,5 @@ object ScanningService {
 //            println("MatchedText ${matchedText.value}")
 //            onOcrSuccess(matchedText.value)
 //        }
-            }
-    }
+        }
 }
