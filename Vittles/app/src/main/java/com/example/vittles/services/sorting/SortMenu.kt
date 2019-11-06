@@ -4,7 +4,7 @@ import android.app.AlertDialog
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.Button
+import android.widget.TextView
 import com.example.domain.product.Product
 import com.example.vittles.R
 import com.example.vittles.productlist.ProductAdapter
@@ -29,7 +29,7 @@ class SortMenu (sortList: MutableList<Product>, adapter: ProductAdapter) {
     private var adapter = adapter
     private var sortList = sortList
     lateinit var previousSortingType: SortingType
-    lateinit var btnSort: Button
+    lateinit var btnSort: TextView
     lateinit var alertDialog: AlertDialog
     lateinit var view: View
 
@@ -37,11 +37,11 @@ class SortMenu (sortList: MutableList<Product>, adapter: ProductAdapter) {
      * Sets enums for all of the different sorting options
      *
      */
-    enum class SortingType() {
+    enum class SortingType {
         DAYS_REMAINING_ASC,
         DAYS_REMAINING_DESC,
-        ALFABETIC_AZ,
-        ALFABETIC_ZA,
+        ALPHABETIC_AZ,
+        ALPHABETIC_ZA,
         NEWEST,
         OLDEST
     }
@@ -53,7 +53,7 @@ class SortMenu (sortList: MutableList<Product>, adapter: ProductAdapter) {
      * @param button The button which shows the current sortingType.
      * @param filteredList The list that should be sorted.
      */
-    fun openMenu(context: Context, button: Button, filteredList: MutableList<Product>) {
+    fun openMenu(context: Context, button: TextView, filteredList: MutableList<Product>) {
 
         val mDialogView =
             LayoutInflater.from(context).inflate(R.layout.activity_sort, null)
@@ -86,8 +86,8 @@ class SortMenu (sortList: MutableList<Product>, adapter: ProductAdapter) {
     private fun setListeners() {
         view.daysRemainingLH.setOnClickListener { onSortClick(SortingType.DAYS_REMAINING_ASC, sortList)  }
         view.daysRemainingHL.setOnClickListener { onSortClick(SortingType.DAYS_REMAINING_DESC, sortList) }
-        view.alfabeticAZ.setOnClickListener { onSortClick(SortingType.ALFABETIC_AZ, sortList) }
-        view.alfabeticZA.setOnClickListener { onSortClick(SortingType.ALFABETIC_ZA, sortList) }
+        view.alfabeticAZ.setOnClickListener { onSortClick(SortingType.ALPHABETIC_AZ, sortList) }
+        view.alfabeticZA.setOnClickListener { onSortClick(SortingType.ALPHABETIC_ZA, sortList) }
         view.newest.setOnClickListener { onSortClick(SortingType.NEWEST, sortList) }
         view.oldest.setOnClickListener { onSortClick(SortingType.OLDEST, sortList) }
     }
@@ -102,8 +102,8 @@ class SortMenu (sortList: MutableList<Product>, adapter: ProductAdapter) {
         when(sortingType) {
             SortingType.DAYS_REMAINING_ASC -> sortList.sortBy { it.expirationDate }
             SortingType.DAYS_REMAINING_DESC -> sortList.sortByDescending { it.expirationDate }
-            SortingType.ALFABETIC_AZ -> sortList.sortBy { it.productName }
-            SortingType.ALFABETIC_ZA -> sortList.sortByDescending { it.productName }
+            SortingType.ALPHABETIC_AZ -> sortList.sortBy { it.productName }
+            SortingType.ALPHABETIC_ZA -> sortList.sortByDescending { it.productName }
             SortingType.NEWEST -> sortList.sortByDescending { it.creationDate }
             else -> sortList.sortBy { it.creationDate }
         }
@@ -129,8 +129,8 @@ class SortMenu (sortList: MutableList<Product>, adapter: ProductAdapter) {
         when (currentSortingType) {
             SortingType.DAYS_REMAINING_ASC -> view.daysRemainingAsc.alpha = 1f
             SortingType.DAYS_REMAINING_DESC -> view.daysRemainingDesc.alpha = 1f
-            SortingType.ALFABETIC_AZ -> view.alfabeticAz.alpha = 1f
-            SortingType.ALFABETIC_ZA -> view.alfabeticZa.alpha = 1f
+            SortingType.ALPHABETIC_AZ -> view.alfabeticAz.alpha = 1f
+            SortingType.ALPHABETIC_ZA -> view.alfabeticZa.alpha = 1f
             SortingType.NEWEST -> view.newestSelected.alpha = 1f
             else -> view.oldestSelected.alpha = 1f
         }
@@ -145,8 +145,8 @@ class SortMenu (sortList: MutableList<Product>, adapter: ProductAdapter) {
         when(sortingType) {
             SortingType.DAYS_REMAINING_ASC -> btnSort.text = view.daysRemainingLH.text
             SortingType.DAYS_REMAINING_DESC -> btnSort.text = view.daysRemainingHL.text
-            SortingType.ALFABETIC_AZ -> btnSort.text = view.alfabeticAZ.text
-            SortingType.ALFABETIC_ZA -> btnSort.text = view.alfabeticZA.text
+            SortingType.ALPHABETIC_AZ -> btnSort.text = view.alfabeticAZ.text
+            SortingType.ALPHABETIC_ZA -> btnSort.text = view.alfabeticZA.text
             SortingType.NEWEST -> btnSort.text = view.newest.text
             else -> btnSort.text = view.oldest.text
         }

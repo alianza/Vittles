@@ -5,6 +5,7 @@
 
     <!--    Global Buttons-->
     <string name="btn_confirm">Confirm</string>
+    <string name="btn_cancel">Cancel</string>
 
     <!--    Products Overview-->
     <string name="view_title">My Vittles</string>
@@ -37,8 +38,8 @@
     <string name="sorting">Sorting </string>
     <string name="days_remaining_lh">Days Remaining (Asc)</string>
     <string name="days_remaining_hl">Days Remaining (Desc)</string>
-    <string name="alfabetic_az">Alfabetic (A-Z)</string>
-    <string name="alfabetic_za">Alfabetic (Z-A)</string>
+    <string name="alphabetic_az">Alphabetic (A-Z)</string>
+    <string name="alphabetic_za">Alphabetic (Z-A)</string>
     <string name="newest">Newest</string>
     <string name="oldest">Oldest</string>
 
@@ -52,4 +53,7 @@
     <string name="cd_scanning_pane">Scanning pane</string>
     <string name="btn_add_vittle">Add Vittle</string>
 
+    <!--    Add product manually-->
+    <string name="edit_product_name">Edit product name</string>
+    <string name="edit_expiration_date">Edit expiration date</string>
 </resources>

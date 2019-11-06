@@ -23,10 +23,10 @@
                 android:id="@+id/ivCheckboxBarcode"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginStart="18dp"
                 android:contentDescription="@string/cd_checklist_image"
                 app:layout_constraintBottom_toBottomOf="@+id/tvBarcode"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/textView2"
                 app:srcCompat="@drawable/ic_circle_darkened" />
 
@@ -34,21 +34,21 @@
                 android:id="@+id/ivCheckboxExpirationDate"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginStart="18dp"
                 android:contentDescription="@string/cd_checklist_image"
                 app:layout_constraintBottom_toBottomOf="@+id/tvExpirationDate"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/textView5"
                 app:srcCompat="@drawable/ic_circle_darkened" />
 
             <TextView
                 android:id="@+id/textView5"
                 android:layout_width="0dp"
-                android:layout_height="28dp"
+                android:layout_height="22dp"
                 android:layout_marginTop="8dp"
                 android:text="@string/exp_date_title_scanner"
                 android:textColor="@color/black"
-                android:textSize="20sp"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="@+id/textView2"
                 app:layout_constraintStart_toStartOf="@+id/textView2"
                 app:layout_constraintTop_toBottomOf="@+id/tvBarcode" />
@@ -58,7 +58,7 @@
                 android:layout_width="0dp"
                 android:layout_height="26dp"
                 android:text="@string/product_name_scanner"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="@+id/textView2"
                 app:layout_constraintStart_toStartOf="@+id/textView2"
                 app:layout_constraintTop_toBottomOf="@+id/textView2" />
@@ -68,7 +68,7 @@
                 android:layout_width="0dp"
                 android:layout_height="26dp"
                 android:text="@string/date_format_scanner"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="@+id/textView2"
                 app:layout_constraintStart_toStartOf="@+id/textView2"
                 app:layout_constraintTop_toBottomOf="@+id/textView5" />
@@ -76,14 +76,38 @@
             <TextView
                 android:id="@+id/textView2"
                 android:layout_width="280dp"
-                android:layout_height="28dp"
-                android:layout_marginStart="70dp"
+                android:layout_height="22dp"
+                android:layout_marginStart="32dp"
                 android:layout_marginTop="8dp"
                 android:text="@string/barcode_title_scanner"
                 android:textColor="@color/black"
-                android:textSize="20sp"
-                app:layout_constraintStart_toStartOf="parent"
+                android:textSize="14sp"
+                app:layout_constraintStart_toEndOf="@+id/ivCheckbox"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/ibEditName"
+                style="@style/TextAppearance.AppCompat.Widget.Button.Borderless.Colored"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="18dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:layout_constraintBottom_toBottomOf="@+id/tvBarcode"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/textView2"
+                app:srcCompat="@drawable/ic_edit_black_24dp" />
+
+            <ImageButton
+                android:id="@+id/ibEditDate"
+                style="@style/TextAppearance.AppCompat.Widget.Button.Borderless.Colored"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="18dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:layout_constraintBottom_toBottomOf="@+id/tvBarcode5"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/textView5"
+                app:srcCompat="@drawable/ic_edit_black_24dp" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -93,10 +117,10 @@
             android:layout_height="match_parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0"/>
+            app:layout_constraintVertical_bias="1.0" />
 
         <ImageView
             android:id="@+id/scanningPlane"

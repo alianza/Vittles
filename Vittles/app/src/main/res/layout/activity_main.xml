@@ -102,28 +102,43 @@
             app:titleMarginStart="0dp"
             app:titleTextColor="#000000">
 
-            <Button
-                android:id="@+id/btnSort"
-                style="?android:attr/borderlessButtonStyle"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/sortLayout"
+                style="@style/AppTheme.SortButton"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:height="56dp"
-                android:backgroundTint="@color/white"
-                android:fontFamily="sans-serif-medium"
-                android:minWidth="100dp"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
-                android:text="@string/days_remaining_lh"
-                android:textAlignment="center"
-                android:textAllCaps="false"
-                android:textColor="@color/black"
-                android:textSize="12sp" />
+                android:layout_height="wrap_content">
 
-            <ImageView
-                android:id="@+id/imageView7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_expand_more_24px" />
+                <TextView
+                    android:id="@+id/btnSort"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/white"
+                    android:fontFamily="sans-serif-medium"
+                    android:minWidth="100dp"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="0dp"
+                    android:text="@string/days_remaining_lh"
+                    android:textAlignment="textStart"
+                    android:textAllCaps="false"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/imageView7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/btnSort"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_expand_more_24px" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
         </androidx.appcompat.widget.Toolbar>
 
