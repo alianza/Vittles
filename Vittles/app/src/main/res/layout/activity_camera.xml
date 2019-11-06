@@ -91,7 +91,7 @@
                 style="@style/TextAppearance.AppCompat.Widget.Button.Borderless.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="18dp"
+                android:layout_marginEnd="48dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/edit_icon"
                 app:layout_constraintBottom_toBottomOf="@+id/tvBarcode"
@@ -104,13 +104,37 @@
                 style="@style/TextAppearance.AppCompat.Widget.Button.Borderless.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="18dp"
+                android:layout_marginEnd="48dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/edit_icon"
                 app:layout_constraintBottom_toBottomOf="@+id/tvExpirationDate"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/textView5"
                 app:srcCompat="@drawable/ic_edit_black_24dp" />
+
+            <ImageButton
+                android:id="@+id/refreshProductName"
+                style="@style/TextAppearance.AppCompat.Widget.Button.Borderless.Colored"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:layout_constraintBottom_toBottomOf="@+id/ibEditName"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/ibEditName"
+                app:layout_constraintTop_toTopOf="@+id/ibEditName"
+                app:srcCompat="@drawable/ic_refresh" />
+
+            <ImageButton
+                android:id="@+id/refreshDate"
+                style="@style/TextAppearance.AppCompat.Widget.Button.Borderless.Colored"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:layout_constraintBottom_toBottomOf="@+id/ibEditDate"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/ibEditDate"
+                app:layout_constraintTop_toTopOf="@+id/ibEditDate"
+                app:srcCompat="@drawable/ic_refresh" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

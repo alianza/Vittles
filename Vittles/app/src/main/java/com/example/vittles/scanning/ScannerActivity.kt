@@ -10,14 +10,14 @@ import android.view.View
 import android.widget.Toast
 import androidx.camera.core.CameraX
 import com.example.vittles.R
+import com.example.vittles.scanning.productaddmanual.DateEditView
 import com.example.vittles.scanning.productaddmanual.ProductNameEditView
+import com.example.vittles.services.scanner.DateFormatterService
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.activity_camera.*
 import org.joda.time.DateTime
-import org.joda.time.format.DateTimeFormat
-import org.joda.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 const val SCAN_RESULT = "SCAN_RESULT"
@@ -37,7 +37,7 @@ class ScannerActivity @Inject internal constructor(): DaggerAppCompatActivity(),
 
     private lateinit var expirationDate: DateTime
 
-    private val regex = Regex("^([0-9&/:.-]*)\$")
+    private val regex = Regex("^([0-9& /:.-]*)\$")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,9 +62,14 @@ class ScannerActivity @Inject internal constructor(): DaggerAppCompatActivity(),
 
         textureView = findViewById(R.id.textureView)
 
+        refreshDate.visibility = View.INVISIBLE
+        refreshProductName.visibility = View.INVISIBLE
+
         btnScanVittle.setOnClickListener { onAddVittleButtonClick() }
 
         ibEditName.setOnClickListener { onEditNameButtonClick() }
+
+        ibEditDate.setOnClickListener { onEditExperationButtonClick() }
     }
 
     /**
@@ -103,30 +108,9 @@ class ScannerActivity @Inject internal constructor(): DaggerAppCompatActivity(),
      *
      * @param text The text that has been retrieved from the camera
      */
-
     override fun onTextScanned(text: String) {
-        val numberFormat = DateTimeFormat.forPattern("dd/MM/yyyy")
-        val charFormat = DateTimeFormat.forPattern("dd/MMM/yyyy")
-
-        val formatter = if (text.matches(regex)) {
-            numberFormat
-        } else {
-            charFormat
-        }
-
-//      Replace all dividers to slashes for yodaTime
-        var replacedText = text.replace('-', '/').replace(':', '/').replace('.', '/').replace(' ', '/')
-
-//      Replace dutch abbreviated month names with english equivalents
-        replacedText = replacedText.replace("okt", "oct").replace("mei", "may").replace("mrt", "mar")
-
-//        var date = LocalDate.parse(replacedText, formatter)
-
-        expirationDate = formatter.parseDateTime(replacedText)
-
-        println(formatter.print(expirationDate))
-
-        tvExpirationDate.text = numberFormat.print(expirationDate)
+        tvExpirationDate.text = DateFormatterService.numberFormat.print(DateFormatterService.expirationDateFormatter(text))
+        expirationDate = DateFormatterService.expirationDateFormatter(text)!!
         ivCheckboxExpirationDate.setImageDrawable(getDrawable(R.drawable.ic_circle_darkened_filled))
     }
 
@@ -186,6 +170,11 @@ class ScannerActivity @Inject internal constructor(): DaggerAppCompatActivity(),
     fun onEditNameButtonClick() {
         val dialog = ProductNameEditView()
         dialog.openDialog(this, tvBarcode)
+    }
+
+    fun onEditExperationButtonClick() {
+        val dialog = DateEditView()
+        dialog.openDialog(this, tvExpirationDate)
     }
 
     /**
