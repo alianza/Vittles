@@ -153,7 +153,12 @@ class ProductsActivity : DaggerAppCompatActivity(), ProductsContract.View {
         if (deletedProductIndex == 0) {
             productAdapter.notifyDataSetChanged()
         } else {
-            removeItem(deletedProductIndex)
+            productAdapter.notifyItemRemoved(deletedProductIndex)
+
+            //Makes sure the divider on the element above is drawn
+            if(deletedProductIndex != 0) {
+                productAdapter.notifyItemChanged(deletedProductIndex - 1)
+            }
         }
 
         showUndoSnackbar()
@@ -182,23 +187,13 @@ class ProductsActivity : DaggerAppCompatActivity(), ProductsContract.View {
                 else{
                     products.add(index = deletedProductIndex, element = deletedProduct)
                     productAdapter.notifyItemInserted(deletedProductIndex)
+
+                    if (deletedProductIndex == products.count() - 1){
+                        productAdapter.notifyItemChanged(deletedProductIndex - 1)
+                    }
                 }
             }
         })
-    }
-
-    /**
-     * Removes an item from the adapter and draws a new divider
-     *
-     * @param index
-     */
-    private fun removeItem(index: Int){
-        productAdapter.notifyItemRemoved(index)
-
-        //Makes sure the divider on the element above is drawn
-        if(deletedProductIndex != 0) {
-            productAdapter.notifyItemChanged(index - 1)
-        }
     }
 
     /**
@@ -207,18 +202,6 @@ class ProductsActivity : DaggerAppCompatActivity(), ProductsContract.View {
      */
     @SuppressLint("DefaultLocale")
     private fun showUndoSnackbar(){
-        //if (undoSnackbar.isShown) { undoSnackbar.dismiss() }
-
-//        undoSnackbar = Snackbar.make(
-//            findViewById(android.R.id.content),
-//            deletedProduct.productName + " has been " + deleteType
-//                .toString()
-//                .toLowerCase()
-//                .replace("_", " "),
-//            Snackbar.LENGTH_SHORT
-//        )
-       // undoSnackbar.
-
         undoSnackbar.setText(deletedProduct.productName + " has been " + deletedProductDeleteType
             .toString()
             .toLowerCase()
