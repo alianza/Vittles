@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.SearchView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,8 +22,8 @@ import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.base_popup.*
 import kotlinx.android.synthetic.main.content_main.*
+import java.util.*
 import javax.inject.Inject
 
 /**
@@ -42,6 +41,10 @@ class ProductsActivity : DaggerAppCompatActivity(), ProductsContract.View {
     lateinit var presenter: ProductsPresenter
 
     private lateinit var itemTouchHelper: ItemTouchHelper
+    private lateinit var undoSnackbar: Snackbar
+    private var deletedProduct: Deque<Product> = ArrayDeque()
+    private var deletedProductDeleteType: Deque<DeleteType> = ArrayDeque()
+    private var deletedProductIndex: Deque<Int> = ArrayDeque()
     private var products = mutableListOf<Product>()
     private var filteredProducts = products
     private val productAdapter = ProductAdapter(products, this::onRemoveButtonClicked)
@@ -60,14 +63,12 @@ class ProductsActivity : DaggerAppCompatActivity(), ProductsContract.View {
             start(this@ProductsActivity)
         }
         initViews()
-
     }
 
     override fun onDestroy() {
         super.onDestroy()
         presenter.destroy()
     }
-
 
     /**
      * Initializes the RecyclerView and sets EventListeners.
@@ -87,9 +88,10 @@ class ProductsActivity : DaggerAppCompatActivity(), ProductsContract.View {
         val textView = svSearch.findViewById(id) as TextView
         textView.setTextColor(Color.BLACK)
 
+        initUndoSnackbar()
+
         setItemTouchHelper()
     }
-
 
     /**
      * Called when the mainActivity starts.
@@ -130,27 +132,85 @@ class ProductsActivity : DaggerAppCompatActivity(), ProductsContract.View {
         imgbtnCloseSearch.setOnClickListener { closeSearchBar() }
     }
 
-    private fun saveDeleteProduct(product: Product, deleteType: DeleteType){
-        val i: Int = products.indexOf(product)
-        products.remove(product)
-        productAdapter.notifyItemRemoved(i)
+    /**
+     * Deletes product and shows a toast to undo the deletion.
+     *
+     * @param product The product to delete.
+     * @param deleteType The deleteType: eaten, thrown_away or removed.
+     */
+    private fun saveDeleteProduct(product: Product, deleteType: DeleteType) {
 
-        val snackbar = Snackbar.make(findViewById(android.R.id.content), product.productName + " has been " + deleteType.toString().toLowerCase(), Snackbar.LENGTH_SHORT)
-        snackbar.setAction("UNDO") {}
-        snackbar.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
+        //set deleted product
+        deletedProduct.push(product)
+        deletedProductIndex.push(products.indexOf(product))
+        deletedProductDeleteType.push(deleteType)
+
+        products.remove(product)
+        //It crashes when you use notifyItemRemoved(0). This has been a known issue for quit a while.
+        if (deletedProductIndex.peekFirst() == 0) {
+            productAdapter.notifyDataSetChanged()
+        } else {
+            productAdapter.notifyItemRemoved(deletedProductIndex.first)
+            //productAdapter.notifyDataSetChanged()
+        }
+
+        showUndoSnackbar()
+    }
+
+    /**
+     * Initializes the undo snackbar.
+     *
+     */
+    private fun initUndoSnackbar(){
+        undoSnackbar = Snackbar.make(
+            findViewById(android.R.id.content),
+            "",
+            Snackbar.LENGTH_SHORT)
+
+        undoSnackbar.setAction("UNDO") {}
+        undoSnackbar.setActionTextColor(Color.WHITE)
+        undoSnackbar.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
             override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
                 super.onDismissed(transientBottomBar, event)
 
-                if(event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT){
-                    presenter.deleteProduct(product, deleteType)
+                if(event != Snackbar.Callback.DISMISS_EVENT_ACTION){
+                    presenter.deleteProduct(deletedProduct.removeLast(), deletedProductDeleteType.removeLast())
+                    deletedProductIndex.removeLast()
                 }
                 else{
-                    products.add(index = i, element = product)
-                    productAdapter.notifyItemInserted(i)
+                    products.add(index = deletedProductIndex.first, element = deletedProduct.removeFirst())
+                    productAdapter.notifyItemInserted(deletedProductIndex.removeFirst())
+                    //productAdapter.notifyDataSetChanged()
+
+                    deletedProductDeleteType.removeLast()
                 }
             }
         })
-        snackbar.show()
+    }
+
+    /**
+     * Shows the undo snackbar and sets the text.
+     *
+     */
+    private fun showUndoSnackbar(){
+        if (undoSnackbar.isShown) { undoSnackbar.dismiss() }
+
+//        undoSnackbar = Snackbar.make(
+//            findViewById(android.R.id.content),
+//            deletedProduct.productName + " has been " + deleteType
+//                .toString()
+//                .toLowerCase()
+//                .replace("_", " "),
+//            Snackbar.LENGTH_SHORT
+//        )
+
+        undoSnackbar.setText(deletedProduct.first.productName + " has been " + deletedProductDeleteType.first
+            .toString()
+            .toLowerCase()
+            .replace("_", " ")
+        )
+
+        undoSnackbar.show()
     }
     
      /**
@@ -177,7 +237,7 @@ class ProductsActivity : DaggerAppCompatActivity(), ProductsContract.View {
     
      */
     override fun setItemTouchHelper() {
-        val callback = ProductItemTouchHelper(products,presenter,this)
+        val callback = ProductItemTouchHelper(products,presenter,this, this::saveDeleteProduct)
         itemTouchHelper = ItemTouchHelper(callback)
         itemTouchHelper.attachToRecyclerView(rvProducts)
     }

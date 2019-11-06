@@ -26,7 +26,8 @@ import com.example.vittles.enums.DeleteType
  * @param context Application Context.
  */
 class ProductItemTouchHelper(initialProducts: List<Product>, initialPresenter: ProductsPresenter,
-                             var context: Context
+                             var context: Context,
+                             private val saveDelete: (Product, DeleteType) -> Unit
 ): ItemTouchHelper.Callback() {
 
     private var products: List<Product> = initialProducts
@@ -80,13 +81,14 @@ class ProductItemTouchHelper(initialProducts: List<Product>, initialPresenter: P
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
         val product = products[viewHolder.adapterPosition]
 
+        //Must be var. For some reason it will always be THROWN_AWAY when it's val.
         var deleteType =  if (direction == 8){
             DeleteType.EATEN
         }else{
             DeleteType.THROWN_AWAY
         }
 
-        presenter.deleteProduct(product, deleteType)
+        saveDelete(product, deleteType)
     }
 
 
