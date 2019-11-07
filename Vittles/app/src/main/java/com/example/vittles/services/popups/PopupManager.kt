@@ -6,8 +6,8 @@ import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.View
 import com.example.vittles.R
-import kotlinx.android.synthetic.main.base_popup.view.tvHeader
-import kotlinx.android.synthetic.main.base_popup.view.tvsSubtext
+import kotlinx.android.synthetic.main.popup_base.view.tvHeader
+import kotlinx.android.synthetic.main.popup_base.view.tvsSubtext
 import kotlinx.android.synthetic.main.popup_button_one.view.*
 import kotlinx.android.synthetic.main.popup_button_two.view.*
 import java.util.*
@@ -64,7 +64,7 @@ internal class PopupManager {
      * @param popupBase The PopupBase which contains a header and subText string.
      */
     internal fun showPopup(context: Context, popupBase: IPopupBase){
-        val view = LayoutInflater.from(context).inflate(R.layout.base_popup, null)
+        val view = LayoutInflater.from(context).inflate(R.layout.popup_base, null)
 
         showPopup(context, popupBase, view)
 }
