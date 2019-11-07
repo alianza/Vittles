@@ -16,14 +16,14 @@ interface ProductListContract {
         fun setItemTouchHelper()
         fun setEmptyView()
         fun onAddButtonClick()
+        fun onNoResults()
+        fun onSearchBarOpened()
+        fun onSearchBarClosed()
+        fun onPopulateRecyclerView()
+        fun onShowProducts(products: List<Product>)
+        fun onShowProductDeleteError()
+        fun onSortMenuOpened()
         fun filter(query: String)
-        fun setNoResultsView()
-//        fun openSearchBar()
-//        fun closeSearchBar()
-        fun populateRecyclerView()
-        fun showProducts(products: List<Product>)
-        fun showProductDeleteError()
-
     }
 
     interface Presenter {

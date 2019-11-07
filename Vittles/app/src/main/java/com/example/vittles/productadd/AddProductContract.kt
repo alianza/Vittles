@@ -13,11 +13,11 @@ interface AddProductContract {
         fun initViews()
         fun initDatePicker()
         fun onConfirmButtonClick()
+        fun onResetView()
+        fun onShowAddProductError()
+        fun onShowAddProductSucceed()
+        fun onShowCloseToExpirationPopup(product: Product)
         fun validate(): Boolean
-        fun resetView()
-        fun showAddProductError()
-        fun showAddProductSucceed()
-        fun showCloseToExpirationPopup(product: Product)
     }
 
     interface Presenter {

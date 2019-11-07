@@ -7,8 +7,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.SearchView
 import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -48,7 +50,12 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
     private val productAdapter = ProductAdapter(products, this::onRemoveButtonClicked)
     private val sortMenu = SortMenu(products, productAdapter)
 
-    lateinit var rvProducts: RecyclerView
+    private lateinit var rvProducts: RecyclerView
+    private lateinit var llSearch: LinearLayout
+    private lateinit var tvAddNewVittle: TextView
+    private lateinit var tvNoResults: TextView
+    private lateinit var svSearch: SearchView
+    private lateinit var toolbar: Toolbar
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -63,11 +70,18 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         rvProducts = view.findViewById(R.id.rvProducts)
+        llSearch = view.findViewById(R.id.llSearch)
+        tvAddNewVittle = view.findViewById(R.id.tvAddNewVittle)
+        tvNoResults = view.findViewById(R.id.tvNoResults)
+        svSearch = view.findViewById(R.id.svSearch)
+        toolbar = view.findViewById(R.id.toolbar)
+        onSearchBarClosed()
         initViews()
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        onSearchBarClosed()
         presenter.destroy()
     }
 
@@ -93,10 +107,9 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
         setItemTouchHelper()
 
         if (args.withSearch) {
-            openSearchBar()
+            onSearchBarOpened()
         }
     }
-
 
     /**
      * Called when the mainActivity starts.
@@ -105,7 +118,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
      */
     override fun onResume() {
         super.onResume()
-        populateRecyclerView()
+        onPopulateRecyclerView()
     }
 
     /**
@@ -113,11 +126,11 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
      *
      */
     override fun setListeners() {
-        sortLayout.setOnClickListener { openSortMenu() }
+        sortLayout.setOnClickListener { onSortMenuOpened() }
 
-        ibtnSearch.setOnClickListener { openSearchBar() }
+        ibtnSearch.setOnClickListener { onSearchBarOpened() }
 
-        svSearch.setOnCloseListener { closeSearchBar(); false }
+        svSearch.setOnCloseListener { onSearchBarClosed(); false }
 
         svSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
 
@@ -131,7 +144,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
 
         })
 
-        imgbtnCloseSearch.setOnClickListener { closeSearchBar() }
+        imgbtnCloseSearch.setOnClickListener { onSearchBarClosed() }
     }
 
 
@@ -182,7 +195,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
             AddProductFragment::class.java
         )
         startActivity(addProductActivityIntent)
-//        closeSearchBar()
+        onSearchBarClosed()
     }
 
 
@@ -190,7 +203,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
      * Called after filtering products array to show or hide no results textview
      *
      */
-    override fun setNoResultsView() {
+    override fun onNoResults() {
         if (productAdapter.itemCount == 0) {
             tvNoResults.visibility = View.VISIBLE
         } else {
@@ -203,7 +216,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
      * Populates the RecyclerView with items from the local DataBase.
      *
      */
-    override fun populateRecyclerView() {
+    override fun onPopulateRecyclerView() {
         products.clear()
         presenter.startPresenting()
     }
@@ -213,7 +226,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
      *
      * @param products Products to be added to the product list.
      */
-    override fun showProducts(products: List<Product>) {
+    override fun onShowProducts(products: List<Product>) {
         this.products.addAll(products)
         presenter.loadIndicationColors(this.products)
         productAdapter.products = products
@@ -221,7 +234,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
         filteredProducts = this.products
         sortMenu.sortFilteredList(filteredProducts)
         setEmptyView()
-        setNoResultsView()
+        onNoResults()
     }
 
 
@@ -229,7 +242,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
      * If product could not be deleted, this method will create a feedback Snackbar for the error.
      *
      */
-    override fun showProductDeleteError() {
+    override fun onShowProductDeleteError() {
         Snackbar.make(rvProducts, getString(R.string.product_deleted_failed), Snackbar.LENGTH_LONG)
             .show()
     }
@@ -249,15 +262,14 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
         productAdapter.notifyDataSetChanged()
         sortMenu.sortFilteredList(filteredProducts)
 
-        setNoResultsView()
+        onNoResults()
     }
 
     /**
      * Called when the sort button is clicked.
      *
      */
-    // TODO sorting
-    private fun openSortMenu() {
+    override fun onSortMenuOpened() {
         sortMenu.openMenu(context!!, btnSort, filteredProducts)
     }
 
@@ -265,7 +277,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
      * Method to show the search bar and hide the toolbar
      *
      */
-    fun openSearchBar() {
+    override fun onSearchBarOpened() {
         llSearch.visibility = View.VISIBLE
         svSearch.isIconified = false
 
@@ -276,9 +288,9 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
      * Method to hide the search bar and show the toolbar
      *
      */
-    fun closeSearchBar() {
-        llSearch.visibility = View.GONE
+    override fun onSearchBarClosed() {
         svSearch.setQuery("", true)
+        llSearch.visibility = View.GONE
         toolbar.visibility = View.VISIBLE
     }
 }

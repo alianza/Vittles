@@ -8,13 +8,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import androidx.activity.OnBackPressedCallback
+import androidx.navigation.fragment.NavHostFragment
 import com.example.domain.product.Product
+import com.example.vittles.NavigationGraphDirections
 import com.example.vittles.R
 import com.example.vittles.services.popups.PopupBase
 import com.example.vittles.services.popups.PopupButton
 import com.example.vittles.services.popups.PopupManager
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
+import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.fragment_add_product.*
 import org.joda.time.DateTime
 import javax.inject.Inject
@@ -59,18 +63,6 @@ class AddProductFragment : DaggerFragment(), AddProductContract.View {
         initViews()
     }
 
-
-//    /**
-//     * Sets the content, assigns the dao and calls the initViews method.
-//     *
-//     */
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//        presenter.start(this@AddProductFragment)
-//        setContentView(R.layout.fragment_add_product)
-//        initViews()
-//    }
-
     override fun onDestroy() {
         super.onDestroy()
         presenter.destroy()
@@ -84,6 +76,14 @@ class AddProductFragment : DaggerFragment(), AddProductContract.View {
     override fun initViews() {
         initDatePicker()
         btnConfirm.setOnClickListener { onConfirmButtonClick() }
+
+        // Will make it possible to go back to the previous screen with the phone's back button
+        val onBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                NavHostFragment.findNavController(fragmentHost).navigate(NavigationGraphDirections.actionGlobalProductsFragment(false))
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
     }
 
     /**
@@ -153,7 +153,7 @@ class AddProductFragment : DaggerFragment(), AddProductContract.View {
      * If product has been added, this method will reset the text fields.
      *
      */
-    override fun resetView() {
+    override fun onResetView() {
         etProductName.setText("")
         etExpirationDate.setText("")
     }
@@ -162,7 +162,7 @@ class AddProductFragment : DaggerFragment(), AddProductContract.View {
      * If product could not be added, this method will create a feedback snack bar for the error.
      *
      */
-    override fun showAddProductError() {
+    override fun onShowAddProductError() {
         Snackbar.make(layout, getString(R.string.product_failed), Snackbar.LENGTH_LONG)
             .show()
     }
@@ -171,7 +171,7 @@ class AddProductFragment : DaggerFragment(), AddProductContract.View {
      * If product is added successfully, this method will show a toast displaying a success state.
      *
      */
-    override fun showAddProductSucceed() {
+    override fun onShowAddProductSucceed() {
         Snackbar.make(layout, getString(R.string.product_added), Snackbar.LENGTH_SHORT).show()
     }
 
@@ -179,7 +179,7 @@ class AddProductFragment : DaggerFragment(), AddProductContract.View {
      * Shows the CloseToExpiring popup.
      *
      */
-    override fun showCloseToExpirationPopup(product: Product) {
+    override fun onShowCloseToExpirationPopup(product: Product) {
         PopupManager.instance.showPopup(
             context!!,
             PopupBase(

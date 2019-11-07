@@ -18,6 +18,9 @@ import javax.inject.Inject
  * Binds app-specific data to views that are displayed in the RecyclerView.
  *
  * @author Arjen Simons
+ * @author Jeroen Flietstra
+ * @author Fethi Tewelde
+ * @author Sarah Lange
  *
  * @property products The list of products that should be displayed in the RecyclerView.
  */

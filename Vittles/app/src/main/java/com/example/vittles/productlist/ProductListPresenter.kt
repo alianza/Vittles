@@ -33,7 +33,7 @@ class ProductListPresenter @Inject internal constructor(
         disposables.add(
             getProducts().subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ view?.showProducts(it) }, { view?.setNoResultsView() })
+                .subscribe({ view?.onShowProducts(it) }, { view?.onNoResults() })
         )
     }
 
@@ -62,7 +62,7 @@ class ProductListPresenter @Inject internal constructor(
         disposables.add(deleteProduct.invoke(product)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ view?.populateRecyclerView() }, { view?.showProductDeleteError() })
+            .subscribe({ view?.onPopulateRecyclerView() }, { view?.onShowProductDeleteError() })
         )
     }
 }
