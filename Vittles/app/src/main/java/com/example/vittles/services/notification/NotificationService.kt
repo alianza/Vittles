@@ -15,7 +15,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.example.domain.notification.Notification
 import com.example.vittles.R
-import com.example.vittles.productlist.ProductsFragment
+import com.example.vittles.productlist.ProductListFragment
 
 /**
  * Creates a notification Channel and Notifications
@@ -77,7 +77,7 @@ object NotificationService {
                 setAutoCancel(notification.autoCancel)
 
                 //Open on Click
-                val intent = Intent(context, ProductsFragment::class.java)
+                val intent = Intent(context, ProductListFragment::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 val pendingIntent = PendingIntent.getActivity(context, 0, intent, 0 )
                 setContentIntent(pendingIntent)
@@ -96,7 +96,7 @@ object NotificationService {
                 setAutoCancel(notification.autoCancel) // 8
 
                 //open on click
-                val intent = Intent(context, ProductsFragment::class.java)
+                val intent = Intent(context, ProductListFragment::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 val pendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
                 setContentIntent(pendingIntent)

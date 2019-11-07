@@ -19,11 +19,11 @@ import javax.inject.Inject
  *
  * @property getProducts The GetProducts use case from the domain module
  */
-class ProductsPresenter @Inject internal constructor(
+class ProductListPresenter @Inject internal constructor(
     private val getProducts: GetProducts,
     private val deleteProduct: DeleteProduct
 ) :
-    BasePresenter<ProductsFragment>(), ProductsContract.Presenter {
+    BasePresenter<ProductListFragment>(), ProductsContract.Presenter {
 
     /**
      * Loads the products.

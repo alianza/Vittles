@@ -34,10 +34,10 @@ import javax.inject.Inject
  * @author Fethi Tewelde
  * @author Marc van Spronsen
  */
-class ProductsFragment : DaggerFragment(), ProductsContract.View {
+class ProductListFragment : DaggerFragment(), ProductsContract.View {
 
     @Inject
-    lateinit var presenter: ProductsPresenter
+    lateinit var presenter: ProductListPresenter
 
     private lateinit var itemTouchHelper: ItemTouchHelper
     private var products = mutableListOf<Product>()
@@ -52,7 +52,7 @@ class ProductsFragment : DaggerFragment(), ProductsContract.View {
         savedInstanceState: Bundle?
     ): View? {
         with(presenter) {
-            start(this@ProductsFragment)
+            start(this@ProductListFragment)
         }
 
         // Inflate the layout for this fragment
@@ -67,7 +67,7 @@ class ProductsFragment : DaggerFragment(), ProductsContract.View {
 
 
 //    /**
-//     * Called when the ProductsFragment is created.
+//     * Called when the ProductListFragment is created.
 //     *
 //     */
 //    override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,7 +76,7 @@ class ProductsFragment : DaggerFragment(), ProductsContract.View {
 //        setContentView(R.layout.activity_main)
 //        setSupportActionBar(toolbar)
 //        with(presenter) {
-//            start(this@ProductsFragment)
+//            start(this@ProductListFragment)
 //        }
 //        initViews()
 //

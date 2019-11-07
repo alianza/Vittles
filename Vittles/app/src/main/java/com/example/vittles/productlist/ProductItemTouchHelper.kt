@@ -1,6 +1,5 @@
 package com.example.vittles.productlist
 
-import android.content.ClipData
 import android.content.Context
 import android.graphics.drawable.ColorDrawable
 import android.view.View
@@ -10,7 +9,6 @@ import com.example.vittles.R
 import kotlinx.android.synthetic.main.item_product.view.*
 import android.graphics.*
 import android.graphics.drawable.Drawable
-import android.util.Log
 import androidx.core.content.ContextCompat
 import com.example.domain.product.Product
 import com.example.vittles.enums.DeleteType
@@ -25,12 +23,12 @@ import com.example.vittles.enums.DeleteType
  * @param initialPresenter The presenter what presents the product.
  * @param context Application Context.
  */
-class ProductItemTouchHelper(initialProducts: List<Product>, initialPresenter: ProductsPresenter,
+class ProductItemTouchHelper(initialProducts: List<Product>, initialPresenter: ProductListPresenter,
                              var context: Context
 ): ItemTouchHelper.Callback() {
 
     private var products: List<Product> = initialProducts
-    private var presenter: ProductsPresenter = initialPresenter
+    private var presenter: ProductListPresenter = initialPresenter
 
     /**
      * Enum to determain where the swipe icon should be located.

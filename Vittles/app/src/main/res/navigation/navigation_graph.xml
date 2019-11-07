@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/productsFragment"
-        android:name="com.example.vittles.productlist.ProductsFragment"
+        android:name="com.example.vittles.productlist.ProductListFragment"
         android:label="@string/view_title"
         tools:layout="@layout/fragment_productlist">
         <action
