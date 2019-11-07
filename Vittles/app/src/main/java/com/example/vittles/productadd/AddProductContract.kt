@@ -1,6 +1,7 @@
 package com.example.vittles.productadd
 
 import com.example.domain.product.Product
+import com.example.vittles.scanning.ScanResult
 
 /**
  * MVP Contract for adding products.
@@ -13,6 +14,8 @@ interface AddProductContract {
         fun initViews()
         fun initDatePicker()
         fun onConfirmButtonClick()
+        fun onScanButtonClick()
+        fun onScanResult(scanResult: ScanResult)
         fun onResetView()
         fun onShowAddProductError()
         fun onShowAddProductSucceed()

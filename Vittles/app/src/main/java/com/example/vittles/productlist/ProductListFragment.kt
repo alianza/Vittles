@@ -164,7 +164,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
 
     /**
      * Attaches the ItemTouchHelper to the RecyclerView.
-
+     *
      */
     override fun setItemTouchHelper() {
         val callback = ProductItemTouchHelper(products, presenter, context!!)

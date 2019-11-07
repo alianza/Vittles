@@ -1,8 +1,6 @@
 package com.example.vittles.scanning
 
-import android.content.Intent
 import android.os.Bundle
-import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.TextureView
 import android.view.View
@@ -10,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.camera.core.CameraX
+import androidx.navigation.fragment.NavHostFragment
 import com.example.vittles.R
 import com.example.vittles.scanning.ScannerPresenter.Companion.REQUEST_CODE_PERMISSIONS
 import com.example.vittles.scanning.ScannerPresenter.Companion.REQUIRED_PERMISSIONS
@@ -18,19 +17,11 @@ import com.example.vittles.scanning.productaddmanual.ProductNameEditView
 import com.example.vittles.services.scanner.DateFormatterService
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
 import dagger.android.support.DaggerFragment
-import kotlinx.android.parcel.Parcelize
+import kotlinx.android.synthetic.main.content_main.*
 import org.joda.time.DateTime
 import javax.inject.Inject
 
-const val SCAN_RESULT = "SCAN_RESULT"
-
-class ScannerFragment @Inject internal constructor(): DaggerFragment(), ScannerContract.View {
-
-    @Parcelize
-    data class ScanResult (
-        val productName: String?,
-        val expirationDate: DateTime?
-    ) : Parcelable
+class ScannerFragment @Inject internal constructor() : DaggerFragment(), ScannerContract.View {
 
     @Inject
     lateinit var presenter: ScannerPresenter
@@ -98,15 +89,10 @@ class ScannerFragment @Inject internal constructor(): DaggerFragment(), ScannerC
      *
      */
     override fun onAddVittleButtonClick() {
-        if (tvBarcode.text.toString().isNotBlank() && tvBarcode.text.toString() != "PRODUCT NAME") {
-            val scanResult = ScanResult(tvBarcode.text.toString(), expirationDate)
-            val resultIntent = Intent()
-            resultIntent.putExtra(SCAN_RESULT, scanResult)
-//            setResult(Activity.RESULT_OK, resultIntent)
-            CameraX.unbindAll()
-        } else {
-            CameraX.unbindAll()
-        }
+        val scanResult = ScanResult(tvBarcode.text.toString(), expirationDate)
+        NavHostFragment.findNavController(fragmentHost)
+            .navigate(ScannerFragmentDirections.actionScannerFragmentToAddProductFragment(scanResult))
+        CameraX.unbindAll()
     }
 
     /**
@@ -117,7 +103,12 @@ class ScannerFragment @Inject internal constructor(): DaggerFragment(), ScannerC
     override fun onBarcodeScanned(barcodes: List<FirebaseVisionBarcode>) {
         if (barcodes.isNotEmpty()) {
             tvBarcode.text = barcodes[0].rawValue
-            ivCheckboxBarcode.setImageDrawable(getDrawable(context!!, R.drawable.ic_circle_darkened_filled))
+            ivCheckboxBarcode.setImageDrawable(
+                getDrawable(
+                    context!!,
+                    R.drawable.ic_circle_darkened_filled
+                )
+            )
         }
         PreviewAnalyzer.hasBarCode = true
     }
@@ -128,9 +119,16 @@ class ScannerFragment @Inject internal constructor(): DaggerFragment(), ScannerC
      * @param text The text that has been retrieved from the camera
      */
     override fun onTextScanned(text: String) {
-        tvExpirationDate.text = DateFormatterService.numberFormat.print(DateFormatterService.expirationDateFormatter(text))
+        tvExpirationDate.text = DateFormatterService.numberFormat.print(
+            DateFormatterService.expirationDateFormatter(text)
+        )
         expirationDate = DateFormatterService.expirationDateFormatter(text)!!
-        ivCheckboxExpirationDate.setImageDrawable(getDrawable(context!!, R.drawable.ic_circle_darkened_filled))
+        ivCheckboxExpirationDate.setImageDrawable(
+            getDrawable(
+                context!!,
+                R.drawable.ic_circle_darkened_filled
+            )
+        )
         PreviewAnalyzer.hasExpirationDate = true
     }
 
@@ -139,11 +137,11 @@ class ScannerFragment @Inject internal constructor(): DaggerFragment(), ScannerC
      *
      */
     override fun onBarcodeNotFound() {
-            Toast.makeText(
-                context!!,
-                "Something went wrong!",
-                Toast.LENGTH_SHORT
-            ).show()
+        Toast.makeText(
+            context!!,
+            "Something went wrong!",
+            Toast.LENGTH_SHORT
+        ).show()
     }
 
     /**
@@ -199,5 +197,6 @@ class ScannerFragment @Inject internal constructor(): DaggerFragment(), ScannerC
     override fun onEditExpirationButtonClick() {
         val dialog = DateEditView()
         dialog.openDialog(context!!, tvExpirationDate)
+        requireActivity().onBackPressed()
     }
 }

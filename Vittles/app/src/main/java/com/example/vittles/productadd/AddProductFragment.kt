@@ -1,8 +1,6 @@
 package com.example.vittles.productadd
 
-import android.app.Activity
 import android.app.DatePickerDialog
-import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.LayoutInflater
@@ -12,11 +10,11 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.activity.OnBackPressedCallback
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.navArgs
 import com.example.domain.product.Product
 import com.example.vittles.NavigationGraphDirections
 import com.example.vittles.R
-import com.example.vittles.scanning.SCAN_RESULT
-import com.example.vittles.scanning.ScannerFragment
+import com.example.vittles.scanning.ScanResult
 import com.example.vittles.services.popups.PopupBase
 import com.example.vittles.services.popups.PopupButton
 import com.example.vittles.services.popups.PopupManager
@@ -29,8 +27,6 @@ import org.joda.time.format.DateTimeFormat
 import org.joda.time.format.DateTimeFormatter
 import javax.inject.Inject
 
-const val SCAN_PRODUCT_REQUEST_CODE = 100
-
 /**
  * Activity class for the Add Product component. This components makes it possible to
  * create a product manually and insert it into the local database.
@@ -42,12 +38,15 @@ class AddProductFragment : DaggerFragment(), AddProductContract.View {
     @Inject
     lateinit var presenter: AddProductPresenter
 
+    private val args: AddProductFragmentArgs by navArgs()
+
     private var expirationDate = DateTime()
 
     private val formatter: DateTimeFormatter = DateTimeFormat.forPattern("dd/MM/yyyy")
 
-    lateinit var etExpirationDate: EditText
-    lateinit var btnConfirm: Button
+    private lateinit var etProductName: EditText
+    private lateinit var etExpirationDate: EditText
+    private lateinit var btnConfirm: Button
 
     companion object {
         /**
@@ -68,6 +67,7 @@ class AddProductFragment : DaggerFragment(), AddProductContract.View {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        etProductName = view.findViewById(R.id.etProductName)
         etExpirationDate = view.findViewById(R.id.etExpirationDate)
         btnConfirm = view.findViewById(R.id.btnConfirm)
         initViews()
@@ -95,38 +95,11 @@ class AddProductFragment : DaggerFragment(), AddProductContract.View {
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
-    }
 
-    /**
-     * Retrieve the result from the activity.
-     *
-     */
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//        if (resultCode == Activity.RESULT_OK) {
-//            when (requestCode) {
-//                SCAN_PRODUCT_REQUEST_CODE -> {
-//                    val scanResult =
-//                        data!!.getParcelableExtra<ScannerFragment.ScanResult>(SCAN_RESULT)
-//                    etProductName.setText(scanResult?.productName)
-//                    etExpirationDate.setText(formatter.print(scanResult?.expirationDate))
-//                    expirationDate = scanResult?.expirationDate!!
-//                }
-//            }
-//        }
-    }
-
-    /**
-     * Temporary button action.
-     *
-     */
-    private fun onScanButtonClick() {
-//        val scannerActivity = Intent(
-//            this,
-//            ScannerFragment::class.java
-//        )
-//        startActivityForResult(scannerActivity, SCAN_PRODUCT_REQUEST_CODE)
-        NavHostFragment.findNavController(fragmentHost).navigate(AddProductFragmentDirections.actionAddProductFragmentToScannerFragment())
+        val scanResult = args.scanResult
+        if (scanResult != null) {
+            onScanResult(scanResult)
+        }
     }
 
     /**
@@ -178,6 +151,24 @@ class AddProductFragment : DaggerFragment(), AddProductContract.View {
             presenter.addProduct(product)
 
         }
+    }
+
+    /**
+     * If a scan result is returned, set the values in the input fields.
+     *
+     * @param scanResult The result from the ScannerActivity.
+     */
+    override fun onScanResult(scanResult: ScanResult) {
+        etProductName.setText(scanResult.productName)
+        etExpirationDate.setText(formatter.print(scanResult.expirationDate))
+    }
+
+    /**
+     * Temporary button action.
+     *
+     */
+    override fun onScanButtonClick() {
+        NavHostFragment.findNavController(fragmentHost).navigate(AddProductFragmentDirections.actionAddProductFragmentToScannerFragment())
     }
 
     /**
