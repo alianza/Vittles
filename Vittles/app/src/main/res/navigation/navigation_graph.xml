@@ -10,6 +10,10 @@
         android:name="com.example.vittles.productlist.ProductListFragment"
         android:label="@string/view_title"
         tools:layout="@layout/fragment_productlist">
+        <argument
+            android:name="withSearch"
+            app:argType="boolean"
+            android:defaultValue="false" />
         <action
             android:id="@+id/action_productsFragment_to_addProductFragment"
             app:destination="@id/addProductFragment" />
@@ -28,7 +32,7 @@
             android:id="@+id/action_reportsFragment_to_addProductFragment"
             app:destination="@id/addProductFragment" />
     </fragment>
-    <action android:id="@+id/action_global_productsFragment" app:destination="@id/productsFragment" />
+    <action android:id="@+id/action_global_productsFragment" app:destination="@id/productsFragment"/>
     <action android:id="@+id/action_global_reportsFragment" app:destination="@id/reportsFragment" />
 
 </navigation>

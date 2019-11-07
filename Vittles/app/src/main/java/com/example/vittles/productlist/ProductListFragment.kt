@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
 import android.widget.TextView
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -39,6 +40,8 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
     @Inject
     lateinit var presenter: ProductListPresenter
 
+    private val args: ProductListFragmentArgs by navArgs()
+
     private lateinit var itemTouchHelper: ItemTouchHelper
     private var products = mutableListOf<Product>()
     private var filteredProducts = products
@@ -54,8 +57,6 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
         with(presenter) {
             start(this@ProductListFragment)
         }
-
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_productlist, container, false)
     }
 
@@ -64,23 +65,6 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
         rvProducts = view.findViewById(R.id.rvProducts)
         initViews()
     }
-
-
-//    /**
-//     * Called when the ProductListFragment is created.
-//     *
-//     */
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        setTheme(R.style.AppTheme_NoActionBar)
-//        super.onCreate(savedInstanceState)
-//        setContentView(R.layout.activity_main)
-//        setSupportActionBar(toolbar)
-//        with(presenter) {
-//            start(this@ProductListFragment)
-//        }
-//        initViews()
-//
-//    }
 
     override fun onDestroy() {
         super.onDestroy()
@@ -94,7 +78,6 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
      */
     override fun initViews() {
         setListeners()
-//        supportActionBar?.title = getString(R.string.view_title)
 
         rvProducts.layoutManager =
             LinearLayoutManager(context, RecyclerView.VERTICAL, false)
@@ -108,6 +91,10 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
         setListeners()
 
         setItemTouchHelper()
+
+        if (args.withSearch) {
+            openSearchBar()
+        }
     }
 
 
@@ -274,7 +261,6 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
         sortMenu.openMenu(context!!, btnSort, filteredProducts)
     }
 
-    // TODO searching
     /**
      * Method to show the search bar and hide the toolbar
      *

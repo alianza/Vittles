@@ -9,7 +9,7 @@ import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
-import com.example.vittles.productlist.ProductsFragmentDirections
+import com.example.vittles.productlist.ProductListFragmentDirections
 import com.example.vittles.reports.ReportsFragmentDirections
 import com.google.android.material.bottomappbar.BottomAppBar
 import kotlinx.android.synthetic.main.content_main.*
@@ -81,7 +81,13 @@ class MainActivity : AppCompatActivity() {
         navView.menu.getItem(3).isEnabled = false
 
         navView.menu.getItem(0).setOnMenuItemClickListener { onNavigateHomeButtonClick() }
+        navView.menu.getItem(1).setOnMenuItemClickListener { onNavigateSearchButtonClick() }
         navView.menu.getItem(4).setOnMenuItemClickListener { onNavigateReportsButtonClick() }
+    }
+
+    private fun onNavigateSearchButtonClick(): Boolean {
+            findNavController(fragmentHost).navigate(NavigationGraphDirections.actionGlobalProductsFragment(true))
+            return true
     }
 
     private fun onNavigateHomeButtonClick(): Boolean {
@@ -101,7 +107,7 @@ class MainActivity : AppCompatActivity() {
     fun onAddButtonClick() {
         var action: NavDirections? = null
         when (navController.currentDestination?.id) {
-            R.id.productsFragment -> action = ProductsFragmentDirections.actionProductsFragmentToAddProductFragment()
+            R.id.productsFragment -> action = ProductListFragmentDirections.actionProductsFragmentToAddProductFragment()
             R.id.reportsFragment -> action = ReportsFragmentDirections.actionReportsFragmentToAddProductFragment()
         }
         if (action != null) {
