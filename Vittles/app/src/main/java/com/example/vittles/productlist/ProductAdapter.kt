@@ -77,21 +77,20 @@ class ProductAdapter @Inject constructor(initialProducts: List<Product>, private
             if (daysLeft.toInt() > context.getString(R.string.maxDaysRemaining).toInt()) {
                 daysLeft = context.getString(R.string.maxDaysRemaining) + "+"
             }
-
+            // LayoutParams for setting margins programmatically
+            val lp = ConstraintLayout.LayoutParams(
+                ConstraintLayout.LayoutParams.MATCH_PARENT,
+                ConstraintLayout.LayoutParams.WRAP_CONTENT
+            )
+            // Last product in list, remove decorator and add extra bottom-margin
             if(products[products.lastIndex] == product) {
                 itemView.borderDecorator.visibility = View.INVISIBLE
-                /*
-                TODO Add margin to last record
-                 */
-//                val lp = ConstraintLayout.LayoutParams(
-//                    ConstraintLayout.LayoutParams.MATCH_PARENT,
-//                    ConstraintLayout.LayoutParams.WRAP_CONTENT
-//                )
-//                lp.setMargins(0, 0, 0, 175)
-//                itemView.layoutParams = lp
+                lp.setMargins(0, 0, 0, 175)
             } else {
                 itemView.borderDecorator.visibility = View.VISIBLE
+                lp.setMargins(0, 0, 0, 0)
             }
+            itemView.layoutParams = lp
 
             itemView.tvName.text = product.productName
             itemView.tvDate.text = context.resources.getString(
