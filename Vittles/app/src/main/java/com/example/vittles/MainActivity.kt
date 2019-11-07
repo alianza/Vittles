@@ -161,10 +161,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-//    override fun onBackPressed() {
-//        val fragment = supportFragmentManager.findFragmentById(R.id.fragmentHost)
-//        (fragment as? OnBackPressed)?.onBackPressed()?.not()?.let {
-//            super.onBackPressed()
-//        }
-//    }
+    override fun onBackPressed() {
+        when (navController.currentDestination?.id) {
+            R.id.addProductFragment -> navController.navigate(NavigationGraphDirections.actionGlobalProductListFragment())
+            else -> navController.navigateUp()
+        }
+    }
 }

@@ -37,7 +37,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
     private lateinit var ivCheckboxBarcode: ImageView
     private lateinit var ivCheckboxExpirationDate: ImageView
 
-    private lateinit var expirationDate: DateTime
+    private var expirationDate: DateTime? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -89,10 +89,18 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
      *
      */
     override fun onAddVittleButtonClick() {
-        val scanResult = ScanResult(tvBarcode.text.toString(), expirationDate)
-        NavHostFragment.findNavController(fragmentHost)
-            .navigate(ScannerFragmentDirections.actionScannerFragmentToAddProductFragment(scanResult))
-        CameraX.unbindAll()
+        if (expirationDate != null && !tvBarcode.text.isNullOrBlank()){
+            val scanResult = ScanResult(tvBarcode.text.toString(), expirationDate)
+            NavHostFragment.findNavController(fragmentHost)
+                .navigate(ScannerFragmentDirections.actionScannerFragmentToAddProductFragment(scanResult))
+            CameraX.unbindAll()
+        } else {
+            Toast.makeText(
+                context!!,
+                "Scan or fill in the necessary fields",
+                Toast.LENGTH_LONG
+            ).show()
+        }
     }
 
     /**

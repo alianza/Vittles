@@ -35,6 +35,7 @@ import javax.inject.Inject
  * @author Jan-Willem van Bremen
  */
 class AddProductFragment : DaggerFragment(), AddProductContract.View {
+
     @Inject
     lateinit var presenter: AddProductPresenter
 
