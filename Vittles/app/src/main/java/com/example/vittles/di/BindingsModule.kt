@@ -3,9 +3,7 @@ package com.example.vittles.di
 import com.example.vittles.reports.ReportsFragment
 import com.example.vittles.productadd.AddProductFragment
 import com.example.vittles.productlist.ProductListFragment
-import com.example.vittles.scanning.ScannerActivity
-import com.example.vittles.productadd.AddProductActivity
-import com.example.vittles.productlist.ProductsActivity
+import com.example.vittles.scanning.ScannerFragment
 import com.example.vittles.services.notification.NotificationScheduleService
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -19,7 +17,7 @@ abstract class BindingsModule {
     abstract fun bindAddProductFragment(): AddProductFragment
 
     @ContributesAndroidInjector
-    abstract fun bindCameraActivity(): ScannerActivity
+    abstract fun bindScannerFragment(): ScannerFragment
 
     @ContributesAndroidInjector
     abstract fun bindNotificationScheduleService(): NotificationScheduleService

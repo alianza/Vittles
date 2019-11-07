@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity() {
         // Initialize navigation visibility
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.productsFragment -> showBottomNavigationBar(
+                R.id.productListFragment -> showBottomNavigationBar(
                     barVisibility = true,
                     fabVisibility = true
                 )
@@ -113,7 +113,7 @@ class MainActivity : AppCompatActivity() {
      * @return Boolean value that represents if the navigation has succeeded.
      */
     private fun onNavigateSearchButtonClick(): Boolean {
-            findNavController(fragmentHost).navigate(NavigationGraphDirections.actionGlobalProductsFragment(true))
+            findNavController(fragmentHost).navigate(NavigationGraphDirections.actionGlobalProductListFragment(true))
             return true
     }
 
@@ -123,8 +123,8 @@ class MainActivity : AppCompatActivity() {
      * @return Boolean value that represents if the navigation has succeeded.
      */
     private fun onNavigateHomeButtonClick(): Boolean {
-        return if (navController.currentDestination?.id != R.id.productsFragment) {
-            findNavController(fragmentHost).navigate(NavigationGraphDirections.actionGlobalProductsFragment(false))
+        return if (navController.currentDestination?.id != R.id.productListFragment) {
+            findNavController(fragmentHost).navigate(NavigationGraphDirections.actionGlobalProductListFragment(false))
             true
         } else {
             false
@@ -139,7 +139,7 @@ class MainActivity : AppCompatActivity() {
     private fun onAddButtonClick() {
         var action: NavDirections? = null
         when (navController.currentDestination?.id) {
-            R.id.productsFragment -> action = ProductListFragmentDirections.actionProductsFragmentToAddProductFragment()
+            R.id.productListFragment -> action = ProductListFragmentDirections.actionProductsFragmentToAddProductFragment()
             R.id.reportsFragment -> action = ReportsFragmentDirections.actionReportsFragmentToAddProductFragment()
         }
         if (action != null) {

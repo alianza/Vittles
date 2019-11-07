@@ -3,15 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.vittles.MainActivity">
     <item
-        android:id="@+id/productsFragment"
+        android:id="@+id/productListFragment"
         android:orderInCategory="1"
-        android:title="Home"
+        android:title="@string/menu_home"
         app:showAsAction="always"
-        android:icon="@drawable/ic_home_black_24dp"/>
+        android:icon="@drawable/ic_home_black_24dp"
+        tools:ignore="AlwaysShowAction" />
     <item
         android:id="@+id/search"
         android:orderInCategory="2"
-        android:title="Search"
+        android:title="@string/menu_search"
         app:showAsAction="always"
         android:icon="@drawable/ic_magnifying_glass"/>
     <item
@@ -27,13 +28,13 @@
     <item
         android:id="@+id/reportsFragment"
         android:orderInCategory="5"
-        android:title="Reports"
+        android:title="@string/menu_reports"
         app:showAsAction="always"
         android:icon="@drawable/ic_show_chart_black_24dp"/>
     <item
         android:id="@+id/settings"
         android:orderInCategory="6"
-        android:title="Settings"
+        android:title="@string/menu_settings"
         app:showAsAction="always"
         android:icon="@drawable/ic_settings_black_24dp"/>
 </menu>

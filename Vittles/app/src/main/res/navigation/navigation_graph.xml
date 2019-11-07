@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation_graph"
-    app:startDestination="@id/productsFragment">
+    app:startDestination="@id/productListFragment">
 
     <fragment
-        android:id="@+id/productsFragment"
+        android:id="@+id/productListFragment"
         android:name="com.example.vittles.productlist.ProductListFragment"
         android:label="@string/view_title"
         tools:layout="@layout/fragment_productlist">
@@ -22,7 +22,11 @@
         android:id="@+id/addProductFragment"
         android:name="com.example.vittles.productadd.AddProductFragment"
         android:label="@string/add_product_title"
-        tools:layout="@layout/fragment_add_product" />
+        tools:layout="@layout/fragment_add_product" >
+        <action
+            android:id="@+id/action_addProductFragment_to_scannerFragment"
+            app:destination="@id/scannerFragment" />
+    </fragment>
     <fragment
         android:id="@+id/reportsFragment"
         android:name="com.example.vittles.reports.ReportsFragment"
@@ -32,7 +36,12 @@
             android:id="@+id/action_reportsFragment_to_addProductFragment"
             app:destination="@id/addProductFragment" />
     </fragment>
-    <action android:id="@+id/action_global_productsFragment" app:destination="@id/productsFragment"/>
+    <action android:id="@+id/action_global_productListFragment" app:destination="@id/productListFragment"/>
     <action android:id="@+id/action_global_reportsFragment" app:destination="@id/reportsFragment" />
+    <fragment
+        android:id="@+id/scannerFragment"
+        android:name="com.example.vittles.scanning.ScannerFragment"
+        android:label="fragment_camera"
+        tools:layout="@layout/fragment_camera" />
 
 </navigation>

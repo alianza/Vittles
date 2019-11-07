@@ -9,19 +9,9 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.domain.barcode.GetProductByBarcode
 import com.example.vittles.mvp.BasePresenter
-import kotlinx.android.synthetic.main.activity_camera.*
+import kotlinx.android.synthetic.main.fragment_camera.*
 import java.util.concurrent.Executors
 import javax.inject.Inject
-
-/*
-This is an arbitrary number we are using to keep track of the permission
-request. Where an app has multiple context for requesting permission,
-this can help differentiate the different contexts.
- */
-const val REQUEST_CODE_PERMISSIONS = 10
-
-// This is an array of all the permission specified in the manifest.
-private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
 
 /**
  * The presenter for the scanning activity.
@@ -29,7 +19,7 @@ private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
  * @property getProductByBarcode The GetProductByBarcode use case from the domain module.
  */
 class ScannerPresenter @Inject internal constructor(private val getProductByBarcode: GetProductByBarcode) :
-    BasePresenter<ScannerActivity>(), ScannerContract.Presenter {
+    BasePresenter<ScannerFragment>(), ScannerContract.Presenter {
 
     // CameraX preview element
     private lateinit var preview: Preview
@@ -94,10 +84,10 @@ class ScannerPresenter @Inject internal constructor(private val getProductByBarc
         // Build the image analysis use case and instantiate our analyzer
         return ImageAnalysis(analyzerConfig).apply {
             setAnalyzer(executor, PreviewAnalyzer(
-                onBarcodeFailure = {view?.onBarcodeNotFound()},
-                onBarcodeSuccess = {view?.onBarcodeScanned(it)},
-                onOcrFailure = {view?.onTextNotFound()},
-                onOcrSuccess = {view?.onTextScanned(it)}
+                onBarcodeFailure = { view?.onBarcodeNotFound() },
+                onBarcodeSuccess = { view?.onBarcodeScanned(it) },
+                onOcrFailure = { view?.onTextNotFound() },
+                onOcrSuccess = { view?.onTextScanned(it) }
             ))
         }
     }
@@ -112,9 +102,7 @@ class ScannerPresenter @Inject internal constructor(private val getProductByBarc
             view?.textureView?.post { startCamera() }
         } else {
             view?.let {
-                ActivityCompat.requestPermissions(
-                    it, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS
-                )
+                view?.onRequestPermissionsFromFragment()
             }
         }
     }
@@ -123,10 +111,22 @@ class ScannerPresenter @Inject internal constructor(private val getProductByBarc
      * Check if all permission specified in the manifest have been granted.
      */
     override fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
-        view?.baseContext?.let { it1 ->
+        view?.context.let { it1 ->
             ContextCompat.checkSelfPermission(
-                it1, it
+                it1!!, it
             )
         } == PackageManager.PERMISSION_GRANTED
+    }
+
+    companion object {
+        /*
+        This is an arbitrary number we are using to keep track of the permission
+        request. Where an app has multiple context for requesting permission,
+        this can help differentiate the different contexts.
+        */
+        const val REQUEST_CODE_PERMISSIONS = 10
+
+        // This is an array of all the permission specified in the manifest.
+        val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
     }
 }

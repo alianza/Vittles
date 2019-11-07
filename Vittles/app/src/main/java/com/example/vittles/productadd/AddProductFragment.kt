@@ -16,7 +16,7 @@ import com.example.domain.product.Product
 import com.example.vittles.NavigationGraphDirections
 import com.example.vittles.R
 import com.example.vittles.scanning.SCAN_RESULT
-import com.example.vittles.scanning.ScannerActivity
+import com.example.vittles.scanning.ScannerFragment
 import com.example.vittles.services.popups.PopupBase
 import com.example.vittles.services.popups.PopupButton
 import com.example.vittles.services.popups.PopupManager
@@ -87,6 +87,14 @@ class AddProductFragment : DaggerFragment(), AddProductContract.View {
         initDatePicker()
         btnConfirm.setOnClickListener { onConfirmButtonClick() }
         btnScan.setOnClickListener { onScanButtonClick() }
+
+        // Will make it possible to go back to the previous screen with the phone's back button
+        val onBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                NavHostFragment.findNavController(fragmentHost).navigate(NavigationGraphDirections.actionGlobalProductListFragment(false))
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
     }
 
     /**
@@ -94,18 +102,18 @@ class AddProductFragment : DaggerFragment(), AddProductContract.View {
      *
      */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK) {
-            when (requestCode) {
-                SCAN_PRODUCT_REQUEST_CODE -> {
-                    val scanResult =
-                        data!!.getParcelableExtra<ScannerActivity.ScanResult>(SCAN_RESULT)
-                    etProductName.setText(scanResult?.productName)
-                    etExpirationDate.setText(formatter.print(scanResult?.expirationDate))
-                    expirationDate = scanResult?.expirationDate!!
-                }
-            }
-        }
+//        super.onActivityResult(requestCode, resultCode, data)
+//        if (resultCode == Activity.RESULT_OK) {
+//            when (requestCode) {
+//                SCAN_PRODUCT_REQUEST_CODE -> {
+//                    val scanResult =
+//                        data!!.getParcelableExtra<ScannerFragment.ScanResult>(SCAN_RESULT)
+//                    etProductName.setText(scanResult?.productName)
+//                    etExpirationDate.setText(formatter.print(scanResult?.expirationDate))
+//                    expirationDate = scanResult?.expirationDate!!
+//                }
+//            }
+//        }
     }
 
     /**
@@ -113,21 +121,12 @@ class AddProductFragment : DaggerFragment(), AddProductContract.View {
      *
      */
     private fun onScanButtonClick() {
-        val scannerActivity = Intent(
-            this,
-            ScannerActivity::class.java
-        )
-        startActivityForResult(scannerActivity, SCAN_PRODUCT_REQUEST_CODE)
-    }
-
-
-        // Will make it possible to go back to the previous screen with the phone's back button
-        val onBackPressedCallback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                NavHostFragment.findNavController(fragmentHost).navigate(NavigationGraphDirections.actionGlobalProductsFragment(false))
-            }
-        }
-        requireActivity().onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
+//        val scannerActivity = Intent(
+//            this,
+//            ScannerFragment::class.java
+//        )
+//        startActivityForResult(scannerActivity, SCAN_PRODUCT_REQUEST_CODE)
+        NavHostFragment.findNavController(fragmentHost).navigate(AddProductFragmentDirections.actionAddProductFragmentToScannerFragment())
     }
 
     /**

@@ -1,28 +1,30 @@
 package com.example.vittles.scanning
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
-import android.view.MenuItem
+import android.view.LayoutInflater
 import android.view.TextureView
 import android.view.View
-import android.widget.Toast
+import android.view.ViewGroup
+import android.widget.*
+import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.camera.core.CameraX
 import com.example.vittles.R
+import com.example.vittles.scanning.ScannerPresenter.Companion.REQUEST_CODE_PERMISSIONS
+import com.example.vittles.scanning.ScannerPresenter.Companion.REQUIRED_PERMISSIONS
 import com.example.vittles.scanning.productaddmanual.DateEditView
 import com.example.vittles.scanning.productaddmanual.ProductNameEditView
 import com.example.vittles.services.scanner.DateFormatterService
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
-import dagger.android.support.DaggerAppCompatActivity
+import dagger.android.support.DaggerFragment
 import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.activity_camera.*
 import org.joda.time.DateTime
 import javax.inject.Inject
 
 const val SCAN_RESULT = "SCAN_RESULT"
 
-class ScannerActivity @Inject internal constructor(): DaggerAppCompatActivity(), ScannerContract.View {
+class ScannerFragment @Inject internal constructor(): DaggerFragment(), ScannerContract.View {
 
     @Parcelize
     data class ScanResult (
@@ -34,19 +36,45 @@ class ScannerActivity @Inject internal constructor(): DaggerAppCompatActivity(),
     lateinit var presenter: ScannerPresenter
 
     private lateinit var textureView: TextureView
+    private lateinit var refreshDate: ImageButton
+    private lateinit var refreshProductName: ImageButton
+    private lateinit var tvBarcode: TextView
+    private lateinit var tvExpirationDate: TextView
+    private lateinit var ibEditName: ImageButton
+    private lateinit var ibEditDate: ImageButton
+    private lateinit var btnScanVittle: Button
+    private lateinit var ivCheckboxBarcode: ImageView
+    private lateinit var ivCheckboxExpirationDate: ImageView
 
     private lateinit var expirationDate: DateTime
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        presenter.start(this@ScannerActivity)
-        setContentView(R.layout.activity_camera)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        presenter.start(this@ScannerFragment)
+        return inflater.inflate(R.layout.fragment_camera, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        textureView = view.findViewById(R.id.textureView)
+        refreshDate = view.findViewById(R.id.refreshDate)
+        refreshProductName = view.findViewById(R.id.refreshProductName)
+        tvBarcode = view.findViewById(R.id.tvBarcode)
+        tvExpirationDate = view.findViewById(R.id.tvExpirationDate)
+        ibEditName = view.findViewById(R.id.ibEditName)
+        ibEditDate = view.findViewById(R.id.ibEditDate)
+        btnScanVittle = view.findViewById(R.id.btnScanVittle)
+        ivCheckboxBarcode = view.findViewById(R.id.ivCheckboxBarcode)
+        ivCheckboxExpirationDate = view.findViewById(R.id.ivCheckboxExpirationDate)
         initViews()
         presenter.checkPermissions()
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        CameraX.unbindAll()
         presenter.destroy()
     }
 
@@ -55,11 +83,6 @@ class ScannerActivity @Inject internal constructor(): DaggerAppCompatActivity(),
      *
      */
     override fun initViews() {
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = getString(R.string.scan_vittles_title)
-
-        textureView = findViewById(R.id.textureView)
-
         refreshDate.visibility = View.INVISIBLE
         refreshProductName.visibility = View.INVISIBLE
 
@@ -67,7 +90,7 @@ class ScannerActivity @Inject internal constructor(): DaggerAppCompatActivity(),
 
         ibEditName.setOnClickListener { onEditNameButtonClick() }
 
-        ibEditDate.setOnClickListener { onEditExperationButtonClick() }
+        ibEditDate.setOnClickListener { onEditExpirationButtonClick() }
     }
 
     /**
@@ -79,14 +102,11 @@ class ScannerActivity @Inject internal constructor(): DaggerAppCompatActivity(),
             val scanResult = ScanResult(tvBarcode.text.toString(), expirationDate)
             val resultIntent = Intent()
             resultIntent.putExtra(SCAN_RESULT, scanResult)
-            setResult(Activity.RESULT_OK, resultIntent)
+//            setResult(Activity.RESULT_OK, resultIntent)
             CameraX.unbindAll()
-            finish()
         } else {
             CameraX.unbindAll()
-            finish()
         }
-
     }
 
     /**
@@ -97,7 +117,7 @@ class ScannerActivity @Inject internal constructor(): DaggerAppCompatActivity(),
     override fun onBarcodeScanned(barcodes: List<FirebaseVisionBarcode>) {
         if (barcodes.isNotEmpty()) {
             tvBarcode.text = barcodes[0].rawValue
-            ivCheckboxBarcode.setImageDrawable(getDrawable(R.drawable.ic_circle_darkened_filled))
+            ivCheckboxBarcode.setImageDrawable(getDrawable(context!!, R.drawable.ic_circle_darkened_filled))
         }
         PreviewAnalyzer.hasBarCode = true
     }
@@ -110,7 +130,7 @@ class ScannerActivity @Inject internal constructor(): DaggerAppCompatActivity(),
     override fun onTextScanned(text: String) {
         tvExpirationDate.text = DateFormatterService.numberFormat.print(DateFormatterService.expirationDateFormatter(text))
         expirationDate = DateFormatterService.expirationDateFormatter(text)!!
-        ivCheckboxExpirationDate.setImageDrawable(getDrawable(R.drawable.ic_circle_darkened_filled))
+        ivCheckboxExpirationDate.setImageDrawable(getDrawable(context!!, R.drawable.ic_circle_darkened_filled))
         PreviewAnalyzer.hasExpirationDate = true
     }
 
@@ -120,7 +140,7 @@ class ScannerActivity @Inject internal constructor(): DaggerAppCompatActivity(),
      */
     override fun onBarcodeNotFound() {
             Toast.makeText(
-                this,
+                context!!,
                 "Something went wrong!",
                 Toast.LENGTH_SHORT
             ).show()
@@ -132,7 +152,7 @@ class ScannerActivity @Inject internal constructor(): DaggerAppCompatActivity(),
      */
     override fun onTextNotFound() {
         Toast.makeText(
-            this,
+            context!!,
             "Something went wrong! TEXt",
             Toast.LENGTH_SHORT
         ).show()
@@ -154,48 +174,30 @@ class ScannerActivity @Inject internal constructor(): DaggerAppCompatActivity(),
         }
     }
 
+    fun onRequestPermissionsFromFragment() {
+        requestPermissions(REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
+    }
+
     /**
      * If no permissions granted, show toast with error message.
      *
      */
     override fun onNoPermissionGranted() {
         Toast.makeText(
-            this,
+            context!!,
             "Permissions not granted by the user.",
             Toast.LENGTH_SHORT
         ).show()
-        finish()
+        requireActivity().finish()
     }
 
-    fun onEditNameButtonClick() {
+    override fun onEditNameButtonClick() {
         val dialog = ProductNameEditView()
-        dialog.openDialog(this, tvBarcode)
+        dialog.openDialog(context!!, tvBarcode)
     }
 
-    fun onEditExperationButtonClick() {
+    override fun onEditExpirationButtonClick() {
         val dialog = DateEditView()
-        dialog.openDialog(this, tvExpirationDate)
-    }
-
-    /**
-     * Listener of the back button.
-     */
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        return onBackButtonClick()
-    }
-
-    /**
-     * Terminates the scan product activity.
-     *
-     * @return boolean that represents if action succeeded
-     */
-    override fun onBackButtonClick(): Boolean {
-        return try {
-            CameraX.unbindAll()
-            finish()
-            true
-        } catch (exception: Exception) {
-            false
-        }
+        dialog.openDialog(context!!, tvExpirationDate)
     }
 }

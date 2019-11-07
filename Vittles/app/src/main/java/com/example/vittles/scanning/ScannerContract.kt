@@ -20,7 +20,8 @@ interface ScannerContract {
         fun onTextScanned(text: String)
         fun onTextNotFound()
         fun onNoPermissionGranted()
-        fun onBackButtonClick(): Boolean
+        fun onEditNameButtonClick()
+        fun onEditExpirationButtonClick()
     }
 
     interface Presenter {
