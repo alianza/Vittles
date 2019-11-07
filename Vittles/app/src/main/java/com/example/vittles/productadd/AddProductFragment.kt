@@ -15,7 +15,7 @@ import com.example.vittles.services.popups.PopupButton
 import com.example.vittles.services.popups.PopupManager
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.activity_add_product.*
+import kotlinx.android.synthetic.main.fragment_add_product.*
 import org.joda.time.DateTime
 import javax.inject.Inject
 
@@ -49,7 +49,7 @@ class AddProductFragment : DaggerFragment(), AddProductContract.View {
     ): View? {
         presenter.start(this@AddProductFragment)
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.activity_add_product, container, false)
+        return inflater.inflate(R.layout.fragment_add_product, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -67,7 +67,7 @@ class AddProductFragment : DaggerFragment(), AddProductContract.View {
 //    override fun onCreate(savedInstanceState: Bundle?) {
 //        super.onCreate(savedInstanceState)
 //        presenter.start(this@AddProductFragment)
-//        setContentView(R.layout.activity_add_product)
+//        setContentView(R.layout.fragment_add_product)
 //        initViews()
 //    }
 

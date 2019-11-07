@@ -14,8 +14,6 @@ import kotlinx.android.synthetic.main.content_main.*
 import androidx.navigation.findNavController as findNavSetup
 
 class MainActivity : AppCompatActivity() {
-    // TODO Splash screen
-
     private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {

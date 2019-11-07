@@ -274,6 +274,7 @@ class ProductsFragment : DaggerFragment(), ProductsContract.View {
         sortMenu.openMenu(context!!, btnSort, filteredProducts)
     }
 
+    // TODO searching
     /**
      * Method to show the search bar and hide the toolbar
      *
