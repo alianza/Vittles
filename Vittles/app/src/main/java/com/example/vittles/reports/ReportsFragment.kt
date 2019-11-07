@@ -1,4 +1,4 @@
-package com.example.vittles.Reports
+package com.example.vittles.reports
 
 
 import android.os.Bundle

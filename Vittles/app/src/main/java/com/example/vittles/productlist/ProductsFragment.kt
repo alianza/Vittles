@@ -100,7 +100,6 @@ class ProductsFragment : DaggerFragment(), ProductsContract.View {
             LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         rvProducts.adapter = productAdapter
 
-        // TODO searching
         // Set searchView textColor
         val id =
             svSearch.context.resources.getIdentifier("android:id/search_src_text", null, null)
@@ -127,10 +126,6 @@ class ProductsFragment : DaggerFragment(), ProductsContract.View {
      *
      */
     override fun setListeners() {
-        // TODO implement onclicklisteners
-
-//        fab.setOnClickListener { onAddButtonClick() }
-
         sortLayout.setOnClickListener { openSortMenu() }
 
         ibtnSearch.setOnClickListener { openSearchBar() }
@@ -278,8 +273,6 @@ class ProductsFragment : DaggerFragment(), ProductsContract.View {
     private fun openSortMenu() {
         sortMenu.openMenu(context!!, btnSort, filteredProducts)
     }
-
-    // TODO searching
 
     /**
      * Method to show the search bar and hide the toolbar

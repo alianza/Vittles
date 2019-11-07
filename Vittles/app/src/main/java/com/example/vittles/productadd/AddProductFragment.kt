@@ -82,30 +82,9 @@ class AddProductFragment : DaggerFragment(), AddProductContract.View {
      *
      */
     override fun initViews() {
-//        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-//        supportActionBar?.title = getString(R.string.add_product_title)
-
         initDatePicker()
         btnConfirm.setOnClickListener { onConfirmButtonClick() }
     }
-
-
-//    /**
-//     * Listener of the back button.
-//     */
-//    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-//        return onBackButtonClick()
-//    }
-//
-//    /**
-//     * Terminates the add product activity.
-//     *
-//     * @return boolean that represents if action succeeded
-//     */
-//    override fun onBackButtonClick(): Boolean {
-//        finish()
-//        return true
-//    }
 
     /**
      * Initializes the date picker. Including the default date and listeners.

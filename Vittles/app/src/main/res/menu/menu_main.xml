@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.vittles.MainActivity">
     <item
-        android:id="@+id/home"
+        android:id="@+id/productsFragment"
         android:orderInCategory="1"
         android:title="Home"
         app:showAsAction="always"
@@ -20,14 +20,19 @@
         app:showAsAction="always"
         android:title="" />
     <item
-        android:id="@+id/reports"
+        android:id="@+id/placeholder2"
         android:orderInCategory="4"
+        app:showAsAction="always"
+        android:title="" />
+    <item
+        android:id="@+id/reportsFragment"
+        android:orderInCategory="5"
         android:title="Reports"
         app:showAsAction="always"
         android:icon="@drawable/ic_show_chart_black_24dp"/>
     <item
         android:id="@+id/settings"
-        android:orderInCategory="5"
+        android:orderInCategory="6"
         android:title="Settings"
         app:showAsAction="always"
         android:icon="@drawable/ic_settings_black_24dp"/>

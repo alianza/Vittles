@@ -12,8 +12,6 @@ interface AddProductContract {
     interface View {
         fun initViews()
         fun initDatePicker()
-        // TODO implement backbutton
-//        fun onBackButtonClick() : Boolean
         fun onConfirmButtonClick()
         fun validate(): Boolean
         fun resetView()
