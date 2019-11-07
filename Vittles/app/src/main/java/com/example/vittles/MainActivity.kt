@@ -4,11 +4,13 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.ActionMenuView
 import androidx.navigation.NavController
+import androidx.navigation.NavDirections
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import com.example.vittles.productlist.ProductsFragmentDirections
+import com.example.vittles.reports.ReportsFragmentDirections
 import com.google.android.material.bottomappbar.BottomAppBar
 import kotlinx.android.synthetic.main.content_main.*
 import androidx.navigation.findNavController as findNavSetup
@@ -97,8 +99,14 @@ class MainActivity : AppCompatActivity() {
      *
      */
     fun onAddButtonClick() {
-        val action = ProductsFragmentDirections.actionProductsFragmentToAddProductFragment()
-        findNavController(fragmentHost).navigate(action)
+        var action: NavDirections? = null
+        when (navController.currentDestination?.id) {
+            R.id.productsFragment -> action = ProductsFragmentDirections.actionProductsFragmentToAddProductFragment()
+            R.id.reportsFragment -> action = ReportsFragmentDirections.actionReportsFragmentToAddProductFragment()
+        }
+        if (action != null) {
+            findNavController(fragmentHost).navigate(action)
+        }
     }
 
     fun onNavigateReportsButtonClick(): Boolean {

@@ -23,7 +23,11 @@
         android:id="@+id/reportsFragment"
         android:name="com.example.vittles.reports.ReportsFragment"
         android:label="@string/waste_report_title"
-        tools:layout="@layout/fragment_reports" />
+        tools:layout="@layout/fragment_reports" >
+        <action
+            android:id="@+id/action_reportsFragment_to_addProductFragment"
+            app:destination="@id/addProductFragment" />
+    </fragment>
     <action android:id="@+id/action_global_productsFragment" app:destination="@id/productsFragment" />
     <action android:id="@+id/action_global_reportsFragment" app:destination="@id/reportsFragment" />
 
