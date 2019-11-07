@@ -1,6 +1,8 @@
 package com.example.vittles.productadd
 
+import android.app.Activity
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.LayoutInflater
@@ -13,6 +15,8 @@ import androidx.navigation.fragment.NavHostFragment
 import com.example.domain.product.Product
 import com.example.vittles.NavigationGraphDirections
 import com.example.vittles.R
+import com.example.vittles.scanning.SCAN_RESULT
+import com.example.vittles.scanning.ScannerActivity
 import com.example.vittles.services.popups.PopupBase
 import com.example.vittles.services.popups.PopupButton
 import com.example.vittles.services.popups.PopupManager
@@ -21,7 +25,11 @@ import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.fragment_add_product.*
 import org.joda.time.DateTime
+import org.joda.time.format.DateTimeFormat
+import org.joda.time.format.DateTimeFormatter
 import javax.inject.Inject
+
+const val SCAN_PRODUCT_REQUEST_CODE = 100
 
 /**
  * Activity class for the Add Product component. This components makes it possible to
@@ -35,6 +43,8 @@ class AddProductFragment : DaggerFragment(), AddProductContract.View {
     lateinit var presenter: AddProductPresenter
 
     private var expirationDate = DateTime()
+
+    private val formatter: DateTimeFormatter = DateTimeFormat.forPattern("dd/MM/yyyy")
 
     lateinit var etExpirationDate: EditText
     lateinit var btnConfirm: Button
@@ -76,6 +86,40 @@ class AddProductFragment : DaggerFragment(), AddProductContract.View {
     override fun initViews() {
         initDatePicker()
         btnConfirm.setOnClickListener { onConfirmButtonClick() }
+        btnScan.setOnClickListener { onScanButtonClick() }
+    }
+
+    /**
+     * Retrieve the result from the activity.
+     *
+     */
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                SCAN_PRODUCT_REQUEST_CODE -> {
+                    val scanResult =
+                        data!!.getParcelableExtra<ScannerActivity.ScanResult>(SCAN_RESULT)
+                    etProductName.setText(scanResult?.productName)
+                    etExpirationDate.setText(formatter.print(scanResult?.expirationDate))
+                    expirationDate = scanResult?.expirationDate!!
+                }
+            }
+        }
+    }
+
+    /**
+     * Temporary button action.
+     *
+     */
+    private fun onScanButtonClick() {
+        val scannerActivity = Intent(
+            this,
+            ScannerActivity::class.java
+        )
+        startActivityForResult(scannerActivity, SCAN_PRODUCT_REQUEST_CODE)
+    }
+
 
         // Will make it possible to go back to the previous screen with the phone's back button
         val onBackPressedCallback = object : OnBackPressedCallback(true) {
@@ -101,9 +145,11 @@ class AddProductFragment : DaggerFragment(), AddProductContract.View {
             val dpd = DatePickerDialog(
                 context!!,
                 DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
-                    this.expirationDate = DateTime(year, monthOfYear + MONTHS_OFFSET, dayOfMonth, 0, 0)
-                            etExpirationDate.setText(getString(
-                             R.string.expiration_format,
+                    this.expirationDate =
+                        DateTime(year, monthOfYear + MONTHS_OFFSET, dayOfMonth, 0, 0)
+                    etExpirationDate.setText(
+                        getString(
+                            R.string.expiration_format,
                             (this.expirationDate.dayOfMonth).toString(),
                             (this.expirationDate.monthOfYear).toString(),
                             (this.expirationDate.year).toString()
@@ -184,8 +230,10 @@ class AddProductFragment : DaggerFragment(), AddProductContract.View {
             context!!,
             PopupBase(
                 "Almost expired!",
-                String.format("The scanned product expires in %d days. \n Are you sure you want to add it?",
-                    product.getDaysRemaining())
+                String.format(
+                    "The scanned product expires in %d days. \n Are you sure you want to add it?",
+                    product.getDaysRemaining()
+                )
             ),
             PopupButton("NO"),
             PopupButton("YES") { presenter.addProduct(product, false) }
