@@ -34,7 +34,7 @@ import javax.inject.Inject
  * @author Fethi Tewelde
  * @author Marc van Spronsen
  */
-class ProductListFragment : DaggerFragment(), ProductsContract.View {
+class ProductListFragment : DaggerFragment(), ProductListContract.View {
 
     @Inject
     lateinit var presenter: ProductListPresenter

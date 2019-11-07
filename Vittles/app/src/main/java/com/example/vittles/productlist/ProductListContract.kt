@@ -8,7 +8,7 @@ import com.example.vittles.enums.DeleteType
  *
  * @author Jeroen Flietstra
  */
-interface ProductsContract {
+interface ProductListContract {
 
     interface View {
         fun initViews()

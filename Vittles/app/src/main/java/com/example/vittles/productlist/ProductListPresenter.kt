@@ -23,7 +23,7 @@ class ProductListPresenter @Inject internal constructor(
     private val getProducts: GetProducts,
     private val deleteProduct: DeleteProduct
 ) :
-    BasePresenter<ProductListFragment>(), ProductsContract.Presenter {
+    BasePresenter<ProductListFragment>(), ProductListContract.Presenter {
 
     /**
      * Loads the products.
