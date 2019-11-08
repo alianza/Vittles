@@ -89,14 +89,6 @@ class AddProductFragment : DaggerFragment(), AddProductContract.View {
         btnConfirm.setOnClickListener { onConfirmButtonClick() }
         btnScan.setOnClickListener { onScanButtonClick() }
 
-        // Will make it possible to go back to the previous screen with the phone's back button
-        val onBackPressedCallback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                NavHostFragment.findNavController(fragmentHost).navigate(NavigationGraphDirections.actionGlobalProductListFragment(false))
-            }
-        }
-        requireActivity().onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
-
         val scanResult = args.scanResult
         if (scanResult != null) {
             onScanResult(scanResult)
