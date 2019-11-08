@@ -19,6 +19,7 @@ import androidx.navigation.findNavController as findNavSetup
  * Main activity that only controls the navigation.
  *
  * @author Jeroen Flietstra
+ * @author Fethi Tewelde
  */
 class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController

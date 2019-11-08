@@ -8,11 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import androidx.activity.OnBackPressedCallback
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.navArgs
 import com.example.domain.product.Product
-import com.example.vittles.NavigationGraphDirections
 import com.example.vittles.R
 import com.example.vittles.scanning.ScanResult
 import com.example.vittles.services.popups.PopupBase
@@ -107,23 +105,27 @@ class AddProductFragment : DaggerFragment(), AddProductContract.View {
         val day = currentDate.dayOfMonth
 
         etExpirationDate.setOnClickListener {
-            val dpd = DatePickerDialog(
-                context!!,
-                DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
-                    this.expirationDate =
-                        DateTime(year, monthOfYear + MONTHS_OFFSET, dayOfMonth, 0, 0)
-                    etExpirationDate.setText(
-                        getString(
-                            R.string.expiration_format,
-                            (this.expirationDate.dayOfMonth).toString(),
-                            (this.expirationDate.monthOfYear).toString(),
-                            (this.expirationDate.year).toString()
+            val dpd = context?.let { it1 ->
+                DatePickerDialog(
+                    it1,
+                    DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
+                        this.expirationDate =
+                            DateTime(year, monthOfYear + MONTHS_OFFSET, dayOfMonth, 0, 0)
+                        etExpirationDate.setText(
+                            getString(
+                                R.string.expiration_format,
+                                (this.expirationDate.dayOfMonth).toString(),
+                                (this.expirationDate.monthOfYear).toString(),
+                                (this.expirationDate.year).toString()
+                            )
                         )
-                    )
-                }, year, month - MONTHS_OFFSET, day
-            )
-            dpd.datePicker.minDate = currentDate.millis
-            dpd.show()
+                    }, year, month - MONTHS_OFFSET, day
+                )
+            }
+            if (dpd != null) {
+                dpd.datePicker.minDate = currentDate.millis
+                dpd.show()
+            }
         }
     }
 
@@ -209,17 +211,19 @@ class AddProductFragment : DaggerFragment(), AddProductContract.View {
      *
      */
     override fun onShowCloseToExpirationPopup(product: Product) {
-        PopupManager.instance.showPopup(
-            context!!,
-            PopupBase(
-                "Almost expired!",
-                String.format(
-                    "The scanned product expires in %d days. \n Are you sure you want to add it?",
-                    product.getDaysRemaining()
-                )
-            ),
-            PopupButton("NO"),
-            PopupButton("YES") { presenter.addProduct(product, false) }
-        )
+        context?.let {
+            PopupManager.instance.showPopup(
+                it,
+                PopupBase(
+                    "Almost expired!",
+                    String.format(
+                        "The scanned product expires in %d days. \n Are you sure you want to add it?",
+                        product.getDaysRemaining()
+                    )
+                ),
+                PopupButton("NO"),
+                PopupButton("YES") { presenter.addProduct(product, false) }
+            )
+        }
     }
 }
