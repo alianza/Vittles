@@ -96,7 +96,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
             CameraX.unbindAll()
         } else {
             Toast.makeText(
-                context!!,
+                context,
                 "Scan or fill in the necessary fields",
                 Toast.LENGTH_LONG
             ).show()
@@ -112,10 +112,12 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         if (barcodes.isNotEmpty()) {
             tvBarcode.text = barcodes[0].rawValue
             ivCheckboxBarcode.setImageDrawable(
-                getDrawable(
-                    context!!,
-                    R.drawable.ic_circle_darkened_filled
-                )
+                context?.let {
+                    getDrawable(
+                        it,
+                        R.drawable.ic_circle_darkened_filled
+                    )
+                }
             )
         }
         PreviewAnalyzer.hasBarCode = true
@@ -132,10 +134,12 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         )
         expirationDate = DateFormatterService.expirationDateFormatter(text)!!
         ivCheckboxExpirationDate.setImageDrawable(
-            getDrawable(
-                context!!,
-                R.drawable.ic_circle_darkened_filled
-            )
+            context?.let {
+                getDrawable(
+                    it,
+                    R.drawable.ic_circle_darkened_filled
+                )
+            }
         )
         PreviewAnalyzer.hasExpirationDate = true
     }
@@ -146,7 +150,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
      */
     override fun onBarcodeNotFound() {
         Toast.makeText(
-            context!!,
+            context,
             "Something went wrong!",
             Toast.LENGTH_SHORT
         ).show()
@@ -158,7 +162,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
      */
     override fun onTextNotFound() {
         Toast.makeText(
-            context!!,
+            context,
             "Something went wrong! TEXt",
             Toast.LENGTH_SHORT
         ).show()
@@ -190,7 +194,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
      */
     override fun onNoPermissionGranted() {
         Toast.makeText(
-            context!!,
+            context,
             "Permissions not granted by the user.",
             Toast.LENGTH_SHORT
         ).show()
@@ -199,12 +203,12 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
 
     override fun onEditNameButtonClick() {
         val dialog = ProductNameEditView()
-        dialog.openDialog(context!!, tvBarcode)
+        context?.let { dialog.openDialog(it, tvBarcode) }
     }
 
     override fun onEditExpirationButtonClick() {
         val dialog = DateEditView()
-        dialog.openDialog(context!!, tvExpirationDate)
+        context?.let { dialog.openDialog(it, tvExpirationDate) }
         requireActivity().onBackPressed()
     }
 }
