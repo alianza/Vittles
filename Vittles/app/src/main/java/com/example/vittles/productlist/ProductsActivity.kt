@@ -18,6 +18,7 @@ import com.example.vittles.services.popups.PopupBase
 import com.example.vittles.services.popups.PopupButton
 import com.example.vittles.services.popups.PopupManager
 import com.example.vittles.services.sorting.SortMenu
+import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
@@ -39,6 +40,10 @@ class ProductsActivity : DaggerAppCompatActivity(), ProductsContract.View {
     lateinit var presenter: ProductsPresenter
 
     private lateinit var itemTouchHelper: ItemTouchHelper
+    private lateinit var undoSnackbar: Snackbar
+    private lateinit var deletedProduct: Product
+    private lateinit var deletedProductDeleteType: DeleteType
+    private var deletedProductIndex: Int = 0
     private var products = mutableListOf<Product>()
     private var filteredProducts = products
     private val productAdapter = ProductAdapter(products, this::onRemoveButtonClicked)
@@ -57,14 +62,12 @@ class ProductsActivity : DaggerAppCompatActivity(), ProductsContract.View {
             start(this@ProductsActivity)
         }
         initViews()
-
     }
 
     override fun onDestroy() {
         super.onDestroy()
         presenter.destroy()
     }
-
 
     /**
      * Initializes the RecyclerView and sets EventListeners.
@@ -84,9 +87,10 @@ class ProductsActivity : DaggerAppCompatActivity(), ProductsContract.View {
         val textView = svSearch.findViewById(id) as TextView
         textView.setTextColor(Color.BLACK)
 
+        initUndoSnackbar()
+
         setItemTouchHelper()
     }
-
 
     /**
      * Called when the mainActivity starts.
@@ -126,6 +130,86 @@ class ProductsActivity : DaggerAppCompatActivity(), ProductsContract.View {
 
         imgbtnCloseSearch.setOnClickListener { closeSearchBar() }
     }
+
+    /**
+     * Deletes product and shows a toast to undo the deletion.
+     *
+     * @param product The product to delete.
+     * @param deleteType The deleteType: eaten, thrown_away or removed.
+     */
+    private fun onSaveDeleteProduct(product: Product, deleteType: DeleteType) {
+
+        if (undoSnackbar.isShown) {
+            presenter.deleteProduct(deletedProduct, deletedProductDeleteType)
+            //removeItem(deletedProductIndex)
+        }
+        //set deleted product
+        deletedProduct = product
+        deletedProductIndex = products.indexOf(product)
+        deletedProductDeleteType = deleteType
+
+        products.remove(product)
+        //It crashes when you use notifyItemRemoved(0). This has been a known issue for quit a while.
+        if (deletedProductIndex == 0) {
+            productAdapter.notifyDataSetChanged()
+        } else {
+            productAdapter.notifyItemRemoved(deletedProductIndex)
+
+            //Makes sure the divider on the element above is drawn
+            if(deletedProductIndex != 0) {
+                productAdapter.notifyItemChanged(deletedProductIndex - 1)
+            }
+        }
+
+        onShowUndoSnackbar()
+    }
+
+    /**
+     * Initializes the undo snackbar.
+     *
+     */
+    private fun initUndoSnackbar(){
+        undoSnackbar = Snackbar.make(
+            findViewById(android.R.id.content),
+            "",
+            Snackbar.LENGTH_SHORT)
+
+        undoSnackbar.setAction("UNDO") {}
+        undoSnackbar.setActionTextColor(Color.WHITE)
+        undoSnackbar.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
+
+            override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                super.onDismissed(transientBottomBar, event)
+
+                if(event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT){
+                    presenter.deleteProduct(deletedProduct, deletedProductDeleteType)
+                }
+                else{
+                    products.add(index = deletedProductIndex, element = deletedProduct)
+                    productAdapter.notifyItemInserted(deletedProductIndex)
+
+                    if (deletedProductIndex == products.count() - 1){
+                        productAdapter.notifyItemChanged(deletedProductIndex - 1)
+                    }
+                }
+            }
+        })
+    }
+
+    /**
+     * Shows the undo snackbar and sets the text.
+     *
+     */
+    @SuppressLint("DefaultLocale")
+    private fun onShowUndoSnackbar(){
+        undoSnackbar.setText(deletedProduct.productName + " has been " + deletedProductDeleteType
+            .toString()
+            .toLowerCase()
+            .replace("_", " ")
+        )
+
+        undoSnackbar.show()
+    }
     
      /**
      * Called when the sort button is clicked.
@@ -143,7 +227,7 @@ class ProductsActivity : DaggerAppCompatActivity(), ProductsContract.View {
         PopupManager.instance.showPopup(this,
             PopupBase("Remove Product", "Do you want to remove this product? \n It won't be used for the food waste report."),
             PopupButton("NO") {},
-            PopupButton("YES") { presenter.deleteProduct(product, DeleteType.REMOVED) })
+            PopupButton("YES") { onSaveDeleteProduct(product, DeleteType.REMOVED) })
     }
 
     /**
@@ -151,7 +235,7 @@ class ProductsActivity : DaggerAppCompatActivity(), ProductsContract.View {
     
      */
     override fun setItemTouchHelper() {
-        val callback = ProductItemTouchHelper(products,presenter,this)
+        val callback = ProductItemTouchHelper(products,presenter,this, this::onSaveDeleteProduct)
         itemTouchHelper = ItemTouchHelper(callback)
         itemTouchHelper.attachToRecyclerView(rvProducts)
     }
@@ -258,7 +342,6 @@ class ProductsActivity : DaggerAppCompatActivity(), ProductsContract.View {
         setEmptyView()
         setNoResultsView()
     }
-
 
     /**
      * If product could not be deleted, this method will create a feedback Snackbar for the error.

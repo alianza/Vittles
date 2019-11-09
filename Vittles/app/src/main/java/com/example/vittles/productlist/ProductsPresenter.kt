@@ -65,7 +65,7 @@ class ProductsPresenter @Inject internal constructor(
         disposables.add(deleteProduct.invoke(product)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ view?.populateRecyclerView() }, { view?.showProductDeleteError() })
+            .subscribe({ }, { view?.showProductDeleteError() })
         )
     }
 }
