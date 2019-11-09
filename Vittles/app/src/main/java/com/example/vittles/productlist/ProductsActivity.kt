@@ -137,7 +137,7 @@ class ProductsActivity : DaggerAppCompatActivity(), ProductsContract.View {
      * @param product The product to delete.
      * @param deleteType The deleteType: eaten, thrown_away or removed.
      */
-    private fun saveDeleteProduct(product: Product, deleteType: DeleteType) {
+    private fun onSaveDeleteProduct(product: Product, deleteType: DeleteType) {
 
         if (undoSnackbar.isShown) {
             presenter.deleteProduct(deletedProduct, deletedProductDeleteType)
@@ -161,7 +161,7 @@ class ProductsActivity : DaggerAppCompatActivity(), ProductsContract.View {
             }
         }
 
-        showUndoSnackbar()
+        onShowUndoSnackbar()
     }
 
     /**
@@ -201,7 +201,7 @@ class ProductsActivity : DaggerAppCompatActivity(), ProductsContract.View {
      *
      */
     @SuppressLint("DefaultLocale")
-    private fun showUndoSnackbar(){
+    private fun onShowUndoSnackbar(){
         undoSnackbar.setText(deletedProduct.productName + " has been " + deletedProductDeleteType
             .toString()
             .toLowerCase()
@@ -227,7 +227,7 @@ class ProductsActivity : DaggerAppCompatActivity(), ProductsContract.View {
         PopupManager.instance.showPopup(this,
             PopupBase("Remove Product", "Do you want to remove this product? \n It won't be used for the food waste report."),
             PopupButton("NO") {},
-            PopupButton("YES") { saveDeleteProduct(product, DeleteType.REMOVED) })
+            PopupButton("YES") { onSaveDeleteProduct(product, DeleteType.REMOVED) })
     }
 
     /**
@@ -235,7 +235,7 @@ class ProductsActivity : DaggerAppCompatActivity(), ProductsContract.View {
     
      */
     override fun setItemTouchHelper() {
-        val callback = ProductItemTouchHelper(products,presenter,this, this::saveDeleteProduct)
+        val callback = ProductItemTouchHelper(products,presenter,this, this::onSaveDeleteProduct)
         itemTouchHelper = ItemTouchHelper(callback)
         itemTouchHelper.attachToRecyclerView(rvProducts)
     }
