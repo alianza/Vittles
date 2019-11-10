@@ -22,8 +22,9 @@ fun createProductDaoImpl(context: Context): ProductDao {
  *
  * @author Jeroen Flietstra
  * @author Jan-Willem van Bremen
+ * @author Sarah Lange
  */
-@Database(entities = [ProductEntity::class], version = 1, exportSchema = false)
+@Database(entities = [ProductEntity::class, WasteReportEntity::class], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun productDao(): ProductDao
