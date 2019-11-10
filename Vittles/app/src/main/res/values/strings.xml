@@ -42,4 +42,17 @@
     <string name="newest">Newest</string>
     <string name="oldest">Oldest</string>
 
+    <!--    Waste Report-->
+    <string name="vittles_eaten">Vittles eaten</string>
+    <string name="vittles_expired">Vittles expired</string>
+    <string name="count_fail">Error while loading statistic</string>
+    <string name="this_week">This week</string>
+    <string name="waste_percent">%1$d%%</string>
+    <string name="food_eaten">Food eaten</string>
+    <string name="time_range">Time range</string>
+    <string name="last_seven_days">Last 7 days</string>
+    <string name="last_30_days">Last 30 days</string>
+    <string name="last_year">Last year</string>
+    <string name="content_description">Button time range</string>
+
 </resources>
