@@ -59,4 +59,17 @@ interface ProductDao {
     @Delete
     fun delete(product: ProductEntity): Int
 
+
+    @Insert
+    fun insertWasteReportProduct(wasteReportProduct: WasteReportEntity)
+
+
+    @Query("SELECT COUNT(waste_type) FROM WasteReportEntity WHERE waste_type = 'EATEN' AND creation_date >= :date")
+    fun getCountEatenProducts(date: Long): Single<Int>
+
+    @Query("SELECT COUNT(waste_type) FROM WasteReportEntity WHERE waste_type = 'THROWN_AWAY' AND creation_date >= :date")
+    fun getCountExpiredProducts(date: Long): Single<Int>
+
+    @Query("SELECT Cast(tot1 AS FLOAT)/(CAST(tot2 AS FLOAT)+CAST(tot1 AS FLOAT))*100.00 FROM (SELECT COUNT(waste_type) AS tot1 FROM WasteReportEntity WHERE waste_type = 'EATEN' AND creation_date >= :date) as float ,(SELECT COUNT(waste_type)AS tot2 FROM WasteReportEntity WHERE waste_type = 'THROWN_AWAY' AND creation_date >= :date) as float")
+    fun getWastePercent(date: Long): Single<Int>
 }
