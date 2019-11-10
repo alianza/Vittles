@@ -12,6 +12,7 @@ apply plugin: 'kotlin-kapt'
 
 repositories {
     maven { url 'https://maven.fabric.io/public' }
+    maven { url "https://jitpack.io" }
 }
 
 android {
@@ -97,6 +98,12 @@ dependencies {
 
     implementation project(path: ':domain')
     implementation project(path: ':data')
+
+    //Circle Chart
+    implementation 'com.github.bmarrdev:android-DecoView-charting:v0.9.3'
+
+    //BarChart
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 }
 
 buildscript {
