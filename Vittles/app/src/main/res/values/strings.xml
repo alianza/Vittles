@@ -54,5 +54,6 @@
     <string name="last_30_days">Last 30 days</string>
     <string name="last_year">Last year</string>
     <string name="content_description">Button time range</string>
+    <string name="null_percent">0%</string>
 
 </resources>
