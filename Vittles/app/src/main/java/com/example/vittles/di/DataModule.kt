@@ -1,11 +1,9 @@
 package com.example.vittles.di
 
 import android.content.Context
-import com.example.data.ProductDao
-import com.example.data.ProductModelMapper
-import com.example.data.ProductsRepositoryImpl
-import com.example.data.createProductDaoImpl
+import com.example.data.*
 import com.example.domain.repositories.ProductsRepository
+import com.example.domain.repositories.WasteReportRepository
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -20,4 +18,8 @@ class DataModule {
     @Singleton
     @Provides
     fun provideProductsRepository(productDao: ProductDao, mapper: ProductModelMapper): ProductsRepository = ProductsRepositoryImpl(productDao, mapper)
+
+    @Singleton
+    @Provides
+    fun provideWasteReportRepository(productDao: ProductDao, mapper: WasteReportModelMapper): WasteReportRepository = WasteReportRepositoryImpl(productDao, mapper)
 }
