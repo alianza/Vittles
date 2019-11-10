@@ -18,6 +18,7 @@ import com.example.vittles.services.popups.PopupBase
 import com.example.vittles.services.popups.PopupButton
 import com.example.vittles.services.popups.PopupManager
 import com.example.vittles.services.sorting.SortMenu
+import com.example.vittles.wastereport.WasteReportActivity
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
@@ -176,7 +177,7 @@ class ProductsActivity : DaggerAppCompatActivity(), ProductsContract.View {
     override fun onAddButtonClick() {
         val addProductActivityIntent = Intent(
             this,
-            AddProductActivity::class.java
+            WasteReportActivity::class.java
         )
         startActivity(addProductActivityIntent)
         closeSearchBar()
