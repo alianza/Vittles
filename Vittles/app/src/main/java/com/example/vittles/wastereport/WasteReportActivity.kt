@@ -1,16 +1,12 @@
 package com.example.vittles.wastereport
 
-import android.app.AlertDialog
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.ViewPager
 import com.example.vittles.R
-import com.example.vittles.services.sorting.SortMenu
 import dagger.android.support.DaggerAppCompatActivity
-import kotlinx.android.synthetic.main.activity_sort.view.*
 import kotlinx.android.synthetic.main.activity_waste_report.*
 import kotlinx.android.synthetic.main.content_waste_history.*
 import org.joda.time.DateTime
@@ -21,7 +17,7 @@ class WasteReportActivity : DaggerAppCompatActivity(), WasteReportContract.View 
     @Inject
     lateinit var presenter: WasteReportPresenter
 
-    lateinit var timeRangeMenu: WasteTimeRange
+    lateinit var timeRangeMenu: WasteTimeRangeMenu
     lateinit var adapter: ViewPagerAdapter
 
 
@@ -29,7 +25,7 @@ class WasteReportActivity : DaggerAppCompatActivity(), WasteReportContract.View 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_waste_report)
 
-        timeRangeMenu = WasteTimeRange(presenter)
+        timeRangeMenu = WasteTimeRangeMenu(presenter)
         presenter.start(this)
         presenter.getCountEatenProducts(DateTime.now().minusDays(1) )
         presenter.getCountExpiredProducts(DateTime.now().minusDays(1))
