@@ -8,7 +8,7 @@ import android.widget.TextView
 import com.example.domain.product.Product
 import com.example.vittles.R
 import com.example.vittles.productlist.ProductAdapter
-import kotlinx.android.synthetic.main.activity_sort.view.*
+import kotlinx.android.synthetic.main.dialog_sort.view.*
 
 /**
  * Class for the sorting Menu, This menu shows all the sorting types and the current sorting type.
@@ -56,7 +56,7 @@ class SortMenu (sortList: MutableList<Product>, adapter: ProductAdapter) {
     fun openMenu(context: Context, button: TextView, filteredList: MutableList<Product>) {
 
         val mDialogView =
-            LayoutInflater.from(context).inflate(R.layout.activity_sort, null)
+            LayoutInflater.from(context).inflate(R.layout.dialog_sort, null)
         val mBuilder =
             AlertDialog.Builder(context).setView(mDialogView)
         val  mAlertDialog = mBuilder.show()

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_graph"
+    app:startDestination="@id/productListFragment">
+
+    <fragment
+        android:id="@+id/productListFragment"
+        android:name="com.example.vittles.productlist.ProductListFragment"
+        android:label="@string/view_title"
+        tools:layout="@layout/fragment_productlist">
+        <argument
+            android:name="withSearch"
+            app:argType="boolean"
+            android:defaultValue="false" />
+        <action
+            android:id="@+id/action_productsFragment_to_addProductFragment"
+            app:destination="@id/addProductFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addProductFragment"
+        android:name="com.example.vittles.productadd.AddProductFragment"
+        android:label="@string/add_product_title"
+        tools:layout="@layout/fragment_add_product" >
+        <argument
+            android:name="scanResult"
+            app:argType="com.example.vittles.scanning.ScanResult"
+            app:nullable="true"
+            android:defaultValue="@null"/>
+        <action
+            android:id="@+id/action_addProductFragment_to_scannerFragment"
+            app:destination="@id/scannerFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/reportsFragment"
+        android:name="com.example.vittles.reports.ReportsFragment"
+        android:label="@string/waste_report_title"
+        tools:layout="@layout/fragment_reports" >
+        <action
+            android:id="@+id/action_reportsFragment_to_addProductFragment"
+            app:destination="@id/addProductFragment" />
+    </fragment>
+    <action android:id="@+id/action_global_productListFragment" app:destination="@id/productListFragment"/>
+    <action android:id="@+id/action_global_reportsFragment" app:destination="@id/reportsFragment" />
+    <fragment
+        android:id="@+id/scannerFragment"
+        android:name="com.example.vittles.scanning.ScannerFragment"
+        android:label="fragment_camera"
+        tools:layout="@layout/fragment_camera" >
+        <action
+            android:id="@+id/action_scannerFragment_to_addProductFragment"
+            app:destination="@id/addProductFragment" />
+    </fragment>
+
+</navigation>

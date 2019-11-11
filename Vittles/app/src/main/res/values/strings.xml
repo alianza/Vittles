@@ -5,6 +5,7 @@
 
     <!--    Global Buttons-->
     <string name="btn_confirm">Confirm</string>
+    <string name="btn_cancel">Cancel</string>
 
     <!--    Products Overview-->
     <string name="view_title">My Vittles</string>
@@ -42,4 +43,29 @@
     <string name="newest">Newest</string>
     <string name="oldest">Oldest</string>
 
+    <!--    Waste Report-->
+    <string name="waste_report_title">Waste report</string>
+
+    <!--    Scan Vittles-->
+    <string name="scan_vittles_title">Scan Vittles</string>
+    <string name="cd_checklist_image">Checklist checkbox</string>
+    <string name="product_name_scanner">PRODUCT NAME</string>
+    <string name="date_format_scanner">DD/MM/YYYY</string>
+    <string name="barcode_title_scanner">Barcode</string>
+    <string name="exp_date_title_scanner">Expiration date</string>
+    <string name="cd_scanning_pane">Scanning pane</string>
+    <string name="btn_add_vittle">Add Vittle</string>
+
+    <!--    Add product manually-->
+    <string name="edit_product_name">Edit product name</string>
+    <string name="edit_expiration_date">Edit expiration date</string>
+
+    <!--    Scan Products-->
+    <string name="edit_icon">Edit</string>
+
+    <!--    Menu-->
+    <string name="menu_home">Home</string>
+    <string name="menu_search">Search</string>
+    <string name="menu_reports">Reports</string>
+    <string name="menu_settings">Settings</string>
 </resources>

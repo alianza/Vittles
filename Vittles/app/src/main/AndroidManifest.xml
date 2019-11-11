@@ -4,6 +4,8 @@
     package="com.example.vittles">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
 
     <application
         android:name=".VittlesApp"
@@ -14,26 +16,28 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".productadd.AddProductActivity"/>
-        <activity
-            android:name=".productlist.ProductsActivity"
+        <activity android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.Launcher">
+            android:theme="@style/AppTheme.Launcher"
+            android:windowSoftInputMode="adjustPan|stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="4838ec19460fdfb32acef2d2035595bb8248cc75"
-            />
+            android:value="4838ec19460fdfb32acef2d2035595bb8248cc75" />
         <meta-data
             android:name="com.google.firebase.ml.vision.DEPENDENCIES"
             android:value="barcode,ocr" />
-        <receiver android:name=".services.notification.NotificationScheduleService"
-            android:exported="true"
-            android:enabled="true"/>
+
+        <receiver
+            android:name=".services.notification.NotificationScheduleService"
+            android:enabled="true"
+            android:exported="true" />
     </application>
+
 </manifest>

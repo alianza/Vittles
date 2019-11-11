@@ -17,7 +17,7 @@ import javax.inject.Inject
  * @property addProduct The AddProduct from the domain module.
  */
 class AddProductPresenter @Inject internal constructor(private val addProduct: AddProduct) :
-    BasePresenter<AddProductActivity>(), AddProductContract.Presenter {
+    BasePresenter<AddProductFragment>(), AddProductContract.Presenter {
 
     /**
      * Method used to add a product.
@@ -31,14 +31,14 @@ class AddProductPresenter @Inject internal constructor(private val addProduct: A
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 {
-                    view?.showAddProductSucceed()
-                    view?.resetView()
+                    view?.onShowAddProductSucceed()
+                    view?.onResetView()
                 },
                 {
                     if (it is IllegalArgumentException) {
-                        view?.showAddProductError() // Show snack bar that tells it failed
+                        view?.onShowAddProductError() // Show snack bar that tells it failed
                     } else if (it is Exception) {
-                        view?.showCloseToExpirationPopup(product) // Show close to expiring popup
+                        view?.onShowCloseToExpirationPopup(product) // Show close to expiring popup
                     }
                 }
             )
