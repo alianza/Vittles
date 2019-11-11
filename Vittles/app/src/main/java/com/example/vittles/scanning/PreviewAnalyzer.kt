@@ -65,9 +65,11 @@ class PreviewAnalyzer(
             val imageRotation = degreesToFirebaseRotation(degrees)
             if (mediaImage != null) {
                 val image = FirebaseVisionImage.fromMediaImage(mediaImage, imageRotation)
+                if (iterator == 0 && !hasBarCode) {
                     ScanningService.scanForBarcode(image, onBarcodeSuccess, onBarcodeFailure)
-                if (!hasExpirationDate) {
-//                    ScanningService.scanForExpirationDate(image, onOcrSuccess, onOcrFailure)
+                    iterator++
+                } else if (!hasExpirationDate) {
+                    ScanningService.scanForExpirationDate(image, onOcrSuccess, onOcrFailure)
                     iterator--
                 }
             }
