@@ -85,6 +85,9 @@ class ScannerPresenter @Inject internal constructor(private val getProductByBarc
             setImageReaderMode(ImageAnalysis.ImageReaderMode.ACQUIRE_LATEST_IMAGE) // Take newest available frame on analyze call
         }.build()
 
+        PreviewAnalyzer.hasBarCode = false
+        PreviewAnalyzer.hasExpirationDate = false
+
         // Build the image analysis use case and instantiate our analyzer
         return ImageAnalysis(analyzerConfig).apply {
             setAnalyzer(executor, PreviewAnalyzer(
