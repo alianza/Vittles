@@ -1,4 +1,4 @@
-package com.example.data
+package com.example.data.retrofit
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -10,7 +10,7 @@ import retrofit2.converter.gson.GsonConverterFactory
  * Created for future development
  *
  */
-class ProductsApiImpl {
+class ProductsApi {
     companion object {
         // The base url of the API
         private const val baseUrl = "https://dev.tescolabs.com/"

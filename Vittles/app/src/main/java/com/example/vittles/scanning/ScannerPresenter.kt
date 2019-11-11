@@ -38,8 +38,6 @@ class ScannerPresenter @Inject internal constructor(private val getProductByBarc
      *
      */
     override fun startCamera() {
-        val list : List<FirebaseVisionBarcode> = listOf()
-        getProductNameByBarcode(list)
         imageAnalysis = getImageAnalysis()
         preview = getPreview()
 
@@ -124,7 +122,7 @@ class ScannerPresenter @Inject internal constructor(private val getProductByBarc
     }
 
     private fun getProductNameByBarcode(barcodes: List<FirebaseVisionBarcode>) {
-        if (barcodes.isEmpty()) {
+        if (barcodes.isNotEmpty()) {
             val barcode = barcodes[0].toString()
             disposables.add(
                 getProductByBarcode(barcode).subscribeOn(Schedulers.io())

@@ -2,6 +2,11 @@ package com.example.vittles.di
 
 import android.content.Context
 import com.example.data.*
+import com.example.data.retrofit.ProductsApi
+import com.example.data.retrofit.ProductsApiService
+import com.example.data.room.ProductDao
+import com.example.data.room.ProductModelMapper
+import com.example.data.room.createProductDaoImpl
 import com.example.domain.repositories.ProductsRepository
 import dagger.Module
 import dagger.Provides
@@ -12,11 +17,12 @@ class DataModule {
 
     @Singleton
     @Provides
-    fun provideProductDaoImpl(context: Context) = createProductDaoImpl(context)
+    fun provideProductDaoImpl(context: Context) =
+        createProductDaoImpl(context)
 
     @Singleton
     @Provides
-    fun provideProductsApiService() = ProductsApiImpl.createApi()
+    fun provideProductsApiService() = ProductsApi.createApi()
 
     @Singleton
     @Provides

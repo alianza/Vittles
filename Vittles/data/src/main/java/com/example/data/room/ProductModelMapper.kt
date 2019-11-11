@@ -1,4 +1,4 @@
-package com.example.data
+package com.example.data.room
 
 import com.example.domain.product.Product
 import javax.inject.Inject
@@ -11,5 +11,10 @@ import javax.inject.Inject
  */
 class ProductModelMapper @Inject constructor() {
     fun fromEntity(from: ProductEntity) = Product(from.uid, from.productName, from.expirationDate, from.creationDate, null)
-    fun toEntity(from: Product) = ProductEntity(from.uid, from.productName, from.expirationDate, from.creationDate)
+    fun toEntity(from: Product) = ProductEntity(
+        from.uid,
+        from.productName,
+        from.expirationDate,
+        from.creationDate
+    )
 }

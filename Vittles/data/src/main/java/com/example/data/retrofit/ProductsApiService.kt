@@ -1,6 +1,6 @@
-package com.example.data
+package com.example.data.retrofit
 
-import com.example.data.tescoapi.TescoResult
+import com.example.data.retrofit.tesco.TescoResult
 import io.reactivex.Observable
 import retrofit2.http.GET
 import retrofit2.http.Headers

@@ -1,5 +1,8 @@
 package com.example.data
 
+import com.example.data.retrofit.ProductsApiService
+import com.example.data.room.ProductDao
+import com.example.data.room.ProductModelMapper
 import com.example.domain.repositories.ProductsRepository
 import com.example.domain.product.Product
 import io.reactivex.Completable
@@ -17,7 +20,8 @@ import io.reactivex.Single
  */
 class ProductsRepositoryImpl(private val productDao: ProductDao,
                              private val productsApi: ProductsApiService,
-                             private val mapper: ProductModelMapper) :
+                             private val mapper: ProductModelMapper
+) :
     ProductsRepository {
 
     override fun get(): Single<List<Product>> {

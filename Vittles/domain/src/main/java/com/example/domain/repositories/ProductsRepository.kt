@@ -31,7 +31,7 @@ interface ProductsRepository {
     /**
      * Deletes a product in the database.
      *
-     * @param product The product ot delete.
+     * @param product The product to delete.
      * @return A completable status.
      */
     fun delete(product: Product): Completable
@@ -44,5 +44,11 @@ interface ProductsRepository {
      */
     fun post(product: Product): Completable
 
+    /**
+     * Calls external API to look for product name of the barcode.
+     *
+     * @param barcode The barcode to look up.
+     * @return Observable string value of the product name.
+     */
     fun getProductNameByBarcode(barcode: String): Observable<String>
 }
