@@ -9,6 +9,9 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.domain.barcode.GetProductByBarcode
 import com.example.vittles.mvp.BasePresenter
+import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_camera.*
 import java.util.concurrent.Executors
 import javax.inject.Inject
@@ -61,8 +64,9 @@ class ScannerPresenter @Inject internal constructor(private val getProductByBarc
         preview.setOnPreviewOutputUpdateListener {
             // To update the SurfaceTexture, we have to remove it and re-add it
             val parent = view?.textureView?.parent as ViewGroup
+            val textureView = view?.textureView
             parent.removeView(view?.textureView)
-            parent.addView(view?.textureView, 0)
+            parent.addView(textureView, 0)
 
             view?.textureView?.surfaceTexture = it.surfaceTexture
         }
@@ -85,7 +89,7 @@ class ScannerPresenter @Inject internal constructor(private val getProductByBarc
         return ImageAnalysis(analyzerConfig).apply {
             setAnalyzer(executor, PreviewAnalyzer(
                 onBarcodeFailure = { view?.onBarcodeNotFound() },
-                onBarcodeSuccess = { view?.onBarcodeScanned(it) },
+                onBarcodeSuccess = { getProductNameByBarcode(it) },
                 onOcrFailure = { view?.onTextNotFound() },
                 onOcrSuccess = { view?.onTextScanned(it) }
             ))
@@ -116,6 +120,24 @@ class ScannerPresenter @Inject internal constructor(private val getProductByBarc
                 it1!!, it
             )
         } == PackageManager.PERMISSION_GRANTED
+    }
+
+    /**
+     * Calls repository to retrieve the product name with the given barcodes.
+     *
+     * @param barcodes All the barcodes retrieved from the camera.
+     */
+    private fun getProductNameByBarcode(barcodes: List<FirebaseVisionBarcode>) {
+        if (barcodes.isNotEmpty()) {
+            val barcode = barcodes[0].toString()
+            disposables.add(
+                getProductByBarcode(barcode).subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({ view?.onBarcodeScanned(it) }, { view?.onBarcodeNotFound() })
+            )
+        } else {
+            view?.onBarcodeNotFound()
+        }
     }
 
     companion object {

@@ -163,7 +163,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
      * @param product The product to delete.
      * @param deleteType The deleteType: eaten, thrown_away or removed.
      */
-    private fun onSaveDeleteProduct(product: Product, deleteType: DeleteType) {
+    override fun onSaveDeleteProduct(product: Product, deleteType: DeleteType) {
 
         if (undoSnackbar.isShown) {
             presenter.deleteProduct(deletedProduct, deletedProductDeleteType)
@@ -194,7 +194,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
      * Initializes the undo snackbar.
      *
      */
-    private fun initUndoSnackbar(){
+    override fun initUndoSnackbar(){
         undoSnackbar = Snackbar.make(
             content,
             "",
@@ -227,7 +227,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
      *
      */
     @SuppressLint("DefaultLocale")
-    private fun onShowUndoSnackbar(){
+    override fun onShowUndoSnackbar(){
         undoSnackbar.setText(deletedProduct.productName + " has been " + deletedProductDeleteType
             .toString()
             .toLowerCase()
@@ -241,7 +241,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
      * Handles the action of the remove button on a product
      *
      */
-    private fun onRemoveButtonClicked(product: Product) {
+    override fun onRemoveButtonClicked(product: Product) {
         PopupManager.instance.showPopup(context!!,
             PopupBase(
                 "Remove Product",

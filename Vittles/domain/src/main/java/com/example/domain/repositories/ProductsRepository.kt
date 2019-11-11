@@ -2,6 +2,7 @@ package com.example.domain.repositories
 
 import com.example.domain.product.Product
 import io.reactivex.Completable
+import io.reactivex.Observable
 import io.reactivex.Single
 
 /**
@@ -30,7 +31,7 @@ interface ProductsRepository {
     /**
      * Deletes a product in the database.
      *
-     * @param product The product ot delete.
+     * @param product The product to delete.
      * @return A completable status.
      */
     fun delete(product: Product): Completable
@@ -42,4 +43,12 @@ interface ProductsRepository {
      * @return A completable status.
      */
     fun post(product: Product): Completable
+
+    /**
+     * Calls external API to look for product name of the barcode.
+     *
+     * @param barcode The barcode to look up.
+     * @return Observable string value of the product name.
+     */
+    fun getProductNameByBarcode(barcode: String): Observable<String>
 }
