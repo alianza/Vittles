@@ -135,8 +135,6 @@ class ScannerPresenter @Inject internal constructor(private val getProductByBarc
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({ view?.onBarcodeScanned(it) }, { view?.onBarcodeNotFound() })
             )
-        } else {
-            view?.onBarcodeNotFound()
         }
     }
 
