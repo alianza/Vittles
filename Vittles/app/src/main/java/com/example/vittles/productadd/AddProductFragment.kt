@@ -26,8 +26,7 @@ import org.joda.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 /**
- * Activity class for the Add Product component. This components makes it possible to
- * create a product manually and insert it into the local database.
+ * Fragment class for the Add Product component.
  *
  * @author Jeroen Flietstra
  * @author Jan-Willem van Bremen

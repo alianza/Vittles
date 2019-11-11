@@ -31,7 +31,7 @@ import kotlinx.android.synthetic.main.fragment_productlist.*
 import javax.inject.Inject
 
 /**
- * Activity class for the main activity. This is the activity that shows the list of products.
+ * Fragment class for the main activity. This is the fragment that shows the list of products.
  *
  * @author Arjen Simons
  * @author Jeroen Flietstra
