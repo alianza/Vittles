@@ -40,9 +40,8 @@ class ProductsRepositoryImpl(private val productDao: ProductDao,
             if (it.products?.size!! > 0) {
                 it.products?.get(0)?.value
             } else {
-                ""
+                barcode
             }
-
         }
     }
 }
