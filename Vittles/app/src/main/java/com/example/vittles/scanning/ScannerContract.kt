@@ -12,6 +12,7 @@ interface ScannerContract {
 
     interface View {
         fun initViews()
+        fun setUpTapToFocus()
         fun onAddVittleButtonClick()
         fun onBarcodeScanned(productName: String)
         fun onBarcodeNotFound()
@@ -20,6 +21,7 @@ interface ScannerContract {
         fun onNoPermissionGranted()
         fun onEditNameButtonClick()
         fun onEditExpirationButtonClick()
+        fun onTorchButtonClicked()
     }
 
     interface Presenter {

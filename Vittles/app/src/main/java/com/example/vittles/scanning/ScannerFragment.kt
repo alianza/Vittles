@@ -18,6 +18,7 @@ import com.example.vittles.scanning.productaddmanual.ProductNameEditView
 import com.example.vittles.services.scanner.DateFormatterService
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.content_main.*
+import kotlinx.android.synthetic.main.fragment_camera.*
 import org.joda.time.DateTime
 import javax.inject.Inject
 
@@ -41,6 +42,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
     private lateinit var btnScanVittle: Button
     private lateinit var ivCheckboxBarcode: ImageView
     private lateinit var ivCheckboxExpirationDate: ImageView
+    private lateinit var btnTorch: ImageButton
 
     private var expirationDate: DateTime? = null
 
@@ -64,13 +66,17 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         btnScanVittle = view.findViewById(R.id.btnScanVittle)
         ivCheckboxBarcode = view.findViewById(R.id.ivCheckboxBarcode)
         ivCheckboxExpirationDate = view.findViewById(R.id.ivCheckboxExpirationDate)
+        btnTorch = view.findViewById(R.id.btnTorch)
         initViews()
-        setUpTapToFocus()
         presenter.checkPermissions()
     }
 
+    /**
+     * Set up the tap to focus listener.
+     *
+     */
     @SuppressLint("ClickableViewAccessibility")
-    private fun setUpTapToFocus() {
+    override fun setUpTapToFocus() {
         textureView.setOnTouchListener { _, event ->
             if (event.action != MotionEvent.ACTION_DOWN) {
                 return@setOnTouchListener false
@@ -103,6 +109,10 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         ibEditName.setOnClickListener { onEditNameButtonClick() }
 
         ibEditDate.setOnClickListener { onEditExpirationButtonClick() }
+
+        btnTorch.setOnClickListener { onTorchButtonClicked() }
+
+        setUpTapToFocus()
     }
 
     /**
@@ -121,6 +131,32 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
                 "Scan or fill in the necessary fields",
                 Toast.LENGTH_LONG
             ).show()
+        }
+    }
+
+    /**
+     * Calls presenter to toggle torch and sets drawable of the torch status.
+     *
+     */
+    override fun onTorchButtonClicked() {
+        if (presenter.toggleTorch()) {
+            btnTorch.setImageDrawable(
+                context?.let {
+                    getDrawable(
+                        it,
+                        R.drawable.ic_flash_on_black_36dp
+                    )
+                }
+            )
+        } else {
+            btnTorch.setImageDrawable(
+                context?.let {
+                    getDrawable(
+                        it,
+                        R.drawable.ic_flash_off_black_36dp
+                    )
+                }
+            )
         }
     }
 
