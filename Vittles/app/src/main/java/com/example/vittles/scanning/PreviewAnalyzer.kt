@@ -6,6 +6,10 @@ import com.example.vittles.services.scanner.ScanningService
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.google.firebase.ml.vision.common.FirebaseVisionImageMetadata
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.concurrent.TimeUnit
 
 /**
@@ -30,9 +34,6 @@ class PreviewAnalyzer(
 
     // Value used for the scanning delay
     private var lastAnalyzedTimestamp = 0L
-
-    private var iterator = 0
-
 
     /**
      * Convert the rotation degree to firebase rotation degree.
@@ -65,15 +66,30 @@ class PreviewAnalyzer(
             val imageRotation = degreesToFirebaseRotation(degrees)
             if (mediaImage != null) {
                 val image = FirebaseVisionImage.fromMediaImage(mediaImage, imageRotation)
-                if (iterator == 0 && !hasBarCode) {
-                    ScanningService.scanForBarcode(image, onBarcodeSuccess, onBarcodeFailure)
-                    iterator++
-                } else if (!hasExpirationDate) {
-                    ScanningService.scanForExpirationDate(image, onOcrSuccess, onOcrFailure)
-                    iterator--
+                if (!hasBarCode) {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        withContext(Dispatchers.IO) {
+                            ScanningService.scanForBarcode(
+                                image,
+                                onBarcodeSuccess,
+                                onBarcodeFailure
+                            )
+                        }
+                    }
                 }
+                if (!hasExpirationDate) {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        withContext(Dispatchers.IO) {
+                            ScanningService.scanForExpirationDate(
+                                image,
+                                onOcrSuccess,
+                                onOcrFailure
+                            )
+                        }
+                    }
+                }
+                lastAnalyzedTimestamp = currentTimestamp
             }
-            lastAnalyzedTimestamp = currentTimestamp
         }
     }
 }

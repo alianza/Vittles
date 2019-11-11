@@ -129,14 +129,12 @@ class ScannerPresenter @Inject internal constructor(private val getProductByBarc
      */
     private fun getProductNameByBarcode(barcodes: List<FirebaseVisionBarcode>) {
         if (barcodes.isNotEmpty()) {
-            val barcode = barcodes[0].toString()
+            val barcode = barcodes[0].rawValue.toString()
             disposables.add(
                 getProductByBarcode(barcode).subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({ view?.onBarcodeScanned(it) }, { view?.onBarcodeNotFound() })
             )
-        } else {
-            view?.onBarcodeNotFound()
         }
     }
 
