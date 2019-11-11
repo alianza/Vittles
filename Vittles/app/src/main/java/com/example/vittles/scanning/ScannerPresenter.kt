@@ -122,6 +122,11 @@ class ScannerPresenter @Inject internal constructor(private val getProductByBarc
         } == PackageManager.PERMISSION_GRANTED
     }
 
+    /**
+     * Calls repository to retrieve the product name with the given barcodes.
+     *
+     * @param barcodes All the barcodes retrieved from the camera.
+     */
     private fun getProductNameByBarcode(barcodes: List<FirebaseVisionBarcode>) {
         if (barcodes.isNotEmpty()) {
             val barcode = barcodes[0].toString()
