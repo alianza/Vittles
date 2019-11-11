@@ -42,4 +42,6 @@ interface ProductsRepository {
      * @return A completable status.
      */
     fun post(product: Product): Completable
+
+    fun getProductNameByBarcode(barcode: String): Single<String>
 }

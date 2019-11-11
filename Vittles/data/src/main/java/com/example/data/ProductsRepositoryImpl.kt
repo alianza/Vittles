@@ -2,6 +2,7 @@ package com.example.data
 
 import com.example.domain.repositories.ProductsRepository
 import com.example.domain.product.Product
+import com.example.domain.repositories.ProductsApi
 import io.reactivex.Completable
 import io.reactivex.Single
 
@@ -15,6 +16,7 @@ import io.reactivex.Single
  * @property mapper The mapper used to map the product data class.
  */
 class ProductsRepositoryImpl(private val productDao: ProductDao,
+                             private val productsApi: ProductsApiService,
                              private val mapper: ProductModelMapper) :
     ProductsRepository {
 
@@ -28,4 +30,8 @@ class ProductsRepositoryImpl(private val productDao: ProductDao,
     override fun delete(product: Product): Completable = Completable.fromAction { productDao.delete(mapper.toEntity(product)) }
 
     override fun post(product: Product): Completable = Completable.fromAction { productDao.insert(mapper.toEntity(product)) }
+
+    override fun getProductNameByBarcode(barcode: String): Single<String> {
+        return productsApi.getProductName(barcode).
+    }
 }

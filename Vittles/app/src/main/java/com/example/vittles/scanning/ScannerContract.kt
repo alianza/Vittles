@@ -2,8 +2,6 @@ package com.example.vittles.scanning
 
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.Preview
-import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
-import com.google.firebase.ml.vision.text.FirebaseVisionText
 
 /**
  * MVP Contract for scanning products.
@@ -15,7 +13,7 @@ interface ScannerContract {
     interface View {
         fun initViews()
         fun onAddVittleButtonClick()
-        fun onBarcodeScanned(barcodes: List<FirebaseVisionBarcode>)
+        fun onBarcodeScanned(barcodes: String)
         fun onBarcodeNotFound()
         fun onTextScanned(text: String)
         fun onTextNotFound()

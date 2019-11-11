@@ -106,11 +106,11 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
     /**
      * Handles interface actions once the barcode has been successfully scanned.
      *
-     * @param barcodes The barcodes that have been retrieved from the camera.
+     * @param barcode The barcodes that have been retrieved from the camera.
      */
-    override fun onBarcodeScanned(barcodes: List<FirebaseVisionBarcode>) {
-        if (barcodes.isNotEmpty()) {
-            tvBarcode.text = barcodes[0].rawValue
+    override fun onBarcodeScanned(barcode: String) {
+        if (barcode.isNotEmpty()) {
+            tvBarcode.text = barcode
             ivCheckboxBarcode.setImageDrawable(
                 context?.let {
                     getDrawable(
