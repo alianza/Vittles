@@ -37,7 +37,12 @@ class ProductsRepositoryImpl(private val productDao: ProductDao,
 
     override fun getProductNameByBarcode(barcode: String): Observable<String> {
         return productsApi.getProductName(barcode).map {
-            it.products?.get(0)?.value
+            if (it.products?.size!! > 0) {
+                it.products?.get(0)?.value
+            } else {
+                ""
+            }
+
         }
     }
 }

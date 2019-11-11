@@ -15,7 +15,6 @@ import com.example.vittles.scanning.ScannerPresenter.Companion.REQUIRED_PERMISSI
 import com.example.vittles.scanning.productaddmanual.DateEditView
 import com.example.vittles.scanning.productaddmanual.ProductNameEditView
 import com.example.vittles.services.scanner.DateFormatterService
-import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.content_main.*
 import org.joda.time.DateTime
@@ -34,7 +33,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
     private lateinit var textureView: TextureView
     private lateinit var refreshDate: ImageButton
     private lateinit var refreshProductName: ImageButton
-    private lateinit var tvBarcode: TextView
+    private lateinit var tvProductName: TextView
     private lateinit var tvExpirationDate: TextView
     private lateinit var ibEditName: ImageButton
     private lateinit var ibEditDate: ImageButton
@@ -57,7 +56,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         textureView = view.findViewById(R.id.textureView)
         refreshDate = view.findViewById(R.id.refreshDate)
         refreshProductName = view.findViewById(R.id.refreshProductName)
-        tvBarcode = view.findViewById(R.id.tvBarcode)
+        tvProductName = view.findViewById(R.id.tvProductName)
         tvExpirationDate = view.findViewById(R.id.tvExpirationDate)
         ibEditName = view.findViewById(R.id.ibEditName)
         ibEditDate = view.findViewById(R.id.ibEditDate)
@@ -94,8 +93,8 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
      *
      */
     override fun onAddVittleButtonClick() {
-        if (expirationDate != null && !tvBarcode.text.isNullOrBlank()){
-            val scanResult = ScanResult(tvBarcode.text.toString(), expirationDate)
+        if (expirationDate != null && !tvProductName.text.isNullOrBlank()){
+            val scanResult = ScanResult(tvProductName.text.toString(), expirationDate)
             NavHostFragment.findNavController(fragmentHost)
                 .navigate(ScannerFragmentDirections.actionScannerFragmentToAddProductFragment(scanResult))
             CameraX.unbindAll()
@@ -109,13 +108,13 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
     }
 
     /**
-     * Handles interface actions once the barcode has been successfully scanned.
+     * Handles interface actions once the productName has been successfully scanned.
      *
-     * @param barcode The barcodes that have been retrieved from the camera.
+     * @param productName The product name that has been retrieved from the camera.
      */
-    override fun onBarcodeScanned(barcode: String) {
-        if (barcode.isNotEmpty()) {
-            tvBarcode.text = barcode
+    override fun onBarcodeScanned(productName: String) {
+        if (productName.isNotEmpty()) {
+            tvProductName.text = productName
             ivCheckboxBarcode.setImageDrawable(
                 context?.let {
                     getDrawable(
@@ -208,7 +207,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
 
     override fun onEditNameButtonClick() {
         val dialog = ProductNameEditView()
-        context?.let { dialog.openDialog(it, tvBarcode) }
+        context?.let { dialog.openDialog(it, tvProductName) }
     }
 
     override fun onEditExpirationButtonClick() {

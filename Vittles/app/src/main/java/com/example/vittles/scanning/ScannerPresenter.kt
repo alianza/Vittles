@@ -64,8 +64,9 @@ class ScannerPresenter @Inject internal constructor(private val getProductByBarc
         preview.setOnPreviewOutputUpdateListener {
             // To update the SurfaceTexture, we have to remove it and re-add it
             val parent = view?.textureView?.parent as ViewGroup
+            val textureView = view?.textureView
             parent.removeView(view?.textureView)
-            parent.addView(view?.textureView, 0)
+            parent.addView(textureView, 0)
 
             view?.textureView?.surfaceTexture = it.surfaceTexture
         }

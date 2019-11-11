@@ -13,7 +13,7 @@ interface ScannerContract {
     interface View {
         fun initViews()
         fun onAddVittleButtonClick()
-        fun onBarcodeScanned(barcodes: String)
+        fun onBarcodeScanned(productName: String)
         fun onBarcodeNotFound()
         fun onTextScanned(text: String)
         fun onTextNotFound()

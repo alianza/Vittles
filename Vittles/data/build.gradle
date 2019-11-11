@@ -25,6 +25,10 @@ android {
         }
     }
 
+    buildTypes.each {
+        it.buildConfigField("String", "TescoAPIKey", TescoAPIKey)
+    }
+
     dokka {
         includeNonPublic = true
         outputFormat = 'html'

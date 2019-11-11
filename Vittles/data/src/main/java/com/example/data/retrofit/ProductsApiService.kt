@@ -6,9 +6,20 @@ import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Query
 
+/**
+ * Retrofit service that connects to the endpoints of the API.
+ *
+ * @author Jeroen Flietstra
+ */
 interface ProductsApiService {
 
-    @Headers("Accept: application/json", "Ocp-Apim-Subscription-Key: bb12529b7dda4bb4b7a6f25d1c146891")
+    /**
+     * Connects to the endpoint that retrieves product data based on a GTIN code.
+     *
+     * @param barcode The GTIN code of the product.
+     * @return A [TescoResult] object with the retrieved data.
+     */
+    @Headers("Accept: application/json")
     @GET("product/")
     fun getProductName(@Query(value = "gtin", encoded = true) barcode: String): Observable<TescoResult>
 }
