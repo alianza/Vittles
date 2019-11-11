@@ -2,6 +2,7 @@ package com.example.domain.repositories
 
 import com.example.domain.product.Product
 import io.reactivex.Completable
+import io.reactivex.Observable
 import io.reactivex.Single
 
 /**
@@ -43,5 +44,5 @@ interface ProductsRepository {
      */
     fun post(product: Product): Completable
 
-    fun getProductNameByBarcode(barcode: String): Single<String>
+    fun getProductNameByBarcode(barcode: String): Observable<String>
 }

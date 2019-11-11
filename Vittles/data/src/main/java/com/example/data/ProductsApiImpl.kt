@@ -1,9 +1,9 @@
 package com.example.data
 
-import com.example.domain.repositories.ProductsApi
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
 /**
@@ -13,7 +13,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class ProductsApiImpl {
     companion object {
         // The base url of the API
-        private const val baseUrl = "https://dev.tescolabs.com/product/"
+        private const val baseUrl = "https://dev.tescolabs.com/"
 
         /**
          *
@@ -27,14 +27,15 @@ class ProductsApiImpl {
                 .build()
 
             // Create the Retrofit instance
-            val numbersApi = Retrofit.Builder()
+            val productsApi = Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build()
 
             // Return the Retrofit NumbersApiService
-            return numbersApi.create(ProductsApiService::class.java)
+            return productsApi.create(ProductsApiService::class.java)
         }
     }
 }

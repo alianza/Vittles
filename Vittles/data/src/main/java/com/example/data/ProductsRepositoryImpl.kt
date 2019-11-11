@@ -2,8 +2,8 @@ package com.example.data
 
 import com.example.domain.repositories.ProductsRepository
 import com.example.domain.product.Product
-import com.example.domain.repositories.ProductsApi
 import io.reactivex.Completable
+import io.reactivex.Observable
 import io.reactivex.Single
 
 /**
@@ -31,7 +31,9 @@ class ProductsRepositoryImpl(private val productDao: ProductDao,
 
     override fun post(product: Product): Completable = Completable.fromAction { productDao.insert(mapper.toEntity(product)) }
 
-    override fun getProductNameByBarcode(barcode: String): Single<String> {
-        return productsApi.getProductName(barcode).
+    override fun getProductNameByBarcode(barcode: String): Observable<String> {
+        return productsApi.getProductName(barcode).map {
+            it.products?.get(0)?.value
+        }
     }
 }

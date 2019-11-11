@@ -1,7 +1,7 @@
 package com.example.domain.barcode
 
 import com.example.domain.repositories.ProductsRepository
-import io.reactivex.Single
+import io.reactivex.Observable
 import javax.inject.Inject
 
 /**
@@ -11,5 +11,5 @@ import javax.inject.Inject
  */
 class GetProductByBarcode @Inject constructor(private val repository: ProductsRepository) {
 
-    operator fun invoke(barcode: String): Single<String> = repository.getProductNameByBarcode(barcode)
+    operator fun invoke(barcode: String): Observable<String> = repository.getProductNameByBarcode(barcode)
 }
