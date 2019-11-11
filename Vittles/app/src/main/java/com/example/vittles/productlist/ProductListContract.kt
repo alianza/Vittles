@@ -23,6 +23,10 @@ interface ProductListContract {
         fun onShowProducts(products: List<Product>)
         fun onShowProductDeleteError()
         fun onSortMenuOpened()
+        fun onSaveDeleteProduct(product: Product, deleteType: DeleteType)
+        fun initUndoSnackbar()
+        fun onShowUndoSnackbar()
+        fun onRemoveButtonClicked(product: Product)
         fun filter(query: String)
     }
 
