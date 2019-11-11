@@ -46,7 +46,7 @@
     <fragment
         android:id="@+id/scannerFragment"
         android:name="com.example.vittles.scanning.ScannerFragment"
-        android:label="fragment_camera"
+        android:label="@string/scan_vittles_title"
         tools:layout="@layout/fragment_camera" >
         <action
             android:id="@+id/action_scannerFragment_to_addProductFragment"
