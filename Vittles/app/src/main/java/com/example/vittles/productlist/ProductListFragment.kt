@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.SearchView
 import android.widget.TextView
@@ -61,6 +62,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
     private lateinit var tvNoResults: TextView
     private lateinit var svSearch: SearchView
     private lateinit var toolbar: Toolbar
+    private lateinit var content: FrameLayout
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -80,6 +82,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
         tvNoResults = view.findViewById(R.id.tvNoResults)
         svSearch = view.findViewById(R.id.svSearch)
         toolbar = view.findViewById(R.id.toolbar)
+        content = view.findViewById(R.id.content)
         onSearchBarClosed()
         initViews()
     }
@@ -193,7 +196,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
      */
     private fun initUndoSnackbar(){
         undoSnackbar = Snackbar.make(
-            findViewById(android.R.id.content),
+            content,
             "",
             Snackbar.LENGTH_SHORT)
 
@@ -234,14 +237,6 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
         undoSnackbar.show()
     }
 
-     /**
-     * Called when the sort button is clicked.
-     *
-     */
-    private fun openSortMenu() {
-        sortMenu.openMenu(this, btnSort, filteredProducts)
-    }
-
     /**
      * Handles the action of the remove button on a product
      *
@@ -261,7 +256,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
      *
      */
     override fun setItemTouchHelper() {
-        val callback = ProductItemTouchHelper(products, presenter, this, this::onSaveDeleteProduct)
+        val callback = ProductItemTouchHelper(products, presenter, context!!, this::onSaveDeleteProduct)
         itemTouchHelper = ItemTouchHelper(callback)
         itemTouchHelper.attachToRecyclerView(rvProducts)
     }
