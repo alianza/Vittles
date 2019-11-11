@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.SearchView
 import android.widget.TextView
@@ -23,13 +24,14 @@ import com.example.vittles.services.popups.PopupBase
 import com.example.vittles.services.popups.PopupButton
 import com.example.vittles.services.popups.PopupManager
 import com.example.vittles.services.sorting.SortMenu
+import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_productlist.*
 import javax.inject.Inject
 
 /**
- * Activity class for the main activity. This is the activity that shows the list of products.
+ * Fragment class for the main activity. This is the fragment that shows the list of products.
  *
  * @author Arjen Simons
  * @author Jeroen Flietstra
@@ -45,6 +47,10 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
     private val args: ProductListFragmentArgs by navArgs()
 
     private lateinit var itemTouchHelper: ItemTouchHelper
+    private lateinit var undoSnackbar: Snackbar
+    private lateinit var deletedProduct: Product
+    private lateinit var deletedProductDeleteType: DeleteType
+    private var deletedProductIndex: Int = 0
     private var products = mutableListOf<Product>()
     private var filteredProducts = products
     private val productAdapter = ProductAdapter(products, this::onRemoveButtonClicked)
@@ -56,6 +62,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
     private lateinit var tvNoResults: TextView
     private lateinit var svSearch: SearchView
     private lateinit var toolbar: Toolbar
+    private lateinit var content: FrameLayout
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -75,6 +82,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
         tvNoResults = view.findViewById(R.id.tvNoResults)
         svSearch = view.findViewById(R.id.svSearch)
         toolbar = view.findViewById(R.id.toolbar)
+        content = view.findViewById(R.id.content)
         onSearchBarClosed()
         initViews()
     }
@@ -84,7 +92,6 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
         onSearchBarClosed()
         presenter.destroy()
     }
-
 
     /**
      * Initializes the RecyclerView and sets EventListeners.
@@ -103,6 +110,8 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
         val textView = svSearch.findViewById(id) as TextView
         textView.setTextColor(Color.BLACK)
         setListeners()
+
+        initUndoSnackbar()
 
         setItemTouchHelper()
 
@@ -149,6 +158,86 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
 
 
     /**
+     * Deletes product and shows a toast to undo the deletion.
+     *
+     * @param product The product to delete.
+     * @param deleteType The deleteType: eaten, thrown_away or removed.
+     */
+    private fun onSaveDeleteProduct(product: Product, deleteType: DeleteType) {
+
+        if (undoSnackbar.isShown) {
+            presenter.deleteProduct(deletedProduct, deletedProductDeleteType)
+            //removeItem(deletedProductIndex)
+        }
+        //set deleted product
+        deletedProduct = product
+        deletedProductIndex = products.indexOf(product)
+        deletedProductDeleteType = deleteType
+
+        products.remove(product)
+        //It crashes when you use notifyItemRemoved(0). This has been a known issue for quit a while.
+        if (deletedProductIndex == 0) {
+            productAdapter.notifyDataSetChanged()
+        } else {
+            productAdapter.notifyItemRemoved(deletedProductIndex)
+
+            //Makes sure the divider on the element above is drawn
+            if(deletedProductIndex != 0) {
+                productAdapter.notifyItemChanged(deletedProductIndex - 1)
+            }
+        }
+
+        onShowUndoSnackbar()
+    }
+
+    /**
+     * Initializes the undo snackbar.
+     *
+     */
+    private fun initUndoSnackbar(){
+        undoSnackbar = Snackbar.make(
+            content,
+            "",
+            Snackbar.LENGTH_SHORT)
+
+        undoSnackbar.setAction("UNDO") {}
+        undoSnackbar.setActionTextColor(Color.WHITE)
+        undoSnackbar.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
+
+            override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                super.onDismissed(transientBottomBar, event)
+
+                if(event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT){
+                    presenter.deleteProduct(deletedProduct, deletedProductDeleteType)
+                }
+                else{
+                    products.add(index = deletedProductIndex, element = deletedProduct)
+                    productAdapter.notifyItemInserted(deletedProductIndex)
+
+                    if (deletedProductIndex == products.count() - 1){
+                        productAdapter.notifyItemChanged(deletedProductIndex - 1)
+                    }
+                }
+            }
+        })
+    }
+
+    /**
+     * Shows the undo snackbar and sets the text.
+     *
+     */
+    @SuppressLint("DefaultLocale")
+    private fun onShowUndoSnackbar(){
+        undoSnackbar.setText(deletedProduct.productName + " has been " + deletedProductDeleteType
+            .toString()
+            .toLowerCase()
+            .replace("_", " ")
+        )
+
+        undoSnackbar.show()
+    }
+
+    /**
      * Handles the action of the remove button on a product
      *
      */
@@ -159,7 +248,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
                 "Do you want to remove this product? \n It won't be used for the food waste report."
             ),
             PopupButton("NO") {},
-            PopupButton("YES") { presenter.deleteProduct(product, DeleteType.REMOVED) })
+            PopupButton("YES") { onSaveDeleteProduct(product, DeleteType.REMOVED) })
     }
 
     /**
@@ -167,7 +256,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
      *
      */
     override fun setItemTouchHelper() {
-        val callback = ProductItemTouchHelper(products, presenter, context!!)
+        val callback = ProductItemTouchHelper(products, presenter, context!!, this::onSaveDeleteProduct)
         itemTouchHelper = ItemTouchHelper(callback)
         itemTouchHelper.attachToRecyclerView(rvProducts)
     }
@@ -236,7 +325,6 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
         setEmptyView()
         onNoResults()
     }
-
 
     /**
      * If product could not be deleted, this method will create a feedback Snackbar for the error.

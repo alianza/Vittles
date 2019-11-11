@@ -21,6 +21,11 @@ import kotlinx.android.synthetic.main.content_main.*
 import org.joda.time.DateTime
 import javax.inject.Inject
 
+/**
+ * The scanner fragment that displays the camera preview with the checklist.
+ *
+ * @author Jeroen Flietstra
+ */
 class ScannerFragment @Inject internal constructor() : DaggerFragment(), ScannerContract.View {
 
     @Inject
