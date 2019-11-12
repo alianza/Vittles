@@ -68,4 +68,7 @@
     <string name="menu_search">Search</string>
     <string name="menu_reports">Reports</string>
     <string name="menu_settings">Settings</string>
+
+    <!--    Content Descriptions-->
+    <string name="cd_refresh_button">Refresh</string>
 </resources>

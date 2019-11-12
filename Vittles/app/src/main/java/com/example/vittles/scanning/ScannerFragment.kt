@@ -1,6 +1,7 @@
 package com.example.vittles.scanning
 
 import android.annotation.SuppressLint
+import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.*
 import android.widget.*
@@ -8,14 +9,18 @@ import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.camera.core.CameraX
 import androidx.camera.core.DisplayOrientedMeteringPointFactory
 import androidx.camera.core.FocusMeteringAction
-import androidx.camera.core.MeteringPoint
 import androidx.navigation.fragment.NavHostFragment
+import com.example.domain.product.Product
+import com.example.vittles.NavigationGraphDirections
 import com.example.vittles.R
 import com.example.vittles.scanning.ScannerPresenter.Companion.REQUEST_CODE_PERMISSIONS
 import com.example.vittles.scanning.ScannerPresenter.Companion.REQUIRED_PERMISSIONS
-import com.example.vittles.scanning.productaddmanual.DateEditView
 import com.example.vittles.scanning.productaddmanual.ProductNameEditView
+import com.example.vittles.services.popups.PopupBase
+import com.example.vittles.services.popups.PopupButton
+import com.example.vittles.services.popups.PopupManager
 import com.example.vittles.services.scanner.DateFormatterService
+import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.fragment_camera.*
@@ -33,8 +38,8 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
     lateinit var presenter: ScannerPresenter
 
     private lateinit var textureView: TextureView
-    private lateinit var refreshDate: ImageButton
-    private lateinit var refreshProductName: ImageButton
+    private lateinit var refreshDate: ImageView
+    private lateinit var refreshProductName: ImageView
     private lateinit var tvProductName: TextView
     private lateinit var tvExpirationDate: TextView
     private lateinit var ibEditName: ImageButton
@@ -57,8 +62,8 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         textureView = view.findViewById(R.id.textureView)
-        refreshDate = view.findViewById(R.id.refreshDate)
-        refreshProductName = view.findViewById(R.id.refreshProductName)
+        refreshDate = view.findViewById(R.id.ibRefreshDate)
+        refreshProductName = view.findViewById(R.id.ibRefreshProductName)
         tvProductName = view.findViewById(R.id.tvProductName)
         tvExpirationDate = view.findViewById(R.id.tvExpirationDate)
         ibEditName = view.findViewById(R.id.ibEditName)
@@ -82,7 +87,12 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
                 return@setOnTouchListener false
             }
 
-            val factory = DisplayOrientedMeteringPointFactory(context!!, CameraX.LensFacing.BACK, textureView.width.toFloat(), textureView.height.toFloat())
+            val factory = DisplayOrientedMeteringPointFactory(
+                context!!,
+                CameraX.LensFacing.BACK,
+                textureView.width.toFloat(),
+                textureView.height.toFloat()
+            )
             val point = factory.createPoint(event.x, event.y)
             val action = FocusMeteringAction.Builder.from(point).build()
             CameraX.getCameraControl(CameraX.LensFacing.BACK).startFocusAndMetering(action)
@@ -120,11 +130,15 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
      *
      */
     override fun onAddVittleButtonClick() {
-        if (expirationDate != null && !tvProductName.text.isNullOrBlank()){
-            val scanResult = ScanResult(tvProductName.text.toString(), expirationDate)
-            NavHostFragment.findNavController(fragmentHost)
-                .navigate(ScannerFragmentDirections.actionScannerFragmentToAddProductFragment(scanResult))
-            CameraX.unbindAll()
+        if (expirationDate != null && !tvProductName.text.isNullOrBlank()) {
+            val product = Product(
+                null,
+                tvProductName.text.toString(),
+                expirationDate!!,
+                DateTime(),
+                null
+            )
+            presenter.addProduct(product, true)
         } else {
             Toast.makeText(
                 context,
@@ -241,12 +255,16 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         }
     }
 
+    /**
+     * Asks for the needed permissions, called if the user did not grant any permissions.
+     *
+     */
     fun onRequestPermissionsFromFragment() {
         requestPermissions(REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
     }
 
     /**
-     * If no permissions granted, show toast with error message.
+     * If no permissions granted, show toast with error message and redirect to dashboard.
      *
      */
     override fun onNoPermissionGranted() {
@@ -255,17 +273,125 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
             "Permissions not granted by the user.",
             Toast.LENGTH_SHORT
         ).show()
-        requireActivity().finish()
+        NavHostFragment.findNavController(fragmentHost)
+            .navigate(NavigationGraphDirections.actionGlobalProductListFragment())
     }
 
     override fun onEditNameButtonClick() {
-        val dialog = ProductNameEditView()
-        context?.let { dialog.openDialog(it, tvProductName) }
+        val dialog = ProductNameEditView(onFinished = { productName: String ->
+            onBarcodeScanned(productName)
+        })
+        context?.let { dialog.openDialog(it) }
     }
 
     override fun onEditExpirationButtonClick() {
-        val dialog = DateEditView()
-        context?.let { dialog.openDialog(it, tvExpirationDate) }
-        requireActivity().onBackPressed()
+        val currentDate = DateTime.now()
+
+        val year = currentDate.year
+        val month = currentDate.monthOfYear
+        val day = currentDate.dayOfMonth
+        val dpd = context?.let { it1 ->
+            DatePickerDialog(
+                it1,
+                DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
+                    val expirationDate =
+                        DateTime(year, monthOfYear + MONTHS_OFFSET, dayOfMonth, 0, 0)
+                    val expDateText = getString(
+                        R.string.expiration_format,
+                        (expirationDate.dayOfMonth).toString(),
+                        (expirationDate.monthOfYear).toString(),
+                        (expirationDate.year).toString()
+                    )
+                    onTextScanned(expDateText)
+                }, year, month - MONTHS_OFFSET, day
+            )
+        }
+        if (dpd != null) {
+            dpd.setButton(
+                DatePickerDialog.BUTTON_NEGATIVE,
+                getString(R.string.btn_cancel),
+                dpd
+            )
+            dpd.setButton(
+                DatePickerDialog.BUTTON_POSITIVE,
+                getString(R.string.btn_confirm),
+                dpd
+            )
+            dpd.datePicker.minDate = currentDate.millis
+            dpd.show()
+        }
+    }
+
+    /**
+     * If product has been added, this method will reset all the necessary properties.
+     *
+     */
+    override fun onResetView() {
+        tvProductName.text = getString(R.string.product_name_scanner)
+        tvExpirationDate.text = getString(R.string.date_format_scanner)
+        ivCheckboxExpirationDate.setImageDrawable(
+            context?.let {
+                getDrawable(
+                    it,
+                    R.drawable.ic_circle_darkened
+                )
+            }
+        )
+        ivCheckboxBarcode.setImageDrawable(
+            context?.let {
+                getDrawable(
+                    it,
+                    R.drawable.ic_circle_darkened
+                )
+            }
+        )
+        PreviewAnalyzer.hasBarCode = false
+        PreviewAnalyzer.hasExpirationDate = false
+    }
+
+    /**
+     * If product could not be added, this method will create a feedback snack bar for the error.
+     *
+     */
+    override fun onShowAddProductError() {
+        Snackbar.make(layout, getString(R.string.product_failed), Snackbar.LENGTH_LONG)
+            .show()
+    }
+
+    /**
+     * If product is added successfully, this method will show a toast displaying a success state.
+     *
+     */
+    override fun onShowAddProductSucceed() {
+        Snackbar.make(layout, getString(R.string.product_added), Snackbar.LENGTH_SHORT).show()
+    }
+
+    /**
+     * Shows the CloseToExpiring popup.
+     *
+     */
+    override fun onShowCloseToExpirationPopup(product: Product) {
+        context?.let {
+            PopupManager.instance.showPopup(
+                it,
+                PopupBase(
+                    "Almost expired!",
+                    String.format(
+                        "The scanned product expires in %d days. \n Are you sure you want to add it?",
+                        product.getDaysRemaining()
+                    )
+                ),
+                PopupButton("NO"),
+                PopupButton("YES") { presenter.addProduct(product, false) }
+            )
+        }
+    }
+
+    companion object {
+        /**
+         * This offset is used to counter the default values from the Date object.
+         *
+         */
+        const val MONTHS_OFFSET = 1
     }
 }
