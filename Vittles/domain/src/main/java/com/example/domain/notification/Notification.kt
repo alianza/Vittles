@@ -4,6 +4,7 @@ package com.example.domain.notification
  * Model for notifications.
  *
  * @author Jeroen Flietstra
+ * @author Sarah Lange
  *
  * @property title The title of the notification.
  * @property message The message of the notification.

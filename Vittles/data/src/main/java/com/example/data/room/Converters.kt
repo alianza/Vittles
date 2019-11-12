@@ -1,4 +1,4 @@
-package com.example.data
+package com.example.data.room
 
 import androidx.room.TypeConverter
 import org.joda.time.DateTime
@@ -7,7 +7,8 @@ import org.joda.time.DateTime
  * The converters in this class are used to convert non-persistable types in data models
  * to persistable types.
  *
- * @author https://developer.android.com/reference/android/arch/persistence/room/TypeConverter
+ * @author Jan-Willem van Bremen
+ * @author Jeroen Flietstra
  */
 class Converters {
     @TypeConverter

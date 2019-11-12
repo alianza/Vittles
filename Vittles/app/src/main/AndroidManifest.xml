@@ -4,6 +4,8 @@
     package="com.example.vittles">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
 
     <application
         android:name=".VittlesApp"
@@ -15,11 +17,10 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".wastereport.WasteReportActivity"></activity>
-        <activity android:name=".productadd.AddProductActivity" />
-        <activity
-            android:name=".productlist.ProductsActivity"
+        <activity android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.Launcher">
+            android:theme="@style/AppTheme.Launcher"
+            android:windowSoftInputMode="adjustPan|stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

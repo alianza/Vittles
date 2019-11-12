@@ -1,6 +1,7 @@
 package com.example.vittles.mvp
 
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import io.reactivex.disposables.CompositeDisposable
 
 /**
@@ -12,7 +13,7 @@ import io.reactivex.disposables.CompositeDisposable
  *
  * @param V The activity (V: View) of the presenter.
  */
-abstract class BasePresenter<V : AppCompatActivity> : MvpPresenter {
+abstract class BasePresenter<V : Fragment> : MvpPresenter {
 
     protected val disposables: CompositeDisposable = CompositeDisposable()
     protected var view: V? = null

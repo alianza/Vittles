@@ -20,14 +20,14 @@ import javax.inject.Inject
  * @author Jeroen Flietstra
  * @author Arjen Simons
  *
- * @property getProducts The GetProducts use case from the domain module
+ * @property getProducts The GetProducts use case from the domain module.
  */
-class ProductsPresenter @Inject internal constructor(
+class ProductListPresenter @Inject internal constructor(
     private val getProducts: GetProducts,
     private val deleteProduct: DeleteProduct,
     private val addWasteReportProduct: AddWasteReportProduct
 ) :
-    BasePresenter<ProductsActivity>(), ProductsContract.Presenter {
+    BasePresenter<ProductListFragment>(), ProductListContract.Presenter {
 
     /**
      * Loads the products.
@@ -37,7 +37,7 @@ class ProductsPresenter @Inject internal constructor(
         disposables.add(
             getProducts().subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ view?.showProducts(it) }, { view?.setNoResultsView() })
+                .subscribe({ view?.onShowProducts(it) }, { view?.onNoResults() })
         )
     }
 
@@ -66,7 +66,7 @@ class ProductsPresenter @Inject internal constructor(
         disposables.add(deleteProduct.invoke(product)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ view?.populateRecyclerView() }, { view?.showProductDeleteError() })
+            .subscribe({ }, { view?.onShowProductDeleteError() })
         )
         addWasteReportProduct(deleteType)
     }
