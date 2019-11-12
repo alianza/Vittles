@@ -141,6 +141,21 @@ class ScannerPresenter @Inject internal constructor(private val getProductByBarc
         }
     }
 
+    /**
+     * Toggles the flash (torch) of the camera.
+     *
+     * @return Boolean value that represents if torch is on or off.
+     */
+    fun toggleTorch(): Boolean {
+        return if(preview.isTorchOn) {
+            preview.enableTorch(false)
+            false
+        } else {
+            preview.enableTorch(true)
+            true
+        }
+    }
+
     companion object {
         /*
         This is an arbitrary number we are using to keep track of the permission
