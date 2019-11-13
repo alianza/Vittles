@@ -12,7 +12,6 @@ import android.widget.LinearLayout
 import android.widget.SearchView
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -41,10 +40,12 @@ import javax.inject.Inject
  */
 class ProductListFragment : DaggerFragment(), ProductListContract.View {
 
+    companion object {
+        var withSearch = false
+    }
+
     @Inject
     lateinit var presenter: ProductListPresenter
-
-    private val args: ProductListFragmentArgs by navArgs()
 
     private lateinit var itemTouchHelper: ItemTouchHelper
     private lateinit var undoSnackbar: Snackbar
@@ -109,13 +110,14 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
             svSearch.context.resources.getIdentifier("android:id/search_src_text", null, null)
         val textView = svSearch.findViewById(id) as TextView
         textView.setTextColor(Color.BLACK)
+
         setListeners()
 
         initUndoSnackbar()
 
         setItemTouchHelper()
 
-        if (args.withSearch) {
+        if (withSearch) {
             onSearchBarOpened()
         }
     }
@@ -128,6 +130,10 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
     override fun onResume() {
         super.onResume()
         onPopulateRecyclerView()
+        withSearch = false
+
+        // Set sortBtn text to currentSortingType
+        btnSort.text = getString(sortMenu.currentSortingType.textId)
     }
 
     /**
@@ -198,7 +204,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
         undoSnackbar = Snackbar.make(
             content,
             "",
-            Snackbar.LENGTH_SHORT)
+            Snackbar.LENGTH_LONG)
 
         undoSnackbar.setAction("UNDO") {}
         undoSnackbar.setActionTextColor(Color.WHITE)
@@ -241,14 +247,15 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
      * Handles the action of the remove button on a product
      *
      */
+    @SuppressLint("DefaultLocale")
     override fun onRemoveButtonClicked(product: Product) {
         PopupManager.instance.showPopup(context!!,
             PopupBase(
-                "Remove Product",
-                "Do you want to remove this product? \n It won't be used for the food waste report."
+                getString(R.string.remove_product_header),
+                getString(R.string.remove_product_subText)
             ),
-            PopupButton("NO") {},
-            PopupButton("YES") { onSaveDeleteProduct(product, DeleteType.REMOVED) })
+            PopupButton(getString(R.string.btn_no).toUpperCase()) {},
+            PopupButton(getString(R.string.btn_yes).toUpperCase()) { onSaveDeleteProduct(product, DeleteType.REMOVED) })
     }
 
     /**
@@ -366,9 +373,9 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
      *
      */
     override fun onSearchBarOpened() {
+        svSearch.setQuery("", true)
         llSearch.visibility = View.VISIBLE
         svSearch.isIconified = false
-
         toolbar.visibility = View.GONE
     }
 

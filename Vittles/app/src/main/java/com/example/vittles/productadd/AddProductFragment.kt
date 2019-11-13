@@ -1,5 +1,6 @@
 package com.example.vittles.productadd
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.os.Bundle
 import android.text.TextUtils
@@ -209,19 +210,18 @@ class AddProductFragment : DaggerFragment(), AddProductContract.View {
      * Shows the CloseToExpiring popup.
      *
      */
+    @SuppressLint("DefaultLocale")
     override fun onShowCloseToExpirationPopup(product: Product) {
+        val multipleDaysChar = if (product.getDaysRemaining() == 1) { "" } else { "s" }
         context?.let {
             PopupManager.instance.showPopup(
                 it,
                 PopupBase(
-                    "Almost expired!",
-                    String.format(
-                        "The scanned product expires in %d days. \n Are you sure you want to add it?",
-                        product.getDaysRemaining()
-                    )
+                    getString(R.string.close_to_expiration_header),
+                    getString(R.string.close_to_expiration_subText, product.getDaysRemaining(), multipleDaysChar)
                 ),
-                PopupButton("NO"),
-                PopupButton("YES") { presenter.addProduct(product, false) }
+                PopupButton(getString(R.string.btn_no).toUpperCase()),
+                PopupButton(getString(R.string.btn_yes).toUpperCase()) { presenter.addProduct(product, false) }
             )
         }
     }

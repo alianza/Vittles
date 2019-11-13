@@ -6,6 +6,8 @@
     <!--    Global Buttons-->
     <string name="btn_confirm">Confirm</string>
     <string name="btn_cancel">Cancel</string>
+    <string name="btn_yes">Yes</string>
+    <string name="btn_no">No</string>
 
     <!--    Products Overview-->
     <string name="view_title">My Vittles</string>
@@ -68,6 +70,12 @@
     <string name="menu_search">Search</string>
     <string name="menu_reports">Reports</string>
     <string name="menu_settings">Settings</string>
+
+    <!--    Pop-Ups-->
+    <string name="close_to_expiration_header">Almost expired!</string>
+    <string name="close_to_expiration_subText">The scanned product expires in %d day%s. \n Are you sure you want to add it?</string>
+    <string name="remove_product_header">Remove Product</string>
+    <string name="remove_product_subText">Do you want to remove this product? \n It won\'t be used for the food waste report.</string>
 
     <!--    Content Descriptions-->
     <string name="cd_refresh_button">Refresh</string>

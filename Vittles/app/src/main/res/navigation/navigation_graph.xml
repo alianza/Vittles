@@ -10,10 +10,9 @@
         android:name="com.example.vittles.productlist.ProductListFragment"
         android:label="@string/view_title"
         tools:layout="@layout/fragment_productlist">
-        <argument
-            android:name="withSearch"
-            app:argType="boolean"
-            android:defaultValue="false" />
+        <action
+            android:id="@+id/action_productsFragment_to_addProductFragment"
+            app:destination="@id/addProductFragment" />
     </fragment>
     <fragment
         android:id="@+id/addProductFragment"

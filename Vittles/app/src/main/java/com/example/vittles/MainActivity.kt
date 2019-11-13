@@ -9,6 +9,7 @@ import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
+import com.example.vittles.productlist.ProductListFragment
 import com.example.vittles.productlist.ProductListFragmentDirections
 import com.example.vittles.reports.ReportsFragmentDirections
 import com.google.android.material.bottomappbar.BottomAppBar
@@ -114,7 +115,8 @@ class MainActivity : AppCompatActivity() {
      * @return Boolean value that represents if the navigation has succeeded.
      */
     private fun onNavigateSearchButtonClick(): Boolean {
-            findNavController(fragmentHost).navigate(NavigationGraphDirections.actionGlobalProductListFragment(true))
+            ProductListFragment.withSearch = true
+            findNavController(fragmentHost).navigate(NavigationGraphDirections.actionGlobalProductListFragment())
             return true
     }
 
@@ -125,7 +127,7 @@ class MainActivity : AppCompatActivity() {
      */
     private fun onNavigateHomeButtonClick(): Boolean {
         return if (navController.currentDestination?.id != R.id.productListFragment) {
-            findNavController(fragmentHost).navigate(NavigationGraphDirections.actionGlobalProductListFragment(false))
+            findNavController(fragmentHost).navigate(NavigationGraphDirections.actionGlobalProductListFragment())
             true
         } else {
             false
