@@ -60,7 +60,7 @@ class PreviewAnalyzer(
         // Scan only every 500 ms instead of every frame.
         val currentTimestamp = System.currentTimeMillis()
         if (currentTimestamp - lastAnalyzedTimestamp >=
-            TimeUnit.MILLISECONDS.toMillis(500)
+            TimeUnit.MILLISECONDS.toMillis(1000)
         ) {
             val mediaImage = imageProxy?.image
             val imageRotation = degreesToFirebaseRotation(degrees)
