@@ -1,5 +1,6 @@
 package com.example.vittles.services.sorting
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.view.LayoutInflater
@@ -23,27 +24,25 @@ import kotlinx.android.synthetic.main.dialog_sort.view.*
  * @property alertDialog The entire alertDialog of the sortMenu.
  * @property view The View which holds the sortingMenu.
  */
-class SortMenu (sortList: MutableList<Product>, adapter: ProductAdapter) {
+class SortMenu (private var sortList: MutableList<Product>, private var adapter: ProductAdapter) {
 
-    private var currentSortingType: SortingType = SortingType.DAYS_REMAINING_ASC
-    private var adapter = adapter
-    private var sortList = sortList
+    var currentSortingType: SortingType = SortingType.DAYS_REMAINING_ASC
+    private lateinit var btnSort: TextView
+    private lateinit var alertDialog: AlertDialog
     lateinit var previousSortingType: SortingType
-    lateinit var btnSort: TextView
-    lateinit var alertDialog: AlertDialog
     lateinit var view: View
 
     /**
      * Sets enums for all of the different sorting options
      *
      */
-    enum class SortingType {
-        DAYS_REMAINING_ASC,
-        DAYS_REMAINING_DESC,
-        ALPHABETIC_AZ,
-        ALPHABETIC_ZA,
-        NEWEST,
-        OLDEST
+    enum class SortingType(val textId: Int) {
+        DAYS_REMAINING_ASC(R.string.days_remaining_lh),
+        DAYS_REMAINING_DESC(R.string.days_remaining_hl),
+        ALPHABETIC_AZ(R.string.alphabetic_az),
+        ALPHABETIC_ZA(R.string.alphabetic_za),
+        NEWEST(R.string.newest),
+        OLDEST(R.string.oldest)
     }
 
     /**
@@ -53,6 +52,7 @@ class SortMenu (sortList: MutableList<Product>, adapter: ProductAdapter) {
      * @param button The button which shows the current sortingType.
      * @param filteredList The list that should be sorted.
      */
+    @SuppressLint("InflateParams")
     fun openMenu(context: Context, button: TextView, filteredList: MutableList<Product>) {
 
         val mDialogView =
@@ -113,7 +113,7 @@ class SortMenu (sortList: MutableList<Product>, adapter: ProductAdapter) {
         adapter.notifyDataSetChanged()
 
         if (currentSortingType != previousSortingType) {
-            setSortbtnText(sortingType)
+            setSortBtnText(sortingType)
         }
 
         if (::alertDialog.isInitialized) {
@@ -141,7 +141,7 @@ class SortMenu (sortList: MutableList<Product>, adapter: ProductAdapter) {
      *
      * @param sortingType The sortingType which was selected by the user.
      */
-    private fun setSortbtnText(sortingType: SortingType) {
+    private fun setSortBtnText(sortingType: SortingType) {
         when(sortingType) {
             SortingType.DAYS_REMAINING_ASC -> btnSort.text = view.daysRemainingLH.text
             SortingType.DAYS_REMAINING_DESC -> btnSort.text = view.daysRemainingHL.text

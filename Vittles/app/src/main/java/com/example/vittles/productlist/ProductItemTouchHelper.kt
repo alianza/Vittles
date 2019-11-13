@@ -31,6 +31,7 @@ class ProductItemTouchHelper(initialProducts: List<Product>, initialPresenter: P
     private var products: List<Product> = initialProducts
     private var presenter: ProductListPresenter = initialPresenter
 
+
     /**
      * Enum to determain where the swipe icon should be located.
      *
@@ -131,6 +132,7 @@ class ProductItemTouchHelper(initialProducts: List<Product>, initialPresenter: P
         if (isCanceled) {
             removeSwipeLines(viewHolder, recyclerView)
             super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+            removeDecoratorOnSwipedProduct(viewHolder.itemView)
             return
         }
 
@@ -146,6 +148,20 @@ class ProductItemTouchHelper(initialProducts: List<Product>, initialPresenter: P
 
 
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+    }
+
+    /**
+     * Checks if swiped product is last product and removes the decorator
+     */
+    private fun removeDecoratorOnSwipedProduct(view: View){
+        val itemView: View = view
+        val product: Product? = products.find { product -> product.uid == view.productId.text.toString().toInt() }
+
+        if(products[products.lastIndex] == product) {
+            itemView.borderDecorator.visibility = View.INVISIBLE
+        } else {
+            itemView.borderDecorator.visibility = View.VISIBLE
+        }
     }
 
     /**
