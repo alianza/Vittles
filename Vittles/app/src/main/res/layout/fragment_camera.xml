@@ -214,7 +214,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/containerChecklist"
-            app:srcCompat="@drawable/scanning_plane2" />
+            app:srcCompat="@drawable/scanning_plane" />
 
         <Button
             android:id="@+id/btnScanVittle"
