@@ -38,8 +38,8 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
     lateinit var presenter: ScannerPresenter
 
     private lateinit var textureView: TextureView
-    private lateinit var refreshDate: ImageView
-    private lateinit var refreshProductName: ImageView
+    private lateinit var refreshDate: ImageButton
+    private lateinit var refreshProductName: ImageButton
     private lateinit var tvProductName: TextView
     private lateinit var tvExpirationDate: TextView
     private lateinit var ibEditName: ImageButton
@@ -61,18 +61,8 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        textureView = view.findViewById(R.id.textureView)
-        refreshDate = view.findViewById(R.id.ibRefreshDate)
-        refreshProductName = view.findViewById(R.id.ibRefreshProductName)
-        tvProductName = view.findViewById(R.id.tvProductName)
-        tvExpirationDate = view.findViewById(R.id.tvExpirationDate)
-        ibEditName = view.findViewById(R.id.ibEditName)
-        ibEditDate = view.findViewById(R.id.ibEditDate)
-        btnScanVittle = view.findViewById(R.id.btnScanVittle)
-        ivCheckboxBarcode = view.findViewById(R.id.ivCheckboxBarcode)
-        ivCheckboxExpirationDate = view.findViewById(R.id.ivCheckboxExpirationDate)
-        btnTorch = view.findViewById(R.id.btnTorch)
-        initViews()
+        initViews(view)
+        initListeners()
         presenter.checkPermissions()
     }
 
@@ -110,10 +100,26 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
      * Initializes view elements.
      *
      */
-    override fun initViews() {
+    override fun initViews(view: View) {
+        textureView = view.findViewById(R.id.textureView)
+        refreshDate = view.findViewById(R.id.ibRefreshDate)
+        refreshProductName = view.findViewById(R.id.ibRefreshProductName)
+        tvProductName = view.findViewById(R.id.tvProductName)
+        tvExpirationDate = view.findViewById(R.id.tvExpirationDate)
+        ibEditName = view.findViewById(R.id.ibEditName)
+        ibEditDate = view.findViewById(R.id.ibEditDate)
+        btnScanVittle = view.findViewById(R.id.btnScanVittle)
+        ivCheckboxBarcode = view.findViewById(R.id.ivCheckboxBarcode)
+        ivCheckboxExpirationDate = view.findViewById(R.id.ivCheckboxExpirationDate)
+        btnTorch = view.findViewById(R.id.btnTorch)
+
         refreshDate.visibility = View.INVISIBLE
         refreshProductName.visibility = View.INVISIBLE
 
+        setUpTapToFocus()
+    }
+
+    override fun initListeners() {
         btnScanVittle.setOnClickListener { onAddVittleButtonClick() }
 
         ibEditName.setOnClickListener { onEditNameButtonClick() }
@@ -122,7 +128,9 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
 
         btnTorch.setOnClickListener { onTorchButtonClicked() }
 
-        setUpTapToFocus()
+        refreshProductName.setOnClickListener { onResetProductName() }
+
+        refreshDate.setOnClickListener { onResetDate() }
     }
 
     /**
@@ -192,6 +200,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
             )
         }
         PreviewAnalyzer.hasBarCode = true
+        refreshProductName.visibility = View.VISIBLE
     }
 
     /**
@@ -213,6 +222,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
             }
         )
         PreviewAnalyzer.hasExpirationDate = true
+        refreshDate.visibility = View.VISIBLE
     }
 
     /**
@@ -237,6 +247,40 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
             "Something went wrong! TEXt",
             Toast.LENGTH_SHORT
         ).show()
+    }
+
+    /**
+     * Resets the necessary date properties.
+     *
+     */
+    override fun onResetDate(){
+        tvExpirationDate.text = getString(R.string.date_format_scanner)
+        ivCheckboxExpirationDate.setImageDrawable(
+            context?.let {
+                getDrawable(
+                    it,
+                    R.drawable.ic_circle_darkened
+                )
+            }
+        )
+        PreviewAnalyzer.hasExpirationDate = false
+    }
+
+    /**
+     * Resets the necessary product name properties.
+     *
+     */
+    override fun onResetProductName() {
+        tvProductName.text = getString(R.string.product_name_scanner)
+        ivCheckboxBarcode.setImageDrawable(
+            context?.let {
+                getDrawable(
+                    it,
+                    R.drawable.ic_circle_darkened
+                )
+            }
+        )
+        PreviewAnalyzer.hasBarCode = false
     }
 
     /**
@@ -277,6 +321,10 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
             .navigate(NavigationGraphDirections.actionGlobalProductListFragment())
     }
 
+    /**
+     * Opens the dialog to edit the product name.
+     *
+     */
     override fun onEditNameButtonClick() {
         val dialog = ProductNameEditView(onFinished = { productName: String ->
             onBarcodeScanned(productName)
@@ -284,6 +332,10 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         context?.let { dialog.openDialog(it) }
     }
 
+    /**
+     * Opens the date picker dialog to edit the expiration date.
+     *
+     */
     override fun onEditExpirationButtonClick() {
         val currentDate = DateTime.now()
 
@@ -327,26 +379,8 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
      *
      */
     override fun onResetView() {
-        tvProductName.text = getString(R.string.product_name_scanner)
-        tvExpirationDate.text = getString(R.string.date_format_scanner)
-        ivCheckboxExpirationDate.setImageDrawable(
-            context?.let {
-                getDrawable(
-                    it,
-                    R.drawable.ic_circle_darkened
-                )
-            }
-        )
-        ivCheckboxBarcode.setImageDrawable(
-            context?.let {
-                getDrawable(
-                    it,
-                    R.drawable.ic_circle_darkened
-                )
-            }
-        )
-        PreviewAnalyzer.hasBarCode = false
-        PreviewAnalyzer.hasExpirationDate = false
+        onResetDate()
+        onResetProductName()
     }
 
     /**

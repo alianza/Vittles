@@ -12,7 +12,8 @@ import com.example.domain.product.Product
 interface ScannerContract {
 
     interface View {
-        fun initViews()
+        fun initViews(view: android.view.View)
+        fun initListeners()
         fun setUpTapToFocus()
         fun onAddVittleButtonClick()
         fun onBarcodeScanned(productName: String)
@@ -24,6 +25,8 @@ interface ScannerContract {
         fun onEditExpirationButtonClick()
         fun onTorchButtonClicked()
         fun onResetView()
+        fun onResetDate()
+        fun onResetProductName()
         fun onShowAddProductError()
         fun onShowAddProductSucceed()
         fun onShowCloseToExpirationPopup(product: Product)
