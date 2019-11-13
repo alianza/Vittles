@@ -3,13 +3,13 @@ package com.example.vittles.services.scanner
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 import org.joda.time.format.DateTimeFormatter
+import java.util.*
 
 object DateFormatterService {
 
     private val regex = Regex("^([0-9&/]*)\$")
-    private val charFormat = DateTimeFormat.forPattern("dd/MMM/yyyy")
-
-    val numberFormat: DateTimeFormatter = DateTimeFormat.forPattern("dd/MM/yyyy")
+    private val charFormat = DateTimeFormat.forPattern("dd/MMM/yyyy").withLocale(Locale.ROOT)
+    val numberFormat: DateTimeFormatter = DateTimeFormat.forPattern("dd/MM/yyyy").withLocale(Locale.ROOT)
 
     /**
      * sets the retrieved text in the correct date format and returns the date
