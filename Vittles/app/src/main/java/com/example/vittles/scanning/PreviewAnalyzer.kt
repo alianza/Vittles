@@ -85,7 +85,6 @@ class PreviewAnalyzer(
                                 onOcrSuccess,
                                 onOcrFailure
                             )
-                            println("Scanning!!!")
                         }
                     }
                 }
