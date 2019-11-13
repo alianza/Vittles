@@ -2,13 +2,20 @@ package com.example.vittles.scanning
 
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
+import android.content.Context
+import android.content.res.ColorStateList
 import android.os.Bundle
+import android.os.Handler
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.view.*
 import android.widget.*
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.camera.core.CameraX
 import androidx.camera.core.DisplayOrientedMeteringPointFactory
 import androidx.camera.core.FocusMeteringAction
+import androidx.core.content.ContextCompat
+import androidx.core.widget.ImageViewCompat
 import androidx.navigation.fragment.NavHostFragment
 import com.example.domain.product.Product
 import com.example.vittles.NavigationGraphDirections
@@ -24,6 +31,10 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.fragment_camera.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.selects.SelectClause1
 import org.joda.time.DateTime
 import javax.inject.Inject
 
@@ -48,6 +59,9 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
     private lateinit var ivCheckboxBarcode: ImageView
     private lateinit var ivCheckboxExpirationDate: ImageView
     private lateinit var btnTorch: ImageButton
+    private lateinit var scanningPlane: ImageView
+
+    private lateinit var vibrator: Vibrator
 
     private var expirationDate: DateTime? = null
 
@@ -56,6 +70,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         savedInstanceState: Bundle?
     ): View? {
         presenter.start(this@ScannerFragment)
+        vibrator = context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         return inflater.inflate(R.layout.fragment_camera, container, false)
     }
 
@@ -112,6 +127,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         ivCheckboxBarcode = view.findViewById(R.id.ivCheckboxBarcode)
         ivCheckboxExpirationDate = view.findViewById(R.id.ivCheckboxExpirationDate)
         btnTorch = view.findViewById(R.id.btnTorch)
+        scanningPlane = view.findViewById(R.id.scanningPlane)
 
         refreshDate.visibility = View.INVISIBLE
         refreshProductName.visibility = View.INVISIBLE
@@ -188,19 +204,10 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
      * @param productName The product name that has been retrieved from the camera.
      */
     override fun onBarcodeScanned(productName: String) {
-        if (productName.isNotEmpty()) {
-            tvProductName.text = productName
-            ivCheckboxBarcode.setImageDrawable(
-                context?.let {
-                    getDrawable(
-                        it,
-                        R.drawable.ic_circle_darkened_filled
-                    )
-                }
-            )
-        }
+        onProductNameCheckboxChecked(productName)
         PreviewAnalyzer.hasBarCode = true
         refreshProductName.visibility = View.VISIBLE
+        onScanSuccessful()
     }
 
     /**
@@ -209,20 +216,10 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
      * @param text The text that has been retrieved from the camera
      */
     override fun onTextScanned(text: String) {
-        tvExpirationDate.text = DateFormatterService.numberFormat.print(
-            DateFormatterService.expirationDateFormatter(text)
-        )
-        expirationDate = DateFormatterService.expirationDateFormatter(text)!!
-        ivCheckboxExpirationDate.setImageDrawable(
-            context?.let {
-                getDrawable(
-                    it,
-                    R.drawable.ic_circle_darkened_filled
-                )
-            }
-        )
+        onExpirationDateCheckboxChecked(text)
         PreviewAnalyzer.hasExpirationDate = true
         refreshDate.visibility = View.VISIBLE
+        onScanSuccessful()
     }
 
     /**
@@ -249,6 +246,65 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         ).show()
     }
 
+    // Deprecation suppressed because we use an old API version
+    @Suppress("DEPRECATION")
+    fun onScanSuccessful() {
+        if (vibrator.hasVibrator()) {
+            vibrator.vibrate(50)
+        }
+        ImageViewCompat.setImageTintList(scanningPlane, context?.let {
+            ContextCompat.getColor(
+                it, R.color.colorPrimary)
+        }?.let { ColorStateList.valueOf(it) })
+        Handler().postDelayed({
+            ImageViewCompat.setImageTintList(scanningPlane, context?.let {
+                ContextCompat.getColor(
+                    it, R.color.black)
+            }?.let { ColorStateList.valueOf(it) })
+        }, 500)
+    }
+
+    fun onProductNameEdited(productName: String) {
+        onProductNameCheckboxChecked(productName)
+        PreviewAnalyzer.hasBarCode = true
+        refreshProductName.visibility = View.VISIBLE
+    }
+
+    fun onExpirationDateEdited(text: String) {
+        onExpirationDateCheckboxChecked(text)
+        PreviewAnalyzer.hasExpirationDate = true
+        refreshDate.visibility = View.VISIBLE
+    }
+
+    fun onProductNameCheckboxChecked(productName: String) {
+        if (productName.isNotEmpty()) {
+            tvProductName.text = productName
+            ivCheckboxBarcode.setImageDrawable(
+                context?.let {
+                    getDrawable(
+                        it,
+                        R.drawable.ic_circle_darkened_filled
+                    )
+                }
+            )
+        }
+    }
+
+    fun onExpirationDateCheckboxChecked(text: String) {
+        tvExpirationDate.text = DateFormatterService.numberFormat.print(
+            DateFormatterService.expirationDateFormatter(text)
+        )
+        expirationDate = DateFormatterService.expirationDateFormatter(text)!!
+        ivCheckboxExpirationDate.setImageDrawable(
+            context?.let {
+                getDrawable(
+                    it,
+                    R.drawable.ic_circle_darkened_filled
+                )
+            }
+        )
+    }
+
     /**
      * Resets the necessary date properties.
      *
@@ -264,6 +320,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
             }
         )
         PreviewAnalyzer.hasExpirationDate = false
+        refreshDate.visibility = View.INVISIBLE
     }
 
     /**
@@ -281,6 +338,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
             }
         )
         PreviewAnalyzer.hasBarCode = false
+        refreshProductName.visibility = View.INVISIBLE
     }
 
     /**
@@ -327,9 +385,9 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
      */
     override fun onEditNameButtonClick() {
         val dialog = ProductNameEditView(onFinished = { productName: String ->
-            onBarcodeScanned(productName)
+            onProductNameEdited(productName)
         })
-        context?.let { dialog.openDialog(it) }
+        context?.let { dialog.openDialog(it, tvProductName.text.toString()) }
     }
 
     /**
@@ -354,7 +412,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
                         (expirationDate.monthOfYear).toString(),
                         (expirationDate.year).toString()
                     )
-                    onTextScanned(expDateText)
+                    onExpirationDateEdited(expDateText)
                 }, year, month - MONTHS_OFFSET, day
             )
         }
@@ -388,7 +446,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
      *
      */
     override fun onShowAddProductError() {
-        Snackbar.make(layout, getString(R.string.product_failed), Snackbar.LENGTH_LONG)
+        Snackbar.make(layout, getString(R.string.product_name_invalid), Snackbar.LENGTH_LONG)
             .show()
     }
 

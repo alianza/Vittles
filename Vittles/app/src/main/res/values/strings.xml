@@ -17,7 +17,7 @@
     <string name="et_expiration_date">Expiration date</string>
     <string name="expiration_format">%1$s/%2$s/%3$s</string>
     <string name="product_added">Product added!</string>
-    <string name="product_failed">Could not add product!</string>
+    <string name="product_name_invalid">Product name should not be empty!</string>
     <string name="product_deleted">Product deleted!</string>
     <string name="product_deleted_failed">Could not delete product!</string>
     <string name="empty_state_Add_New_Vittle">\n\nClick on button at the bottom to add vittles</string>

@@ -193,7 +193,7 @@ class AddProductFragment : DaggerFragment(), AddProductContract.View {
      *
      */
     override fun onShowAddProductError() {
-        Snackbar.make(layout, getString(R.string.product_failed), Snackbar.LENGTH_LONG)
+        Snackbar.make(layout, getString(R.string.product_name_invalid), Snackbar.LENGTH_LONG)
             .show()
     }
 
