@@ -110,6 +110,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
             svSearch.context.resources.getIdentifier("android:id/search_src_text", null, null)
         val textView = svSearch.findViewById(id) as TextView
         textView.setTextColor(Color.BLACK)
+
         setListeners()
 
         initUndoSnackbar()
@@ -130,6 +131,9 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
         super.onResume()
         onPopulateRecyclerView()
         withSearch = false
+
+        // Set sortBtn text to currentSortingType
+        btnSort.text = getString(sortMenu.currentSortingType.textId)
     }
 
     /**
