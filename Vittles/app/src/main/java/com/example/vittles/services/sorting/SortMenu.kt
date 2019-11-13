@@ -56,7 +56,7 @@ class SortMenu (private var sortList: MutableList<Product>, private var adapter:
     fun openMenu(context: Context, button: TextView, filteredList: MutableList<Product>) {
 
         val mDialogView =
-            LayoutInflater.from(context).inflate(R.layout.dialog_sort,null)
+            LayoutInflater.from(context).inflate(R.layout.dialog_sort, null)
         val mBuilder =
             AlertDialog.Builder(context).setView(mDialogView)
         val  mAlertDialog = mBuilder.show()
