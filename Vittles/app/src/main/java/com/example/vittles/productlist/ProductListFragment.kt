@@ -200,7 +200,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
         undoSnackbar = Snackbar.make(
             content,
             "",
-            Snackbar.LENGTH_SHORT)
+            Snackbar.LENGTH_LONG)
 
         undoSnackbar.setAction("UNDO") {}
         undoSnackbar.setActionTextColor(Color.WHITE)
