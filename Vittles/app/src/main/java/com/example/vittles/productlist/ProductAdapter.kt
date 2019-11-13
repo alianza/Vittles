@@ -24,10 +24,7 @@ import javax.inject.Inject
  *
  * @property products The list of products that should be displayed in the RecyclerView.
  */
-class ProductAdapter @Inject constructor(
-    initialProducts: List<Product>,
-    private val clickListener: (Product) -> Unit
-) :
+class ProductAdapter @Inject constructor(initialProducts: List<Product>, private val clickListener: (Product) -> Unit) :
     RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
 
     lateinit var context: Context
@@ -90,7 +87,7 @@ class ProductAdapter @Inject constructor(
                 ConstraintLayout.LayoutParams.WRAP_CONTENT
             )
             // Last product in list, remove decorator and add extra bottom-margin
-            if (products[products.lastIndex] == product) {
+            if(products[products.lastIndex] == product) {
                 itemView.borderDecorator.visibility = View.INVISIBLE
                 lp.setMargins(0, 0, 0, 175)
             } else {
@@ -104,24 +101,13 @@ class ProductAdapter @Inject constructor(
                 R.string.expiration_format,
                 product.expirationDate.dayOfMonth.toString(),
                 product.expirationDate.monthOfYear.toString(),
-                product.expirationDate.year.toString()
-            )
+                product.expirationDate.year.toString())
             itemView.tvDaysLeft.text = daysLeft
-            itemView.btnRemove.setOnClickListener { clickListener(product) }
+            itemView.btnRemove.setOnClickListener{ clickListener(product) }
 
             //Set the colors
-            itemView.ivColor.setColorFilter(
-                ContextCompat.getColor(
-                    context,
-                    product.indicationColor!!
-                ), PorterDuff.Mode.MULTIPLY
-            ) //Circle
-            itemView.tvDaysLeft.setTextColor(
-                ContextCompat.getColor(
-                    context,
-                    product.indicationColor!!
-                )
-            ) //DaysLeft number
+            itemView.ivColor.setColorFilter(ContextCompat.getColor(context, product.indicationColor!!), PorterDuff.Mode.MULTIPLY) //Circle
+            itemView.tvDaysLeft.setTextColor(ContextCompat.getColor(context, product.indicationColor!!)) //DaysLeft number
         }
     }
 }

@@ -9,7 +9,6 @@ import com.example.vittles.R
 import kotlinx.android.synthetic.main.item_product.view.*
 import android.graphics.*
 import android.graphics.drawable.Drawable
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.example.domain.product.Product
 import com.example.vittles.enums.DeleteType
@@ -151,8 +150,10 @@ class ProductItemTouchHelper(initialProducts: List<Product>, initialPresenter: P
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
     }
 
+    /**
+     * Checks if swiped product is last product and removes the decorator
+     */
     private fun removeDecoratorOnSwipedProduct(view: View){
-        // checks if swipe product is last product and removes the decorator
         val itemView: View = view
         val product: Product? = products.find { product -> product.uid == view.productId.text.toString().toInt() }
 
