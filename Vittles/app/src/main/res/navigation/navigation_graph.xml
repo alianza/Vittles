@@ -33,16 +33,16 @@
             app:destination="@id/scannerFragment" />
     </fragment>
     <fragment
-        android:id="@+id/reportsFragment"
-        android:name="com.example.vittles.reports.ReportsFragment"
+        android:id="@+id/wasteReportFragment"
+        android:name="com.example.vittles.wastereport.WasteReportFragment"
         android:label="@string/waste_report_title"
-        tools:layout="@layout/fragment_reports" >
+        tools:layout="@layout/fragment_waste_report" >
         <action
             android:id="@+id/action_reportsFragment_to_addProductFragment"
             app:destination="@id/addProductFragment" />
     </fragment>
     <action android:id="@+id/action_global_productListFragment" app:destination="@id/productListFragment"/>
-    <action android:id="@+id/action_global_reportsFragment" app:destination="@id/reportsFragment" />
+    <action android:id="@+id/action_global_reportsFragment" app:destination="@id/wasteReportFragment" />
     <fragment
         android:id="@+id/scannerFragment"
         android:name="com.example.vittles.scanning.ScannerFragment"

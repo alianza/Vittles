@@ -11,6 +11,7 @@ import io.reactivex.Single
  *
  * @author Jeroen Flietstra
  * @author Jan-Willem van Bremen
+ * @author Sarah Lange
  */
 @Dao
 interface ProductDao {
@@ -60,16 +61,39 @@ interface ProductDao {
     fun delete(product: ProductEntity): Int
 
 
+    /**
+     * Insert the given wasteReportProduct into the database
+     *
+     * @param wasteReportProduct WasteReportProduct to be inserted
+     */
     @Insert
     fun insertWasteReportProduct(wasteReportProduct: WasteReportEntity)
 
 
+    /**
+     * Gets amount of eaten vittles
+     *
+     * @param date from this date up to now the amount is calculated
+     * @return amount of eaten vittles
+     */
     @Query("SELECT COUNT(waste_type) FROM WasteReportEntity WHERE waste_type = 'EATEN' AND creation_date >= :date")
     fun getCountEatenProducts(date: Long): Single<Int>
 
+    /**
+     * Gets amount of expired vittles
+     *
+     * @param date from this date up to now the amount is calculated
+     * @return amount of expired vittles
+     * */
     @Query("SELECT COUNT(waste_type) FROM WasteReportEntity WHERE waste_type = 'THROWN_AWAY' AND creation_date >= :date")
     fun getCountExpiredProducts(date: Long): Single<Int>
 
+    /**
+     * Gets percent value of eaten vittles
+     *
+     * @param date from this date up to now the value is calculated
+     * @return percent value of eaten vittles
+     */
     @Query("SELECT Cast(tot1 AS FLOAT)/(CAST(tot2 AS FLOAT)+CAST(tot1 AS FLOAT))*100.00 FROM (SELECT COUNT(waste_type) AS tot1 FROM WasteReportEntity WHERE waste_type = 'EATEN' AND creation_date >= :date) as float ,(SELECT COUNT(waste_type)AS tot2 FROM WasteReportEntity WHERE waste_type = 'THROWN_AWAY' AND creation_date >= :date) as float")
-    fun getWastePercent(date: Long): Single<Int>
+    fun getEatenPercent(date: Long): Single<Int>
 }

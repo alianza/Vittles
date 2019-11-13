@@ -26,7 +26,7 @@
         app:showAsAction="always"
         android:title="" />
     <item
-        android:id="@+id/reportsFragment"
+        android:id="@+id/wasteReportFragment"
         android:orderInCategory="5"
         android:title="@string/menu_reports"
         app:showAsAction="always"

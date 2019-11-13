@@ -6,8 +6,8 @@
     android:layout_height="match_parent"
     android:background="#FFF"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".wastereport.WasteReportActivity"
-    tools:showIn="@layout/activity_waste_report">
+    tools:context=".wastereport.WasteReportFragment"
+    tools:showIn="@layout/fragment_waste_report">
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/view_pager"

@@ -1,11 +1,12 @@
 package com.example.vittles.di
 
-import com.example.vittles.reports.ReportsFragment
 import com.example.vittles.productadd.AddProductFragment
 import com.example.vittles.productlist.ProductListFragment
 import com.example.vittles.scanning.ScannerFragment
 import com.example.vittles.services.notification.NotificationScheduleService
-import com.example.vittles.wastereport.WasteReportActivity
+import com.example.vittles.wastereport.BarChart.BarChartFragment
+import com.example.vittles.wastereport.CircleChart.CircleChartFragment
+import com.example.vittles.wastereport.WasteReportFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -24,8 +25,11 @@ abstract class BindingsModule {
     abstract fun bindNotificationScheduleService(): NotificationScheduleService
 
     @ContributesAndroidInjector
-    abstract fun bindReportsFragment(): ReportsFragment
+    abstract fun bindWasteReportFragment(): WasteReportFragment
 
     @ContributesAndroidInjector
-    abstract fun bindWasteReportActivity(): WasteReportActivity
+    abstract fun bindBarChartFragment(): BarChartFragment
+
+    @ContributesAndroidInjector
+    abstract fun bindCircleChartFragment(): CircleChartFragment
 }

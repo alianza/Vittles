@@ -10,7 +10,8 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import com.example.vittles.productlist.ProductListFragmentDirections
-import com.example.vittles.reports.ReportsFragmentDirections
+import com.example.vittles.wastereport.WasteReportFragmentDirections
+
 import com.google.android.material.bottomappbar.BottomAppBar
 import kotlinx.android.synthetic.main.content_main.*
 import androidx.navigation.findNavController as findNavSetup
@@ -50,7 +51,7 @@ class MainActivity : AppCompatActivity() {
 
         val appBarConfiguration = AppBarConfiguration(navController.graph)
         // Make reports top-level so that the back button disables
-        appBarConfiguration.topLevelDestinations.add(R.id.reportsFragment)
+        appBarConfiguration.topLevelDestinations.add(R.id.wasteReportFragment)
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration)
 
         mainToolbar.setupWithNavController(navController, appBarConfiguration)
@@ -62,7 +63,7 @@ class MainActivity : AppCompatActivity() {
                     barVisibility = true,
                     fabVisibility = true
                 )
-                R.id.reportsFragment -> showBottomNavigationBar(
+                R.id.wasteReportFragment -> showBottomNavigationBar(
                     barVisibility = true,
                     fabVisibility = true
                 )
@@ -141,7 +142,7 @@ class MainActivity : AppCompatActivity() {
         var action: NavDirections? = null
         when (navController.currentDestination?.id) {
             R.id.productListFragment -> action = ProductListFragmentDirections.actionProductsFragmentToAddProductFragment()
-            R.id.reportsFragment -> action = ReportsFragmentDirections.actionReportsFragmentToAddProductFragment()
+            R.id.wasteReportFragment -> action = WasteReportFragmentDirections.actionReportsFragmentToAddProductFragment()
         }
         if (action != null) {
             findNavController(fragmentHost).navigate(action)
@@ -154,7 +155,7 @@ class MainActivity : AppCompatActivity() {
      * @return Boolean value that represents if the navigation has succeeded.
      */
     private fun onNavigateReportsButtonClick(): Boolean {
-        return if (navController.currentDestination?.id != R.id.reportsFragment) {
+        return if (navController.currentDestination?.id != R.id.wasteReportFragment) {
             findNavController(fragmentHost).navigate(NavigationGraphDirections.actionGlobalReportsFragment())
             true
         } else {
