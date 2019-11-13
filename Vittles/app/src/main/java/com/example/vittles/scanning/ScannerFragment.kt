@@ -135,6 +135,10 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         setUpTapToFocus()
     }
 
+    /**
+     * Initializes the on click listeners.
+     *
+     */
     override fun initListeners() {
         btnScanVittle.setOnClickListener { onAddVittleButtonClick() }
 
@@ -246,6 +250,10 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         ).show()
     }
 
+    /**
+     * Lets the phone vibrate and colors the scanning plane.
+     *
+     */
     // Deprecation suppressed because we use an old API version
     @Suppress("DEPRECATION")
     fun onScanSuccessful() {
@@ -264,19 +272,34 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         }, 500)
     }
 
-    fun onProductNameEdited(productName: String) {
+    /**
+     * Puts the necessary values on the right place after edit.
+     *
+     * @param productName The new product name.
+     */
+    override fun onProductNameEdited(productName: String) {
         onProductNameCheckboxChecked(productName)
         PreviewAnalyzer.hasBarCode = true
         refreshProductName.visibility = View.VISIBLE
     }
 
-    fun onExpirationDateEdited(text: String) {
+    /**
+     * Puts the necessary values on the right place after edit.
+     *
+     * @param text The new expiration date.
+     */
+    override fun onExpirationDateEdited(text: String) {
         onExpirationDateCheckboxChecked(text)
         PreviewAnalyzer.hasExpirationDate = true
         refreshDate.visibility = View.VISIBLE
     }
 
-    fun onProductNameCheckboxChecked(productName: String) {
+    /**
+     * Checks the checkbox and fills in the text view.
+     *
+     * @param productName The new product name.
+     */
+    override fun onProductNameCheckboxChecked(productName: String) {
         if (productName.isNotEmpty()) {
             tvProductName.text = productName
             ivCheckboxBarcode.setImageDrawable(
@@ -290,7 +313,12 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         }
     }
 
-    fun onExpirationDateCheckboxChecked(text: String) {
+    /**
+     * Checks the checkbox and fills in the text view.
+     *
+     * @param text The new expiration date.
+     */
+    override fun onExpirationDateCheckboxChecked(text: String) {
         tvExpirationDate.text = DateFormatterService.numberFormat.print(
             DateFormatterService.expirationDateFormatter(text)
         )

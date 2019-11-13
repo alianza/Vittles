@@ -30,6 +30,10 @@ interface ScannerContract {
         fun onShowAddProductError()
         fun onShowAddProductSucceed()
         fun onShowCloseToExpirationPopup(product: Product)
+        fun onProductNameEdited(productName: String)
+        fun onExpirationDateEdited(text: String)
+        fun onProductNameCheckboxChecked(productName: String)
+        fun onExpirationDateCheckboxChecked(text: String)
     }
 
     interface Presenter {
