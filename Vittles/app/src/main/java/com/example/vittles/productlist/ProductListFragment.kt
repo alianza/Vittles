@@ -243,14 +243,15 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
      * Handles the action of the remove button on a product
      *
      */
+    @SuppressLint("DefaultLocale")
     override fun onRemoveButtonClicked(product: Product) {
         PopupManager.instance.showPopup(context!!,
             PopupBase(
-                "Remove Product",
-                "Do you want to remove this product? \n It won't be used for the food waste report."
+                getString(R.string.remove_product_header),
+                getString(R.string.remove_product_subText)
             ),
-            PopupButton("NO") {},
-            PopupButton("YES") { onSaveDeleteProduct(product, DeleteType.REMOVED) })
+            PopupButton(getString(R.string.btn_no).toUpperCase()) {},
+            PopupButton(getString(R.string.btn_yes).toUpperCase()) { onSaveDeleteProduct(product, DeleteType.REMOVED) })
     }
 
     /**
