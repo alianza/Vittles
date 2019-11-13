@@ -67,7 +67,7 @@ class MainActivity : AppCompatActivity() {
                     barVisibility = true,
                     fabVisibility = true
                 )
-                R.id.addProductFragment -> showBottomNavigationBar(
+                R.id.scannerFragment -> showBottomNavigationBar(
                     barVisibility = false,
                     fabVisibility = false
                 )
@@ -140,14 +140,7 @@ class MainActivity : AppCompatActivity() {
      *
      */
     private fun onAddButtonClick() {
-        var action: NavDirections? = null
-        when (navController.currentDestination?.id) {
-            R.id.productListFragment -> action = ProductListFragmentDirections.actionProductsFragmentToAddProductFragment()
-            R.id.reportsFragment -> action = ReportsFragmentDirections.actionReportsFragmentToAddProductFragment()
-        }
-        if (action != null) {
-            findNavController(fragmentHost).navigate(action)
-        }
+        findNavController(fragmentHost).navigate(NavigationGraphDirections.actionGlobalScannerFragment())
     }
 
     /**
@@ -161,13 +154,6 @@ class MainActivity : AppCompatActivity() {
             true
         } else {
             false
-        }
-    }
-
-    override fun onBackPressed() {
-        when (navController.currentDestination?.id) {
-            R.id.addProductFragment -> navController.navigate(NavigationGraphDirections.actionGlobalProductListFragment())
-            else -> navController.navigateUp()
         }
     }
 }

@@ -19,7 +19,7 @@
     <string name="et_expiration_date">Expiration date</string>
     <string name="expiration_format">%1$s/%2$s/%3$s</string>
     <string name="product_added">Product added!</string>
-    <string name="product_failed">Could not add product!</string>
+    <string name="product_name_invalid">Product name should not be empty!</string>
     <string name="product_deleted">Product deleted!</string>
     <string name="product_deleted_failed">Could not delete product!</string>
     <string name="empty_state_Add_New_Vittle">\n\nClick on button at the bottom to add vittles</string>
@@ -76,4 +76,7 @@
     <string name="close_to_expiration_subText">The scanned product expires in %d day%s. \n Are you sure you want to add it?</string>
     <string name="remove_product_header">Remove Product</string>
     <string name="remove_product_subText">Do you want to remove this product? \n It won\'t be used for the food waste report.</string>
+
+    <!--    Content Descriptions-->
+    <string name="cd_refresh_button">Refresh</string>
 </resources>

@@ -8,11 +8,14 @@ import androidx.camera.core.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.domain.barcode.GetProductByBarcode
+import com.example.domain.product.AddProduct
+import com.example.domain.product.Product
 import com.example.vittles.mvp.BasePresenter
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_camera.*
+import java.lang.Exception
 import java.util.concurrent.Executors
 import javax.inject.Inject
 
@@ -21,7 +24,10 @@ import javax.inject.Inject
  *
  * @property getProductByBarcode The GetProductByBarcode use case from the domain module.
  */
-class ScannerPresenter @Inject internal constructor(private val getProductByBarcode: GetProductByBarcode) :
+class ScannerPresenter @Inject internal constructor(
+    private val getProductByBarcode: GetProductByBarcode,
+    private val addProduct: AddProduct
+) :
     BasePresenter<ScannerFragment>(), ScannerContract.Presenter {
 
     // CameraX preview element
@@ -32,6 +38,32 @@ class ScannerPresenter @Inject internal constructor(private val getProductByBarc
     private val executor = Executors.newSingleThreadExecutor()
     // The analyzer for the preview
     private lateinit var analyzer: PreviewAnalyzer
+
+    /**
+     * Method used to add a product.
+     *
+     * @param product The product to add.
+     * @param checkDate If the date should be checked to show a popup.
+     */
+    fun addProduct(product: Product, checkDate: Boolean) {
+        disposables.add(addProduct.invoke(product, checkDate)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                    view?.onShowAddProductSucceed()
+                    view?.onResetView()
+                },
+                {
+                    if (it is IllegalArgumentException) {
+                        view?.onShowAddProductError() // Show snack bar that tells it failed
+                    } else if (it is Exception) {
+                        view?.onShowCloseToExpirationPopup(product) // Show close to expiring popup
+                    }
+                }
+            )
+        )
+    }
 
     /**
      * Sets up everything for the camera to start.
@@ -147,7 +179,7 @@ class ScannerPresenter @Inject internal constructor(private val getProductByBarc
      * @return Boolean value that represents if torch is on or off.
      */
     fun toggleTorch(): Boolean {
-        return if(preview.isTorchOn) {
+        return if (preview.isTorchOn) {
             preview.enableTorch(false)
             false
         } else {
