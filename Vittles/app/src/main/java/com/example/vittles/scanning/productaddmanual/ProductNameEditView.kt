@@ -46,9 +46,14 @@ class ProductNameEditView(private val onFinished: (productName: String) -> Unit)
         view.btnCancel.setOnClickListener { onCancelButtonClicked() }
     }
 
+    /**
+     * Returns the correct value in the callback.
+     *
+     */
     private fun onConfirmButtonClicked() {
         if (!view.etProductName.text.isNullOrBlank()) {
             onFinished(view.etProductName.text.toString())
+            // Close the keyboard
             val imm = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(view.windowToken, 0)
             dialog.dismiss()
@@ -57,7 +62,12 @@ class ProductNameEditView(private val onFinished: (productName: String) -> Unit)
         }
     }
 
+    /**
+     * Dismisses the dialog.
+     *
+     */
     private fun onCancelButtonClicked() {
+        // Close the keyboard
         val imm = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(view.windowToken, 0)
         dialog.dismiss()
