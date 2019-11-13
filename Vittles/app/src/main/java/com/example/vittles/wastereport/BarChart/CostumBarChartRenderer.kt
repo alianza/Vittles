@@ -1,4 +1,4 @@
-package com.example.vittles.wastereport
+package com.example.vittles.wastereport.BarChart
 
 import android.R.attr.bottom
 import android.R.attr.right

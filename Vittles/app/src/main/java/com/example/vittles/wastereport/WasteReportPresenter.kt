@@ -13,7 +13,7 @@ class WasteReportPresenter @Inject internal constructor(
     private val getCountEatenProducts: GetCountEatenProducts,
     private val getCountExpiredProducts: GetCountExpiredProducts,
     private val getWastePercent: GetWastePercent) :
-    BasePresenter<WasteReportActivity>(), WasteReportContract.Presenter {
+    BasePresenter<WasteReportFragment>(), WasteReportContract.Presenter {
 
 
     override fun getCountEatenProducts(date: DateTime) {
@@ -32,11 +32,5 @@ class WasteReportPresenter @Inject internal constructor(
         )
     }
 
-    override fun getPercent(date: DateTime) {
-        disposables.add(getWastePercent.invoke(date)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ view?.calculateWaste(it) }, { view?.setNoResultsView() })
-        )
-    }
+
 }

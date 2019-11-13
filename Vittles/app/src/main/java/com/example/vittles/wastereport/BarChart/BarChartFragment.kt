@@ -1,40 +1,53 @@
-package com.example.vittles.wastereport
+package com.example.vittles.wastereport.BarChart
+
 
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import com.example.vittles.R
-import com.example.vittles.wastereport.BarChart.CustomBarChartRender
+import com.example.vittles.wastereport.CircleChart.RefreshData
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
+import dagger.android.support.DaggerFragment
+import org.joda.time.DateTime
+import javax.inject.Inject
 
-class FragmentBarChart : Fragment() {
+class BarChartFragment @Inject internal constructor(var date: DateTime) : DaggerFragment(), BarChartContract.View, RefreshData  {
+    @Inject
+    lateinit var presenter: BarChartPresenter
+
+    lateinit var barChartEaten: BarChart
+    lateinit var barChartExpired: BarChart
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-
-        val view = inflater.inflate(R.layout.fragment_bar_chart, container, false)
-
-        setupBarChartData(view)
-        setupBarChartData2(view)
-        return view
-
+        return inflater.inflate(R.layout.fragment_bar_chart, container, false)
     }
 
-    private fun setupBarChartData(view:View) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        barChartEaten = view.findViewById(R.id.barChart)
+        barChartExpired = view.findViewById(R.id.barChartExpired)
+        setupBarChartDataEaten()
+        setupBarChartDataExpired()
+    }
 
-        val barChart = view.findViewById<BarChart>(R.id.barChart)
+    override fun refresh(date: DateTime) {
+        this.date = date
+        //presenter.getEatenPercent(date)
+    }
+
+    override fun setupBarChartDataEaten() {
+
         // create BarEntry for Bar Group
         val bargroup = ArrayList<BarEntry>()
         bargroup.add(BarEntry(0f, 70f, "0"))
@@ -51,26 +64,23 @@ class FragmentBarChart : Fragment() {
 
         val barChartRender =
             CustomBarChartRender(
-                barChart,
-                barChart.animator,
-                barChart.viewPortHandler
+                barChartEaten,
+                barChartEaten.animator,
+                barChartEaten.viewPortHandler
             )
         barChartRender.setRadius(30)
-        barChart.renderer = barChartRender
+        barChartEaten.renderer = barChartRender
 
         val data = BarData(barDataSet)
-        barChart.setData(data)
+        barChartEaten.setData(data)
 
-        designSetup(barChart)
-        barChart.xAxis.isEnabled = false
-        barChart.setViewPortOffsets(80f, 40f, 80f, 10f)
+        designSetup(barChartEaten)
+        barChartEaten.xAxis.isEnabled = false
+        barChartEaten.setViewPortOffsets(80f, 40f, 80f, 10f)
 
     }
 
-    private fun setupBarChartData2(view: View) {
-
-        val barChart2 = view.findViewById<BarChart>(R.id.barChartExpired)
-
+    override fun setupBarChartDataExpired() {
         val labels = ArrayList<String>()
         labels.add("Mon")
         labels.add("Tue")
@@ -96,34 +106,34 @@ class FragmentBarChart : Fragment() {
 
         val barChartRender =
             CustomBarChartRender(
-                barChart2,
-                barChart2.animator,
-                barChart2.viewPortHandler
+                barChartExpired,
+                barChartExpired.animator,
+                barChartExpired.viewPortHandler
             )
         barChartRender.setRadius(25)
-        barChart2.renderer = barChartRender
+        barChartExpired.renderer = barChartRender
 
         barDataSet.color = Color.RED
 
         val data = BarData(barDataSet)
-        barChart2.setData(data)
-        designSetup(barChart2)
-        barChart2.xAxis.textSize = 12f
-        barChart2.xAxis.textColor = Color.BLACK
-        barChart2.xAxis.labelRotationAngle = 180f
-        barChart2.xAxis.position = XAxis.XAxisPosition.TOP
+        barChartExpired.setData(data)
+        designSetup(barChartExpired)
+        barChartExpired.xAxis.textSize = 12f
+        barChartExpired.xAxis.textColor = Color.BLACK
+        barChartExpired.xAxis.labelRotationAngle = 180f
+        barChartExpired.xAxis.position = XAxis.XAxisPosition.TOP
 
-        barChart2.rotation = 180f
-        barChart2.setViewPortOffsets(80f,100f,80f,10f)
-        barChart2.xAxis.xOffset = 20f
-        barChart2.xAxis.yOffset = 20f
-        barChart2.xAxis.valueFormatter = IndexAxisValueFormatter(labels)
-        barChart2.xAxis.setGranularity(1f)
-        barChart2.xAxis.setGranularityEnabled(true)
+        barChartExpired.rotation = 180f
+        barChartExpired.setViewPortOffsets(80f,100f,80f,10f)
+        barChartExpired.xAxis.xOffset = 20f
+        barChartExpired.xAxis.yOffset = 20f
+        barChartExpired.xAxis.valueFormatter = IndexAxisValueFormatter(labels)
+        barChartExpired.xAxis.setGranularity(1f)
+        barChartExpired.xAxis.setGranularityEnabled(true)
 
     }
 
-    fun designSetup(barChart: BarChart) {
+    override fun designSetup(barChart: BarChart) {
         barChart.setPinchZoom(false)
         barChart.setScaleEnabled(false)
         barChart.isHighlightPerTapEnabled = false
