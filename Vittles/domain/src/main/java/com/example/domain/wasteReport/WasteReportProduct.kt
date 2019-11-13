@@ -3,7 +3,7 @@ package com.example.domain.wasteReport
 import org.joda.time.DateTime
 
 /**
- * The wasteReportProduct entity.
+ * The WasteReportProduct entity.
  *
  * @author Sarah Lange
  *

@@ -1,5 +1,7 @@
 package com.example.data
 
+import com.example.data.room.ProductDao
+import com.example.data.room.WasteReportModelMapper
 import com.example.domain.repositories.WasteReportRepository
 import com.example.domain.wasteReport.WasteReportProduct
 import io.reactivex.Completable
@@ -15,7 +17,8 @@ import org.joda.time.DateTime
  * @property mapper The mapper used to map the wasteReportProduct data class.
  */
 class WasteReportRepositoryImpl(private val productDao: ProductDao,
-                             private val mapper: WasteReportModelMapper) :
+                                private val mapper: WasteReportModelMapper
+) :
     WasteReportRepository {
     override fun post(wasteReportProduct: WasteReportProduct): Completable = Completable.fromAction { productDao
         .insertWasteReportProduct(mapper.toEntity(wasteReportProduct))
@@ -30,9 +33,8 @@ class WasteReportRepositoryImpl(private val productDao: ProductDao,
         return productDao.getCountExpiredProducts(date)
     }
 
-    override fun getPercent(date: Long):Single<Int> {
-        println("TESEEEEEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFT"+ productDao.getWastePercent(date))
-        return productDao.getWastePercent(date)
+    override fun getEatenPercent(date: Long):Single<Int> {
+        return productDao.getEatenPercent(date)
     }
 
 }

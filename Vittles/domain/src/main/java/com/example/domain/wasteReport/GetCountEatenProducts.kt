@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 
 /**
- * This class handles te business logic of getting waste report.
+ * This class handles te business logic of getting amount of eaten vittles
  *
  * @author Sarah Lange
  *
@@ -15,7 +15,12 @@ import javax.inject.Inject
  */
 class GetCountEatenProducts @Inject constructor(private val repository: WasteReportRepository) {
 
-
+    /**
+     * Gets the amount of eaten vittles
+     *
+     * @param date From this date up to now the amount is calculated
+     * @return amount of eaten vittles
+     */
     operator fun invoke(date: DateTime): Single<Int>  = repository.getCountEatenProducts(date.millis)
 
 }
