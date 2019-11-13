@@ -12,7 +12,6 @@ import android.widget.LinearLayout
 import android.widget.SearchView
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -41,10 +40,12 @@ import javax.inject.Inject
  */
 class ProductListFragment : DaggerFragment(), ProductListContract.View {
 
+    companion object {
+        var withSearch = false
+    }
+
     @Inject
     lateinit var presenter: ProductListPresenter
-
-    private val args: ProductListFragmentArgs by navArgs()
 
     private lateinit var itemTouchHelper: ItemTouchHelper
     private lateinit var undoSnackbar: Snackbar
@@ -115,7 +116,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
 
         setItemTouchHelper()
 
-        if (args.withSearch) {
+        if (withSearch) {
             onSearchBarOpened()
         }
     }
@@ -128,6 +129,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
     override fun onResume() {
         super.onResume()
         onPopulateRecyclerView()
+        withSearch = false
     }
 
     /**
@@ -366,9 +368,9 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
      *
      */
     override fun onSearchBarOpened() {
+        svSearch.setQuery("", true)
         llSearch.visibility = View.VISIBLE
         svSearch.isIconified = false
-
         toolbar.visibility = View.GONE
     }
 
