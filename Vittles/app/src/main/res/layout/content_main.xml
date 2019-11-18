@@ -84,6 +84,3 @@
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <!--    app:contentInsetLeft="0dp"-->
-    <!--    app:contentInsetStart="0dp"-->
