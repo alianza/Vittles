@@ -183,6 +183,7 @@ class MainActivity : AppCompatActivity() {
      * @return Boolean value that represents if the navigation has succeeded.
      */
     private fun onNavigateSettingsButtonClick(): Boolean {
+        // TODO Implement settings button click
         println("onNavigateSettingsButtonClick TODO")
         return true
     }
