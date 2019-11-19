@@ -1,14 +1,20 @@
 package com.example.vittles
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.ActionMenuView
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
+import androidx.core.view.size
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
+import com.example.vittles.productlist.ProductListFragment
 import com.example.vittles.productlist.ProductListFragmentDirections
 import com.example.vittles.wastereport.WasteReportFragmentDirections
 
@@ -56,6 +62,8 @@ class MainActivity : AppCompatActivity() {
 
         mainToolbar.setupWithNavController(navController, appBarConfiguration)
 
+        setDrawableTint(getMenuItemByTitle(R.string.menu_home)!!.icon, R.color.colorPrimary)
+
         // Initialize navigation visibility
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
@@ -67,7 +75,7 @@ class MainActivity : AppCompatActivity() {
                     barVisibility = true,
                     fabVisibility = true
                 )
-                R.id.addProductFragment -> showBottomNavigationBar(
+                R.id.scannerFragment -> showBottomNavigationBar(
                     barVisibility = false,
                     fabVisibility = false
                 )
@@ -92,21 +100,93 @@ class MainActivity : AppCompatActivity() {
         if (fabVisibility) fab.show() else fab.hide()
     }
 
-
     /**
      * Sets all necessary event listeners on UI elements.
      *
      */
     private fun setListeners() {
-        fab.setOnClickListener { onAddButtonClick() }
+        fab.setOnClickListener { setMenuIconColor(0); onAddButtonClick() }
 
-        // Disable these buttons, since they are placeholders
-        navView.menu.getItem(2).isEnabled = false
-        navView.menu.getItem(3).isEnabled = false
+        navView.menu.getItem(0).setOnMenuItemClickListener { setMenuIconColor(0); onNavigateHomeButtonClick() }
+        navView.menu.getItem(1).setOnMenuItemClickListener { setMenuIconColor(1); onNavigateSearchButtonClick()}
+        navView.menu.getItem(4).setOnMenuItemClickListener { setMenuIconColor(4); onNavigateReportsButtonClick() }
+        navView.menu.getItem(5).setOnMenuItemClickListener { setMenuIconColor(5); onNavigateSettingsButtonClick() }
+    }
 
-        navView.menu.getItem(0).setOnMenuItemClickListener { onNavigateHomeButtonClick() }
-        navView.menu.getItem(1).setOnMenuItemClickListener { onNavigateSearchButtonClick() }
-        navView.menu.getItem(4).setOnMenuItemClickListener { onNavigateReportsButtonClick() }
+    /**
+     * Sets the color of menu icon that is pressed
+     *
+     * @param index Index of pressed menu item
+     */
+    private fun setMenuIconColor(index: Int) {
+        val wrappedDrawable = setDrawableTint(navView.menu.getItem(index).icon, R.color.colorPrimary)
+
+        for (x in 0 until navView.menu.size) {
+            if (navView.menu.getItem(x).isEnabled && x != index) {
+                val wrappedDrawableToReset = setDrawableTint(navView.menu.getItem(x).icon, R.color.black)
+                navView.menu.getItem(x).icon = wrappedDrawableToReset
+            }
+        }
+
+        navView.menu.getItem(index).icon = wrappedDrawable
+
+        searchIconException(index)
+    }
+
+    /**
+     * Handles the exception of the search icon (Home icon is highlighted)
+     *
+     * @param index Index of potential search icon menu item
+     */
+    private fun searchIconException(index: Int) {
+        if (navView.menu.getItem(index).title === getString(R.string.menu_search)) {
+            val wrappedDrawable = setDrawableTint(navView.menu.getItem(index).icon, R.color.black)
+            navView.menu.getItem(index).icon = wrappedDrawable
+            setDrawableTint(getMenuItemByTitle(R.string.menu_home)!!.icon, R.color.colorPrimary)
+        }
+    }
+
+    /**
+     * Sets the tint of a drawable and returns the drawable
+     *
+     * @param drawable Drawable to modify tint of
+     * @param color Color to modify tint of drawable to
+     * @return Returns modified drawable
+     */
+    private fun setDrawableTint(drawable: Drawable, color: Int): Drawable? {
+        val wrappedDrawable = DrawableCompat.wrap(drawable)
+
+        DrawableCompat.setTint(
+            wrappedDrawable,
+            ContextCompat.getColor(applicationContext, color)
+        )
+        return wrappedDrawable
+    }
+
+    /**
+     * Gets a menu item based on it's title
+     *
+     * @param title title to search MenuItem on
+     * @return returns found MenuItem of null if not found
+     */
+    private fun getMenuItemByTitle(title: Int): MenuItem? {
+        for (x in 0 until navView.menu.size) {
+            if (navView.menu.getItem(x).isEnabled && navView.menu.getItem(x).title == getString(title)) {
+                return navView.menu.getItem(x)
+            }
+        }
+        return null
+    }
+
+    /**
+     * Navigate to the SettingsFragment with the search bar opened.
+     *
+     * @return Boolean value that represents if the navigation has succeeded.
+     */
+    private fun onNavigateSettingsButtonClick(): Boolean {
+        // TODO Implement settings button click
+        println("onNavigateSettingsButtonClick TODO")
+        return true
     }
 
     /**
@@ -115,7 +195,8 @@ class MainActivity : AppCompatActivity() {
      * @return Boolean value that represents if the navigation has succeeded.
      */
     private fun onNavigateSearchButtonClick(): Boolean {
-            findNavController(fragmentHost).navigate(NavigationGraphDirections.actionGlobalProductListFragment(true))
+            ProductListFragment.withSearch = true
+            findNavController(fragmentHost).navigate(NavigationGraphDirections.actionGlobalProductListFragment())
             return true
     }
 
@@ -126,7 +207,7 @@ class MainActivity : AppCompatActivity() {
      */
     private fun onNavigateHomeButtonClick(): Boolean {
         return if (navController.currentDestination?.id != R.id.productListFragment) {
-            findNavController(fragmentHost).navigate(NavigationGraphDirections.actionGlobalProductListFragment(false))
+            findNavController(fragmentHost).navigate(NavigationGraphDirections.actionGlobalProductListFragment())
             true
         } else {
             false
@@ -139,14 +220,7 @@ class MainActivity : AppCompatActivity() {
      *
      */
     private fun onAddButtonClick() {
-        var action: NavDirections? = null
-        when (navController.currentDestination?.id) {
-            R.id.productListFragment -> action = ProductListFragmentDirections.actionProductsFragmentToAddProductFragment()
-            R.id.wasteReportFragment -> action = WasteReportFragmentDirections.actionReportsFragmentToAddProductFragment()
-        }
-        if (action != null) {
-            findNavController(fragmentHost).navigate(action)
-        }
+        findNavController(fragmentHost).navigate(NavigationGraphDirections.actionGlobalScannerFragment())
     }
 
     /**
@@ -160,13 +234,6 @@ class MainActivity : AppCompatActivity() {
             true
         } else {
             false
-        }
-    }
-
-    override fun onBackPressed() {
-        when (navController.currentDestination?.id) {
-            R.id.addProductFragment -> navController.navigate(NavigationGraphDirections.actionGlobalProductListFragment())
-            else -> navController.navigateUp()
         }
     }
 }

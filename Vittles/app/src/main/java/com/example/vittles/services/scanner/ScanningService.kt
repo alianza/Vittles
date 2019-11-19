@@ -17,9 +17,9 @@ import java.util.*
 object ScanningService {
 
     //    Regex to match against dates (12/12/19, 12-12-2019, 12.dec.19, 12:12:2019)
-
-    private val regex =
-        Regex("(?:(?:31([/\\-.:])(?:0?[13578]|1[02]|(?:jan|mar|may|jul|aug|oct|dec|okt|mei|mrt)))\\1|(?:(?:29|30)([/\\-.:])(?:0?[1,3-9]|1[0-2]|(?:jan|mar|apr|may|jun|jul|aug|sep|oct|nov|dec|okt|mei|mrt))\\2))(?:(?:1[6-9]|[2-9]\\d)?\\d{2})|(?:29([/\\-.:])(?:0?2|(?:feb))\\3(?:(?:(?:1[6-9]|[2-9]\\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))|(?:0?[1-9]|1\\d|2[0-8])([/\\-.:])(?:(?:0?[1-9]|(?:jan|feb|mar|apr|may|jun|jul|aug|sep|mei|mrt))|(?:1[0-2]|(?:oct|nov|dec|okt)))\\4(?:(?:1[6-9]|[2-9]\\d)?\\d{2})")
+    private val regex = Regex("(?:(?:31([/\\-.: ])(?:0[13578]|1[02]|(?:jan|mar|may|jul|aug|oct|dec|okt|mei|mrt)))\\1|(?:(?:29|30)([/\\-.: ])(?:0[1,3-9]|1[0-2]|(?:jan|mar|apr|may|jun|jul|aug|sep|oct|nov|dec|okt|mei|mrt))\\2))(?:(?:1[6-9]|[2-9]\\d)?\\d{2})|(?:29([/\\-.: ])(?:02|(?:feb))\\3(?:(?:(?:1[6-9]|[2-9]\\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))|(?:0[1-9]|1\\d|2[0-8])([/\\-.: ])(?:(?:0[1-9]|(?:jan|feb|mar|apr|may|jun|jul|aug|sep|mei|mrt))|(?:1[0-2]|(?:oct|nov|dec|okt)))\\4(?:(?:1[6-9]|[2-9]\\d)?\\d{2})|(?:(?:31([/\\-.: ])(?:0[13578]|1[02]|(?:jan|mar|may|jul|aug|oct|dec|okt|mei|mrt)))|(?:(?:29|30)([/\\-.: ])(?:0[1,3-9]|1[0-2]|(?:jan|mar|apr|may|jun|jul|aug|sep|oct|nov|dec|okt|mei|mrt))\\2))|(?:29([/\\-.: ])(?:02|(?:feb)))((?:(?:(?:1[6-9]|[2-9]\\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))|(?:0[1-9]|1\\d|2[0-8])([/\\-.: ])(?:(?:0[1-9]|(?:jan|feb|mar|apr|may|jun|jul|aug|sep|mei|mrt))|(?:1[0-2]|(?:oct|nov|dec|okt)))")
+    //    Regex to match against dates (12-2019, dec.19, 12:2019, dec-2019)
+    private val shortRegex = Regex("(?:(0[1-9]{1}|1[0-2]{1})([/\\-.: ]\\d{4}))|(?:jan|feb|mar|apr|may|jun|jul|aug|oct|nov|dec|okt|mei|mrt{3})([/\\-.: ]\\d{4})|(?:jan|feb|mar|apr|may|jun|jul|aug|oct|nov|dec|okt|mei|mrt{3})([/\\-.: ]\\d{2})")
 
     /**
      * Scans the image for barcodes and retrieves the value from the barcodes to return it to
@@ -65,14 +65,20 @@ object ScanningService {
 
                 detector.processImage(image)
                     .addOnSuccessListener { firebaseVisionText ->
-                        val matchedText = regex.find(firebaseVisionText.text.toLowerCase(), 0)
+                        var matchedText = regex.find(firebaseVisionText.text.toLowerCase(), 0)
 
                         println("ScannedText " + firebaseVisionText.text)
+
+                        if (matchedText == null) {
+                            matchedText = shortRegex.find(firebaseVisionText.text.toLowerCase(),0)
+                        }
 
                         if (matchedText !== null) {
                             println("MatchedText " + matchedText.value)
                             onOcrSuccess(matchedText.value)
                         }
+
+
                     }
                     .addOnFailureListener {
                         onOcrFailure(it)

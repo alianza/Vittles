@@ -2,6 +2,7 @@ package com.example.vittles.scanning
 
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.Preview
+import com.example.domain.product.Product
 
 /**
  * MVP Contract for scanning products.
@@ -11,7 +12,8 @@ import androidx.camera.core.Preview
 interface ScannerContract {
 
     interface View {
-        fun initViews()
+        fun initViews(view: android.view.View)
+        fun initListeners()
         fun setUpTapToFocus()
         fun onAddVittleButtonClick()
         fun onBarcodeScanned(productName: String)
@@ -22,6 +24,16 @@ interface ScannerContract {
         fun onEditNameButtonClick()
         fun onEditExpirationButtonClick()
         fun onTorchButtonClicked()
+        fun onResetView()
+        fun onResetDate()
+        fun onResetProductName()
+        fun onShowAddProductError()
+        fun onShowAddProductSucceed()
+        fun onShowCloseToExpirationPopup(product: Product)
+        fun onProductNameEdited(productName: String)
+        fun onExpirationDateEdited(text: String)
+        fun onProductNameCheckboxChecked(productName: String)
+        fun onExpirationDateCheckboxChecked(text: String)
     }
 
     interface Presenter {
