@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.os.Handler
-import android.os.VibrationEffect
 import android.os.Vibrator
 import android.view.*
 import android.widget.*
@@ -31,10 +30,6 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.fragment_camera.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.selects.SelectClause1
 import org.joda.time.DateTime
 import javax.inject.Inject
 
@@ -262,12 +257,14 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         }
         ImageViewCompat.setImageTintList(scanningPlane, context?.let {
             ContextCompat.getColor(
-                it, R.color.colorPrimary)
+                it, R.color.colorPrimary
+            )
         }?.let { ColorStateList.valueOf(it) })
         Handler().postDelayed({
             ImageViewCompat.setImageTintList(scanningPlane, context?.let {
                 ContextCompat.getColor(
-                    it, R.color.black)
+                    it, R.color.black
+                )
             }?.let { ColorStateList.valueOf(it) })
         }, 500)
     }
@@ -337,7 +334,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
      * Resets the necessary date properties.
      *
      */
-    override fun onResetDate(){
+    override fun onResetDate() {
         tvExpirationDate.text = getString(R.string.date_format_scanner)
         ivCheckboxExpirationDate.setImageDrawable(
             context?.let {
