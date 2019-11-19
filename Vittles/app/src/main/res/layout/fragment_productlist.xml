@@ -121,7 +121,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/btnSort"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/ic_expand_more_24px"/>
+                        app:srcCompat="@drawable/ic_expand_more_24px" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
                 <ImageButton
