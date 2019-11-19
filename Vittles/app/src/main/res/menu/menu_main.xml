@@ -7,7 +7,7 @@
         android:orderInCategory="1"
         android:title="@string/menu_home"
         app:showAsAction="always"
-        android:icon="@drawable/ic_home_black_24dp"
+        android:icon="@drawable/ic_menu_home"
         tools:ignore="AlwaysShowAction" />
     <item
         android:id="@+id/search"
@@ -18,11 +18,13 @@
     <item
         android:id="@+id/placeholder"
         android:orderInCategory="3"
+        android:enabled="false"
         app:showAsAction="always"
         android:title="" />
     <item
         android:id="@+id/placeholder2"
         android:orderInCategory="4"
+        android:enabled="false"
         app:showAsAction="always"
         android:title="" />
     <item
@@ -30,11 +32,11 @@
         android:orderInCategory="5"
         android:title="@string/menu_reports"
         app:showAsAction="always"
-        android:icon="@drawable/ic_show_chart_black_24dp"/>
+        android:icon="@drawable/ic_menu_history"/>
     <item
         android:id="@+id/settings"
         android:orderInCategory="6"
         android:title="@string/menu_settings"
         app:showAsAction="always"
-        android:icon="@drawable/ic_settings_black_24dp"/>
+        android:icon="@drawable/ic_menu_settings"/>
 </menu>
