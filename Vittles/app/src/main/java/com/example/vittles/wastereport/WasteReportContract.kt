@@ -11,18 +11,18 @@ import org.joda.time.DateTime
 interface WasteReportContract {
 
     interface View {
-        fun initViews()
+        fun initViews(vittlesEaten: Int, vittlesExpired: Int)
+        fun initData()
         fun addOnPageChangeListener()
         fun showEatenProducts(eatenProducts: Int)
         fun setNoResultsView()
         fun showExpiredProducts(expiredProducts: Int)
-        fun calculateWaste(percent: Int)
         fun showTimeRangeSelector()
         fun changeDate(date: DateTime)
     }
 
     interface Presenter {
-        fun getCountEatenProducts(date: DateTime)
-        fun getCountExpiredProducts(date: DateTime)
+        fun getCountEatenProducts(date: DateTime): Int
+        fun getCountExpiredProducts(date: DateTime): Int
     }
 }

@@ -2,6 +2,8 @@ package com.example.vittles.wastereport
 
 import android.media.VolumeShaper
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +13,7 @@ import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.LiveData
 import androidx.viewpager.widget.ViewPager
 import com.example.domain.product.Product
 import com.example.vittles.R
@@ -68,34 +71,46 @@ class WasteReportFragment : DaggerFragment(), WasteReportContract.View {
 
 
         presenter.start(this)
-        CoroutineScope(Dispatchers.Main).launch {
-            withContext(Dispatchers.IO) {
-                presenter.getCountEatenProducts(DateTime.now().minusDays(1))
-                presenter.getCountExpiredProducts(DateTime.now().minusDays(1))
-            }
-            initViews()
-        }
 
+        initData()
 
 
         //presenter.getPercent(DateTime.now().minusDays(1))
 
     }
 
+    override fun initData() {
+        // Call get methods asynchronously, then call initViews synchronously
+        CoroutineScope(Dispatchers.Main).launch {
+            withContext(Dispatchers.IO) {
+                val vittlesEaten =
+                    async { presenter.getCountEatenProducts(DateTime.now().minusDays(1)) }
+                val vittlesExpired =
+                    async { presenter.getCountExpiredProducts(DateTime.now().minusDays(1)) }
 
-    override fun initViews() {
-        adapter = ViewPagerAdapter(
-            activity!!.supportFragmentManager,
-            TimeRange.LAST_SEVEN_DAYS.value,
-            vittlesEaten,
-            vittlesExpired
-        )
-        view_pager.adapter = adapter
-        addOnPageChangeListener()
+                initViews(vittlesEaten.await(), vittlesExpired.await())
+            }
+        }    }
 
+    override fun initViews(vittlesEaten: Int, vittlesExpired: Int) {
+        // Inside handler because android doesn't allow UI changes outside main thread.
+        Handler(Looper.getMainLooper()).post {
+            adapter = ViewPagerAdapter(
+                activity!!.supportFragmentManager,
+                TimeRange.LAST_SEVEN_DAYS.value,
+                vittlesEaten,
+                vittlesExpired
+            )
+            view_pager.adapter = adapter
+            addOnPageChangeListener()
 
+            showEatenProducts(vittlesEaten)
+            showExpiredProducts(vittlesExpired)
+        }
         timeRange.setOnClickListener { showTimeRangeSelector() }
     }
+
+
 
     override fun showTimeRangeSelector() {
         context?.let { timeRangeMenu.openMenu(it, btnSort) }
@@ -108,8 +123,8 @@ class WasteReportFragment : DaggerFragment(), WasteReportContract.View {
     }
 
     override fun changeDate(date: DateTime) {
-        presenter.getCountEatenProducts(date)
-        presenter.getCountExpiredProducts(date)
+        //presenter.getCountEatenProducts(date)
+        //presenter.getCountExpiredProducts(date)
         adapter.updateDate(date)
     }
 
@@ -132,18 +147,9 @@ class WasteReportFragment : DaggerFragment(), WasteReportContract.View {
         Toast.makeText(context, R.string.count_fail, Toast.LENGTH_SHORT).show()
     }
 
-    override fun calculateWaste(percent: Int) {
-        if (view_pager.adapter == null) {
-            //loadPageView(percent)
-        } else {
-            //adapter.updatePercent(percent)
-            //loadPageView(percent)
-        }
-
-    }
 
     override fun addOnPageChangeListener() {
-        view_pager?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+        view_pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
 
             override fun onPageScrollStateChanged(state: Int) {
             }

@@ -16,21 +16,42 @@ class WasteReportPresenter @Inject internal constructor(
     BasePresenter<WasteReportFragment>(), WasteReportContract.Presenter {
 
 
-    override fun getCountEatenProducts(date: DateTime) {
+    override fun getCountEatenProducts(date: DateTime): Int {
+        return try {
+            getCountEatenProducts.invoke(date)
+                .subscribeOn(Schedulers.io())
+                .blockingGet()
+        } catch (e: Exception) {
+            view?.setNoResultsView()
+            -1
+        }
+    }
+
+    override fun getCountExpiredProducts(date: DateTime): Int {
+        return try {
+            getCountExpiredProducts.invoke(date)
+                .subscribeOn(Schedulers.io())
+                .blockingGet()
+        } catch (e: Exception) {
+            view?.setNoResultsView()
+            -1
+        }
+    }
+    /*override suspend fun getCountEatenProducts(date: DateTime) {
         disposables.add(getCountEatenProducts.invoke(date)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ view?.showEatenProducts(it) }, { view?.setNoResultsView() })
         )
-    }
+    }*/
 
-    override fun getCountExpiredProducts(date: DateTime) {
+    /*override suspend fun getCountExpiredProducts(date: DateTime) {
         disposables.add(getCountExpiredProducts.invoke(date)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ view?.showExpiredProducts(it) }, { view?.setNoResultsView() })
         )
-    }
+    }*/
 
 
 }

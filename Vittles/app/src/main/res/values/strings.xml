@@ -56,6 +56,8 @@
     <string name="last_year">Last year</string>
     <string name="content_description">Button time range</string>
     <string name="null_percent">0%</string>
+    <string name="zero">0</string>
+    <string name="dot">Dot</string>
 
     <!--    Waste Report-->
     <string name="waste_report_title">Waste report</string>
