@@ -16,7 +16,7 @@ import org.joda.time.DateTime
 import javax.inject.Inject
 
 interface RefreshData {
-    fun refresh(date: DateTime)
+    fun refresh(date: DateTime, vittlesEaten: Int, vittlesExpired: Int)
 }
 
 class CircleChartFragment @Inject internal constructor(var date: DateTime, var vittlesEaten: Int, var vittlesExpired: Int) : DaggerFragment(), CircleChartContract.View, RefreshData  {
@@ -43,8 +43,10 @@ class CircleChartFragment @Inject internal constructor(var date: DateTime, var v
         presenter.destroy()
     }
 
-    override fun refresh(date: DateTime) {
+    override fun refresh(date: DateTime, vittlesEaten: Int, vittlesExpired: Int) {
         this.date = date
+        this.vittlesEaten = vittlesEaten
+        this.vittlesExpired = vittlesExpired
         presenter.getEatenPercent(date, vittlesEaten, vittlesExpired)
     }
 

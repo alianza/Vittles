@@ -16,35 +16,25 @@ import org.joda.time.DateTime
  * @author Marc van Spronsen
  * @author Sarah Lange
  *
- * @property currentTimeRange The current sorting type that is used.
- * @property previousTimeRange The previous sorting type that was used.
- * @property btnTimeRange The button which shows the current sortingType.
- * @property alertDialog The entire alertDialog of the sortMenu.
+ * @property currentTimeRange The current time range that is used.
+ * @property previousTimeRange The previous time range type that was used.
+ * @property btnTimeRange The button which shows the current time range.
+ * @property alertDialog The entire alertDialog of the time range.
  * @property view The View which holds the sortingMenu.
  */
-class WasteTimeRangeMenu (private var presenter: WasteReportPresenter, private val onDateChange: (DateTime) -> Unit) {
+class WasteTimeRangeMenu (private val onDateChange: (DateTime) -> Unit) {
 
     private var currentTimeRange: TimeRange = TimeRange.LAST_SEVEN_DAYS
-    lateinit var previousTimeRange: TimeRange
-    lateinit var btnTimeRange: TextView
+    private lateinit var previousTimeRange: TimeRange
+    private lateinit var btnTimeRange: TextView
     lateinit var alertDialog: AlertDialog
     lateinit var view: View
 
     /**
-     * Sets enums for all of the different sorting options
+     * Inflates the timeRangeMenu.
      *
-     */
-    //enum class SortingType {
-    //    LAST_7_DAYS,
-     //   LAST_30_DAYS,
-      //  LAST_YEAR
-    //}
-
-    /**
-     * Inflates the sortingMenu.
-     *
-     * @param context The context in which the sortingMenu is active.
-     * @param button The button which shows the current sortingType.
+     * @param context The context in which the time range is active.
+     * @param button The button which shows the current time range.
      */
     fun openMenu(context: Context, button: TextView) {
 
@@ -67,13 +57,15 @@ class WasteTimeRangeMenu (private var presenter: WasteReportPresenter, private v
      *
      */
     private fun setListeners() {
-        view.daysRemainingLH.setOnClickListener { onSortClick(TimeRange.LAST_SEVEN_DAYS)  }
-        view.daysRemainingHL.setOnClickListener { onSortClick(TimeRange.LAST_30_DAYS) }
-        view.alfabeticAZ.setOnClickListener { onSortClick(TimeRange.LAST_YEAR) }
+        view.lastSevenDays.setOnClickListener { onSortClick(TimeRange.LAST_SEVEN_DAYS)  }
+        view.last30Days.setOnClickListener { onSortClick(TimeRange.LAST_30_DAYS) }
+        view.lastYear.setOnClickListener { onSortClick(TimeRange.LAST_YEAR) }
     }
 
     /**
      * Handles all actions that happen when a button is clicked
+     *
+     * @param timeRange time range of clicked button
      *
      */
     private fun onSortClick(timeRange: TimeRange) {
@@ -87,7 +79,7 @@ class WasteTimeRangeMenu (private var presenter: WasteReportPresenter, private v
         currentTimeRange = timeRange
 
         if (currentTimeRange != previousTimeRange) {
-            setSortbtnText(timeRange)
+            setTimeRangebtnText(timeRange)
         }
 
         if (::alertDialog.isInitialized) {
@@ -95,11 +87,13 @@ class WasteTimeRangeMenu (private var presenter: WasteReportPresenter, private v
         }
     }
 
+    /**
+     * * calls the onDateChange method in the wasteReportFragment when a button is clicked
+     *
+     * @param date Date from which the statistics should be displayed
+     */
     private fun loadData(date: DateTime) {
         onDateChange(date)
-        //presenter.getCountEatenProducts(DateTime.now().minusDays(days))
-        //presenter.getCountExpiredProducts(DateTime.now().minusDays(days))
-        //presenter.getPercent(DateTime.now().minusDays(days))
     }
 
     /**
@@ -108,9 +102,9 @@ class WasteTimeRangeMenu (private var presenter: WasteReportPresenter, private v
      */
     private fun setCircleColor() {
         when (currentTimeRange) {
-            TimeRange.LAST_SEVEN_DAYS -> view.daysRemainingAsc.alpha = 1f
-            TimeRange.LAST_30_DAYS-> view.daysRemainingDesc.alpha = 1f
-            TimeRange.LAST_YEAR -> view.alfabeticAz.alpha = 1f
+            TimeRange.LAST_SEVEN_DAYS -> view.lastSevenDaysDot.alpha = 1f
+            TimeRange.LAST_30_DAYS-> view.last30DaysDot.alpha = 1f
+            TimeRange.LAST_YEAR -> view.lastYearDot.alpha = 1f
         }
     }
 
@@ -119,11 +113,11 @@ class WasteTimeRangeMenu (private var presenter: WasteReportPresenter, private v
      *
      * @param sortingType The sortingType which was selected by the user.
      */
-    private fun setSortbtnText(sortingType: TimeRange) {
-        when(sortingType) {
-            TimeRange.LAST_SEVEN_DAYS -> btnTimeRange.text = view.daysRemainingLH.text
-            TimeRange.LAST_30_DAYS -> btnTimeRange.text = view.daysRemainingHL.text
-            TimeRange.LAST_YEAR -> btnTimeRange.text = view.alfabeticAZ.text
+    private fun setTimeRangebtnText(timeRange: TimeRange) {
+        when(timeRange) {
+            TimeRange.LAST_SEVEN_DAYS -> btnTimeRange.text = view.lastSevenDays.text
+            TimeRange.LAST_30_DAYS -> btnTimeRange.text = view.last30Days.text
+            TimeRange.LAST_YEAR -> btnTimeRange.text = view.lastYear.text
         }
     }
 }

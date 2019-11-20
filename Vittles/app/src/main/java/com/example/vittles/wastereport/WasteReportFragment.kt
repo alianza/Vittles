@@ -1,6 +1,5 @@
 package com.example.vittles.wastereport
 
-import android.media.VolumeShaper
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -12,23 +11,13 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.LiveData
 import androidx.viewpager.widget.ViewPager
-import com.example.domain.product.Product
 import com.example.vittles.R
 import com.example.vittles.enums.TimeRange
-import dagger.android.support.DaggerAppCompatActivity
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_waste_report.*
-import kotlinx.android.synthetic.main.content_waste_history.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.callbackFlow
-import org.intellij.lang.annotations.Flow
 import org.joda.time.DateTime
-import org.joda.time.MutableDateTime
-import java.util.*
 import javax.inject.Inject
 
 class WasteReportFragment : DaggerFragment(), WasteReportContract.View {
@@ -42,13 +31,9 @@ class WasteReportFragment : DaggerFragment(), WasteReportContract.View {
     lateinit var ivDot: ImageView
     lateinit var ivDot2: ImageView
     lateinit var timeRange: ConstraintLayout
-    lateinit var view_pager: ViewPager
+    lateinit var viewPager: ViewPager
 
     lateinit var adapter: ViewPagerAdapter
-    var vittlesEaten: Int = 0
-    var vittlesExpired: Int = 0
-    var eatenLoaded = false
-    var expiredLoaded = false
 
 
     override fun onCreateView(
@@ -56,7 +41,7 @@ class WasteReportFragment : DaggerFragment(), WasteReportContract.View {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        timeRangeMenu = WasteTimeRangeMenu(presenter) { date -> changeDate(date) }
+        timeRangeMenu = WasteTimeRangeMenu { date -> changeDate(date) }
         return inflater.inflate(R.layout.fragment_waste_report, container, false)
     }
 
@@ -67,16 +52,11 @@ class WasteReportFragment : DaggerFragment(), WasteReportContract.View {
         ivDot = view.findViewById(R.id.ivDot1)
         ivDot2 = view.findViewById(R.id.ivDot2)
         timeRange = view.findViewById(R.id.time_Range)
-        view_pager = view.findViewById(R.id.view_pager)
-
+        viewPager = view.findViewById(R.id.view_pager)
 
         presenter.start(this)
 
         initData()
-
-
-        //presenter.getPercent(DateTime.now().minusDays(1))
-
     }
 
     override fun initData() {
@@ -84,13 +64,14 @@ class WasteReportFragment : DaggerFragment(), WasteReportContract.View {
         CoroutineScope(Dispatchers.Main).launch {
             withContext(Dispatchers.IO) {
                 val vittlesEaten =
-                    async { presenter.getCountEatenProducts(DateTime.now().minusDays(1)) }
+                    async { presenter.getCountEatenProducts(DateTime.now().minusHours(1)) }
                 val vittlesExpired =
-                    async { presenter.getCountExpiredProducts(DateTime.now().minusDays(1)) }
+                    async { presenter.getCountExpiredProducts(DateTime.now().minusHours(1)) }
 
                 initViews(vittlesEaten.await(), vittlesExpired.await())
             }
-        }    }
+        }
+    }
 
     override fun initViews(vittlesEaten: Int, vittlesExpired: Int) {
         // Inside handler because android doesn't allow UI changes outside main thread.
@@ -101,7 +82,7 @@ class WasteReportFragment : DaggerFragment(), WasteReportContract.View {
                 vittlesEaten,
                 vittlesExpired
             )
-            view_pager.adapter = adapter
+            viewPager.adapter = adapter
             addOnPageChangeListener()
 
             showEatenProducts(vittlesEaten)
@@ -123,24 +104,34 @@ class WasteReportFragment : DaggerFragment(), WasteReportContract.View {
     }
 
     override fun changeDate(date: DateTime) {
-        //presenter.getCountEatenProducts(date)
-        //presenter.getCountExpiredProducts(date)
-        adapter.updateDate(date)
+        CoroutineScope(Dispatchers.Main).launch {
+            withContext(Dispatchers.IO) {
+                val vittlesEaten =
+                    async { presenter.getCountEatenProducts(date) }
+                val vittlesExpired =
+                    async { presenter.getCountExpiredProducts(date) }
+                change(vittlesEaten.await(), vittlesExpired.await(), date)
+            }
+        }
     }
 
+    fun change(vittlesEaten: Int, vittlesExpired: Int, date: DateTime) {
+        Handler(Looper.getMainLooper()).post {
+            showEatenProducts(vittlesEaten)
+            showExpiredProducts(vittlesExpired)
+            adapter.updateDate(date, vittlesEaten, vittlesExpired)
+        }
+    }
+
+
+
     override fun showEatenProducts(eatenProducts: Int) {
-        vittlesEaten = eatenProducts
         tvVittlesEaten.text = eatenProducts.toString()
-        eatenLoaded = true
-        //initViews()
     }
 
 
     override fun showExpiredProducts(expiredProducts: Int) {
-        vittlesExpired = expiredProducts
         tvVittlesExpired.text = expiredProducts.toString()
-        expiredLoaded = true
-        //initViews()
     }
 
     override fun setNoResultsView() {
@@ -149,7 +140,7 @@ class WasteReportFragment : DaggerFragment(), WasteReportContract.View {
 
 
     override fun addOnPageChangeListener() {
-        view_pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+        viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
 
             override fun onPageScrollStateChanged(state: Int) {
             }

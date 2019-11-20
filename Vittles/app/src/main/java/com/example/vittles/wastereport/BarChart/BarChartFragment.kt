@@ -41,7 +41,7 @@ class BarChartFragment @Inject internal constructor(var date: DateTime) : Dagger
         setupBarChartDataExpired()
     }
 
-    override fun refresh(date: DateTime) {
+    override fun refresh(date: DateTime, vittlesEaten: Int, vittlesExpired: Int) {
         this.date = date
         //presenter.getEatenPercent(date)
     }

@@ -19,14 +19,16 @@ class ViewPagerAdapter internal constructor(
     lateinit var fragment: Fragment
 
 
-    fun updateDate(date: DateTime) {
+    fun updateDate(date: DateTime, vittlesEaten: Int, vittlesExpired: Int) {
         this.date = date
+        this.vittlesEaten = vittlesEaten
+        this.vittlesExpired = vittlesExpired
         notifyDataSetChanged()
     }
 
     override fun getItemPosition(obj: Any): Int {
         if (obj is RefreshData) {
-            obj.refresh(date)
+            obj.refresh(date, vittlesEaten, vittlesExpired)
         }
         return super.getItemPosition(obj)
     }

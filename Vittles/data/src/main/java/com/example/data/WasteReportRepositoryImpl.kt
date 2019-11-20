@@ -33,8 +33,4 @@ class WasteReportRepositoryImpl(private val productDao: ProductDao,
         return productDao.getCountExpiredProducts(date)
     }
 
-    override fun getEatenPercent(date: Long):Single<Int> {
-        return productDao.getEatenPercent(date)
-    }
-
 }

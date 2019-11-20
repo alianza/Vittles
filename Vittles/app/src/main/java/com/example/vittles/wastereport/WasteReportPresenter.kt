@@ -9,13 +9,26 @@ import io.reactivex.schedulers.Schedulers
 import org.joda.time.DateTime
 import javax.inject.Inject
 
+/**
+ * This is the presenter for the waste report
+ *
+ * @author Sarah Lange
+ *
+ * @property getCountEatenProducts The GetCountEatenProducts use case from the domain module.
+ * @property getCountExpiredProducts The GetCountExpiredProducts use case from the domain module.
+ */
 class WasteReportPresenter @Inject internal constructor(
     private val getCountEatenProducts: GetCountEatenProducts,
-    private val getCountExpiredProducts: GetCountExpiredProducts,
-    private val getWastePercent: GetWastePercent) :
+    private val getCountExpiredProducts: GetCountExpiredProducts) :
     BasePresenter<WasteReportFragment>(), WasteReportContract.Presenter {
 
 
+    /**
+     * Loads the amount of eaten products
+     *
+     * @param date From this date up to now the amount is calculated
+     * @return Amount of eaten products
+     */
     override fun getCountEatenProducts(date: DateTime): Int {
         return try {
             getCountEatenProducts.invoke(date)
@@ -27,6 +40,12 @@ class WasteReportPresenter @Inject internal constructor(
         }
     }
 
+    /**
+     * Loads the amount of expired products
+     *
+     * @param date From this date up to now the amount is calculated
+     * @return Amount of expired products
+     */
     override fun getCountExpiredProducts(date: DateTime): Int {
         return try {
             getCountExpiredProducts.invoke(date)
@@ -37,21 +56,4 @@ class WasteReportPresenter @Inject internal constructor(
             -1
         }
     }
-    /*override suspend fun getCountEatenProducts(date: DateTime) {
-        disposables.add(getCountEatenProducts.invoke(date)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ view?.showEatenProducts(it) }, { view?.setNoResultsView() })
-        )
-    }*/
-
-    /*override suspend fun getCountExpiredProducts(date: DateTime) {
-        disposables.add(getCountExpiredProducts.invoke(date)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ view?.showExpiredProducts(it) }, { view?.setNoResultsView() })
-        )
-    }*/
-
-
 }
