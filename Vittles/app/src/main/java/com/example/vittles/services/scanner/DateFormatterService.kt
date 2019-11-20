@@ -6,6 +6,12 @@ import org.joda.time.format.DateTimeFormatter
 import java.sql.Time
 import java.util.*
 
+/**
+ * Service for formatting date strings given by the ScanningService.
+ *
+ * @author Marc van Spronsen
+ * @author Jan-Willem van Bremen
+ */
 object DateFormatterService {
 
     private val regex = Regex("^([0-9&/]*)\$")
