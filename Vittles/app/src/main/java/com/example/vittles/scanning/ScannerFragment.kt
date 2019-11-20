@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.os.Handler
-import android.os.VibrationEffect
 import android.os.Vibrator
 import android.view.*
 import android.widget.*
@@ -17,6 +16,7 @@ import androidx.camera.core.FocusMeteringAction
 import androidx.core.content.ContextCompat
 import androidx.core.widget.ImageViewCompat
 import androidx.navigation.fragment.NavHostFragment
+import com.example.domain.consts.DAYS_REMAINING_EXPIRED
 import com.example.domain.product.Product
 import com.example.vittles.NavigationGraphDirections
 import com.example.vittles.R
@@ -31,10 +31,6 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.fragment_camera.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.selects.SelectClause1
 import org.joda.time.DateTime
 import javax.inject.Inject
 
@@ -266,12 +262,14 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         }
         ImageViewCompat.setImageTintList(scanningPlane, context?.let {
             ContextCompat.getColor(
-                it, R.color.colorPrimary)
+                it, R.color.colorPrimary
+            )
         }?.let { ColorStateList.valueOf(it) })
         Handler().postDelayed({
             ImageViewCompat.setImageTintList(scanningPlane, context?.let {
                 ContextCompat.getColor(
-                    it, R.color.black)
+                    it, R.color.black
+                )
             }?.let { ColorStateList.valueOf(it) })
         }, 500)
     }
@@ -341,7 +339,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
      * Resets the necessary date properties.
      *
      */
-    override fun onResetDate(){
+    override fun onResetDate() {
         tvExpirationDate.text = getString(R.string.date_format_scanner)
         ivCheckboxExpirationDate.setImageDrawable(
             context?.let {
@@ -491,22 +489,68 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
     }
 
     /**
+     * Calls either the close to expiration date or already expired pop-ups
+     *
+     */
+    @SuppressLint("DefaultLocale")
+    override fun onShowExpirationPopup(product: Product) {
+        if (product.getDaysRemaining() > DAYS_REMAINING_EXPIRED) {
+            onShowCloseToExpirationPopup(product)
+        } else {
+            onShowAlreadyExpiredPopup(product)
+        }
+    }
+
+    /**
      * Shows the CloseToExpiring popup.
      *
      */
+    @SuppressLint("DefaultLocale")
     override fun onShowCloseToExpirationPopup(product: Product) {
+        val multipleDaysChar = if (product.getDaysRemaining() == 1) { "" } else { "s" }
+
         context?.let {
             PopupManager.instance.showPopup(
                 it,
                 PopupBase(
-                    "Almost expired!",
-                    String.format(
-                        "The scanned product expires in %d days. \n Are you sure you want to add it?",
-                        product.getDaysRemaining()
+                    getString(R.string.close_to_expiration_header),
+                    getString(R.string.close_to_expiration_subText,
+                        product.getDaysRemaining(),
+                        multipleDaysChar
                     )
                 ),
-                PopupButton("NO"),
-                PopupButton("YES") { presenter.addProduct(product, false) }
+                PopupButton(getString(R.string.btn_no).toUpperCase()),
+                PopupButton(getString(R.string.btn_yes).toUpperCase()) {
+                    presenter.addProduct(
+                        product,
+                        false
+                    )
+                }
+            )
+        }
+    }
+
+    /**
+     * Shows the AlreadyExpired popup.
+     *
+     */
+    @SuppressLint("DefaultLocale")
+    override fun onShowAlreadyExpiredPopup(product: Product) {
+
+        context?.let {
+            PopupManager.instance.showPopup(
+                it,
+                PopupBase(
+                    getString(R.string.already_expired_header),
+                    getString(R.string.already_expired_subText)
+                ),
+                PopupButton(getString(R.string.btn_no).toUpperCase()),
+                PopupButton(getString(R.string.btn_yes).toUpperCase()) {
+                    presenter.addProduct(
+                        product,
+                        false
+                    )
+                }
             )
         }
     }

@@ -1,5 +1,6 @@
 package com.example.vittles.scanning
 
+import androidx.camera.core.CameraX
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import com.example.vittles.services.scanner.ScanningService
@@ -65,8 +66,17 @@ class PreviewAnalyzer(
             val mediaImage = imageProxy?.image
             val imageRotation = degreesToFirebaseRotation(degrees)
             if (mediaImage != null) {
-                val image = FirebaseVisionImage.fromMediaImage(mediaImage, imageRotation)
-                if (!hasBarCode) {
+                var image: FirebaseVisionImage? = null
+                try {
+                    image = FirebaseVisionImage.fromMediaImage(mediaImage, imageRotation)
+                } catch (e: IllegalStateException) {
+                    /*
+                    NOTE: Unfixable bug. Bug appears in fewer than 1% of all cases. At least this
+                    try-catch might prevent the app from crashing.
+                     */
+                    CameraX.unbindAll()
+                }
+                if (!hasBarCode && image != null) {
                     CoroutineScope(Dispatchers.Main).launch {
                         withContext(Dispatchers.IO) {
                             ScanningService.scanForBarcode(
@@ -77,7 +87,7 @@ class PreviewAnalyzer(
                         }
                     }
                 }
-                if (!hasExpirationDate) {
+                if (!hasExpirationDate && image != null) {
                     CoroutineScope(Dispatchers.Main).launch {
                         withContext(Dispatchers.IO) {
                             ScanningService.scanForExpirationDate(
