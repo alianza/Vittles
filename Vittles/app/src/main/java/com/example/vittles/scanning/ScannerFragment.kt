@@ -16,6 +16,7 @@ import androidx.camera.core.FocusMeteringAction
 import androidx.core.content.ContextCompat
 import androidx.core.widget.ImageViewCompat
 import androidx.navigation.fragment.NavHostFragment
+import com.example.domain.consts.DAYS_REMAINING_EXPIRED
 import com.example.domain.product.Product
 import com.example.vittles.NavigationGraphDirections
 import com.example.vittles.R
@@ -508,22 +509,71 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
     }
 
     /**
+     * Calls either the close to expiration date or already expired pop-ups
+     *
+     * @param product Product to decide of if CloseToExpirationPopup or AlreadyExpiredPopup should be shown
+     */
+    @SuppressLint("DefaultLocale")
+    override fun onShowExpirationPopup(product: Product) {
+        if (product.getDaysRemaining() > DAYS_REMAINING_EXPIRED) {
+            onShowCloseToExpirationPopup(product)
+        } else {
+            onShowAlreadyExpiredPopup(product)
+        }
+    }
+
+    /**
      * Shows the CloseToExpiring popup.
      *
+     * @param product Product to show CloseToExpirationPopup of
      */
+    @SuppressLint("DefaultLocale")
     override fun onShowCloseToExpirationPopup(product: Product) {
+        val multipleDaysChar = if (product.getDaysRemaining() == 1) { "" } else { "s" }
+
         context?.let {
             PopupManager.instance.showPopup(
                 it,
                 PopupBase(
-                    "Almost expired!",
-                    String.format(
-                        "The scanned product expires in %d days. \n Are you sure you want to add it?",
-                        product.getDaysRemaining()
+                    getString(R.string.close_to_expiration_header),
+                    getString(R.string.close_to_expiration_subText,
+                        product.getDaysRemaining(),
+                        multipleDaysChar
                     )
                 ),
-                PopupButton("NO"),
-                PopupButton("YES") { presenter.addProduct(product, false) }
+                PopupButton(getString(R.string.btn_no).toUpperCase()),
+                PopupButton(getString(R.string.btn_yes).toUpperCase()) {
+                    presenter.addProduct(
+                        product,
+                        false
+                    )
+                }
+            )
+        }
+    }
+
+    /**
+     * Shows the AlreadyExpired popup.
+     *
+     * @param product Product to show AlreadyExpiredPopup of
+     */
+    @SuppressLint("DefaultLocale")
+    override fun onShowAlreadyExpiredPopup(product: Product) {
+
+        context?.let {
+            PopupManager.instance.showPopup(
+                it,
+                PopupBase(
+                    getString(R.string.already_expired_header),
+                    getString(R.string.already_expired_subText)
+                ),
+                PopupButton(getString(R.string.btn_no).toUpperCase()),
+                PopupButton(getString(R.string.btn_yes).toUpperCase()) {
+                    presenter.addProduct(
+                        product,
+                        false
+                    )
+                }
             )
         }
     }
