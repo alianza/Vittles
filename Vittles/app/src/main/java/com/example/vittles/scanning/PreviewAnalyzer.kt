@@ -3,8 +3,6 @@ package com.example.vittles.scanning
 import androidx.camera.core.CameraX
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
-import androidx.navigation.fragment.NavHostFragment
-import com.example.vittles.NavigationGraphDirections
 import com.example.vittles.services.scanner.ScanningService
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
