@@ -290,6 +290,8 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
             context,
             AddProductFragment::class.java
         )
+
+        addProductActivityIntent.put
         startActivity(addProductActivityIntent)
         onSearchBarClosed()
     }
