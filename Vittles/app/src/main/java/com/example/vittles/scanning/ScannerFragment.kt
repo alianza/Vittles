@@ -208,10 +208,12 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
      * @param productName The product name that has been retrieved from the camera.
      */
     override fun onBarcodeScanned(productName: String) {
-        onProductNameCheckboxChecked(productName)
-        PreviewAnalyzer.hasBarCode = true
-        refreshProductName.visibility = View.VISIBLE
-        onScanSuccessful()
+        if (!PreviewAnalyzer.hasBarCode) {
+            onProductNameCheckboxChecked(productName)
+            PreviewAnalyzer.hasBarCode = true
+            refreshProductName.visibility = View.VISIBLE
+            onScanSuccessful()
+        }
     }
 
     /**
@@ -220,10 +222,12 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
      * @param text The text that has been retrieved from the camera
      */
     override fun onTextScanned(text: String) {
-        onExpirationDateCheckboxChecked(text)
-        PreviewAnalyzer.hasExpirationDate = true
-        refreshDate.visibility = View.VISIBLE
-        onScanSuccessful()
+        if (!PreviewAnalyzer.hasExpirationDate) {
+            onExpirationDateCheckboxChecked(text)
+            PreviewAnalyzer.hasExpirationDate = true
+            refreshDate.visibility = View.VISIBLE
+            onScanSuccessful()
+        }
     }
 
     /**
