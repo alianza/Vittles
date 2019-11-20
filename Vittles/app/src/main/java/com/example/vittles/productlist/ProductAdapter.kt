@@ -22,12 +22,20 @@ import javax.inject.Inject
  * @author Sarah Lange
  *
  * @property products The list of products that should be displayed in the RecyclerView.
+ * @property clickListener Click listener used for the delete button.
  */
 class ProductAdapter @Inject constructor(initialProducts: List<Product>, private val clickListener: (Product) -> Unit) :
     RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
 
+    /**
+     * Context of the activity.
+     */
     lateinit var context: Context
+    /**
+     * List of products in the recycler view.
+     */
     var products: List<Product> = initialProducts
+
     /**
      * Creates a new ViewHolder.
      *
@@ -98,6 +106,7 @@ class ProductAdapter @Inject constructor(initialProducts: List<Product>, private
             }
             itemView.layoutParams = lp
 
+            // Set values in layout
             itemView.tvName.text = product.productName
             itemView.tvDate.text = context.resources.getString(
                 R.string.expiration_format,
@@ -107,7 +116,7 @@ class ProductAdapter @Inject constructor(initialProducts: List<Product>, private
             itemView.tvDaysLeft.text = daysLeft
             itemView.btnRemove.setOnClickListener{ clickListener(product) }
 
-            //Set the colors
+            // Set the colors
             itemView.ivColor.setColorFilter(ContextCompat.getColor(context, product.indicationColor!!), PorterDuff.Mode.MULTIPLY) //Circle
             itemView.tvDaysLeft.setTextColor(ContextCompat.getColor(context, product.indicationColor!!)) //DaysLeft number
         }
