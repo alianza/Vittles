@@ -1,7 +1,6 @@
 package com.example.vittles.productlist
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -18,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.product.Product
 import com.example.vittles.R
 import com.example.vittles.enums.DeleteType
-import com.example.vittles.productadd.AddProductFragment
 import com.example.vittles.services.popups.PopupBase
 import com.example.vittles.services.popups.PopupButton
 import com.example.vittles.services.popups.PopupManager
@@ -40,31 +38,46 @@ import javax.inject.Inject
  */
 class ProductListFragment : DaggerFragment(), ProductListContract.View {
 
-    companion object {
-        var withSearch = false
-    }
-
+    /**
+     * The presenter of the fragment.
+     */
     @Inject
     lateinit var presenter: ProductListPresenter
 
+    /** @suppress */
     private lateinit var itemTouchHelper: ItemTouchHelper
+    /** @suppress */
     private lateinit var undoSnackbar: Snackbar
+    /** @suppress */
     private lateinit var deletedProduct: Product
+    /** @suppress */
     private lateinit var deletedProductDeleteType: DeleteType
+    /** @suppress */
     private var deletedProductIndex: Int = 0
+    /** @suppress */
     private var products = mutableListOf<Product>()
+    /** @suppress */
     private var filteredProducts = products
+    /** @suppress */
     private val productAdapter = ProductAdapter(products, this::onRemoveButtonClicked)
+    /** @suppress */
     private val sortMenu = SortMenu(products, productAdapter)
-
+    /** @suppress */
     private lateinit var rvProducts: RecyclerView
+    /** @suppress */
     private lateinit var llSearch: LinearLayout
+    /** @suppress */
     private lateinit var tvAddNewVittle: TextView
+    /** @suppress */
     private lateinit var tvNoResults: TextView
+    /** @suppress */
     private lateinit var svSearch: SearchView
+    /** @suppress */
     private lateinit var toolbar: Toolbar
+    /** @suppress */
     private lateinit var content: FrameLayout
 
+    /** {@inheritDoc} */
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -75,6 +88,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
         return inflater.inflate(R.layout.fragment_productlist, container, false)
     }
 
+    /** {@inheritDoc} */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         rvProducts = view.findViewById(R.id.rvProducts)
@@ -88,6 +102,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
         initViews()
     }
 
+    /** {@inheritDoc} */
     override fun onDestroy() {
         super.onDestroy()
         onSearchBarClosed()
@@ -169,7 +184,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
      * @param product The product to delete.
      * @param deleteType The deleteType: eaten, thrown_away or removed.
      */
-    override fun onSaveDeleteProduct(product: Product, deleteType: DeleteType) {
+    override fun onSafeDeleteProduct(product: Product, deleteType: DeleteType) {
 
         if (undoSnackbar.isShown) {
             presenter.deleteProduct(deletedProduct, deletedProductDeleteType)
@@ -255,7 +270,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
                 getString(R.string.remove_product_subText)
             ),
             PopupButton(getString(R.string.btn_no).toUpperCase()) {},
-            PopupButton(getString(R.string.btn_yes).toUpperCase()) { onSaveDeleteProduct(product, DeleteType.REMOVED) })
+            PopupButton(getString(R.string.btn_yes).toUpperCase()) { onSafeDeleteProduct(product, DeleteType.REMOVED) })
     }
 
     /**
@@ -263,7 +278,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
      *
      */
     override fun setItemTouchHelper() {
-        val callback = ProductItemTouchHelper(products, presenter, context!!, this::onSaveDeleteProduct)
+        val callback = ProductItemTouchHelper(products, context!!, this::onSafeDeleteProduct)
         itemTouchHelper = ItemTouchHelper(callback)
         itemTouchHelper.attachToRecyclerView(rvProducts)
     }
@@ -281,22 +296,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
     }
 
     /**
-     * Called when the add button is clicked.
-     * It starts the addProduct activity.
-     *
-     */
-    override fun onAddButtonClick() {
-        val addProductActivityIntent = Intent(
-            context,
-            AddProductFragment::class.java
-        )
-        startActivity(addProductActivityIntent)
-        onSearchBarClosed()
-    }
-
-
-    /**
-     * Called after filtering products array to show or hide no results textview
+     * Called after filtering products array to show or hide no results text view.
      *
      */
     override fun onNoResults() {
@@ -309,7 +309,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
 
 
     /**
-     * Populates the RecyclerView with items from the local DataBase.
+     * Populates the RecyclerView with items from the local database.
      *
      */
     override fun onPopulateRecyclerView() {
@@ -387,5 +387,13 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
         svSearch.setQuery("", true)
         llSearch.visibility = View.GONE
         toolbar.visibility = View.VISIBLE
+    }
+
+    companion object {
+        /**
+         * Indicates if the fragment should be opened with the search
+         * field opened.
+         */
+        var withSearch = false
     }
 }

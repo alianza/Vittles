@@ -25,8 +25,12 @@ import androidx.navigation.findNavController as findNavSetup
  * @author Fethi Tewelde
  */
 class MainActivity : AppCompatActivity() {
+    /**
+     * The Navigation Controller of the application.
+     */
     private lateinit var navController: NavController
 
+    /** {@inheritDoc}*/
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme_NoActionBar) // Finish splash screen
         super.onCreate(savedInstanceState)
@@ -143,11 +147,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Sets the tint of a drawable and returns the drawable
+     * Sets the tint of a drawable and returns the drawable.
      *
-     * @param drawable Drawable to modify tint of
-     * @param color Color to modify tint of drawable to
-     * @return Returns modified drawable
+     * @param drawable Drawable to modify tint of.
+     * @param color Color to modify tint of drawable to.
+     * @return Returns modified drawable.
      */
     private fun setDrawableTint(drawable: Drawable, color: Int): Drawable? {
         val wrappedDrawable = DrawableCompat.wrap(drawable)
@@ -160,10 +164,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Gets a menu item based on it's title
+     * Gets a menu item based on its title.
      *
-     * @param title title to search MenuItem on
-     * @return returns found MenuItem of null if not found
+     * @param title Title to search MenuItem on.
+     * @return Returns found MenuItem of null if not found.
      */
     private fun getMenuItemByTitle(title: Int): MenuItem? {
         for (x in 0 until navView.menu.size) {
