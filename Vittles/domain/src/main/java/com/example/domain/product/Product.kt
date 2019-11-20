@@ -58,7 +58,7 @@ data class Product(
      * Checks if the change to a product is valid.
      *
      */
-    fun isValidForEdit() = uid!! > 0 && productName.trim().isNotEmpty() && expirationDate.toString().trim().isNotEmpty()
+    fun isValidForEdit() = uid != null && uid > 0  && productName.trim().isNotEmpty() && expirationDate.toString().trim().isNotEmpty()
 
     /**
      * Checks if the input for a product is valid.

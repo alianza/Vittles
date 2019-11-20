@@ -10,8 +10,10 @@ import com.example.vittles.R
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
-
-
+/**
+ * Class for the product info component
+ *
+ */
 class ProductInfoFragment : DaggerFragment(), ProductInfoContract.View {
 
     @Inject
@@ -34,16 +36,28 @@ class ProductInfoFragment : DaggerFragment(), ProductInfoContract.View {
         initViews()
     }
 
+    /**
+     * Initializes the views.
+     *
+     */
     override fun initViews() {
 
         val intent = activity!!.intent
         product = intent.getParcelableExtra(getString(R.string.product))
     }
 
+    /**
+     * Called when the product name is changed.
+     *
+     */
     override fun onNameChanged() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
+    /**
+     * Called when the product expiration date has changed.
+     *
+     */
     override fun onExpirationDateChanged() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
