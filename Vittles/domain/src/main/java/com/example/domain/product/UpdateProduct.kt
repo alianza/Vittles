@@ -16,8 +16,8 @@ class UpdateProduct @Inject constructor(private val repository: ProductsReposito
     /**
      * Updates a product in the room database.
      *
-     * @param product The updated product (id has to be the same)
-     * @return The compatibility status for updating a product in the database
+     * @param product The updated product (id has to be the same.
+     * @return The compatibility status for updating a product in the database.
      */
     fun invoke(product: Product): Completable = validate(product).andThen(repository.patch(product))
 
