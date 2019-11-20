@@ -160,7 +160,7 @@ class AddProductFragment : DaggerFragment(), AddProductContract.View {
     }
 
     /**
-     * Temporary button action.
+     * Handles scan button click; opens scanning activity
      *
      */
     override fun onScanButtonClick() {
