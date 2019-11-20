@@ -16,11 +16,16 @@ import javax.inject.Inject
  */
 class ProductInfoFragment : DaggerFragment(), ProductInfoContract.View {
 
+    /**
+     * The presenter of the Fragment.
+     */
     @Inject
     lateinit var presenter: ProductInfoPresenter
 
+    /** @suppress */
     lateinit var product: Product
 
+    /** {@inheritDoc} */
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -30,6 +35,7 @@ class ProductInfoFragment : DaggerFragment(), ProductInfoContract.View {
         return inflater.inflate(R.layout.fragment_product_info, container, false)
     }
 
+    /** {@inheritDoc} */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
