@@ -19,7 +19,9 @@ interface AddProductContract {
         fun onResetView()
         fun onShowAddProductError()
         fun onShowAddProductSucceed()
+        fun onShowExpirationPopup(product: Product)
         fun onShowCloseToExpirationPopup(product: Product)
+        fun onShowAlreadyExpiredPopup(product: Product)
         fun validate(): Boolean
     }
 

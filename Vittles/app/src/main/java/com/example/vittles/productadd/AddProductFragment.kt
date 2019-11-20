@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.navArgs
+import com.example.domain.consts.DAYS_REMAINING_EXPIRED
 import com.example.domain.product.Product
 import com.example.vittles.R
 import com.example.vittles.scanning.ScanResult
@@ -163,7 +164,8 @@ class AddProductFragment : DaggerFragment(), AddProductContract.View {
      *
      */
     override fun onScanButtonClick() {
-        NavHostFragment.findNavController(fragmentHost).navigate(AddProductFragmentDirections.actionAddProductFragmentToScannerFragment())
+        NavHostFragment.findNavController(fragmentHost)
+            .navigate(AddProductFragmentDirections.actionAddProductFragmentToScannerFragment())
     }
 
     /**
@@ -207,21 +209,66 @@ class AddProductFragment : DaggerFragment(), AddProductContract.View {
     }
 
     /**
-     * Shows the CloseToExpiring popup.
+     * Calls either the close to expiration date or already expired pop-ups
      *
      */
     @SuppressLint("DefaultLocale")
+    override fun onShowExpirationPopup(product: Product) {
+        if (product.getDaysRemaining() > DAYS_REMAINING_EXPIRED) {
+            onShowCloseToExpirationPopup(product)
+        } else {
+            onShowAlreadyExpiredPopup(product)
+        }
+    }
+
+    /**
+     * Shows the CloseToExpiring popup.
+     *
+     */
     override fun onShowCloseToExpirationPopup(product: Product) {
         val multipleDaysChar = if (product.getDaysRemaining() == 1) { "" } else { "s" }
+
         context?.let {
             PopupManager.instance.showPopup(
                 it,
                 PopupBase(
                     getString(R.string.close_to_expiration_header),
-                    getString(R.string.close_to_expiration_subText, product.getDaysRemaining(), multipleDaysChar)
+                    getString(R.string.close_to_expiration_subText,
+                        product.getDaysRemaining(),
+                        multipleDaysChar
+                    )
                 ),
                 PopupButton(getString(R.string.btn_no).toUpperCase()),
-                PopupButton(getString(R.string.btn_yes).toUpperCase()) { presenter.addProduct(product, false) }
+                PopupButton(getString(R.string.btn_yes).toUpperCase()) {
+                    presenter.addProduct(
+                        product,
+                        false
+                    )
+                }
+            )
+        }
+    }
+
+    /**
+     * Shows the AlreadyExpired popup.
+     *
+     */
+    override fun onShowAlreadyExpiredPopup(product: Product) {
+
+        context?.let {
+            PopupManager.instance.showPopup(
+                it,
+                PopupBase(
+                    getString(R.string.already_expired_header),
+                    getString(R.string.already_expired_subText)
+                ),
+                PopupButton(getString(R.string.btn_no).toUpperCase()),
+                PopupButton(getString(R.string.btn_yes).toUpperCase()) {
+                    presenter.addProduct(
+                        product,
+                        false
+                    )
+                }
             )
         }
     }
