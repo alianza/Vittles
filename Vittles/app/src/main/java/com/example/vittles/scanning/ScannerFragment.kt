@@ -191,17 +191,33 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
     }
 
     /**
-     *
+     * Toggle's the status of the add Vittle button based on retrieved properties
      *
      */
     private fun toggleAddVittleButton() {
         if (expirationDate != null && tvProductName.text != getString(R.string.product_name_scanner)) {
-            btnScanVittle.isEnabled = true
-            btnScanVittle.alpha = 1F
+            enableAddVittleButton()
         } else {
-            btnScanVittle.isEnabled = false
-            btnScanVittle.alpha = 0.5F
+            disableAddVittleButton()
         }
+    }
+
+    /**
+     * Disables the add Vittle button
+     *
+     */
+    private fun disableAddVittleButton() {
+        btnScanVittle.isEnabled = false
+        btnScanVittle.alpha = 0.5F
+    }
+
+    /**
+     * Enables the add Vittle button
+     *
+     */
+    private fun enableAddVittleButton() {
+        btnScanVittle.isEnabled = true
+        btnScanVittle.alpha = 1F
     }
 
     /**
