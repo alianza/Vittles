@@ -34,7 +34,7 @@ class AddProduct @Inject constructor(private val repository: ProductsRepository)
 
         return if (!product.isValidForAdd()) {
             Completable.error(IllegalArgumentException("product failed validation before add"))
-        }else if (checkDate && expirationDateIsClose(product.getDaysRemaining())){
+        }else if (checkDate && isExpiredOrCloseToExpiring(product.getDaysRemaining())){
             Completable.error(Exception("Date is to close, show popup"))
         } else {
             Completable.complete()
@@ -46,7 +46,7 @@ class AddProduct @Inject constructor(private val repository: ProductsRepository)
      *
      * @param daysRemaining The amount of days until expiring.
      */
-    private fun expirationDateIsClose(daysRemaining: Int): Boolean{
+    private fun isExpiredOrCloseToExpiring(daysRemaining: Int): Boolean{
         return daysRemaining <= DAYS_REMAINING_BOUNDARY_CLOSE
     }
 }
