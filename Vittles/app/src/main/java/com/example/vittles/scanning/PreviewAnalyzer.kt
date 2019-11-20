@@ -1,7 +1,10 @@
 package com.example.vittles.scanning
 
+import androidx.camera.core.CameraX
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
+import androidx.navigation.fragment.NavHostFragment
+import com.example.vittles.NavigationGraphDirections
 import com.example.vittles.services.scanner.ScanningService
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
@@ -69,7 +72,11 @@ class PreviewAnalyzer(
                 try {
                     image = FirebaseVisionImage.fromMediaImage(mediaImage, imageRotation)
                 } catch (e: IllegalStateException) {
-                    e.printStackTrace()
+                    /*
+                    NOTE: Unfixable bug. Bug appears in fewer than 1% of all cases. At least this
+                    try-catch might prevent the app from crashing.
+                     */
+                    CameraX.unbindAll()
                 }
                 if (!hasBarCode && image != null) {
                     CoroutineScope(Dispatchers.Main).launch {
