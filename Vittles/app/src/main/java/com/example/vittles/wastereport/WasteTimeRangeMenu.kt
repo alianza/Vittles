@@ -70,7 +70,7 @@ class WasteTimeRangeMenu (private val onDateChange: (DateTime) -> Unit) {
      */
     private fun onSortClick(timeRange: TimeRange) {
         when(timeRange) {
-            TimeRange.LAST_SEVEN_DAYS -> loadData(TimeRange.LAST_SEVEN_DAYS.value)
+            TimeRange.LAST_SEVEN_DAYS -> loadData(DateTime.now())
             TimeRange.LAST_30_DAYS -> loadData(TimeRange.LAST_30_DAYS.value)
             TimeRange.LAST_YEAR -> loadData(TimeRange.LAST_YEAR.value)
         }

@@ -88,4 +88,13 @@ interface ProductDao {
     @Query("SELECT COUNT(waste_type) FROM WasteReportEntity WHERE waste_type = 'THROWN_AWAY' AND creation_date >= :date")
     fun getCountExpiredProducts(date: Long): Single<Int>
 
+    /**
+    Gets the waste report products
+     *
+     * @param date From this date up to now the data should be given
+     * @return List of vittles
+     *
+     */
+    @Query("SELECT * FROM WasteReportEntity WHERE creation_date >= :date")
+    fun getWasteReportProducts(date: Long): Single<List<WasteReportEntity>>
 }

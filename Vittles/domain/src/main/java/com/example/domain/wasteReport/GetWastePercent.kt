@@ -11,14 +11,14 @@ import kotlin.math.ceil
  *
  * @author Sarah Lange
  *
- * @property repository The WasteReportRepository.
  */
-class GetWastePercent @Inject constructor(/*private val repository: WasteReportRepository*/) {
+class GetWastePercent @Inject constructor() {
 
     /**
      * This method is used to get the percent value of eaten vittles
      *
-     * @param date From this date up to now the amount is calculated
+     * @param vittlesEaten Amount of eaten vittles
+     * @param vittlesExpired Amount of expired vittles
      * @return percent value of eaten vittles
      */
     operator fun invoke(vittlesEaten: Int, vittlesExpired: Int): Single<Int> {

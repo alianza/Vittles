@@ -33,4 +33,9 @@ class WasteReportRepositoryImpl(private val productDao: ProductDao,
         return productDao.getCountExpiredProducts(date)
     }
 
+    override fun getWasteReportProducts(date: Long): Single<List<WasteReportProduct>> {
+        return productDao.getWasteReportProducts(date)
+            .map { it.map(mapper::fromEntity) }
+    }
+
 }

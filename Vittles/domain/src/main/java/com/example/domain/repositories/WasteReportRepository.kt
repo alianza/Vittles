@@ -35,4 +35,13 @@ interface WasteReportRepository {
      * @return amount of expired vittles
      */
     fun getCountExpiredProducts(date: Long): Single<Int>
+
+    /**
+    Gets the waste report products
+     *
+     * @param date From this date up to now the data should be given
+     * @return List of vittles
+     *
+     */
+    fun getWasteReportProducts(date: Long): Single<List<WasteReportProduct>>
 }
