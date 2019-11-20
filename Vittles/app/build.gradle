@@ -110,6 +110,10 @@ dependencies {
     implementation project(path: ':domain')
     implementation project(path: ':data')
 
+
+    //Preferences
+    implementation 'com.takisoft.fix:preference-v7:25.3.0.0'
+
 }
 
 buildscript {

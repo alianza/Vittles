@@ -57,6 +57,7 @@ class MainActivity : AppCompatActivity() {
         val appBarConfiguration = AppBarConfiguration(navController.graph)
         // Make reports top-level so that the back button disables
         appBarConfiguration.topLevelDestinations.add(R.id.reportsFragment)
+        appBarConfiguration.topLevelDestinations.add(R.id.settingsFragment)
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration)
 
         mainToolbar.setupWithNavController(navController, appBarConfiguration)
@@ -76,6 +77,10 @@ class MainActivity : AppCompatActivity() {
                 )
                 R.id.scannerFragment -> showBottomNavigationBar(
                     barVisibility = false,
+                    fabVisibility = false
+                )
+                R.id.settingsFragment-> showBottomNavigationBar(
+                    barVisibility = true,
                     fabVisibility = false
                 )
             }
@@ -178,13 +183,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Navigate to the SettingsFragment with the search bar opened.
+     * Navigate to the SettingsFragment.
      *
      * @return Boolean value that represents if the navigation has succeeded.
      */
     private fun onNavigateSettingsButtonClick(): Boolean {
-        // TODO Implement settings button click
-        println("onNavigateSettingsButtonClick TODO")
+        findNavController(fragmentHost).navigate(NavigationGraphDirections.actionGlobalSettingsFragment())
         return true
     }
 

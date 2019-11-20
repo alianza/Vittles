@@ -1,5 +1,6 @@
 package com.example.vittles.di
 
+import com.example.vittles.settings.SettingsFragment
 import com.example.vittles.reports.ReportsFragment
 import com.example.vittles.productadd.AddProductFragment
 import com.example.vittles.productlist.ProductListFragment
@@ -24,4 +25,7 @@ abstract class BindingsModule {
 
     @ContributesAndroidInjector
     abstract fun bindReportsFragment(): ReportsFragment
+
+    @ContributesAndroidInjector
+    abstract fun bindSettingsFragment(): SettingsFragment
 }
