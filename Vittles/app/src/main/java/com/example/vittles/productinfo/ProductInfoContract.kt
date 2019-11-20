@@ -7,11 +7,12 @@ interface ProductInfoContract {
 
     interface View{
         fun initViews()
+        fun onNameChanged()
+        fun onExpirationDateChanged()
     }
 
     interface Presenter{
-        fun startPresenting()
-        fun loadIndicationColor(product: Product)
+        fun updateProduct(product: Product)
         fun deleteProduct(product: Product, deleteType: DeleteType)
     }
 }

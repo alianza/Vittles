@@ -29,7 +29,7 @@ data class Product(
     val creationDate: DateTime,
     var indicationColor: Int?
 ) {
-    /**
+/**
      * Calculates the amount of days until the product expires.
      *
      * @return An integer with the amount of days left.

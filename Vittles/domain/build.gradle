@@ -31,6 +31,10 @@ android {
         outputDirectory = "E:\\Video's\\Software Engineering\\Mobile Development\\M2mobi\\VittlesDocumentation"
     }
 
+    androidExtensions {
+        experimental = true
+    }
+
 }
 
 dependencies {
