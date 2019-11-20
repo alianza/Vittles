@@ -13,7 +13,6 @@ import com.example.vittles.R
 import kotlinx.android.synthetic.main.item_product.view.*
 import javax.inject.Inject
 
-
 /**
  * Binds app-specific data to views that are displayed in the RecyclerView.
  *
@@ -75,12 +74,15 @@ class ProductAdapter @Inject constructor(initialProducts: List<Product>, private
          * @param product The product that is bound to the itemView.
          */
         fun bind(product: Product, clickListener: (Product) -> Unit) {
-            var daysLeft = product.getDaysRemaining().toString()
             itemView.productId.text = product.uid.toString()
 
-            if (daysLeft.toInt() > context.getString(R.string.maxDaysRemaining).toInt()) {
-                daysLeft = context.getString(R.string.maxDaysRemaining) + "+"
+            // Assign daysLeft string to 99+ or 99- when greater or smaller than 99 or -99.
+            val daysLeft: String = when {
+                product.getDaysRemaining() > context.getString(R.string.maxDaysRemaining).toInt() -> context.getString(R.string.maxDaysRemaining) + "+"
+                product.getDaysRemaining() < -context.getString(R.string.maxDaysRemaining).toInt() -> context.getString(R.string.maxDaysRemaining) + "-"
+                else -> product.getDaysRemaining().toString()
             }
+
             // LayoutParams for setting margins programmatically
             val lp = ConstraintLayout.LayoutParams(
                 ConstraintLayout.LayoutParams.MATCH_PARENT,
