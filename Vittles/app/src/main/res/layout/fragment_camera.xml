@@ -224,6 +224,8 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
             android:text="@string/btn_add_vittle"
+            android:enabled="false"
+            android:alpha=".5"
             app:layout_constraintBottom_toBottomOf="@+id/textureView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -233,6 +235,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/transparent"
+            android:contentDescription="@string/cd_torch"
             android:src="@drawable/ic_flash_off_black_36dp"
             android:tint="@color/colorPrimary"
             app:layout_constraintEnd_toEndOf="parent"
