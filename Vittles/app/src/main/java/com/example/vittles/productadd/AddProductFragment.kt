@@ -211,6 +211,7 @@ class AddProductFragment : DaggerFragment(), AddProductContract.View {
     /**
      * Calls either the close to expiration date or already expired pop-ups
      *
+     * @param product Product to decide of if CloseToExpirationPopup or AlreadyExpiredPopup should be shown
      */
     @SuppressLint("DefaultLocale")
     override fun onShowExpirationPopup(product: Product) {
@@ -224,6 +225,7 @@ class AddProductFragment : DaggerFragment(), AddProductContract.View {
     /**
      * Shows the CloseToExpiring popup.
      *
+     * @param product Product to show CloseToExpirationPopup of
      */
     @SuppressLint("DefaultLocale")
     override fun onShowCloseToExpirationPopup(product: Product) {
@@ -253,6 +255,7 @@ class AddProductFragment : DaggerFragment(), AddProductContract.View {
     /**
      * Shows the AlreadyExpired popup.
      *
+     * @param product Product to show AlreadyExpiredPopup of
      */
     @SuppressLint("DefaultLocale")
     override fun onShowAlreadyExpiredPopup(product: Product) {
