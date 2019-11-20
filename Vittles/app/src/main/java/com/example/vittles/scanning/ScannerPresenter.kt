@@ -5,7 +5,6 @@ import android.content.pm.PackageManager
 import android.util.Size
 import android.view.ViewGroup
 import androidx.camera.core.*
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.domain.barcode.GetProductByBarcode
 import com.example.domain.product.AddProduct
@@ -58,7 +57,7 @@ class ScannerPresenter @Inject internal constructor(
                     if (it is IllegalArgumentException) {
                         view?.onShowAddProductError() // Show snack bar that tells it failed
                     } else if (it is Exception) {
-                        view?.onShowCloseToExpirationPopup(product) // Show close to expiring popup
+                        view?.onShowExpirationPopup(product) // Show close to expiring popup
                     }
                 }
             )
