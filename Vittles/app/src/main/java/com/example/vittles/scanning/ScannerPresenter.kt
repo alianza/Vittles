@@ -86,11 +86,11 @@ class ScannerPresenter @Inject internal constructor(
         // Create configuration object for the viewfinder use case
         val previewConfig = PreviewConfig.Builder().apply {
             setLensFacing(CameraX.LensFacing.BACK)
+            setTargetAspectRatio(AspectRatio.RATIO_16_9)
         }.build()
 
         // Build the viewfinder use case
         val preview = Preview(previewConfig)
-
 
         // Every time the viewfinder is updated, recompute layout
         preview.setOnPreviewOutputUpdateListener {
