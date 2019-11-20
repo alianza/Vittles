@@ -38,7 +38,7 @@ class AddProductPresenter @Inject internal constructor(private val addProduct: A
                     if (it is IllegalArgumentException) {
                         view?.onShowAddProductError() // Show snack bar that tells it failed
                     } else if (it is Exception) {
-                        view?.onShowCloseToExpirationPopup(product) // Show close to expiring popup
+                        view?.onShowExpirationPopup(product) // Show close to expiring popup
                     }
                 }
             )
