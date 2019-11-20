@@ -225,6 +225,7 @@ class AddProductFragment : DaggerFragment(), AddProductContract.View {
      * Shows the CloseToExpiring popup.
      *
      */
+    @SuppressLint("DefaultLocale")
     override fun onShowCloseToExpirationPopup(product: Product) {
         val multipleDaysChar = if (product.getDaysRemaining() == 1) { "" } else { "s" }
 
@@ -253,6 +254,7 @@ class AddProductFragment : DaggerFragment(), AddProductContract.View {
      * Shows the AlreadyExpired popup.
      *
      */
+    @SuppressLint("DefaultLocale")
     override fun onShowAlreadyExpiredPopup(product: Product) {
 
         context?.let {
