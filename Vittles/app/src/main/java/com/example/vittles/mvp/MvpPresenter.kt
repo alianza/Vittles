@@ -8,7 +8,7 @@ package com.example.vittles.mvp
  */
 interface MvpPresenter {
     /**
-     * Stop presenter.
+     * Stop presenting.
      *
      */
     fun stop()

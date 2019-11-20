@@ -12,6 +12,7 @@ import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
 
+/** @suppress */
 @Module
 class DataModule {
 

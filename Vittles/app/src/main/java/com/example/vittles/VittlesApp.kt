@@ -15,6 +15,7 @@ import net.danlew.android.joda.JodaTimeAndroid
  * @author Jeroen Flietstra
  */
 class VittlesApp : DaggerApplication() {
+    /** {@inheritDoc}*/
     override fun applicationInjector(): AndroidInjector<VittlesApp> {
         val appComponent = DaggerAppComponent.builder()
             .applicationBind(this)
@@ -25,6 +26,7 @@ class VittlesApp : DaggerApplication() {
         return appComponent
     }
 
+    /** {@inheritDoc}*/
     override fun onCreate() {
         super.onCreate()
 

@@ -20,8 +20,11 @@ import kotlinx.android.synthetic.main.dialog_productname_edit.view.*
  */
 class ProductNameEditView(private val onFinished: (productName: String) -> Unit) {
 
+    /** @suppress */
     private lateinit var view: View
+    /** @suppress */
     private lateinit var dialog: AlertDialog
+    /** @suppress */
     private lateinit var context: Context
 
     /**

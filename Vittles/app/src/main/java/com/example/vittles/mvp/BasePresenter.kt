@@ -1,6 +1,5 @@
 package com.example.vittles.mvp
 
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import io.reactivex.disposables.CompositeDisposable
 
@@ -15,7 +14,9 @@ import io.reactivex.disposables.CompositeDisposable
  */
 abstract class BasePresenter<V : Fragment> : MvpPresenter {
 
+    /** Contains all async calls made. */
     protected val disposables: CompositeDisposable = CompositeDisposable()
+    /** The view of the fragment. */
     protected var view: V? = null
         private set
 
