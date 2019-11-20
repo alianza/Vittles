@@ -22,6 +22,7 @@ import javax.inject.Inject
  * The presenter for the scanning activity.
  *
  * @property getProductByBarcode The GetProductByBarcode use case from the domain module.
+ * @property addProduct The AddProduct use case from the domain module.
  */
 class ScannerPresenter @Inject internal constructor(
     private val getProductByBarcode: GetProductByBarcode,
@@ -29,13 +30,13 @@ class ScannerPresenter @Inject internal constructor(
 ) :
     BasePresenter<ScannerFragment>(), ScannerContract.Presenter {
 
-    // CameraX preview element
+    /** CameraX preview element. */
     private lateinit var preview: Preview
-    // ImageAnalysis object with the PreviewAnalyzer in it for the preview analysis
+    /** ImageAnalysis object with the PreviewAnalyzer in it for the preview analysis. */
     private lateinit var imageAnalysis: ImageAnalysis
-    // Executor for the analysis on a different thread
+    /** Executor for the analysis on a different thread. */
     private val executor = Executors.newSingleThreadExecutor()
-    // The analyzer for the preview
+    /** The analyzer for the preview/ */
     private lateinit var analyzer: PreviewAnalyzer
 
     /**
@@ -188,14 +189,14 @@ class ScannerPresenter @Inject internal constructor(
     }
 
     companion object {
-        /*
+        /**
         This is an arbitrary number we are using to keep track of the permission
         request. Where an app has multiple context for requesting permission,
         this can help differentiate the different contexts.
         */
         const val REQUEST_CODE_PERMISSIONS = 10
 
-        // This is an array of all the permission specified in the manifest.
+        /** This is an array of all the permission specified in the manifest. */
         val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
     }
 }

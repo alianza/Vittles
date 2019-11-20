@@ -16,6 +16,7 @@ import io.reactivex.Single
  * @author Arjen Simons
  *
  * @property productDao Reference to the ProductDao.
+ * @property productsApi Reference to the ProductsApiService.
  * @property mapper The mapper used to map the product data class.
  */
 class ProductsRepositoryImpl(private val productDao: ProductDao,
@@ -24,17 +25,22 @@ class ProductsRepositoryImpl(private val productDao: ProductDao,
 ) :
     ProductsRepository {
 
+    /** {@inheritDoc} */
     override fun get(): Single<List<Product>> {
         return productDao.getAll()
             .map { it.map(mapper::fromEntity) }
     }
 
+    /** {@inheritDoc} */
     override fun patch(product: Product): Completable = Completable.fromAction { productDao.insert(mapper.toEntity(product)) }
 
+    /** {@inheritDoc} */
     override fun delete(product: Product): Completable = Completable.fromAction { productDao.delete(mapper.toEntity(product)) }
 
+    /** {@inheritDoc} */
     override fun post(product: Product): Completable = Completable.fromAction { productDao.insert(mapper.toEntity(product)) }
 
+    /** {@inheritDoc} */
     override fun getProductNameByBarcode(barcode: String): Observable<String> {
         return productsApi.getProductName(barcode).map {
             if (it.products?.size!! > 0) {

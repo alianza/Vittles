@@ -14,7 +14,9 @@ import retrofit2.converter.gson.GsonConverterFactory
  */
 class ProductsApi {
     companion object {
-        // The base url of the API
+        /**
+         * Base url of the API.
+         */
         private const val baseUrl = "https://dev.tescolabs.com/"
 
         /**

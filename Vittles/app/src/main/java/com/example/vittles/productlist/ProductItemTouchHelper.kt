@@ -19,25 +19,24 @@ import com.example.vittles.enums.DeleteType
  *
  * @author Sarah Lange
  *
- * @param initialProducts The List of products from the recycler View.
- * @param initialPresenter The presenter what presents the product.
+ * @param products The List of products from the recycler View.
  * @param context Application Context.
+ * @param safeDelete Safe delete method callback.
  */
-class ProductItemTouchHelper(initialProducts: List<Product>, initialPresenter: ProductListPresenter,
-                             var context: Context,
-                             private val saveDelete: (Product, DeleteType) -> Unit
+class ProductItemTouchHelper(private val products: List<Product>, var context: Context,
+                             private val safeDelete: (Product, DeleteType) -> Unit
 ): ItemTouchHelper.Callback() {
-
-    private var products: List<Product> = initialProducts
-    private var presenter: ProductListPresenter = initialPresenter
 
 
     /**
-     * Enum to determain where the swipe icon should be located.
+     * Enum to determine where the swipe icon should be located.
      *
      */
     enum class IconLocation {
-        LEFT, RIGHT
+        /** Left side of the swipe bar */
+        LEFT,
+        /** Right side of the swipe bar */
+        RIGHT
     }
 
     /**
@@ -81,13 +80,13 @@ class ProductItemTouchHelper(initialProducts: List<Product>, initialPresenter: P
         val product = products[viewHolder.adapterPosition]
 
         //Must be var. For some reason it will always be THROWN_AWAY when it's val.
-        var deleteType =  if (direction == 8){
+        val deleteType =  if (direction == 8){
             DeleteType.EATEN
         }else{
             DeleteType.THROWN_AWAY
         }
 
-        saveDelete(product, deleteType)
+        safeDelete(product, deleteType)
     }
 
 

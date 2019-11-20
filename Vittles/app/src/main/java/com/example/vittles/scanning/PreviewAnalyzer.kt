@@ -18,8 +18,10 @@ import java.util.concurrent.TimeUnit
  *
  * @author Jeroen Flietstra
  *
- * @property onBarcodeSuccess Callback function for successful scan.
- * @property onBarcodeFailure Callback function for unsuccessful scan.
+ * @property onBarcodeSuccess Callback function for successful barcode scan.
+ * @property onBarcodeFailure Callback function for unsuccessful barcode scan.
+ * @property onOcrSuccess Callback function for successful OCR scan.
+ * @property onOcrFailure Callback function for unsuccessful OCR scan.
  */
 class PreviewAnalyzer(
     private val onBarcodeFailure: (exception: Exception) -> Unit,
@@ -29,11 +31,13 @@ class PreviewAnalyzer(
 ) : ImageAnalysis.Analyzer {
 
     companion object ProductProps {
+        /** Value that indicates if a barcode has been scanned already */
         var hasBarCode = false
+        /** Value that indicates if an expiration date has been scanned already */
         var hasExpirationDate = false
     }
 
-    // Value used for the scanning delay
+    /** Value used for the scanning delay */
     private var lastAnalyzedTimestamp = 0L
 
     /**
@@ -71,7 +75,7 @@ class PreviewAnalyzer(
                     image = FirebaseVisionImage.fromMediaImage(mediaImage, imageRotation)
                 } catch (e: IllegalStateException) {
                     /*
-                    NOTE: Unfixable bug. Bug appears in fewer than 1% of all cases. At least this
+                    NOTE: Non-fixable bug. Bug appears in fewer than 1% of all cases. At least this
                     try-catch might prevent the app from crashing.
                      */
                     CameraX.unbindAll()

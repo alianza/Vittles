@@ -41,26 +41,45 @@ import javax.inject.Inject
  */
 class ScannerFragment @Inject internal constructor() : DaggerFragment(), ScannerContract.View {
 
+    /**
+     * The presenter of the fragment
+     */
     @Inject
     lateinit var presenter: ScannerPresenter
 
+    /** @suppress */
     private lateinit var textureView: TextureView
+    /** @suppress */
     private lateinit var refreshDate: ImageButton
+    /** @suppress */
     private lateinit var refreshProductName: ImageButton
+    /** @suppress */
     private lateinit var tvProductName: TextView
+    /** @suppress */
     private lateinit var tvExpirationDate: TextView
+    /** @suppress */
     private lateinit var ibEditName: ImageButton
+    /** @suppress */
     private lateinit var ibEditDate: ImageButton
+    /** @suppress */
     private lateinit var btnScanVittle: Button
+    /** @suppress */
     private lateinit var ivCheckboxBarcode: ImageView
+    /** @suppress */
     private lateinit var ivCheckboxExpirationDate: ImageView
+    /** @suppress */
     private lateinit var btnTorch: ImageButton
+    /** @suppress */
     private lateinit var scanningPlane: ImageView
 
+    /** The vibration manager used for vibration when a product is scanned. */
     private lateinit var vibrator: Vibrator
 
+    /** @suppress */
     private var expirationDate: DateTime? = null
 
+
+    /** {@inheritDoc} */
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -70,6 +89,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         return inflater.inflate(R.layout.fragment_camera, container, false)
     }
 
+    /** {@inheritDoc} */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews(view)
@@ -77,30 +97,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         presenter.checkPermissions()
     }
 
-    /**
-     * Set up the tap to focus listener.
-     *
-     */
-    @SuppressLint("ClickableViewAccessibility")
-    override fun setUpTapToFocus() {
-        textureView.setOnTouchListener { _, event ->
-            if (event.action != MotionEvent.ACTION_DOWN) {
-                return@setOnTouchListener false
-            }
-
-            val factory = DisplayOrientedMeteringPointFactory(
-                context!!,
-                CameraX.LensFacing.BACK,
-                textureView.width.toFloat(),
-                textureView.height.toFloat()
-            )
-            val point = factory.createPoint(event.x, event.y)
-            val action = FocusMeteringAction.Builder.from(point).build()
-            CameraX.getCameraControl(CameraX.LensFacing.BACK).startFocusAndMetering(action)
-            return@setOnTouchListener true
-        }
-    }
-
+    /** {@inheritDoc} */
     override fun onDestroy() {
         super.onDestroy()
         CameraX.unbindAll()
@@ -127,14 +124,13 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
 
         refreshDate.visibility = View.INVISIBLE
         refreshProductName.visibility = View.INVISIBLE
-
-        setUpTapToFocus()
     }
 
     /**
      * Initializes the on click listeners.
      *
      */
+    @SuppressLint("ClickableViewAccessibility")
     override fun initListeners() {
         btnScanVittle.setOnClickListener { onAddVittleButtonClick() }
 
@@ -147,6 +143,29 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         refreshProductName.setOnClickListener { onResetProductName() }
 
         refreshDate.setOnClickListener { onResetDate() }
+
+        textureView.setOnTouchListener { _, event -> onTapToFocus(event) }
+    }
+
+    /**
+     * Set up the tap to focus listener.
+     *
+     */
+    override fun onTapToFocus(event: MotionEvent): Boolean {
+        if (event.action != MotionEvent.ACTION_DOWN) {
+            return false
+        }
+
+        val factory = DisplayOrientedMeteringPointFactory(
+            context!!,
+            CameraX.LensFacing.BACK,
+            textureView.width.toFloat(),
+            textureView.height.toFloat()
+        )
+        val point = factory.createPoint(event.x, event.y)
+        val action = FocusMeteringAction.Builder.from(point).build()
+        CameraX.getCameraControl(CameraX.LensFacing.BACK).startFocusAndMetering(action)
+        return true
     }
 
     /**
@@ -166,7 +185,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         } else {
             Toast.makeText(
                 context,
-                "Scan or fill in the necessary fields",
+                context!!.getString(R.string.fill_in_fields),
                 Toast.LENGTH_LONG
             ).show()
         }
@@ -233,7 +252,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
     override fun onBarcodeNotFound() {
         Toast.makeText(
             context,
-            "Something went wrong!",
+            context!!.getString(R.string.no_scanning),
             Toast.LENGTH_SHORT
         ).show()
     }
@@ -245,7 +264,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
     override fun onTextNotFound() {
         Toast.makeText(
             context,
-            "Something went wrong! TEXt",
+            context!!.getString(R.string.no_scanning),
             Toast.LENGTH_SHORT
         ).show()
     }
@@ -257,9 +276,11 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
     // Deprecation suppressed because we use an old API version
     @Suppress("DEPRECATION")
     fun onScanSuccessful() {
+        // Vibrate
         if (vibrator.hasVibrator()) {
             vibrator.vibrate(50)
         }
+        // Turn scanning plane green, and back after 500 ms
         ImageViewCompat.setImageTintList(scanningPlane, context?.let {
             ContextCompat.getColor(
                 it, R.color.colorPrimary
@@ -401,8 +422,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
      */
     override fun onNoPermissionGranted() {
         Toast.makeText(
-            context,
-            "Permissions not granted by the user.",
+            context, context!!.getString(R.string.no_permission),
             Toast.LENGTH_SHORT
         ).show()
         NavHostFragment.findNavController(fragmentHost)
