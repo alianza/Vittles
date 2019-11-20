@@ -99,7 +99,8 @@ class ProductAdapter @Inject constructor(initialProducts: List<Product>, private
             // Last product in list, remove decorator and add extra bottom-margin
             if(products[products.lastIndex] == product) {
                 itemView.borderDecorator.visibility = View.INVISIBLE
-                lp.setMargins(0, 0, 0, 175)
+                val bottomMargin = itemView.height
+                lp.setMargins(0, 0, 0, bottomMargin)
             } else {
                 itemView.borderDecorator.visibility = View.VISIBLE
                 lp.setMargins(0, 0, 0, 0)
