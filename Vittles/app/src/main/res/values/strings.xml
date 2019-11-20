@@ -81,4 +81,5 @@
 
     <!--    Content Descriptions-->
     <string name="cd_refresh_button">Refresh</string>
+    <string name="cd_torch">Torch</string>
 </resources>
