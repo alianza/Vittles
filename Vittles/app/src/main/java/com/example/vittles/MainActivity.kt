@@ -58,23 +58,21 @@ class MainActivity : AppCompatActivity() {
 
         mainToolbar.setupWithNavController(navController, appBarConfiguration)
 
-        setDrawableTint(getMenuItemByTitle(R.string.menu_home)!!.icon, R.color.colorPrimary)
-
         // Initialize navigation visibility
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.productListFragment -> showBottomNavigationBar(
-                    barVisibility = true,
-                    fabVisibility = true
-                )
-                R.id.reportsFragment -> showBottomNavigationBar(
-                    barVisibility = true,
-                    fabVisibility = true
-                )
-                R.id.scannerFragment -> showBottomNavigationBar(
-                    barVisibility = false,
-                    fabVisibility = false
-                )
+                R.id.productListFragment -> {
+                    showBottomNavigationBar(barVisibility = true, fabVisibility = true)
+                    getMenuItemByTitle(R.string.menu_home)?.let { setMenuItemIconColor(it) }
+                }
+                R.id.reportsFragment -> {
+                    showBottomNavigationBar(barVisibility = true, fabVisibility = true)
+                    getMenuItemByTitle(R.string.menu_reports)?.let { setMenuItemIconColor(it) }
+                }
+                R.id.scannerFragment -> {
+                    showBottomNavigationBar(barVisibility = false, fabVisibility = false)
+                }
+                // TODO add settingsFragment case
             }
         }
 
@@ -101,45 +99,30 @@ class MainActivity : AppCompatActivity() {
      *
      */
     private fun setListeners() {
-        fab.setOnClickListener { setMenuIconColor(0); onAddButtonClick() }
+        fab.setOnClickListener { onAddButtonClick() }
 
-        navView.menu.getItem(0).setOnMenuItemClickListener { setMenuIconColor(0); onNavigateHomeButtonClick() }
-        navView.menu.getItem(1).setOnMenuItemClickListener { setMenuIconColor(1); onNavigateSearchButtonClick()}
-        navView.menu.getItem(4).setOnMenuItemClickListener { setMenuIconColor(4); onNavigateReportsButtonClick() }
-        navView.menu.getItem(5).setOnMenuItemClickListener { setMenuIconColor(5); onNavigateSettingsButtonClick() }
+        navView.menu.getItem(0).setOnMenuItemClickListener { onNavigateHomeButtonClick() }
+        navView.menu.getItem(1).setOnMenuItemClickListener { onNavigateSearchButtonClick()}
+        navView.menu.getItem(4).setOnMenuItemClickListener { onNavigateReportsButtonClick() }
+        navView.menu.getItem(5).setOnMenuItemClickListener { onNavigateSettingsButtonClick() }
     }
 
     /**
      * Sets the color of menu icon that is pressed
      *
-     * @param index Index of pressed menu item
+     * @param menuItem Menu item of which to color icon of
      */
-    private fun setMenuIconColor(index: Int) {
-        val wrappedDrawable = setDrawableTint(navView.menu.getItem(index).icon, R.color.colorPrimary)
+    private fun setMenuItemIconColor(menuItem: MenuItem) {
+        val wrappedDrawable = setDrawableTint(menuItem.icon, R.color.colorPrimary)
 
         for (x in 0 until navView.menu.size) {
-            if (navView.menu.getItem(x).isEnabled && x != index) {
+            if (navView.menu.getItem(x).isEnabled && navView.menu.getItem(x).title != menuItem.title) {
                 val wrappedDrawableToReset = setDrawableTint(navView.menu.getItem(x).icon, R.color.black)
                 navView.menu.getItem(x).icon = wrappedDrawableToReset
             }
         }
 
-        navView.menu.getItem(index).icon = wrappedDrawable
-
-        searchIconException(index)
-    }
-
-    /**
-     * Handles the exception of the search icon (Home icon is highlighted)
-     *
-     * @param index Index of potential search icon menu item
-     */
-    private fun searchIconException(index: Int) {
-        if (navView.menu.getItem(index).title === getString(R.string.menu_search)) {
-            val wrappedDrawable = setDrawableTint(navView.menu.getItem(index).icon, R.color.black)
-            navView.menu.getItem(index).icon = wrappedDrawable
-            setDrawableTint(getMenuItemByTitle(R.string.menu_home)!!.icon, R.color.colorPrimary)
-        }
+        menuItem.icon = wrappedDrawable
     }
 
     /**
