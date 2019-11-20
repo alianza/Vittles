@@ -20,6 +20,11 @@ import kotlinx.coroutines.*
 import org.joda.time.DateTime
 import javax.inject.Inject
 
+/**
+ * Fragment class for the waste report.
+ *
+ * @author Sarah Lange
+ */
 class WasteReportFragment : DaggerFragment(), WasteReportContract.View {
 
     @Inject
@@ -59,6 +64,15 @@ class WasteReportFragment : DaggerFragment(), WasteReportContract.View {
         initData()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        presenter.destroy()
+    }
+
+    /**
+     * Initializes the data including eaten and expired vittles
+     *
+     */
     override fun initData() {
         // Call get methods asynchronously, then call initViews synchronously
         CoroutineScope(Dispatchers.Main).launch {
@@ -73,6 +87,12 @@ class WasteReportFragment : DaggerFragment(), WasteReportContract.View {
         }
     }
 
+    /**
+     * Initializes view elements including the onClickListener
+     *
+     * @param vittlesEaten Eaten vittles that should be displayed
+     * @param vittlesExpired Expired vittles that should be displayed
+     */
     override fun initViews(vittlesEaten: Int, vittlesExpired: Int) {
         // Inside handler because android doesn't allow UI changes outside main thread.
         Handler(Looper.getMainLooper()).post {
@@ -85,24 +105,26 @@ class WasteReportFragment : DaggerFragment(), WasteReportContract.View {
             viewPager.adapter = adapter
             addOnPageChangeListener()
 
-            showEatenProducts(vittlesEaten)
-            showExpiredProducts(vittlesExpired)
+            showEatenVittles(vittlesEaten)
+            showExpiredVittles(vittlesExpired)
         }
         timeRange.setOnClickListener { showTimeRangeSelector() }
     }
 
 
-
+    /**
+     * Opens the timeRange menu when the button is clicked
+     *
+     */
     override fun showTimeRangeSelector() {
         context?.let { timeRangeMenu.openMenu(it, btnSort) }
     }
 
-
-    override fun onDestroy() {
-        super.onDestroy()
-        presenter.destroy()
-    }
-
+    /**
+     * Called when the time range is changed.
+     *
+     * @param date From this date up to now the statistic should be shown
+     */
     override fun changeDate(date: DateTime) {
         CoroutineScope(Dispatchers.Main).launch {
             withContext(Dispatchers.IO) {
@@ -110,35 +132,57 @@ class WasteReportFragment : DaggerFragment(), WasteReportContract.View {
                     async { presenter.getCountEatenProducts(date) }
                 val vittlesExpired =
                     async { presenter.getCountExpiredProducts(date) }
-                change(vittlesEaten.await(), vittlesExpired.await(), date)
+                showChangeDate(vittlesEaten.await(), vittlesExpired.await(), date)
             }
         }
     }
 
-    fun change(vittlesEaten: Int, vittlesExpired: Int, date: DateTime) {
+    /**
+     * Calls methods to show data after date is changed
+     *
+     * @param vittlesEaten Amount of eaten vittles
+     * @param vittlesExpired Amount of expired vittles
+     * @param date From this date up to now the statistic should be shown
+     */
+    override fun showChangeDate(vittlesEaten: Int, vittlesExpired: Int, date: DateTime) {
         Handler(Looper.getMainLooper()).post {
-            showEatenProducts(vittlesEaten)
-            showExpiredProducts(vittlesExpired)
+            showEatenVittles(vittlesEaten)
+            showExpiredVittles(vittlesExpired)
             adapter.updateDate(date, vittlesEaten, vittlesExpired)
         }
     }
 
 
-
-    override fun showEatenProducts(eatenProducts: Int) {
-        tvVittlesEaten.text = eatenProducts.toString()
+    /**
+     * Displays amount of eaten vittles
+     *
+     * @param eatenVittles Amount of eaten vittles
+     */
+    override fun showEatenVittles(eatenVittles: Int) {
+        tvVittlesEaten.text = eatenVittles.toString()
     }
 
-
-    override fun showExpiredProducts(expiredProducts: Int) {
-        tvVittlesExpired.text = expiredProducts.toString()
+    /**
+     * Displays amount of expired vittles
+     *
+     * @param expiredVittles Amount of expired vittles
+     */
+    override fun showExpiredVittles(expiredVittles: Int) {
+        tvVittlesExpired.text = expiredVittles.toString()
     }
 
+    /**
+     * Shows toast if an error during loading statistics occurs
+     *
+     */
     override fun setNoResultsView() {
         Toast.makeText(context, R.string.count_fail, Toast.LENGTH_SHORT).show()
     }
 
-
+    /**
+     * Sets listener to viewPager
+     *
+     */
     override fun addOnPageChangeListener() {
         viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
 

@@ -1,4 +1,4 @@
-package com.example.vittles.wastereport.BarChart
+package com.example.vittles.wastereport.barchart
 
 
 import android.graphics.Color
@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.vittles.R
-import com.example.vittles.wastereport.CircleChart.RefreshData
+import com.example.vittles.wastereport.circlechart.RefreshData
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData

@@ -97,7 +97,7 @@ class WasteTimeRangeMenu (private val onDateChange: (DateTime) -> Unit) {
     }
 
     /**
-     * Sets the circle alpha to 1 of the selected sorting method.
+     * Sets the circle alpha to 1 of the selected time range method.
      *
      */
     private fun setCircleColor() {
@@ -109,9 +109,9 @@ class WasteTimeRangeMenu (private val onDateChange: (DateTime) -> Unit) {
     }
 
     /**
-     * Sets the buttonText to the current sorting method.
+     * Sets the buttonText to the current time range.
      *
-     * @param sortingType The sortingType which was selected by the user.
+     * @param timeRange The timeRange which was selected by the user.
      */
     private fun setTimeRangebtnText(timeRange: TimeRange) {
         when(timeRange) {

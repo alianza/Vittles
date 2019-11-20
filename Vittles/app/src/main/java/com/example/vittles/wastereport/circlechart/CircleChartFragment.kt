@@ -1,4 +1,4 @@
-package com.example.vittles.wastereport.CircleChart
+package com.example.vittles.wastereport.circlechart
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,10 +15,31 @@ import dagger.android.support.DaggerFragment
 import org.joda.time.DateTime
 import javax.inject.Inject
 
+/**
+ * Interface for updating date
+ *
+ * @author Sarah Lange
+ *
+ */
 interface RefreshData {
+
+    /**
+     * Refreshes data after setting new date
+     *
+     * @param date From this date up to now the value is calculated
+     * @param vittlesEaten Amount of eaten vittles
+     * @param vittlesExpired Amount of expired vittles
+     */
     fun refresh(date: DateTime, vittlesEaten: Int, vittlesExpired: Int)
 }
 
+/**
+ * Fragment class for the waste report.
+ *
+ * @property date From this date up to now the value is calculated
+ * @property vittlesEaten Amount of eaten vittles
+ * @property vittlesExpired Amount of expired vittles
+ */
 class CircleChartFragment @Inject internal constructor(var date: DateTime, var vittlesEaten: Int, var vittlesExpired: Int) : DaggerFragment(), CircleChartContract.View, RefreshData  {
     @Inject
     lateinit var presenter: CircleChartPresenter
@@ -43,6 +64,13 @@ class CircleChartFragment @Inject internal constructor(var date: DateTime, var v
         presenter.destroy()
     }
 
+    /**
+     * Implementation of the refresh interface
+     *
+     * @param date New date from which the value is calculated
+     * @param vittlesEaten New amount of eaten vittles
+     * @param vittlesExpired New amount of expired vittles
+     */
     override fun refresh(date: DateTime, vittlesEaten: Int, vittlesExpired: Int) {
         this.date = date
         this.vittlesEaten = vittlesEaten
@@ -50,6 +78,11 @@ class CircleChartFragment @Inject internal constructor(var date: DateTime, var v
         presenter.getEatenPercent(date, vittlesEaten, vittlesExpired)
     }
 
+    /**
+     * Draws circle chart
+     *
+     * @param percent percent value
+     */
     override fun drawCircleChart(percent: Int) {
 
         val seriesItem = SeriesItem.Builder(ContextCompat.getColor(context!!, R.color.lightGrey))
@@ -99,9 +132,12 @@ class CircleChartFragment @Inject internal constructor(var date: DateTime, var v
 
     }
 
+    /**
+     * Shows toast if an error occurs
+     *
+     */
     override fun setNoResultsView() {
         Toast.makeText(context, "Error Cicrle Chart", Toast.LENGTH_SHORT).show()
-
     }
 
 }

@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.vittles.R
-import com.example.vittles.wastereport.BarChart.CustomBarChartRender
+import com.example.vittles.wastereport.barchart.CustomBarChartRender
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData

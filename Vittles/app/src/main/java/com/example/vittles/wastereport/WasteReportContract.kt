@@ -14,9 +14,10 @@ interface WasteReportContract {
         fun initViews(vittlesEaten: Int, vittlesExpired: Int)
         fun initData()
         fun addOnPageChangeListener()
-        fun showEatenProducts(eatenProducts: Int)
+        fun showChangeDate(vittlesEaten: Int, vittlesExpired: Int, date: DateTime)
+        fun showEatenVittles(eatenProducts: Int)
         fun setNoResultsView()
-        fun showExpiredProducts(expiredProducts: Int)
+        fun showExpiredVittles(expiredProducts: Int)
         fun showTimeRangeSelector()
         fun changeDate(date: DateTime)
     }

@@ -1,24 +1,13 @@
-package com.example.vittles.wastereport.BarChart
+package com.example.vittles.wastereport.barchart
 
-import android.R.attr.bottom
-import android.R.attr.right
-import android.R.attr.left
-import android.R.attr.top
 import android.graphics.*
 
-import com.github.mikephil.charting.model.GradientColor
-import java.nio.file.Files.size
-import com.github.mikephil.charting.buffer.BarBuffer
-import com.github.mikephil.charting.data.BarEntry
-import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.utils.Utils.convertDpToPixel
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import com.github.mikephil.charting.utils.ViewPortHandler
 import com.github.mikephil.charting.animation.ChartAnimator
 import com.github.mikephil.charting.interfaces.dataprovider.BarDataProvider
 import com.github.mikephil.charting.renderer.BarChartRenderer
-import com.github.mikephil.charting.renderer.XAxisRenderer
-import com.github.mikephil.charting.utils.Utils
 
 
 class CustomBarChartRender(

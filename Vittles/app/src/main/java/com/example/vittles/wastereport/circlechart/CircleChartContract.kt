@@ -1,4 +1,4 @@
-package com.example.vittles.wastereport.CircleChart
+package com.example.vittles.wastereport.circlechart
 
 import org.joda.time.DateTime
 

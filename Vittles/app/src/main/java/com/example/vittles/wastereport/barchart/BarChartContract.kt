@@ -1,7 +1,6 @@
-package com.example.vittles.wastereport.BarChart
+package com.example.vittles.wastereport.barchart
 
 import com.github.mikephil.charting.charts.BarChart
-import org.joda.time.DateTime
 
 
 /**

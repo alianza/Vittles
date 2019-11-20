@@ -3,11 +3,22 @@ package com.example.vittles.wastereport
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
-import com.example.vittles.wastereport.BarChart.BarChartFragment
-import com.example.vittles.wastereport.CircleChart.CircleChartFragment
-import com.example.vittles.wastereport.CircleChart.RefreshData
+import com.example.vittles.wastereport.barchart.BarChartFragment
+import com.example.vittles.wastereport.circlechart.CircleChartFragment
+import com.example.vittles.wastereport.circlechart.RefreshData
 import org.joda.time.DateTime
 
+/**
+ * Binds fragments to views that are displayed in the view pager
+ *
+ * @author Sarah Lange
+ *
+ * @property date From this date up to now the statistic should be shown
+ * @property vittlesEaten Amount of eaten vittles
+ * @property vittlesExpired Amount of expired vittles
+ *
+ * @param fm Fragment Manager
+ */
 class ViewPagerAdapter internal constructor(
     fm: FragmentManager,
     var date: DateTime,
@@ -15,10 +26,17 @@ class ViewPagerAdapter internal constructor(
     var vittlesExpired: Int
 ) : FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
-    private val COUNT = 2
+    private val count = 2
     lateinit var fragment: Fragment
 
 
+    /**
+     * Is called when time range is changed
+     *
+     * @param date From this date up to now the statistic should be shown
+     * @param vittlesEaten Amount of eaten vittles
+     * @param vittlesExpired Amount of expired vittles
+     */
     fun updateDate(date: DateTime, vittlesEaten: Int, vittlesExpired: Int) {
         this.date = date
         this.vittlesEaten = vittlesEaten
@@ -42,7 +60,7 @@ class ViewPagerAdapter internal constructor(
     }
 
     override fun getCount(): Int {
-        return COUNT
+        return count
     }
 
     override fun getPageTitle(position: Int): CharSequence? {

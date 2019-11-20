@@ -4,8 +4,8 @@ import com.example.vittles.productadd.AddProductFragment
 import com.example.vittles.productlist.ProductListFragment
 import com.example.vittles.scanning.ScannerFragment
 import com.example.vittles.services.notification.NotificationScheduleService
-import com.example.vittles.wastereport.BarChart.BarChartFragment
-import com.example.vittles.wastereport.CircleChart.CircleChartFragment
+import com.example.vittles.wastereport.barchart.BarChartFragment
+import com.example.vittles.wastereport.circlechart.CircleChartFragment
 import com.example.vittles.wastereport.WasteReportFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector

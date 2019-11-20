@@ -1,4 +1,4 @@
-package com.example.vittles.wastereport.BarChart
+package com.example.vittles.wastereport.barchart
 
 import com.example.domain.wasteReport.GetWastePercent
 import com.example.vittles.mvp.BasePresenter
