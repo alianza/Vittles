@@ -1,5 +1,6 @@
 package com.example.vittles.scanning
 
+import android.view.MotionEvent
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.Preview
 import com.example.domain.product.Product
@@ -14,7 +15,7 @@ interface ScannerContract {
     interface View {
         fun initViews(view: android.view.View)
         fun initListeners()
-        fun setUpTapToFocus()
+        fun onTapToFocus(event: MotionEvent): Boolean
         fun onAddVittleButtonClick()
         fun onBarcodeScanned(productName: String)
         fun onBarcodeNotFound()

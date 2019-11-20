@@ -3,7 +3,13 @@ package com.example.domain.enums
 /**
  * Enumerator for the colors that represent the days until a products expires.
  *
+ * @author Arjen Simons
  */
 enum class ExpirationIndicationColor {
-    GREEN, YELLOW, RED
+    /** Indicates the color green. */
+    GREEN,
+    /** Indicates the color yellow. */
+    YELLOW,
+    /** Indicates the color red. */
+    RED
 }

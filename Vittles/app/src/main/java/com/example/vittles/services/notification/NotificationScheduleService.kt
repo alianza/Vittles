@@ -21,9 +21,13 @@ import javax.inject.Inject
  * @author Jeroen Flietstra
  */
 class NotificationScheduleService : DaggerBroadcastReceiver() {
+    /**
+     * The GetNotification use case from the domain module.
+     */
     @Inject
     lateinit var getNotification: GetNotificationProductsExpired
 
+    /** Disposables contains all async calls made */
     private val disposables: CompositeDisposable = CompositeDisposable()
 
 
@@ -35,6 +39,7 @@ class NotificationScheduleService : DaggerBroadcastReceiver() {
     override fun onReceive(p0: Context?, p1: Intent?) {
         super.onReceive(p0, p1)
         auditNotification(p0)
+        disposables.clear()
     }
 
     /**
