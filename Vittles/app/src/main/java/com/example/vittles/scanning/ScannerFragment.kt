@@ -154,7 +154,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
      *
      */
     override fun onAddVittleButtonClick() {
-        if (expirationDate != null && !tvProductName.text.isNullOrBlank()) {
+        if (expirationDate != null && tvProductName.text != getString(R.string.product_name_scanner)) {
             val product = Product(
                 null,
                 tvProductName.text.toString(),
