@@ -1,12 +1,8 @@
 package com.example.vittles.settings;
 
 public interface SettingsContract {
-    interface View {
+    interface View { }
 
-//        fun initViews()
-//        fun setListeners()
-    }
-
-    interface Presenter {}
+    interface Presenter { }
 
 }

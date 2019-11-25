@@ -90,4 +90,12 @@
     <integer name="pref_int1_default">10</integer>
     <string name="int1_title">Set Int 1</string>
     <string name="int1_desc">Change the value of the first integer</string>
+
+
+    //Notification options
+    <string-array name="notification_time">
+        <item>Daily</item>
+        <item>Weekly</item>
+        <item>Monthly</item>
+    </string-array>
 </resources>

@@ -84,15 +84,35 @@ class NotificationScheduleService : DaggerBroadcastReceiver() {
          * @param context The application context needed for the alarm manager.
          */
         fun scheduleNotificationAudit(context: Context) {
-            val alarmManager: AlarmManager =
-                context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            val intent = Intent(context, NotificationScheduleService::class.java)
-            val nextAudit = // Set nextAudit to tomorrow 12:00pm
-                DateTime().withDate(DateTime().toLocalDate().plusDays(1)).withHourOfDay(12)
-                    .withMinuteOfHour(0).withSecondOfMinute(0)
-            val broadcast = // Set alarm
-                PendingIntent.getBroadcast(context, 100, intent, PendingIntent.FLAG_UPDATE_CURRENT)
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP, nextAudit.millis, broadcast)
+            var sharedPreference = SharedPreference(context)
+//            var notificationTime = sharedPreference.getValueInt("NOTIFICATION_TIME")
+
+            var nextAudit = // Set nextAudit to tomorrow 12:00pm
+                DateTime().withDate(DateTime().toLocalDate().plusDays(0)).withHourOfDay(0)
+                    .withMinuteOfHour(0).withSecondOfMinute(10)
+
+//            when (notificationTime) {
+//                0 -> nextAudit = // Set nextAudit to tomorrow 12:00pm
+//                    DateTime().withDate(DateTime().toLocalDate().plusDays(0)).withHourOfDay(0)
+//                        .withMinuteOfHour(0).withSecondOfMinute(5)
+//                1 -> nextAudit = // Set nextAudit to tomorrow 12:00pm
+//                    DateTime().withDate(DateTime().toLocalDate().plusDays(0)).withHourOfDay(0)
+//                        .withMinuteOfHour(0).withSecondOfMinute(10)
+//                2 -> nextAudit = // Set nextAudit to tomorrow 12:00pm
+//                    DateTime().withDate(DateTime().toLocalDate().plusDays(0)).withHourOfDay(0)
+//                        .withMinuteOfHour(0).withSecondOfMinute(20)
+//            }
+
+            if (sharedPreference.getValueBoolen("Notification", true)) {
+                val alarmManager: AlarmManager =
+                    context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+                val intent = Intent(context, NotificationScheduleService::class.java)
+
+                val broadcast = // Set alarm
+                    PendingIntent.getBroadcast(context, 100, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, nextAudit.millis, broadcast)
+            }
+
         }
     }
 
