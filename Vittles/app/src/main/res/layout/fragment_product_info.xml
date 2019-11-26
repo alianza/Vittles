@@ -8,8 +8,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
+        android:layout_height="match_parent"
+        android:id="@id/layout">
 
         <TextView
             android:id="@+id/tvProductName"
@@ -50,7 +50,7 @@
             app:layout_constraintTop_toBottomOf="@+id/tvProductName" />
 
         <TextView
-            android:id="@+id/tvExpDate"
+            android:id="@+id/tvExpirationDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
@@ -70,9 +70,9 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/edit_icon"
             android:padding="10dp"
-            app:layout_constraintBottom_toBottomOf="@+id/tvExpDate"
+            app:layout_constraintBottom_toBottomOf="@+id/tvExpirationDate"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tvExpDate"
+            app:layout_constraintTop_toTopOf="@+id/tvExpirationDate"
             app:srcCompat="@drawable/ic_edit_black_24dp"
             tools:ignore="PrivateResource" />
 
@@ -84,7 +84,7 @@
             android:text="@string/tv_creation_date"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="@+id/tvProductName"
-            app:layout_constraintTop_toBottomOf="@+id/tvExpDate" />
+            app:layout_constraintTop_toBottomOf="@+id/tvExpirationDate" />
 
         <TextView
             android:id="@+id/tvCreationDate"

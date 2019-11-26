@@ -1,15 +1,22 @@
 package com.example.vittles.productinfo
 
 
+import android.app.DatePickerDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.navArgs
 import com.example.domain.product.Product
 import com.example.vittles.R
+import com.example.vittles.scanning.ScannerFragment
+import com.example.vittles.scanning.productaddmanual.ProductNameEditView
+import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
+import kotlinx.android.synthetic.main.fragment_product_info.*
+import kotlinx.android.synthetic.main.fragment_product_info.layout
+import kotlinx.android.synthetic.main.fragment_product_info.tvProductName
+import org.joda.time.DateTime
 import javax.inject.Inject
 
 /**
@@ -18,8 +25,6 @@ import javax.inject.Inject
  */
 class ProductInfoFragment : DaggerFragment(), ProductInfoContract.View {
 
-    val productArgs: ProductInfoFragmentArgs by navArgs()
-
     /**
      * The presenter of the Fragment.
      */
@@ -27,6 +32,7 @@ class ProductInfoFragment : DaggerFragment(), ProductInfoContract.View {
     lateinit var presenter: ProductInfoPresenter
 
     /** @suppress */
+    val productArgs: ProductInfoFragmentArgs by navArgs()
     private lateinit var product: Product
     private lateinit var updatedProduct: Product
 
@@ -63,10 +69,89 @@ class ProductInfoFragment : DaggerFragment(), ProductInfoContract.View {
     }
 
     /**
+     * Sets the listeners
+     *
+     */
+    override fun setListeners() {
+        ibEaten.setOnClickListener{ onEatenbuttonClicked() }
+        ibDeleted.setOnClickListener{ onDeleteButtonClicked() }
+        ibEditName.setOnClickListener{ onEditNameClicked() }
+        ibEditExpDate.setOnClickListener{ onEditExpirationDateClicked() }
+    }
+
+    /**
      * Updates the views
      *
      */
     override fun updateViews() {
+        tvProductName.text = product.productName
+        tvExpirationDate.text = context!!.resources.getString(
+            R.string.expiration_format,
+            product.expirationDate.dayOfMonth.toString(),
+            product.expirationDate.monthOfYear.toString(),
+            product.expirationDate.year.toString())
+    }
+
+    /**
+     * Handles the editName button being clicked
+     *
+     */
+    override fun onEditNameClicked() {
+        val dialog = ProductNameEditView(onFinished = { productName: String ->
+            onNameChanged(productName)
+        })
+        context?.let { dialog.openDialog(it, tvProductName.text.toString()) }
+    }
+
+    /**
+     * Handles the edit expiration date button being clicked
+     *
+     */
+    override fun onEditExpirationDateClicked() {
+        val currentDate = DateTime.now()
+
+        val year = currentDate.year
+        val month = currentDate.monthOfYear
+        val day = currentDate.dayOfMonth
+        val dpd = context?.let { it1 ->
+            DatePickerDialog(
+                it1,
+                DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
+                    val expirationDate =
+                        DateTime(year, monthOfYear + ScannerFragment.MONTHS_OFFSET, dayOfMonth, 0, 0)
+                    onExpirationDateChanged(expirationDate)
+                }, year, month - ScannerFragment.MONTHS_OFFSET, day
+            )
+        }
+        if (dpd != null) {
+            dpd.setButton(
+                DatePickerDialog.BUTTON_NEGATIVE,
+                getString(R.string.btn_cancel),
+                dpd
+            )
+            dpd.setButton(
+                DatePickerDialog.BUTTON_POSITIVE,
+                getString(R.string.btn_confirm),
+                dpd
+            )
+            dpd.datePicker.minDate = currentDate.millis
+            dpd.show()
+        }
+    }
+
+    /**
+     * Handles the eaten button being clicked
+     *
+     */
+    override fun onEatenbuttonClicked() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    /**
+     * Handles the thrown away button being clicked
+     *
+     */
+    override fun onDeleteButtonClicked() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
@@ -74,22 +159,18 @@ class ProductInfoFragment : DaggerFragment(), ProductInfoContract.View {
      * Called when the product name is changed.
      *
      */
-    override fun onNameChanged() {
-        //updatedProduct.name = input
+    override fun onNameChanged(productName: String) {
+        updatedProduct = Product(product.uid, productName, product.expirationDate, product.creationDate, product.indicationColor)
         presenter.updateProduct(updatedProduct)
-
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     /**
      * Called when the product expiration date has changed.
      *
      */
-    override fun onExpirationDateChanged() {
-        //updatedProduct.expirationDate = input
+    override fun onExpirationDateChanged(expirationDate: DateTime) {
+        updatedProduct = Product(product.uid, product.productName, expirationDate, product.creationDate, product.indicationColor)
         presenter.updateProduct(updatedProduct)
-
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     /**
@@ -99,7 +180,9 @@ class ProductInfoFragment : DaggerFragment(), ProductInfoContract.View {
     override fun onProductUpdateSuccess() {
         product = updatedProduct
         updateViews()
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+        Snackbar.make(layout, getString(R.string.product_updated), Snackbar.LENGTH_LONG)
+            .show()
     }
 
     /**
@@ -108,6 +191,8 @@ class ProductInfoFragment : DaggerFragment(), ProductInfoContract.View {
      */
     override fun onProductUpdateFail() {
         updatedProduct = product
-        TODO("Display toast") //To change body of created functions use File | Settings | File Templates.
+
+        Snackbar.make(layout, getString(R.string.product_name_invalid), Snackbar.LENGTH_LONG)
+            .show()
     }
 }

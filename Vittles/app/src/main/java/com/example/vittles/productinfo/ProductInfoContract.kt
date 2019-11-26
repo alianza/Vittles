@@ -2,14 +2,20 @@ package com.example.vittles.productinfo
 
 import com.example.domain.product.Product
 import com.example.vittles.enums.DeleteType
+import org.joda.time.DateTime
 
 interface ProductInfoContract {
 
     interface View{
         fun initViews()
+        fun setListeners()
         fun updateViews()
-        fun onNameChanged()
-        fun onExpirationDateChanged()
+        fun onEditNameClicked()
+        fun onEditExpirationDateClicked()
+        fun onEatenbuttonClicked()
+        fun onDeleteButtonClicked()
+        fun onNameChanged(productName: String)
+        fun onExpirationDateChanged(expirationDate: DateTime)
         fun onProductUpdateSuccess()
         fun onProductUpdateFail()
     }
