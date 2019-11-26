@@ -64,6 +64,7 @@
     <!--    Add product manually-->
     <string name="edit_product_name">Edit product name</string>
     <string name="edit_expiration_date">Edit expiration date</string>
+    <string name="edit_product_name_message">The product could not be found, please fill in a product name manually.</string>
 
     <!--    Scan Products-->
     <string name="edit_icon">Edit</string>

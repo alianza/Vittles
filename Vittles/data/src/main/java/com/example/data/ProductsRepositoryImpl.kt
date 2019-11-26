@@ -1,8 +1,10 @@
 package com.example.data
 
-import com.example.data.retrofit.ProductsApiService
+import com.example.data.retrofit.off.OffApiService
+import com.example.data.retrofit.tsco.TscoApiService
 import com.example.data.room.ProductDao
 import com.example.data.room.ProductModelMapper
+import com.example.domain.exceptions.ProductNotFoundException
 import com.example.domain.repositories.ProductsRepository
 import com.example.domain.product.Product
 import io.reactivex.Completable
@@ -16,11 +18,13 @@ import io.reactivex.Single
  * @author Arjen Simons
  *
  * @property productDao Reference to the ProductDao.
- * @property productsApi Reference to the ProductsApiService.
+ * @property productsApiTSCO Reference to the TscoApiService.
+ * @property productsApiOFF Reference to the OffApiService.
  * @property mapper The mapper used to map the product data class.
  */
 class ProductsRepositoryImpl(private val productDao: ProductDao,
-                             private val productsApi: ProductsApiService,
+                             private val productsApiTSCO: TscoApiService,
+                             private val productsApiOFF: OffApiService,
                              private val mapper: ProductModelMapper
 ) :
     ProductsRepository {
@@ -41,12 +45,23 @@ class ProductsRepositoryImpl(private val productDao: ProductDao,
     override fun post(product: Product): Completable = Completable.fromAction { productDao.insert(mapper.toEntity(product)) }
 
     /** {@inheritDoc} */
-    override fun getProductNameByBarcode(barcode: String): Observable<String> {
-        return productsApi.getProductName(barcode).map {
+    override fun getProductNameByBarcodeTSCO(barcode: String): Observable<String> {
+        return productsApiTSCO.getProductName(barcode).map {
             if (it.products?.size!! > 0) {
                 it.products?.get(0)?.value
             } else {
-                barcode
+                throw ProductNotFoundException(barcode)
+            }
+        }
+    }
+
+    /** {@inheritDoc} */
+    override fun getProductNameByBarcodeOFF(barcode: String): Observable<String> {
+        return productsApiOFF.getProductName(barcode).map {
+            if (it.status == 1) {
+                it.product?.productName
+            } else {
+                throw ProductNotFoundException(barcode)
             }
         }
     }

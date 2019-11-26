@@ -1,4 +1,4 @@
-package com.example.data.retrofit.tesco
+package com.example.data.retrofit.tsco
 
 import com.google.gson.annotations.SerializedName
 
