@@ -6,7 +6,6 @@ import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Vibrator
-import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +13,7 @@ import android.widget.SearchView
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -21,6 +21,7 @@ import com.example.domain.product.Product
 import com.example.vittles.R
 import com.example.vittles.enums.DeleteType
 import com.example.vittles.productlist.productinfo.ProductInfoFragment
+import com.example.vittles.productlist.productinfo.ProductInfoFragmentArgs
 import com.example.vittles.services.popups.PopupBase
 import com.example.vittles.services.popups.PopupButton
 import com.example.vittles.services.popups.PopupManager
@@ -52,6 +53,8 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
     /** The vibration manager used for vibration when a product is eaten or removed. */
     private lateinit var vibrator: Vibrator
 
+    /** @suppress */
+    private var productArgs: ProductListFragmentArgs by navArgs()
     /** @suppress */
     private lateinit var itemTouchHelper: ItemTouchHelper
     /** @suppress */
@@ -336,6 +339,11 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
         sortMenu.sortFilteredList(filteredProducts)
         setEmptyView()
         onNoResults()
+
+        if (productArgs.ProductToDelete != null && productArgs.ProductToDelete!!.deleteType != null){
+            onSafeDeleteProduct(ParcelableProductMapper.fromParcelable(productArgs.ProductToDelete!!), productArgs.ProductToDelete!!.deleteType!!)
+            productArgs = ProductListFragmentArgs(null)
+        }
     }
 
     /**

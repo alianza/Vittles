@@ -416,7 +416,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
             Toast.LENGTH_SHORT
         ).show()
         NavHostFragment.findNavController(fragmentHost)
-            .navigate(NavigationGraphDirections.actionGlobalProductListFragment(null))
+            .navigate(NavigationGraphDirections.actionGlobalProductListFragment())
     }
 
     /**

@@ -182,7 +182,7 @@ class MainActivity : AppCompatActivity() {
      */
     private fun onNavigateSearchButtonClick(): Boolean {
             ProductListFragment.withSearch = true
-            findNavController(fragmentHost).navigate(NavigationGraphDirections.actionGlobalProductListFragment(null))
+            findNavController(fragmentHost).navigate(NavigationGraphDirections.actionGlobalProductListFragment())
             return true
     }
 
@@ -193,7 +193,7 @@ class MainActivity : AppCompatActivity() {
      */
     private fun onNavigateHomeButtonClick(): Boolean {
         return if (navController.currentDestination?.id != R.id.productListFragment) {
-            findNavController(fragmentHost).navigate(NavigationGraphDirections.actionGlobalProductListFragment(null))
+            findNavController(fragmentHost).navigate(NavigationGraphDirections.actionGlobalProductListFragment())
             true
         } else {
             false
