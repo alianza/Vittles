@@ -1,16 +1,18 @@
-package com.example.vittles.services.notification
+package com.example.vittles.settings
 
 
 import android.content.Context
 import android.content.SharedPreferences
 
 /**
- * Created by Kolincodes on 10/05/2018.
+ * Shared preference class
+ *@author Fethi Tewelde
  */
 
 class SharedPreference(val context: Context) {
-    private val PREFS_NAME = "kotlincodes"
-    val sharedPref: SharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+    private val PREFS_NAME = "Settings"
+    val sharedPref: SharedPreferences =
+        context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
     fun save(KEY_NAME: String, text: String) {
 
@@ -50,7 +52,7 @@ class SharedPreference(val context: Context) {
         return sharedPref.getInt(KEY_NAME, 0)
     }
 
-    fun getValueBoolen(KEY_NAME: String, defaultValue: Boolean): Boolean {
+    fun getValueBoolean(KEY_NAME: String, defaultValue: Boolean): Boolean {
 
         return sharedPref.getBoolean(KEY_NAME, defaultValue)
 

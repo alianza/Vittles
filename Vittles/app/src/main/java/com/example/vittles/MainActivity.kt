@@ -81,7 +81,7 @@ class MainActivity : AppCompatActivity() {
                 )
                 R.id.settingsFragment-> showBottomNavigationBar(
                     barVisibility = true,
-                    fabVisibility = false
+                    fabVisibility = true
                 )
             }
         }

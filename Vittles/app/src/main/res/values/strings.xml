@@ -30,6 +30,9 @@
     <!--    Validations-->
     <string name="empty_fields">Please fill in all fields</string>
 
+    <!--    Settings-->
+    <string name="settings_title">Settings</string>
+
     <!--    Image Content Descriptions-->
     <string name="border">.</string>
     <string name="close_search">Close Search</string>

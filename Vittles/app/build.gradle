@@ -33,7 +33,7 @@ android {
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.fragment_settings.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
@@ -72,14 +72,14 @@ dependencies {
     implementation 'com.google.firebase:firebase-ml-vision:24.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation 'androidx.fragment_settings:runner:1.2.0'
+    androidTestImplementation 'androidx.fragment_settings.espresso:espresso-core:3.2.0'
 
     implementation('com.crashlytics.sdk.android:crashlytics:2.10.1@aar') {
         transitive = true
     }
-    androidTestImplementation 'androidx.test:runner:1.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation 'androidx.fragment_settings:runner:1.2.0'
+    androidTestImplementation 'androidx.fragment_settings.espresso:espresso-core:3.2.0'
 
     // RxJava and RxAndroid
     implementation libs.rxJava
