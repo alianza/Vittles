@@ -92,7 +92,7 @@ class ProductInfoFragment : DaggerFragment(),
      *
      */
     override fun updateViews() {
-        tvProductName.text = product.productName
+        tvProductName.text = this.product.productName
         tvExpirationDate.text = context!!.resources.getString(
             R.string.expiration_format,
             product.expirationDate.dayOfMonth.toString(),
@@ -143,6 +143,7 @@ class ProductInfoFragment : DaggerFragment(),
                 dpd
             )
             dpd.datePicker.minDate = currentDate.millis
+            dpd.datePicker.updateDate(this.product.expirationDate.year, this.product.expirationDate.monthOfYear, this.product.expirationDate.dayOfMonth)
             dpd.show()
         }
     }
