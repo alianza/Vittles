@@ -20,7 +20,7 @@ import org.joda.time.DateTime
 import javax.inject.Inject
 
 /**
- * Class for the product info component
+ * Class for the product info component.
  *
  */
 class ProductInfoFragment : DaggerFragment(), ProductInfoContract.View {
@@ -32,7 +32,7 @@ class ProductInfoFragment : DaggerFragment(), ProductInfoContract.View {
     lateinit var presenter: ProductInfoPresenter
 
     /** @suppress */
-    val productArgs: ProductInfoFragmentArgs by navArgs()
+    private val productArgs: ProductInfoFragmentArgs by navArgs()
     private lateinit var product: Product
     private lateinit var updatedProduct: Product
 
@@ -69,7 +69,7 @@ class ProductInfoFragment : DaggerFragment(), ProductInfoContract.View {
     }
 
     /**
-     * Sets the listeners
+     * Sets the listeners.
      *
      */
     override fun setListeners() {
@@ -80,7 +80,7 @@ class ProductInfoFragment : DaggerFragment(), ProductInfoContract.View {
     }
 
     /**
-     * Updates the views
+     * Updates the views.
      *
      */
     override fun updateViews() {
@@ -93,7 +93,7 @@ class ProductInfoFragment : DaggerFragment(), ProductInfoContract.View {
     }
 
     /**
-     * Handles the editName button being clicked
+     * Handles the editName button being clicked.
      *
      */
     override fun onEditNameClicked() {
@@ -104,7 +104,7 @@ class ProductInfoFragment : DaggerFragment(), ProductInfoContract.View {
     }
 
     /**
-     * Handles the edit expiration date button being clicked
+     * Handles the edit expiration date button being clicked.
      *
      */
     override fun onEditExpirationDateClicked() {
@@ -140,7 +140,7 @@ class ProductInfoFragment : DaggerFragment(), ProductInfoContract.View {
     }
 
     /**
-     * Handles the eaten button being clicked
+     * Handles the eaten button being clicked.
      *
      */
     override fun onEatenbuttonClicked() {
@@ -148,7 +148,7 @@ class ProductInfoFragment : DaggerFragment(), ProductInfoContract.View {
     }
 
     /**
-     * Handles the thrown away button being clicked
+     * Handles the thrown away button being clicked.
      *
      */
     override fun onDeleteButtonClicked() {
