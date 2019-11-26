@@ -13,6 +13,10 @@
         <action
             android:id="@+id/action_productListFragment_to_productInfoFragment"
             app:destination="@id/productInfoFragment" />
+        <argument
+            android:name="ProductToDelete"
+            app:argType="com.example.vittles.productlist.ParcelableProduct"
+            app:nullable="true" />
     </fragment>
     <fragment
         android:id="@+id/reportsFragment"

@@ -1,6 +1,7 @@
 package com.example.vittles.productlist
 
 import android.os.Parcelable
+import com.example.vittles.enums.DeleteType
 import kotlinx.android.parcel.Parcelize
 import org.joda.time.DateTime
 
@@ -19,5 +20,6 @@ data class ParcelableProduct (
     val uid: Int?,
     val productName: String,
     val expirationDate: DateTime,
-    val creationDate: DateTime
+    val creationDate: DateTime,
+    val deleteType: DeleteType?
     ) : Parcelable

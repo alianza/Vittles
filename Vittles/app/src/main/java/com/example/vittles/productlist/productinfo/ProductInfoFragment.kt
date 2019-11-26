@@ -6,14 +6,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.navArgs
 import com.example.domain.product.Product
 import com.example.vittles.R
+import com.example.vittles.enums.DeleteType
 import com.example.vittles.productlist.ParcelableProductMapper
+import com.example.vittles.productlist.ProductListFragmentDirections
 import com.example.vittles.scanning.ScannerFragment
 import com.example.vittles.scanning.productaddmanual.ProductNameEditView
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
+import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.fragment_product_info.*
 import kotlinx.android.synthetic.main.fragment_product_info.layout
 import kotlinx.android.synthetic.main.fragment_product_info.tvProductName
@@ -150,7 +154,9 @@ class ProductInfoFragment : DaggerFragment(),
      *
      */
     override fun onEatenbuttonClicked() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        NavHostFragment.
+            findNavController(fragmentHost).
+            navigate(ProductListFragmentDirections.actionGlobalProductListFragment(ParcelableProductMapper.toParcelable(product, DeleteType.EATEN)))
     }
 
     /**
@@ -158,7 +164,9 @@ class ProductInfoFragment : DaggerFragment(),
      *
      */
     override fun onDeleteButtonClicked() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        NavHostFragment.
+            findNavController(fragmentHost).
+            navigate(ProductListFragmentDirections.actionGlobalProductListFragment(ParcelableProductMapper.toParcelable(product, DeleteType.THROWN_AWAY)))
     }
 
     /**

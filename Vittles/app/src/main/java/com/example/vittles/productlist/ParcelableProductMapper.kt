@@ -1,6 +1,7 @@
 package com.example.vittles.productlist
 
 import com.example.domain.product.Product
+import com.example.vittles.enums.DeleteType
 
 /**
  * Maps between the parcelable product in the app layer and the product in the domain
@@ -28,11 +29,12 @@ class ParcelableProductMapper {
          *
          * @param from The Product in the domain layer
          */
-        fun toParcelable(from: Product) = ParcelableProduct(
+        fun toParcelable(from: Product, deleteType: DeleteType? = null) = ParcelableProduct(
             from.uid,
             from.productName,
             from.expirationDate,
-            from.creationDate
+            from.creationDate,
+            deleteType
         )
     }
 }
