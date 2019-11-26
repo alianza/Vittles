@@ -66,22 +66,21 @@ class MainActivity : AppCompatActivity() {
         // Initialize navigation visibility
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.productListFragment -> showBottomNavigationBar(
-                    barVisibility = true,
-                    fabVisibility = true
-                )
-                R.id.reportsFragment -> showBottomNavigationBar(
-                    barVisibility = true,
-                    fabVisibility = true
-                )
-                R.id.scannerFragment -> showBottomNavigationBar(
-                    barVisibility = false,
-                    fabVisibility = false
-                )
-                R.id.settingsFragment-> showBottomNavigationBar(
-                    barVisibility = true,
-                    fabVisibility = true
-                )
+                R.id.productListFragment -> {
+                    showBottomNavigationBar(barVisibility = true, fabVisibility = true)
+                    getMenuItemByTitle(R.string.menu_home)?.let { setMenuItemIconColor(it) }
+                }
+                R.id.reportsFragment -> {
+                    showBottomNavigationBar(barVisibility = true, fabVisibility = true)
+                    getMenuItemByTitle(R.string.menu_reports)?.let { setMenuItemIconColor(it) }
+                }
+                R.id.scannerFragment -> {
+                    showBottomNavigationBar(barVisibility = false, fabVisibility = false)
+                }
+                R.id.settingsFragment-> {
+                    showBottomNavigationBar(barVisibility = true, fabVisibility = true)
+                    getMenuItemByTitle(R.string.menu_settings)?.let { setMenuItemIconColor(it) }
+                }
             }
         }
 
