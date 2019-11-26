@@ -19,5 +19,13 @@ class GetProductByBarcode @Inject constructor(private val repository: ProductsRe
      * @param barcode The barcode that has been scanned.
      * @return String value that represents the product description/name.
      */
-    operator fun invoke(barcode: String): Observable<String> = repository.getProductNameByBarcode(barcode)
+    operator fun invoke(barcode: String): Observable<String> {
+        return repository.getProductNameByBarcodeTSCO(barcode).onExceptionResumeNext(
+            repository.getProductNameByBarcodeOFF(barcode).onExceptionResumeNext(
+                Observable.just(
+                    barcode
+                )
+            )
+        )
+    }
 }

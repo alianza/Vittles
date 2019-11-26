@@ -1,5 +1,6 @@
 package com.example.domain.repositories
 
+import com.example.domain.exceptions.ProductNotFoundException
 import com.example.domain.product.Product
 import io.reactivex.Completable
 import io.reactivex.Observable
@@ -50,5 +51,15 @@ interface ProductsRepository {
      * @param barcode The barcode to look up.
      * @return Observable string value of the product name.
      */
-    fun getProductNameByBarcode(barcode: String): Observable<String>
+    @Throws(ProductNotFoundException::class)
+    fun getProductNameByBarcodeTSCO(barcode: String): Observable<String>
+
+    /**
+     * Calls external API to look for product name of the barcode.
+     *
+     * @param barcode The barcode to look up.
+     * @return Observable string value of the product name.
+     */
+    @Throws(ProductNotFoundException::class)
+    fun getProductNameByBarcodeOFF(barcode: String): Observable<String>
 }
