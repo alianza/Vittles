@@ -30,13 +30,12 @@
     </fragment><action android:id="@+id/action_global_scannerFragment" app:destination="@id/scannerFragment"/>
     <fragment
         android:id="@+id/productInfoFragment"
-        android:name="com.example.vittles.productinfo.ProductInfoFragment"
-        android:label="fragment_product_info"
-        tools:layout="@layout/fragment_product_info" >
+        android:name="com.example.vittles.productlist.productinfo.ProductInfoFragment"
+        android:label="Product info"
+        tools:layout="@layout/fragment_product_info">
         <argument
             android:name="product"
-            app:argType="com.example.domain.product.Product"
-            app:nullable="false" />
+            app:argType="com.example.vittles.productlist.ParcelableProduct" />
     </fragment>
 
 </navigation>

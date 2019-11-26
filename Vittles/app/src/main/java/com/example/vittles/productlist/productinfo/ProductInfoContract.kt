@@ -1,4 +1,4 @@
-package com.example.vittles.productinfo
+package com.example.vittles.productlist.productinfo
 
 import com.example.domain.product.Product
 import com.example.vittles.enums.DeleteType

@@ -20,7 +20,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.product.Product
 import com.example.vittles.R
 import com.example.vittles.enums.DeleteType
-import com.example.vittles.productinfo.ProductInfoFragment
+import com.example.vittles.productlist.productinfo.ProductInfoFragment
 import com.example.vittles.services.popups.PopupBase
 import com.example.vittles.services.popups.PopupButton
 import com.example.vittles.services.popups.PopupManager
@@ -283,7 +283,9 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
      *
      */
     override fun onItemViewClicked(product: Product) {
-        NavHostFragment.findNavController(fragmentHost).navigate(ProductListFragmentDirections.actionProductListFragmentToProductInfoFragment(product))
+        NavHostFragment.
+            findNavController(fragmentHost).
+            navigate(ProductListFragmentDirections.actionProductListFragmentToProductInfoFragment(ParcelableProductMapper.toParcelable(product)))
     }
 
     /**

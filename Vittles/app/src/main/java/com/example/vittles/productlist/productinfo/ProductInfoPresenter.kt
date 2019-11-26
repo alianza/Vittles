@@ -1,4 +1,4 @@
-package com.example.vittles.productinfo
+package com.example.vittles.productlist.productinfo
 
 import com.example.domain.product.DeleteProduct
 import com.example.domain.product.Product
@@ -18,7 +18,8 @@ import javax.inject.Inject
 class ProductInfoPresenter @Inject internal constructor(
     private val deleteProduct: DeleteProduct,
     private val updateProduct: UpdateProduct
-) : BasePresenter<ProductInfoFragment>(), ProductInfoContract.Presenter {
+) : BasePresenter<ProductInfoFragment>(),
+    ProductInfoContract.Presenter {
 
     /**
      * Updates a product.

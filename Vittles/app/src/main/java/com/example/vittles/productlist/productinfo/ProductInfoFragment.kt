@@ -1,4 +1,4 @@
-package com.example.vittles.productinfo
+package com.example.vittles.productlist.productinfo
 
 
 import android.app.DatePickerDialog
@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.navArgs
 import com.example.domain.product.Product
 import com.example.vittles.R
+import com.example.vittles.productlist.ParcelableProductMapper
 import com.example.vittles.scanning.ScannerFragment
 import com.example.vittles.scanning.productaddmanual.ProductNameEditView
 import com.google.android.material.snackbar.Snackbar
@@ -23,7 +24,8 @@ import javax.inject.Inject
  * Class for the product info component.
  *
  */
-class ProductInfoFragment : DaggerFragment(), ProductInfoContract.View {
+class ProductInfoFragment : DaggerFragment(),
+    ProductInfoContract.View {
 
     /**
      * The presenter of the Fragment.
@@ -58,13 +60,18 @@ class ProductInfoFragment : DaggerFragment(), ProductInfoContract.View {
      *
      */
     override fun initViews() {
-        product = productArgs.product
+        product = ParcelableProductMapper.fromParcelable(productArgs.product)
         updatedProduct = product
 
 //        val intent = activity!!.intent
 //        product = intent.getParcelableExtra(getString(R.string.product))
 //
 
+        tvCreationDate.text = context!!.resources.getString(
+            R.string.expiration_format,
+            product.creationDate.dayOfMonth.toString(),
+            product.creationDate.monthOfYear.toString(),
+            product.creationDate.year.toString())
         updateViews()
     }
 
