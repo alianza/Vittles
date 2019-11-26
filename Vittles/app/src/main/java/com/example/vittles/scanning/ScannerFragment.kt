@@ -47,31 +47,6 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
     @Inject
     lateinit var presenter: ScannerPresenter
 
-    /** @suppress */
-    private lateinit var textureView: TextureView
-    /** @suppress */
-    private lateinit var refreshDate: ImageButton
-    /** @suppress */
-    private lateinit var refreshProductName: ImageButton
-    /** @suppress */
-    private lateinit var tvProductName: TextView
-    /** @suppress */
-    private lateinit var tvExpirationDate: TextView
-    /** @suppress */
-    private lateinit var ibEditName: ImageButton
-    /** @suppress */
-    private lateinit var ibEditDate: ImageButton
-    /** @suppress */
-    private lateinit var btnScanVittle: Button
-    /** @suppress */
-    private lateinit var ivCheckboxBarcode: ImageView
-    /** @suppress */
-    private lateinit var ivCheckboxExpirationDate: ImageView
-    /** @suppress */
-    private lateinit var btnTorch: ImageButton
-    /** @suppress */
-    private lateinit var scanningPlane: ImageView
-
     /** The vibration manager used for vibration when a product is scanned. */
     private lateinit var vibrator: Vibrator
 
@@ -109,21 +84,8 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
      *
      */
     override fun initViews(view: View) {
-        textureView = view.findViewById(R.id.textureView)
-        refreshDate = view.findViewById(R.id.ibRefreshDate)
-        refreshProductName = view.findViewById(R.id.ibRefreshProductName)
-        tvProductName = view.findViewById(R.id.tvProductName)
-        tvExpirationDate = view.findViewById(R.id.tvExpirationDate)
-        ibEditName = view.findViewById(R.id.ibEditName)
-        ibEditDate = view.findViewById(R.id.ibEditDate)
-        btnScanVittle = view.findViewById(R.id.btnScanVittle)
-        ivCheckboxBarcode = view.findViewById(R.id.ivCheckboxBarcode)
-        ivCheckboxExpirationDate = view.findViewById(R.id.ivCheckboxExpirationDate)
-        btnTorch = view.findViewById(R.id.btnTorch)
-        scanningPlane = view.findViewById(R.id.scanningPlane)
-
-        refreshDate.visibility = View.INVISIBLE
-        refreshProductName.visibility = View.INVISIBLE
+        ibRefreshDate.visibility = View.INVISIBLE
+        ibRefreshProductName.visibility = View.INVISIBLE
     }
 
     /**
@@ -140,9 +102,9 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
 
         btnTorch.setOnClickListener { onTorchButtonClicked() }
 
-        refreshProductName.setOnClickListener { onResetProductName() }
+        ibRefreshProductName.setOnClickListener { onResetProductName() }
 
-        refreshDate.setOnClickListener { onResetDate() }
+        ibRefreshDate.setOnClickListener { onResetDate() }
 
         textureView.setOnTouchListener { _, event -> onTapToFocus(event) }
     }
@@ -248,7 +210,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         if (!PreviewAnalyzer.hasBarCode) {
             onProductNameCheckboxChecked(productName)
             PreviewAnalyzer.hasBarCode = true
-            refreshProductName.visibility = View.VISIBLE
+            ibRefreshProductName.visibility = View.VISIBLE
             onScanSuccessful()
         }
     }
@@ -262,7 +224,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         if (!PreviewAnalyzer.hasExpirationDate) {
             onExpirationDateCheckboxChecked(text)
             PreviewAnalyzer.hasExpirationDate = true
-            refreshDate.visibility = View.VISIBLE
+            ibRefreshDate.visibility = View.VISIBLE
             onScanSuccessful()
         }
     }
@@ -326,7 +288,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
     override fun onProductNameEdited(productName: String) {
         onProductNameCheckboxChecked(productName)
         PreviewAnalyzer.hasBarCode = true
-        refreshProductName.visibility = View.VISIBLE
+        ibRefreshProductName.visibility = View.VISIBLE
         toggleAddVittleButton()
     }
 
@@ -338,7 +300,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
     override fun onExpirationDateEdited(text: String) {
         onExpirationDateCheckboxChecked(text)
         PreviewAnalyzer.hasExpirationDate = true
-        refreshDate.visibility = View.VISIBLE
+        ibRefreshDate.visibility = View.VISIBLE
         toggleAddVittleButton()
     }
 
@@ -397,7 +359,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         )
         PreviewAnalyzer.hasExpirationDate = false
         this.expirationDate = null
-        refreshDate.visibility = View.INVISIBLE
+        ibRefreshDate.visibility = View.INVISIBLE
         toggleAddVittleButton()
     }
 
@@ -416,7 +378,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
             }
         )
         PreviewAnalyzer.hasBarCode = false
-        refreshProductName.visibility = View.INVISIBLE
+        ibRefreshProductName.visibility = View.INVISIBLE
         toggleAddVittleButton()
     }
 
