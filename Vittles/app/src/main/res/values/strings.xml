@@ -68,6 +68,11 @@
     <!--    Scan Products-->
     <string name="edit_icon">Edit</string>
 
+    <!--    Product info-->
+    <string name="tv_creation_date">Creation date</string>
+    <string name="select_eaten">Set product as eaten</string>
+    <string name="select_deleted">Set product as deleted</string>
+
     <!--    Menu-->
     <string name="menu_home">Home</string>
     <string name="menu_search">Search</string>
