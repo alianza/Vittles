@@ -6,6 +6,7 @@ import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
 
+/** @suppress */
 @Module(includes = [DataModule::class])
 class AppModule(private val application: Application) {
 

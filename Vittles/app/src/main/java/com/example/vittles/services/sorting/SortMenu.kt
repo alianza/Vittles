@@ -29,19 +29,26 @@ class SortMenu (private var sortList: MutableList<Product>, private var adapter:
     var currentSortingType: SortingType = SortingType.DAYS_REMAINING_ASC
     private lateinit var btnSort: TextView
     private lateinit var alertDialog: AlertDialog
-    lateinit var previousSortingType: SortingType
+    private lateinit var previousSortingType: SortingType
     lateinit var view: View
 
     /**
      * Sets enums for all of the different sorting options
      *
+     * @param textId Text id of the string.
      */
     enum class SortingType(val textId: Int) {
+        /** Sort by days remaining ascending. */
         DAYS_REMAINING_ASC(R.string.days_remaining_lh),
+        /** Sort by days remaining descending. */
         DAYS_REMAINING_DESC(R.string.days_remaining_hl),
+        /** Sort alphabetically ascending */
         ALPHABETIC_AZ(R.string.alphabetic_az),
+        /** Sort alphabetically descending. */
         ALPHABETIC_ZA(R.string.alphabetic_za),
+        /** Sort by newest. */
         NEWEST(R.string.newest),
+        /** Sort by oldest. */
         OLDEST(R.string.oldest)
     }
 

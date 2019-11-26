@@ -29,6 +29,9 @@
 
     <!--    Validations-->
     <string name="empty_fields">Please fill in all fields</string>
+    <string name="fill_in_fields">Scan or fill in the necessary fields</string>
+    <string name="no_scanning">Can not use scanning.</string>
+    <string name="no_permission">Permissions not granted by the user.</string>
 
     <!--    Settings-->
     <string name="settings_title">Settings</string>
@@ -64,6 +67,7 @@
     <!--    Add product manually-->
     <string name="edit_product_name">Edit product name</string>
     <string name="edit_expiration_date">Edit expiration date</string>
+    <string name="edit_product_name_message">The product could not be found, please fill in a product name manually.</string>
 
     <!--    Scan Products-->
     <string name="edit_icon">Edit</string>
@@ -77,15 +81,16 @@
     <!--    Pop-Ups-->
     <string name="close_to_expiration_header">Almost expired!</string>
     <string name="close_to_expiration_subText">The scanned product expires in %d day%s. \n Are you sure you want to add it?</string>
+    <string name="already_expired_header">Already expired!</string>
+    <string name="already_expired_subText">The scanned product is already past it’s expiration date. \n Do you still want to add it?</string>
     <string name="remove_product_header">Remove Product</string>
     <string name="remove_product_subText">Do you want to remove this product? \n It won\'t be used for the food waste report.</string>
 
     <!--    Content Descriptions-->
     <string name="cd_refresh_button">Refresh</string>
+    <string name="cd_torch">Torch</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-
-
     <string name="pref_int1">int1</string>
     <integer name="pref_int1_step">1</integer>
     <integer name="pref_int1_min">0</integer>
@@ -95,7 +100,7 @@
     <string name="int1_desc">Change the value of the first integer</string>
 
 
-    //Notification options
+    <!-- Notification options -->
     <string-array name="notification_time">
         <item>Daily</item>
         <item>Weekly</item>

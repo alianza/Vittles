@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.os.Handler
-import android.os.VibrationEffect
 import android.os.Vibrator
 import android.view.*
 import android.widget.*
@@ -15,8 +14,10 @@ import androidx.camera.core.CameraX
 import androidx.camera.core.DisplayOrientedMeteringPointFactory
 import androidx.camera.core.FocusMeteringAction
 import androidx.core.content.ContextCompat
+import androidx.core.text.isDigitsOnly
 import androidx.core.widget.ImageViewCompat
 import androidx.navigation.fragment.NavHostFragment
+import com.example.domain.consts.DAYS_REMAINING_EXPIRED
 import com.example.domain.product.Product
 import com.example.vittles.NavigationGraphDirections
 import com.example.vittles.R
@@ -31,10 +32,6 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.fragment_camera.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.selects.SelectClause1
 import org.joda.time.DateTime
 import javax.inject.Inject
 
@@ -45,26 +42,20 @@ import javax.inject.Inject
  */
 class ScannerFragment @Inject internal constructor() : DaggerFragment(), ScannerContract.View {
 
+    /**
+     * The presenter of the fragment
+     */
     @Inject
     lateinit var presenter: ScannerPresenter
 
-    private lateinit var textureView: TextureView
-    private lateinit var refreshDate: ImageButton
-    private lateinit var refreshProductName: ImageButton
-    private lateinit var tvProductName: TextView
-    private lateinit var tvExpirationDate: TextView
-    private lateinit var ibEditName: ImageButton
-    private lateinit var ibEditDate: ImageButton
-    private lateinit var btnScanVittle: Button
-    private lateinit var ivCheckboxBarcode: ImageView
-    private lateinit var ivCheckboxExpirationDate: ImageView
-    private lateinit var btnTorch: ImageButton
-    private lateinit var scanningPlane: ImageView
-
+    /** The vibration manager used for vibration when a product is scanned. */
     private lateinit var vibrator: Vibrator
 
+    /** @suppress */
     private var expirationDate: DateTime? = null
 
+
+    /** {@inheritDoc} */
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -74,6 +65,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         return inflater.inflate(R.layout.fragment_camera, container, false)
     }
 
+    /** {@inheritDoc} */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews(view)
@@ -81,30 +73,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         presenter.checkPermissions()
     }
 
-    /**
-     * Set up the tap to focus listener.
-     *
-     */
-    @SuppressLint("ClickableViewAccessibility")
-    override fun setUpTapToFocus() {
-        textureView.setOnTouchListener { _, event ->
-            if (event.action != MotionEvent.ACTION_DOWN) {
-                return@setOnTouchListener false
-            }
-
-            val factory = DisplayOrientedMeteringPointFactory(
-                context!!,
-                CameraX.LensFacing.BACK,
-                textureView.width.toFloat(),
-                textureView.height.toFloat()
-            )
-            val point = factory.createPoint(event.x, event.y)
-            val action = FocusMeteringAction.Builder.from(point).build()
-            CameraX.getCameraControl(CameraX.LensFacing.BACK).startFocusAndMetering(action)
-            return@setOnTouchListener true
-        }
-    }
-
+    /** {@inheritDoc} */
     override fun onDestroy() {
         super.onDestroy()
         CameraX.unbindAll()
@@ -116,29 +85,15 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
      *
      */
     override fun initViews(view: View) {
-        textureView = view.findViewById(R.id.textureView)
-        refreshDate = view.findViewById(R.id.ibRefreshDate)
-        refreshProductName = view.findViewById(R.id.ibRefreshProductName)
-        tvProductName = view.findViewById(R.id.tvProductName)
-        tvExpirationDate = view.findViewById(R.id.tvExpirationDate)
-        ibEditName = view.findViewById(R.id.ibEditName)
-        ibEditDate = view.findViewById(R.id.ibEditDate)
-        btnScanVittle = view.findViewById(R.id.btnScanVittle)
-        ivCheckboxBarcode = view.findViewById(R.id.ivCheckboxBarcode)
-        ivCheckboxExpirationDate = view.findViewById(R.id.ivCheckboxExpirationDate)
-        btnTorch = view.findViewById(R.id.btnTorch)
-        scanningPlane = view.findViewById(R.id.scanningPlane)
-
-        refreshDate.visibility = View.INVISIBLE
-        refreshProductName.visibility = View.INVISIBLE
-
-        setUpTapToFocus()
+        ibRefreshDate.visibility = View.INVISIBLE
+        ibRefreshProductName.visibility = View.INVISIBLE
     }
 
     /**
      * Initializes the on click listeners.
      *
      */
+    @SuppressLint("ClickableViewAccessibility")
     override fun initListeners() {
         btnScanVittle.setOnClickListener { onAddVittleButtonClick() }
 
@@ -148,9 +103,32 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
 
         btnTorch.setOnClickListener { onTorchButtonClicked() }
 
-        refreshProductName.setOnClickListener { onResetProductName() }
+        ibRefreshProductName.setOnClickListener { onResetProductName() }
 
-        refreshDate.setOnClickListener { onResetDate() }
+        ibRefreshDate.setOnClickListener { onResetDate() }
+
+        textureView.setOnTouchListener { _, event -> onTapToFocus(event) }
+    }
+
+    /**
+     * Set up the tap to focus listener.
+     *
+     */
+    override fun onTapToFocus(event: MotionEvent): Boolean {
+        if (event.action != MotionEvent.ACTION_DOWN) {
+            return false
+        }
+
+        val factory = DisplayOrientedMeteringPointFactory(
+            context!!,
+            CameraX.LensFacing.BACK,
+            textureView.width.toFloat(),
+            textureView.height.toFloat()
+        )
+        val point = factory.createPoint(event.x, event.y)
+        val action = FocusMeteringAction.Builder.from(point).build()
+        CameraX.getCameraControl(CameraX.LensFacing.BACK).startFocusAndMetering(action)
+        return true
     }
 
     /**
@@ -158,22 +136,14 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
      *
      */
     override fun onAddVittleButtonClick() {
-        if (expirationDate != null && !tvProductName.text.isNullOrBlank()) {
-            val product = Product(
-                null,
-                tvProductName.text.toString(),
-                expirationDate!!,
-                DateTime(),
-                null
-            )
-            presenter.addProduct(product, true)
-        } else {
-            Toast.makeText(
-                context,
-                "Scan or fill in the necessary fields",
-                Toast.LENGTH_LONG
-            ).show()
-        }
+        val product = Product(
+            null,
+            tvProductName.text.toString(),
+            expirationDate!!,
+            DateTime(),
+            null
+        )
+        presenter.addProduct(product, true)
     }
 
     /**
@@ -203,15 +173,50 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
     }
 
     /**
+     * Toggle's the status of the add Vittle button based on retrieved properties
+     *
+     */
+    private fun toggleAddVittleButton() {
+        if (expirationDate != null && tvProductName.text != getString(R.string.product_name_scanner)) {
+            enableAddVittleButton()
+        } else {
+            disableAddVittleButton()
+        }
+    }
+
+    /**
+     * Disables the add Vittle button
+     *
+     */
+    private fun disableAddVittleButton() {
+        btnScanVittle.isEnabled = false
+        btnScanVittle.alpha = 0.5F
+    }
+
+    /**
+     * Enables the add Vittle button
+     *
+     */
+    private fun enableAddVittleButton() {
+        btnScanVittle.isEnabled = true
+        btnScanVittle.alpha = 1F
+    }
+
+    /**
      * Handles interface actions once the productName has been successfully scanned.
      *
      * @param productName The product name that has been retrieved from the camera.
      */
     override fun onBarcodeScanned(productName: String) {
-        onProductNameCheckboxChecked(productName)
-        PreviewAnalyzer.hasBarCode = true
-        refreshProductName.visibility = View.VISIBLE
-        onScanSuccessful()
+        if (!PreviewAnalyzer.hasBarCode) {
+            if (productName.isDigitsOnly()) {
+                onShowEditNameDialog(true)
+            }
+            onProductNameCheckboxChecked(productName)
+            ibRefreshProductName.visibility = View.VISIBLE
+            PreviewAnalyzer.hasBarCode = true
+            onScanSuccessful()
+        }
     }
 
     /**
@@ -220,10 +225,12 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
      * @param text The text that has been retrieved from the camera
      */
     override fun onTextScanned(text: String) {
-        onExpirationDateCheckboxChecked(text)
-        PreviewAnalyzer.hasExpirationDate = true
-        refreshDate.visibility = View.VISIBLE
-        onScanSuccessful()
+        if (!PreviewAnalyzer.hasExpirationDate) {
+            onExpirationDateCheckboxChecked(text)
+            PreviewAnalyzer.hasExpirationDate = true
+            ibRefreshDate.visibility = View.VISIBLE
+            onScanSuccessful()
+        }
     }
 
     /**
@@ -233,7 +240,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
     override fun onBarcodeNotFound() {
         Toast.makeText(
             context,
-            "Something went wrong!",
+            context!!.getString(R.string.no_scanning),
             Toast.LENGTH_SHORT
         ).show()
     }
@@ -245,7 +252,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
     override fun onTextNotFound() {
         Toast.makeText(
             context,
-            "Something went wrong! TEXt",
+            context!!.getString(R.string.no_scanning),
             Toast.LENGTH_SHORT
         ).show()
     }
@@ -257,19 +264,24 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
     // Deprecation suppressed because we use an old API version
     @Suppress("DEPRECATION")
     fun onScanSuccessful() {
+        // Vibrate
         if (vibrator.hasVibrator()) {
             vibrator.vibrate(50)
         }
+        // Turn scanning plane green, and back after 500 ms
         ImageViewCompat.setImageTintList(scanningPlane, context?.let {
             ContextCompat.getColor(
-                it, R.color.colorPrimary)
+                it, R.color.colorPrimary
+            )
         }?.let { ColorStateList.valueOf(it) })
         Handler().postDelayed({
             ImageViewCompat.setImageTintList(scanningPlane, context?.let {
                 ContextCompat.getColor(
-                    it, R.color.black)
+                    it, R.color.black
+                )
             }?.let { ColorStateList.valueOf(it) })
         }, 500)
+        toggleAddVittleButton()
     }
 
     /**
@@ -280,7 +292,8 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
     override fun onProductNameEdited(productName: String) {
         onProductNameCheckboxChecked(productName)
         PreviewAnalyzer.hasBarCode = true
-        refreshProductName.visibility = View.VISIBLE
+        ibRefreshProductName.visibility = View.VISIBLE
+        toggleAddVittleButton()
     }
 
     /**
@@ -291,7 +304,8 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
     override fun onExpirationDateEdited(text: String) {
         onExpirationDateCheckboxChecked(text)
         PreviewAnalyzer.hasExpirationDate = true
-        refreshDate.visibility = View.VISIBLE
+        ibRefreshDate.visibility = View.VISIBLE
+        toggleAddVittleButton()
     }
 
     /**
@@ -337,7 +351,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
      * Resets the necessary date properties.
      *
      */
-    override fun onResetDate(){
+    override fun onResetDate() {
         tvExpirationDate.text = getString(R.string.date_format_scanner)
         ivCheckboxExpirationDate.setImageDrawable(
             context?.let {
@@ -348,7 +362,9 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
             }
         )
         PreviewAnalyzer.hasExpirationDate = false
-        refreshDate.visibility = View.INVISIBLE
+        this.expirationDate = null
+        ibRefreshDate.visibility = View.INVISIBLE
+        toggleAddVittleButton()
     }
 
     /**
@@ -366,7 +382,8 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
             }
         )
         PreviewAnalyzer.hasBarCode = false
-        refreshProductName.visibility = View.INVISIBLE
+        ibRefreshProductName.visibility = View.INVISIBLE
+        toggleAddVittleButton()
     }
 
     /**
@@ -389,7 +406,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
      * Asks for the needed permissions, called if the user did not grant any permissions.
      *
      */
-    fun onRequestPermissionsFromFragment() {
+    override fun onRequestPermissionsFromFragment() {
         requestPermissions(REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
     }
 
@@ -399,8 +416,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
      */
     override fun onNoPermissionGranted() {
         Toast.makeText(
-            context,
-            "Permissions not granted by the user.",
+            context, context!!.getString(R.string.no_permission),
             Toast.LENGTH_SHORT
         ).show()
         NavHostFragment.findNavController(fragmentHost)
@@ -412,10 +428,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
      *
      */
     override fun onEditNameButtonClick() {
-        val dialog = ProductNameEditView(onFinished = { productName: String ->
-            onProductNameEdited(productName)
-        })
-        context?.let { dialog.openDialog(it, tvProductName.text.toString()) }
+        onShowEditNameDialog()
     }
 
     /**
@@ -461,6 +474,18 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
     }
 
     /**
+     * Opens the edit product name dialog.
+     *
+     * @param showMessage Boolean value that represents if the message should be shown.
+     */
+    override fun onShowEditNameDialog(showMessage: Boolean) {
+        val dialog = ProductNameEditView(onFinished = { productName: String ->
+            onProductNameEdited(productName)
+        }, showMessage = showMessage)
+        context?.let { dialog.openDialog(it, tvProductName.text.toString()) }
+    }
+
+    /**
      * If product has been added, this method will reset all the necessary properties.
      *
      */
@@ -487,22 +512,71 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
     }
 
     /**
+     * Calls either the close to expiration date or already expired pop-ups
+     *
+     * @param product Product to decide of if CloseToExpirationPopup or AlreadyExpiredPopup should be shown
+     */
+    @SuppressLint("DefaultLocale")
+    override fun onShowExpirationPopup(product: Product) {
+        if (product.getDaysRemaining() > DAYS_REMAINING_EXPIRED) {
+            onShowCloseToExpirationPopup(product)
+        } else {
+            onShowAlreadyExpiredPopup(product)
+        }
+    }
+
+    /**
      * Shows the CloseToExpiring popup.
      *
+     * @param product Product to show CloseToExpirationPopup of
      */
+    @SuppressLint("DefaultLocale")
     override fun onShowCloseToExpirationPopup(product: Product) {
+        val multipleDaysChar = if (product.getDaysRemaining() == 1) { "" } else { "s" }
+
         context?.let {
             PopupManager.instance.showPopup(
                 it,
                 PopupBase(
-                    "Almost expired!",
-                    String.format(
-                        "The scanned product expires in %d days. \n Are you sure you want to add it?",
-                        product.getDaysRemaining()
+                    getString(R.string.close_to_expiration_header),
+                    getString(R.string.close_to_expiration_subText,
+                        product.getDaysRemaining(),
+                        multipleDaysChar
                     )
                 ),
-                PopupButton("NO"),
-                PopupButton("YES") { presenter.addProduct(product, false) }
+                PopupButton(getString(R.string.btn_no).toUpperCase()),
+                PopupButton(getString(R.string.btn_yes).toUpperCase()) {
+                    presenter.addProduct(
+                        product,
+                        false
+                    )
+                }
+            )
+        }
+    }
+
+    /**
+     * Shows the AlreadyExpired popup.
+     *
+     * @param product Product to show AlreadyExpiredPopup of
+     */
+    @SuppressLint("DefaultLocale")
+    override fun onShowAlreadyExpiredPopup(product: Product) {
+
+        context?.let {
+            PopupManager.instance.showPopup(
+                it,
+                PopupBase(
+                    getString(R.string.already_expired_header),
+                    getString(R.string.already_expired_subText)
+                ),
+                PopupButton(getString(R.string.btn_no).toUpperCase()),
+                PopupButton(getString(R.string.btn_yes).toUpperCase()) {
+                    presenter.addProduct(
+                        product,
+                        false
+                    )
+                }
             )
         }
     }

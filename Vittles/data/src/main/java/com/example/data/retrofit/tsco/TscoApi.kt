@@ -1,4 +1,4 @@
-package com.example.data.retrofit
+package com.example.data.retrofit.tsco
 
 import com.example.data.BuildConfig
 import okhttp3.OkHttpClient
@@ -12,17 +12,19 @@ import retrofit2.converter.gson.GsonConverterFactory
  *
  * @author Jeroen Flietstra
  */
-class ProductsApi {
+class TscoApi {
     companion object {
-        // The base url of the API
+        /**
+         * Base url of the API.
+         */
         private const val baseUrl = "https://dev.tescolabs.com/"
 
         /**
-         * Creates an instance of the [ProductsApiService].
+         * Creates an instance of the [TscoApiService].
          *
-         * @return [ProductsApiService] The service class of the retrofit client.
+         * @return [TscoApiService] The service class of the retrofit client.
          */
-        fun createApi(): ProductsApiService {
+        fun createApi(): TscoApiService {
             // Create an OkHttpClient to be able to make a log of the network traffic
             val okHttpClient = OkHttpClient.Builder()
                 .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
@@ -42,8 +44,8 @@ class ProductsApi {
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build()
 
-            // Return the Retrofit ProductsApiService
-            return productsApi.create(ProductsApiService::class.java)
+            // Return the Retrofit TscoApiService
+            return productsApi.create(TscoApiService::class.java)
         }
     }
 }

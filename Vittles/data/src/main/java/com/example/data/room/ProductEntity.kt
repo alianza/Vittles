@@ -12,10 +12,10 @@ import org.joda.time.DateTime
  * @author Jan-Willem van Bremen
  * @author Arjen Simons
  *
- * @property uid unique id used as surrogate key.
- * @property productName name of the product.
- * @property expirationDate date of expiration.
- * @property creationDate date of when product was added to database.
+ * @property uid Unique id used as surrogate key.
+ * @property productName Name of the product.
+ * @property expirationDate Date of expiration.
+ * @property creationDate Date of when product was added to database.
  */
 @Entity
 data class ProductEntity(

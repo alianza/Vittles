@@ -2,8 +2,10 @@ package com.example.vittles.di
 
 import android.content.Context
 import com.example.data.*
-import com.example.data.retrofit.ProductsApi
-import com.example.data.retrofit.ProductsApiService
+import com.example.data.retrofit.off.OffApi
+import com.example.data.retrofit.off.OffApiService
+import com.example.data.retrofit.tsco.TscoApi
+import com.example.data.retrofit.tsco.TscoApiService
 import com.example.data.room.ProductDao
 import com.example.data.room.ProductModelMapper
 import com.example.data.room.createProductDaoImpl
@@ -12,6 +14,7 @@ import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
 
+/** @suppress */
 @Module
 class DataModule {
 
@@ -22,13 +25,18 @@ class DataModule {
 
     @Singleton
     @Provides
-    fun provideProductsApiService() = ProductsApi.createApi()
+    fun provideTscoProductsApiService() = TscoApi.createApi()
+
+    @Singleton
+    @Provides
+    fun provideOffProductsApiService() = OffApi.createApi()
 
     @Singleton
     @Provides
     fun provideProductsRepository(
         productDao: ProductDao,
-        productsApi: ProductsApiService,
+        productsApiTSCO: TscoApiService,
+        productsApiOFF: OffApiService,
         mapper: ProductModelMapper
-    ): ProductsRepository = ProductsRepositoryImpl(productDao, productsApi, mapper)
+    ): ProductsRepository = ProductsRepositoryImpl(productDao, productsApiTSCO, productsApiOFF, mapper)
 }
