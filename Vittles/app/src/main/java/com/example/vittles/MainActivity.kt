@@ -76,6 +76,9 @@ class MainActivity : AppCompatActivity() {
                 R.id.scannerFragment -> {
                     showBottomNavigationBar(barVisibility = false, fabVisibility = false)
                 }
+                R.id.productInfoFragment -> {
+                    showBottomNavigationBar(barVisibility = false, fabVisibility = false)
+                }
                 // TODO add settingsFragment case
             }
         }
@@ -179,7 +182,7 @@ class MainActivity : AppCompatActivity() {
      */
     private fun onNavigateSearchButtonClick(): Boolean {
             ProductListFragment.withSearch = true
-            findNavController(fragmentHost).navigate(NavigationGraphDirections.actionGlobalProductListFragment())
+            findNavController(fragmentHost).navigate(NavigationGraphDirections.actionGlobalProductListFragment(null))
             return true
     }
 
@@ -190,7 +193,7 @@ class MainActivity : AppCompatActivity() {
      */
     private fun onNavigateHomeButtonClick(): Boolean {
         return if (navController.currentDestination?.id != R.id.productListFragment) {
-            findNavController(fragmentHost).navigate(NavigationGraphDirections.actionGlobalProductListFragment())
+            findNavController(fragmentHost).navigate(NavigationGraphDirections.actionGlobalProductListFragment(null))
             true
         } else {
             false
