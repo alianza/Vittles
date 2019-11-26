@@ -173,22 +173,14 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
      *
      */
     override fun onAddVittleButtonClick() {
-        if (expirationDate != null && !tvProductName.text.isNullOrBlank()) {
-            val product = Product(
-                null,
-                tvProductName.text.toString(),
-                expirationDate!!,
-                DateTime(),
-                null
-            )
-            presenter.addProduct(product, true)
-        } else {
-            Toast.makeText(
-                context,
-                context!!.getString(R.string.fill_in_fields),
-                Toast.LENGTH_LONG
-            ).show()
-        }
+        val product = Product(
+            null,
+            tvProductName.text.toString(),
+            expirationDate!!,
+            DateTime(),
+            null
+        )
+        presenter.addProduct(product, true)
     }
 
     /**
@@ -215,6 +207,36 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
                 }
             )
         }
+    }
+
+    /**
+     * Toggle's the status of the add Vittle button based on retrieved properties
+     *
+     */
+    private fun toggleAddVittleButton() {
+        if (expirationDate != null && tvProductName.text != getString(R.string.product_name_scanner)) {
+            enableAddVittleButton()
+        } else {
+            disableAddVittleButton()
+        }
+    }
+
+    /**
+     * Disables the add Vittle button
+     *
+     */
+    private fun disableAddVittleButton() {
+        btnScanVittle.isEnabled = false
+        btnScanVittle.alpha = 0.5F
+    }
+
+    /**
+     * Enables the add Vittle button
+     *
+     */
+    private fun enableAddVittleButton() {
+        btnScanVittle.isEnabled = true
+        btnScanVittle.alpha = 1F
     }
 
     /**
@@ -293,6 +315,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
                 )
             }?.let { ColorStateList.valueOf(it) })
         }, 500)
+        toggleAddVittleButton()
     }
 
     /**
@@ -304,6 +327,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         onProductNameCheckboxChecked(productName)
         PreviewAnalyzer.hasBarCode = true
         refreshProductName.visibility = View.VISIBLE
+        toggleAddVittleButton()
     }
 
     /**
@@ -315,6 +339,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         onExpirationDateCheckboxChecked(text)
         PreviewAnalyzer.hasExpirationDate = true
         refreshDate.visibility = View.VISIBLE
+        toggleAddVittleButton()
     }
 
     /**
@@ -371,7 +396,9 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
             }
         )
         PreviewAnalyzer.hasExpirationDate = false
+        this.expirationDate = null
         refreshDate.visibility = View.INVISIBLE
+        toggleAddVittleButton()
     }
 
     /**
@@ -390,6 +417,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         )
         PreviewAnalyzer.hasBarCode = false
         refreshProductName.visibility = View.INVISIBLE
+        toggleAddVittleButton()
     }
 
     /**
