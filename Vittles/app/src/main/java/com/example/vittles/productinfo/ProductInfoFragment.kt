@@ -53,11 +53,11 @@ class ProductInfoFragment : DaggerFragment(), ProductInfoContract.View {
      */
     override fun initViews() {
         product = productArgs.product
+        updatedProduct = product
 
 //        val intent = activity!!.intent
 //        product = intent.getParcelableExtra(getString(R.string.product))
-//        updatedProduct = product
-        println(product.productName)
+//
 
         updateViews()
     }
