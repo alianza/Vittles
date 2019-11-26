@@ -7,8 +7,11 @@ interface ProductInfoContract {
 
     interface View{
         fun initViews()
+        fun updateViews()
         fun onNameChanged()
         fun onExpirationDateChanged()
+        fun onProductUpdateSuccess()
+        fun onProductUpdateFail()
     }
 
     interface Presenter{

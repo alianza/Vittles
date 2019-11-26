@@ -23,7 +23,8 @@ class ProductInfoFragment : DaggerFragment(), ProductInfoContract.View {
     lateinit var presenter: ProductInfoPresenter
 
     /** @suppress */
-    lateinit var product: Product
+    private lateinit var product: Product
+    private lateinit var updatedProduct: Product
 
     /** {@inheritDoc} */
     override fun onCreateView(
@@ -50,6 +51,17 @@ class ProductInfoFragment : DaggerFragment(), ProductInfoContract.View {
 
         val intent = activity!!.intent
         product = intent.getParcelableExtra(getString(R.string.product))
+        updatedProduct = product
+
+        updateViews()
+    }
+
+    /**
+     * Updates the views
+     *
+     */
+    override fun updateViews() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     /**
@@ -57,6 +69,9 @@ class ProductInfoFragment : DaggerFragment(), ProductInfoContract.View {
      *
      */
     override fun onNameChanged() {
+        //updatedProduct.name = input
+        presenter.updateProduct(updatedProduct)
+
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
@@ -65,8 +80,28 @@ class ProductInfoFragment : DaggerFragment(), ProductInfoContract.View {
      *
      */
     override fun onExpirationDateChanged() {
+        //updatedProduct.expirationDate = input
+        presenter.updateProduct(updatedProduct)
+
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
+    /**
+     * Handles the product update success state.
+     *
+     */
+    override fun onProductUpdateSuccess() {
+        product = updatedProduct
+        updateViews()
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
+    /**
+     * Handles the product updating fail state.
+     *
+     */
+    override fun onProductUpdateFail() {
+        updatedProduct = product
+        TODO("Display toast") //To change body of created functions use File | Settings | File Templates.
+    }
 }
