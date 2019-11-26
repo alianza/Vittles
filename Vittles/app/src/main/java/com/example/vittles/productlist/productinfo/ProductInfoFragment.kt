@@ -23,6 +23,7 @@ import javax.inject.Inject
 /**
  * Class for the product info component.
  *
+ * @author Arjen Simons
  */
 class ProductInfoFragment : DaggerFragment(),
     ProductInfoContract.View {
@@ -62,10 +63,6 @@ class ProductInfoFragment : DaggerFragment(),
     override fun initViews() {
         product = ParcelableProductMapper.fromParcelable(productArgs.product)
         updatedProduct = product
-
-//        val intent = activity!!.intent
-//        product = intent.getParcelableExtra(getString(R.string.product))
-//
 
         tvCreationDate.text = context!!.resources.getString(
             R.string.expiration_format,
@@ -143,7 +140,7 @@ class ProductInfoFragment : DaggerFragment(),
                 dpd
             )
             dpd.datePicker.minDate = currentDate.millis
-            dpd.datePicker.updateDate(this.product.expirationDate.year, this.product.expirationDate.monthOfYear, this.product.expirationDate.dayOfMonth)
+            dpd.datePicker.updateDate(this.product.expirationDate.year, this.product.expirationDate.monthOfYear - 1, this.product.expirationDate.dayOfMonth)
             dpd.show()
         }
     }
