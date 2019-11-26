@@ -27,6 +27,7 @@ interface ProductListContract {
         fun onShowUndoSnackbar()
         fun onRemoveButtonClicked(product: Product)
         fun filter(query: String)
+        fun onItemViewClicked(product: Product)
     }
 
     interface Presenter {

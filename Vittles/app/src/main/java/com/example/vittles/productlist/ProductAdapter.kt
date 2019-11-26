@@ -22,9 +22,9 @@ import javax.inject.Inject
  * @author Sarah Lange
  *
  * @property products The list of products that should be displayed in the RecyclerView.
- * @property clickListener Click listener used for the delete button.
+ * @property removeClickListener Click listener used for the delete button.
  */
-class ProductAdapter @Inject constructor(initialProducts: List<Product>, private val clickListener: (Product) -> Unit) :
+class ProductAdapter @Inject constructor(initialProducts: List<Product>, private val itemClickListener: (Product) -> Unit, private val removeClickListener: (Product) -> Unit) :
     RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
 
     /**
@@ -66,7 +66,7 @@ class ProductAdapter @Inject constructor(initialProducts: List<Product>, private
      * @param position The position of the item to be updated.
      */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(products[position], clickListener)
+        holder.bind(products[position], itemClickListener, removeClickListener)
     }
 
     /**
@@ -81,7 +81,7 @@ class ProductAdapter @Inject constructor(initialProducts: List<Product>, private
          *
          * @param product The product that is bound to the itemView.
          */
-        fun bind(product: Product, clickListener: (Product) -> Unit) {
+        fun bind(product: Product, itemClickListener: (Product) -> Unit, removeClickListener: (Product) -> Unit) {
             itemView.productId.text = product.uid.toString()
 
             // Assign daysLeft string to 99+ or 99- when greater or smaller than 99 or -99.
@@ -114,7 +114,8 @@ class ProductAdapter @Inject constructor(initialProducts: List<Product>, private
                 product.expirationDate.monthOfYear.toString(),
                 product.expirationDate.year.toString())
             itemView.tvDaysLeft.text = daysLeft
-            itemView.btnRemove.setOnClickListener{ clickListener(product) }
+            itemView.btnRemove.setOnClickListener{ removeClickListener(product) }
+            itemView.setOnClickListener{ itemClickListener(product) }
 
             // Set the colors
             itemView.ivColor.setColorFilter(ContextCompat.getColor(context, product.indicationColor!!), PorterDuff.Mode.MULTIPLY) //Circle

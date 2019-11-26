@@ -1,8 +1,10 @@
 package com.example.vittles.productlist
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,12 +13,14 @@ import android.widget.LinearLayout
 import android.widget.SearchView
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
+import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.product.Product
 import com.example.vittles.R
 import com.example.vittles.enums.DeleteType
+import com.example.vittles.productinfo.ProductInfoFragment
 import com.example.vittles.services.popups.PopupBase
 import com.example.vittles.services.popups.PopupButton
 import com.example.vittles.services.popups.PopupManager
@@ -24,6 +28,7 @@ import com.example.vittles.services.sorting.SortMenu
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
+import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.fragment_productlist.*
 import javax.inject.Inject
 
@@ -59,7 +64,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
     /** @suppress */
     private var filteredProducts = products
     /** @suppress */
-    private val productAdapter = ProductAdapter(products, this::onRemoveButtonClicked)
+    private val productAdapter = ProductAdapter(products, this::onItemViewClicked, this::onRemoveButtonClicked)
     /** @suppress */
     private val sortMenu = SortMenu(products, productAdapter)
     /** @suppress */
@@ -271,6 +276,14 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
             ),
             PopupButton(getString(R.string.btn_no).toUpperCase()) {},
             PopupButton(getString(R.string.btn_yes).toUpperCase()) { onSafeDeleteProduct(product, DeleteType.REMOVED) })
+    }
+
+    /**
+     * Handles the item view being clicked, opens the product info page
+     *
+     */
+    override fun onItemViewClicked(product: Product) {
+        NavHostFragment.findNavController(fragmentHost).navigate(ProductListFragmentDirections.actionProductListFragmentToProductInfoFragment(product))
     }
 
     /**

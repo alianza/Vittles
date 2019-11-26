@@ -2,9 +2,11 @@ package com.example.vittles.productinfo
 
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.navArgs
 import com.example.domain.product.Product
 import com.example.vittles.R
 import dagger.android.support.DaggerFragment
@@ -15,6 +17,8 @@ import javax.inject.Inject
  *
  */
 class ProductInfoFragment : DaggerFragment(), ProductInfoContract.View {
+
+    val productArgs: ProductInfoFragmentArgs by navArgs()
 
     /**
      * The presenter of the Fragment.
@@ -48,10 +52,12 @@ class ProductInfoFragment : DaggerFragment(), ProductInfoContract.View {
      *
      */
     override fun initViews() {
+        product = productArgs.product
 
-        val intent = activity!!.intent
-        product = intent.getParcelableExtra(getString(R.string.product))
-        updatedProduct = product
+//        val intent = activity!!.intent
+//        product = intent.getParcelableExtra(getString(R.string.product))
+//        updatedProduct = product
+        println(product.productName)
 
         updateViews()
     }
