@@ -1,16 +1,15 @@
 package com.example.vittles.productlist
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Vibrator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
-import android.widget.LinearLayout
 import android.widget.SearchView
 import android.widget.TextView
-import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -44,6 +43,9 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
     @Inject
     lateinit var presenter: ProductListPresenter
 
+    /** The vibration manager used for vibration when a product is eaten or removed. */
+    private lateinit var vibrator: Vibrator
+
     /** @suppress */
     private lateinit var itemTouchHelper: ItemTouchHelper
     /** @suppress */
@@ -62,42 +64,21 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
     private val productAdapter = ProductAdapter(products, this::onRemoveButtonClicked)
     /** @suppress */
     private val sortMenu = SortMenu(products, productAdapter)
-    /** @suppress */
-    private lateinit var rvProducts: RecyclerView
-    /** @suppress */
-    private lateinit var llSearch: LinearLayout
-    /** @suppress */
-    private lateinit var tvAddNewVittle: TextView
-    /** @suppress */
-    private lateinit var tvNoResults: TextView
-    /** @suppress */
-    private lateinit var svSearch: SearchView
-    /** @suppress */
-    private lateinit var toolbar: Toolbar
-    /** @suppress */
-    private lateinit var content: FrameLayout
 
     /** {@inheritDoc} */
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        with(presenter) {
-            start(this@ProductListFragment)
-        }
+        with(presenter) { start(this@ProductListFragment) }
+        vibrator = context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         return inflater.inflate(R.layout.fragment_productlist, container, false)
     }
 
     /** {@inheritDoc} */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        rvProducts = view.findViewById(R.id.rvProducts)
-        llSearch = view.findViewById(R.id.llSearch)
-        tvAddNewVittle = view.findViewById(R.id.tvAddNewVittle)
-        tvNoResults = view.findViewById(R.id.tvNoResults)
-        svSearch = view.findViewById(R.id.svSearch)
-        toolbar = view.findViewById(R.id.toolbar)
-        content = view.findViewById(R.id.content)
+
         onSearchBarClosed()
         initViews()
     }
@@ -184,6 +165,8 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
      * @param product The product to delete.
      * @param deleteType The deleteType: eaten, thrown_away or removed.
      */
+    // Deprecation suppressed because we use an old API version
+    @Suppress("DEPRECATION")
     override fun onSafeDeleteProduct(product: Product, deleteType: DeleteType) {
 
         if (undoSnackbar.isShown) {
@@ -196,6 +179,12 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
         deletedProductDeleteType = deleteType
 
         products.remove(product)
+
+        //Vibrate feedback
+        if (vibrator.hasVibrator()) {
+            vibrator.vibrate(50)
+        }
+
         //It crashes when you use notifyItemRemoved(0). This has been a known issue for quit a while.
         if (deletedProductIndex == 0) {
             productAdapter.notifyDataSetChanged()
