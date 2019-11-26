@@ -73,6 +73,7 @@ class ProductInfoFragment : DaggerFragment(),
             product.creationDate.monthOfYear.toString(),
             product.creationDate.year.toString())
         updateViews()
+        setListeners()
     }
 
     /**
@@ -199,7 +200,7 @@ class ProductInfoFragment : DaggerFragment(),
     override fun onProductUpdateFail() {
         updatedProduct = product
 
-        Snackbar.make(layout, getString(R.string.product_name_invalid), Snackbar.LENGTH_LONG)
-            .show()
+//        Snackbar.make(layout, getString(R.string.product_updated_failed), Snackbar.LENGTH_LONG)
+//            .show()
     }
 }

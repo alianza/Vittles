@@ -30,7 +30,8 @@ class ProductInfoPresenter @Inject internal constructor(
         disposables.add(updateProduct.invoke(product)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ view?.onProductUpdateSuccess() }, { view?.onProductUpdateFail() })
+            .subscribe({ view?.onProductUpdateSuccess() }, { println("print" + it.localizedMessage) })
+        //view?.onProductUpdateFail()
         )
     }
 
