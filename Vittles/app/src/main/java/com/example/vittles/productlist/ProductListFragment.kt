@@ -180,6 +180,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
 
         products.remove(product)
 
+        //Vibrate feedback
         if (vibrator.hasVibrator()) {
             vibrator.vibrate(50)
         }
