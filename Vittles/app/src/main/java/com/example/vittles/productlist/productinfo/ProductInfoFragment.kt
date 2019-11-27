@@ -40,7 +40,9 @@ class ProductInfoFragment : DaggerFragment(),
 
     /** @suppress */
     private val productArgs: ProductInfoFragmentArgs by navArgs()
+    /** @suppress */
     private lateinit var product: Product
+    /** @suppress */
     private lateinit var updatedProduct: Product
 
     /** {@inheritDoc} */

@@ -4,6 +4,11 @@ import com.example.domain.product.Product
 import com.example.vittles.enums.DeleteType
 import org.joda.time.DateTime
 
+/**
+ * MVP Contract for products info page.
+ *
+ * @author Arjen Simons
+ */
 interface ProductInfoContract {
 
     interface View{
