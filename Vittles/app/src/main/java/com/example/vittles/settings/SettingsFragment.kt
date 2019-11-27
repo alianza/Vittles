@@ -20,10 +20,7 @@ import kotlinx.android.synthetic.main.fragment_settings.*
 class SettingsFragment : DaggerFragment(), SettingsContract.View {
 
 
-    /** @suppress */
-    lateinit var lateView: View
-
-    /** @suppress */
+    /** To Store shared preferences(data) in the form of value-key*/
     lateinit var sharedPreference: SharedPreference
 
     /** @suppress */
@@ -38,7 +35,6 @@ class SettingsFragment : DaggerFragment(), SettingsContract.View {
     /** @suppress */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        lateView = view
         sharedPreference = SharedPreference(context!!)
 
         initViews()
@@ -48,6 +44,7 @@ class SettingsFragment : DaggerFragment(), SettingsContract.View {
      * Sets EventListeners
      * sets default values to the notification toggle
      * shows/keeps the last selected value of notification time
+     *
      */
     override fun initViews() {
 
@@ -67,7 +64,7 @@ class SettingsFragment : DaggerFragment(), SettingsContract.View {
      */
     override fun setListeners() {
 
-        /**
+        /*
          * called when the notification switch is switched
          *
          */
@@ -82,7 +79,7 @@ class SettingsFragment : DaggerFragment(), SettingsContract.View {
         }
 
 
-        /**
+        /*
          * called when time is selected from the spinner
          *
          */
