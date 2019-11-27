@@ -15,7 +15,6 @@ interface ProductListContract {
         fun setListeners()
         fun setItemTouchHelper()
         fun setEmptyView()
-        fun onAddButtonClick()
         fun onNoResults()
         fun onSearchBarOpened()
         fun onSearchBarClosed()
@@ -23,11 +22,14 @@ interface ProductListContract {
         fun onShowProducts(products: List<Product>)
         fun onShowProductDeleteError()
         fun onSortMenuOpened()
-        fun onSaveDeleteProduct(product: Product, deleteType: DeleteType)
+        fun onSafeDeleteProduct(product: Product, deleteType: DeleteType)
         fun initUndoSnackbar()
         fun onShowUndoSnackbar()
         fun onRemoveButtonClicked(product: Product)
+        fun checkForDeletedProduct()
+        fun getProductToDelete(product: Product): Product?
         fun filter(query: String)
+        fun onItemViewClicked(product: Product)
     }
 
     interface Presenter {

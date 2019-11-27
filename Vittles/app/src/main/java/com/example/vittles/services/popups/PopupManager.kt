@@ -1,5 +1,6 @@
 package com.example.vittles.services.popups
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.graphics.drawable.ColorDrawable
@@ -20,11 +21,14 @@ import kotlin.concurrent.schedule
  *
  * @property alertDialog This is the alerDialog used to show popups.
  */
+@SuppressLint("InflateParams")
 internal class PopupManager {
 
+    /** @suppress */
     private var alertDialog: AlertDialog? = null
 
     companion object{
+        /** Instance of the pop up manager. */
         private var INSTANCE: PopupManager? = null
 
         val instance: PopupManager

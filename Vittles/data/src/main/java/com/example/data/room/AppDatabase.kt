@@ -27,10 +27,18 @@ fun createProductDaoImpl(context: Context): ProductDao {
 @Database(entities = [ProductEntity::class, WasteReportEntity::class], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
+    /**
+     * Retrieves the ProductDao
+     *
+     * @return The ProductDao.
+     */
     abstract fun productDao(): ProductDao
 
     companion object {
 
+        /**
+         * Instance of the database.
+         */
         @Volatile
         private var INSTANCE: AppDatabase? = null
 

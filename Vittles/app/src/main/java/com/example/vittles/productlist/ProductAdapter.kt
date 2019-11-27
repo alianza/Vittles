@@ -13,7 +13,6 @@ import com.example.vittles.R
 import kotlinx.android.synthetic.main.item_product.view.*
 import javax.inject.Inject
 
-
 /**
  * Binds app-specific data to views that are displayed in the RecyclerView.
  *
@@ -23,12 +22,20 @@ import javax.inject.Inject
  * @author Sarah Lange
  *
  * @property products The list of products that should be displayed in the RecyclerView.
+ * @property removeClickListener Click listener used for the delete button.
  */
-class ProductAdapter @Inject constructor(initialProducts: List<Product>, private val clickListener: (Product) -> Unit) :
+class ProductAdapter @Inject constructor(initialProducts: List<Product>, private val itemClickListener: (Product) -> Unit, private val removeClickListener: (Product) -> Unit) :
     RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
 
+    /**
+     * Context of the activity.
+     */
     lateinit var context: Context
+    /**
+     * List of products in the recycler view.
+     */
     var products: List<Product> = initialProducts
+
     /**
      * Creates a new ViewHolder.
      *
@@ -59,7 +66,7 @@ class ProductAdapter @Inject constructor(initialProducts: List<Product>, private
      * @param position The position of the item to be updated.
      */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(products[position], clickListener)
+        holder.bind(products[position], itemClickListener, removeClickListener)
     }
 
     /**
@@ -74,13 +81,16 @@ class ProductAdapter @Inject constructor(initialProducts: List<Product>, private
          *
          * @param product The product that is bound to the itemView.
          */
-        fun bind(product: Product, clickListener: (Product) -> Unit) {
-            var daysLeft = product.getDaysRemaining().toString()
+        fun bind(product: Product, itemClickListener: (Product) -> Unit, removeClickListener: (Product) -> Unit) {
             itemView.productId.text = product.uid.toString()
 
-            if (daysLeft.toInt() > context.getString(R.string.maxDaysRemaining).toInt()) {
-                daysLeft = context.getString(R.string.maxDaysRemaining) + "+"
+            // Assign daysLeft string to 99+ or 99- when greater or smaller than 99 or -99.
+            val daysLeft: String = when {
+                product.getDaysRemaining() > context.getString(R.string.maxDaysRemaining).toInt() -> context.getString(R.string.maxDaysRemaining) + "+"
+                product.getDaysRemaining() < -context.getString(R.string.maxDaysRemaining).toInt() -> context.getString(R.string.maxDaysRemaining) + "-"
+                else -> product.getDaysRemaining().toString()
             }
+
             // LayoutParams for setting margins programmatically
             val lp = ConstraintLayout.LayoutParams(
                 ConstraintLayout.LayoutParams.MATCH_PARENT,
@@ -89,13 +99,17 @@ class ProductAdapter @Inject constructor(initialProducts: List<Product>, private
             // Last product in list, remove decorator and add extra bottom-margin
             if(products[products.lastIndex] == product) {
                 itemView.borderDecorator.visibility = View.INVISIBLE
-                lp.setMargins(0, 0, 0, 175)
+                val unbounded = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+                itemView.measure(unbounded, unbounded)
+                val bottomMargin = itemView.measuredHeight
+                lp.setMargins(0, 0, 0, bottomMargin)
             } else {
                 itemView.borderDecorator.visibility = View.VISIBLE
                 lp.setMargins(0, 0, 0, 0)
             }
             itemView.layoutParams = lp
 
+            // Set values in layout
             itemView.tvName.text = product.productName
             itemView.tvDate.text = context.resources.getString(
                 R.string.expiration_format,
@@ -103,9 +117,10 @@ class ProductAdapter @Inject constructor(initialProducts: List<Product>, private
                 product.expirationDate.monthOfYear.toString(),
                 product.expirationDate.year.toString())
             itemView.tvDaysLeft.text = daysLeft
-            itemView.btnRemove.setOnClickListener{ clickListener(product) }
+            itemView.btnRemove.setOnClickListener{ removeClickListener(product) }
+            itemView.setOnClickListener{ itemClickListener(product) }
 
-            //Set the colors
+            // Set the colors
             itemView.ivColor.setColorFilter(ContextCompat.getColor(context, product.indicationColor!!), PorterDuff.Mode.MULTIPLY) //Circle
             itemView.tvDaysLeft.setTextColor(ContextCompat.getColor(context, product.indicationColor!!)) //DaysLeft number
         }

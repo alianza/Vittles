@@ -7,6 +7,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.TextView
 import android.widget.Toast
 import com.example.vittles.R
 import kotlinx.android.synthetic.main.dialog_productname_edit.view.*
@@ -18,10 +19,16 @@ import kotlinx.android.synthetic.main.dialog_productname_edit.view.*
  *
  * @property onFinished Callback function on finished name change.
  */
-class ProductNameEditView(private val onFinished: (productName: String) -> Unit) {
+class ProductNameEditView(
+    private val onFinished: (productName: String) -> Unit,
+    private val showMessage: Boolean = false
+) {
 
+    /** @suppress */
     private lateinit var view: View
+    /** @suppress */
     private lateinit var dialog: AlertDialog
+    /** @suppress */
     private lateinit var context: Context
 
     /**
@@ -42,6 +49,8 @@ class ProductNameEditView(private val onFinished: (productName: String) -> Unit)
             view.etProductName.setText(productName)
         }
 
+        view.tvMessage.visibility = if (showMessage) TextView.VISIBLE else TextView.GONE
+
         view.btnConfirm.setOnClickListener { onConfirmButtonClicked() }
         view.btnCancel.setOnClickListener { onCancelButtonClicked() }
     }
@@ -53,13 +62,21 @@ class ProductNameEditView(private val onFinished: (productName: String) -> Unit)
     private fun onConfirmButtonClicked() {
         if (!view.etProductName.text.isNullOrBlank()) {
             onFinished(view.etProductName.text.toString())
-            // Close the keyboard
-            val imm = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(view.windowToken, 0)
+            dismissKeyboard()
             dialog.dismiss()
         } else {
-            Toast.makeText(context, context.getString(R.string.empty_fields), Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, context.getString(R.string.empty_fields), Toast.LENGTH_SHORT)
+                .show()
         }
+    }
+
+    /**
+     * Dismisses the keyboard.
+     *
+     */
+    private fun dismissKeyboard() {
+        val imm = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
     /**
@@ -67,9 +84,7 @@ class ProductNameEditView(private val onFinished: (productName: String) -> Unit)
      *
      */
     private fun onCancelButtonClicked() {
-        // Close the keyboard
-        val imm = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(view.windowToken, 0)
+        dismissKeyboard()
         dialog.dismiss()
     }
 }

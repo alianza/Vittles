@@ -1,9 +1,6 @@
 package com.example.data.room
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 import io.reactivex.Single
 
 /**
@@ -51,6 +48,14 @@ interface ProductDao {
      */
     @Insert
     fun insert(product: ProductEntity): Long
+
+    /**
+     * Update the given product from the parameters.
+     *
+     * @param product product to be updated
+     */
+    @Update
+    fun update(product: ProductEntity): Int
 
     /**
      * Delete the given product from the database.

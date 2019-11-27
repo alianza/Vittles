@@ -5,7 +5,6 @@ import android.content.pm.PackageManager
 import android.util.Size
 import android.view.ViewGroup
 import androidx.camera.core.*
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.domain.barcode.GetProductByBarcode
 import com.example.domain.product.AddProduct
@@ -23,6 +22,7 @@ import javax.inject.Inject
  * The presenter for the scanning activity.
  *
  * @property getProductByBarcode The GetProductByBarcode use case from the domain module.
+ * @property addProduct The AddProduct use case from the domain module.
  */
 class ScannerPresenter @Inject internal constructor(
     private val getProductByBarcode: GetProductByBarcode,
@@ -30,13 +30,13 @@ class ScannerPresenter @Inject internal constructor(
 ) :
     BasePresenter<ScannerFragment>(), ScannerContract.Presenter {
 
-    // CameraX preview element
+    /** CameraX preview element. */
     private lateinit var preview: Preview
-    // ImageAnalysis object with the PreviewAnalyzer in it for the preview analysis
+    /** ImageAnalysis object with the PreviewAnalyzer in it for the preview analysis. */
     private lateinit var imageAnalysis: ImageAnalysis
-    // Executor for the analysis on a different thread
+    /** Executor for the analysis on a different thread. */
     private val executor = Executors.newSingleThreadExecutor()
-    // The analyzer for the preview
+    /** The analyzer for the preview/ */
     private lateinit var analyzer: PreviewAnalyzer
 
     /**
@@ -58,7 +58,7 @@ class ScannerPresenter @Inject internal constructor(
                     if (it is IllegalArgumentException) {
                         view?.onShowAddProductError() // Show snack bar that tells it failed
                     } else if (it is Exception) {
-                        view?.onShowCloseToExpirationPopup(product) // Show close to expiring popup
+                        view?.onShowExpirationPopup(product) // Show close to expiring popup
                     }
                 }
             )
@@ -86,11 +86,11 @@ class ScannerPresenter @Inject internal constructor(
         // Create configuration object for the viewfinder use case
         val previewConfig = PreviewConfig.Builder().apply {
             setLensFacing(CameraX.LensFacing.BACK)
+            setTargetAspectRatio(AspectRatio.RATIO_16_9)
         }.build()
 
         // Build the viewfinder use case
         val preview = Preview(previewConfig)
-
 
         // Every time the viewfinder is updated, recompute layout
         preview.setOnPreviewOutputUpdateListener {
@@ -189,14 +189,14 @@ class ScannerPresenter @Inject internal constructor(
     }
 
     companion object {
-        /*
+        /**
         This is an arbitrary number we are using to keep track of the permission
         request. Where an app has multiple context for requesting permission,
         this can help differentiate the different contexts.
         */
         const val REQUEST_CODE_PERMISSIONS = 10
 
-        // This is an array of all the permission specified in the manifest.
+        /** This is an array of all the permission specified in the manifest. */
         val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
     }
 }

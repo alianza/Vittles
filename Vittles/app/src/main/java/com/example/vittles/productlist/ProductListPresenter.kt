@@ -22,6 +22,7 @@ import javax.inject.Inject
  * @author Sarah Lange
  *
  * @property getProducts The GetProducts use case from the domain module.
+ * @property deleteProduct The DeleteProduct use cane from the domain module.
  */
 class ProductListPresenter @Inject internal constructor(
     private val getProducts: GetProducts,
