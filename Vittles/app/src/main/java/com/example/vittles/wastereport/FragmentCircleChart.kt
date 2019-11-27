@@ -1,12 +1,10 @@
 package com.example.vittles.wastereport
 
 import android.content.Context
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -14,7 +12,6 @@ import com.example.vittles.R
 import com.hookedonplay.decoviewlib.DecoView
 import com.hookedonplay.decoviewlib.charts.SeriesItem
 import com.hookedonplay.decoviewlib.events.DecoEvent
-import kotlin.coroutines.coroutineContext
 
 interface RefreshData {
     fun refresh(percent: Int)
@@ -54,7 +51,7 @@ class FragmentCircleChart(var data: Int, context: Context) : Fragment(), Refresh
 
 
 
-        val textPercentage = view.findViewById<TextView>(R.id.textPercentage)
+        val textPercentage = view.findViewById<TextView>(R.id.tvPercentage)
         seriesItem2.addArcSeriesItemListener(object : SeriesItem.SeriesItemListener {
             override fun onSeriesItemAnimationProgress(
                 percentComplete: Float,
@@ -78,7 +75,7 @@ class FragmentCircleChart(var data: Int, context: Context) : Fragment(), Refresh
         )
 
         if(percent == 0f) {
-            view.findViewById<TextView>(R.id.textPercentage).text = "0%"
+            view.findViewById<TextView>(R.id.tvPercentage).text = "0%"
         } else {
             val series1Index = decoView.addSeries(seriesItem2)
             decoView.addEvent(
