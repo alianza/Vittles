@@ -108,6 +108,8 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         ibRefreshDate.setOnClickListener { onResetDate() }
 
         textureView.setOnTouchListener { _, event -> onTapToFocus(event) }
+
+        btnUseCamera.setOnClickListener { presenter.checkPermissions() }
     }
 
     /**
@@ -396,10 +398,12 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         if (requestCode == REQUEST_CODE_PERMISSIONS) {
             if (presenter.allPermissionsGranted()) {
                 textureView.post { presenter.startCamera() }
+                btnUseCamera.visibility = View.GONE
+                btnTorch.visibility = View.VISIBLE
             }
-//            else {
-//                onNoPermissionGranted()
-//            }
+            else {
+                onNoPermissionGranted()
+            }
         }
     }
 
@@ -416,12 +420,8 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
      *
      */
     override fun onNoPermissionGranted() {
-        Toast.makeText(
-            context, context!!.getString(R.string.no_permission),
-            Toast.LENGTH_SHORT
-        ).show()
-        NavHostFragment.findNavController(fragmentHost)
-            .navigate(NavigationGraphDirections.actionGlobalProductListFragment())
+        btnUseCamera.visibility = View.VISIBLE
+        btnTorch.visibility = View.GONE
     }
 
     /**
