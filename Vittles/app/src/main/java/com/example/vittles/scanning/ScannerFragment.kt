@@ -221,9 +221,11 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         if (!PreviewAnalyzer.hasBarCode) {
             this.barcodeDictionary = barcodeDictionary
             if (barcodeDictionary.containsNotFound()) {
-                onShowEditNameDialog(true, barcodeDictionary)
+                onShowEditNameDialog(barcodeDictionary)
+                onProductNameCheckboxChecked(barcodeDictionary.barcode)
+            } else {
+                barcodeDictionary.productName?.let { onProductNameCheckboxChecked(it) }
             }
-            barcodeDictionary.productName?.let { onProductNameCheckboxChecked(it) }
             ibRefreshProductName.visibility = View.VISIBLE
             PreviewAnalyzer.hasBarCode = true
             onScanSuccessful()
@@ -300,12 +302,13 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
      *
      * @param barcodeDictionary The new product name with the barcode.
      */
-    override fun onProductNameEdited(barcodeDictionary: BarcodeDictionary, notFound: Boolean) {
+    override fun onProductNameEdited(barcodeDictionary: BarcodeDictionary, insertLocal: Boolean) {
         barcodeDictionary.productName?.let { onProductNameCheckboxChecked(it) }
+        this.barcodeDictionary = barcodeDictionary
         PreviewAnalyzer.hasBarCode = true
         ibRefreshProductName.visibility = View.VISIBLE
         toggleAddVittleButton()
-        if (!barcodeDictionary.containsNotReady()) {
+        if (insertLocal) {
             presenter.addBarcode(barcodeDictionary)
         }
     }
@@ -442,7 +445,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
      *
      */
     override fun onEditNameButtonClick() {
-        onShowEditNameDialog(false, barcodeDictionary)
+        onShowEditNameDialog(barcodeDictionary)
     }
 
     /**
@@ -490,13 +493,13 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
     /**
      * Opens the edit product name dialog.
      *
-     * @param notFound Boolean value that represents if the message should be shown.
+     * @param barcodeDictionary The current barcode dictionary.
      */
-    override fun onShowEditNameDialog(notFound: Boolean, barcodeDictionary: BarcodeDictionary) {
-        val dialog = ProductNameEditView(onFinished = { productName: String ->
-            onProductNameEdited(BarcodeDictionary(barcodeDictionary.barcode, productName), notFound)
-        }, notFound = notFound)
-        context?.let { dialog.openDialog(it, tvProductName.text.toString()) }
+    override fun onShowEditNameDialog(barcodeDictionary: BarcodeDictionary) {
+        val dialog = ProductNameEditView(onFinished = { productName: String, insertLocal: Boolean ->
+            onProductNameEdited(BarcodeDictionary(barcodeDictionary.barcode, productName), insertLocal)
+        })
+        context?.let { dialog.openDialog(it, barcodeDictionary.productName) }
     }
 
     /**

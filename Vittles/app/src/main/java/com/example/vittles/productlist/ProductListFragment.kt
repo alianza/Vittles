@@ -411,9 +411,9 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
      *
      */
     override fun onSearchBarOpened() {
-        svSearch.setQuery("", true)
+        svSearch?.setQuery("", true)
         llSearch.visibility = View.VISIBLE
-        svSearch.isIconified = false
+        svSearch?.isIconified = false
         toolbar.visibility = View.GONE
     }
 
@@ -422,9 +422,9 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
      *
      */
     override fun onSearchBarClosed() {
-        svSearch.setQuery("", true)
-        llSearch.visibility = View.GONE
-        toolbar.visibility = View.VISIBLE
+        svSearch?.setQuery("", true)
+        llSearch?.visibility = View.GONE
+        toolbar?.visibility = View.VISIBLE
     }
 
     companion object {

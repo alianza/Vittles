@@ -19,11 +19,9 @@ import kotlinx.android.synthetic.main.dialog_productname_edit.view.*
  * @author Jeroen Flietstra
  *
  * @property onFinished Callback function on finished name change.
- * @property notFound Indicates if a product could not be found on remote databases.
  */
 class ProductNameEditView(
-    private val onFinished: (productName: String) -> Unit,
-    private val notFound: Boolean = false
+    private val onFinished: (productName: String, insertLocal: Boolean) -> Unit
 ) {
 
     /** @suppress */
@@ -32,6 +30,8 @@ class ProductNameEditView(
     private lateinit var dialog: AlertDialog
     /** @suppress */
     private lateinit var context: Context
+    /** @suppress */
+    private var insertLocal: Boolean = false
 
     /**
      * Opens the dialog.
@@ -47,12 +47,16 @@ class ProductNameEditView(
             AlertDialog.Builder(context).setView(view)
         dialog = mBuilder.show()
 
-        if (!productName.isNullOrBlank() && productName != context.getString(R.string.product_name_scanner)) {
+        if (!productName.isNullOrBlank()
+            && productName != context.getString(R.string.product_name_scanner)
+            && productName != BarcodeDictionaryStatus.NOT_FOUND()
+            && productName != BarcodeDictionaryStatus.NOT_READY()) {
             view.etProductName.setText(productName)
         }
 
         view.tvMessage.visibility =
-            if (productName == BarcodeDictionaryStatus.NOT_READY()) TextView.VISIBLE else TextView.GONE
+            if (productName == BarcodeDictionaryStatus.NOT_FOUND()) TextView.VISIBLE else TextView.GONE
+        insertLocal = productName == BarcodeDictionaryStatus.NOT_FOUND()
 
         view.btnConfirm.setOnClickListener { onConfirmButtonClicked() }
         view.btnCancel.setOnClickListener { onCancelButtonClicked() }
@@ -64,7 +68,7 @@ class ProductNameEditView(
      */
     private fun onConfirmButtonClicked() {
         if (!view.etProductName.text.isNullOrBlank()) {
-            onFinished(view.etProductName.text.toString())
+            onFinished(view.etProductName.text.toString(), insertLocal)
             dismissKeyboard()
             dialog.dismiss()
         } else {

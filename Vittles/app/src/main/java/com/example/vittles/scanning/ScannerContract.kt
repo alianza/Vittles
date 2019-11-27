@@ -35,11 +35,11 @@ interface ScannerContract {
         fun onShowExpirationPopup(product: Product)
         fun onShowCloseToExpirationPopup(product: Product)
         fun onShowAlreadyExpiredPopup(product: Product)
-        fun onProductNameEdited(barcodeDictionary: BarcodeDictionary, notFound: Boolean = false)
+        fun onProductNameEdited(barcodeDictionary: BarcodeDictionary, insertLocal: Boolean = false)
         fun onExpirationDateEdited(text: String)
         fun onProductNameCheckboxChecked(productName: String)
         fun onExpirationDateCheckboxChecked(text: String)
-        fun onShowEditNameDialog(notFound: Boolean = false, barcodeDictionary: BarcodeDictionary)
+        fun onShowEditNameDialog(barcodeDictionary: BarcodeDictionary)
     }
 
     interface Presenter {
