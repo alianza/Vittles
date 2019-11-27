@@ -42,5 +42,10 @@
             android:name="product"
             app:argType="com.example.vittles.productlist.ParcelableProduct" />
     </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.vittles.settings.SettingsFragment"
+        android:label="@string/settings_title" />
+    <action android:id="@+id/action_global_settingsFragment" app:destination="@id/settingsFragment" />
 
 </navigation>

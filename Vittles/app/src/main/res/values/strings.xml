@@ -35,6 +35,9 @@
     <string name="no_scanning">Can not use scanning.</string>
     <string name="no_permission">Permissions not granted by the user.</string>
 
+    <!--    Settings-->
+    <string name="settings_title">Settings</string>
+
     <!--    Image Content Descriptions-->
     <string name="border">.</string>
     <string name="close_search">Close Search</string>
@@ -93,4 +96,21 @@
     <!--    Content Descriptions-->
     <string name="cd_refresh_button">Refresh</string>
     <string name="cd_torch">Torch</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="pref_int1">int1</string>
+    <integer name="pref_int1_step">1</integer>
+    <integer name="pref_int1_min">0</integer>
+    <integer name="pref_int1_max">10</integer>
+    <integer name="pref_int1_default">10</integer>
+    <string name="int1_title">Set Int 1</string>
+    <string name="int1_desc">Change the value of the first integer</string>
+
+
+    <!-- Notification options -->
+    <string-array name="notification_time">
+        <item>Daily</item>
+        <item>Weekly</item>
+        <item>Monthly</item>
+    </string-array>
 </resources>
