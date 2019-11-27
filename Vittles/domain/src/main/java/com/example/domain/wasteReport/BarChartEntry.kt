@@ -14,4 +14,8 @@ data class BarChartEntry(
         val fmt = DateTimeFormat.forPattern("EEE")
         return deleteDate.toString(fmt)
     }
+    fun getDateOfMonth(): String {
+        val fmt = DateTimeFormat.forPattern("dd.MM")
+        return deleteDate.toString(fmt)
+    }
 }

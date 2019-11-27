@@ -6,17 +6,19 @@ import org.joda.time.DateTime
 
 
 /**
- * MVP Contract for circle chart.
+ * MVP Contract for bar chart.
  *
  * @author Sarah Lange
  */
 interface BarChartContract {
 
     interface View {
-        fun setupBarChartDataEaten(list: List<BarChartEntry>)
-        fun setupBarChartDataExpired(list: List<BarChartEntry>)
-        fun designSetup(barChart: BarChart)
+        fun setupBarChartDataEaten(barChartEntries: List<BarChartEntry>)
+        fun setupBarChartDataExpired(barChartEntries: List<BarChartEntry>)
+        fun setupDesign(barChart: BarChart)
         fun setupCharts(barChartData: List<BarChartEntry>)
+        fun setXAxisLabels(barChartEntries: List<BarChartEntry>, barChart: BarChart)
+        fun setRadius(barChart: BarChart)
         fun fail()
 
     }

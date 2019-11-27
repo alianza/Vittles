@@ -3,6 +3,7 @@ package com.example.domain.wasteReport
 import com.example.domain.repositories.WasteReportRepository
 import io.reactivex.Single
 import org.joda.time.DateTime
+import org.joda.time.Days
 import javax.inject.Inject
 
 /**
@@ -18,67 +19,51 @@ class GetWasteReportProducts @Inject constructor(private val repository: WasteRe
      * Gets the waste report products
      *
      * @param date From this date up to now the data should be given
-     * @return List of vittles
+     * @return List of Bar chart entries
      */
-    /*operator fun invoke(date: DateTime): Single<BarChartData> {
-
-        return repository.getWasteReportProducts(date.millis).map { products ->
-            val listEaten = mutableListOf<Int>()
-            val listExpired = mutableListOf<Int>()
-
-            for (i in 0..6) {
-                val productAmount = products.count {
-                    it.creationDate == DateTime.now().minusDays(i).withTimeAtStartOfDay()
-                }
-                val expiring =
-                    products.count {
-                        it.wasteType == "EATEN" && it.creationDate ==
-                                DateTime.now().minusDays(i).withTimeAtStartOfDay()
-                    }
-
-                val percentEaten: Float
-                val percentExpired: Float
-                if (productAmount != 0) {
-                    percentEaten = expiring.toFloat() / productAmount.toFloat() * 100
-                    percentExpired =
-                        (products.size - expiring.toFloat()) / productAmount.toFloat() * 100
-                } else {
-                    percentEaten = 0f
-                    percentExpired = 0f
-                }
-                listEaten.add(percentEaten.toInt())
-                listExpired.add(percentExpired.toInt())
-            }
-            BarChartData(listEaten, listExpired)
-        }
-    }*/
-
     operator fun invoke(date: DateTime): Single<List<BarChartEntry>> {
 
         return repository.getWasteReportProducts(date.millis).map { products ->
             val listBarChartEntry = mutableListOf<BarChartEntry>()
+            var timeRangeDays = Days.daysBetween(date, DateTime.now().withTimeAtStartOfDay()).days
+            if(timeRangeDays == 365) {
+                timeRangeDays = 12
+            }
 
-            for (i in 0..6) {
-                val loopDate = DateTime.now().minusDays(i).withTimeAtStartOfDay()
-                val productAmount = products.count {
-                    it.creationDate == loopDate
-                }
-                val expiring =
-                    products.count {
-                        it.wasteType == "EATEN" && it.creationDate == loopDate
+            for (i in 0 until timeRangeDays) {
+                var productAmount: Int
+                var eaten: Int
+                var barEntryDate: DateTime
+
+                if(timeRangeDays == 12) {
+                    barEntryDate = DateTime.now().minusMonths(i-1)
+                    productAmount = products.count {
+                        it.creationDate.monthOfYear == i
                     }
-
+                    eaten = products.count{
+                        it.wasteType == "EATEN" && it.creationDate.monthOfYear == i
+                    }
+                } else {
+                    barEntryDate = DateTime.now().minusDays(i).withTimeAtStartOfDay()
+                    productAmount = products.count {
+                        it.creationDate == barEntryDate
+                    }
+                    eaten =
+                        products.count {
+                            it.wasteType == "EATEN" && it.creationDate == barEntryDate
+                        }
+                }
                 val percentEaten: Float
                 val percentExpired: Float
                 if (productAmount != 0) {
-                    percentEaten = expiring.toFloat() / productAmount.toFloat() * 100
+                    percentEaten = eaten.toFloat() / productAmount.toFloat() * 100
                     percentExpired =
-                        (productAmount - expiring.toFloat()) / productAmount.toFloat() * 100
+                        (productAmount - eaten.toFloat()) / productAmount.toFloat() * 100
                 } else {
                     percentEaten = 0f
                     percentExpired = 0f
                 }
-                listBarChartEntry.add(BarChartEntry(percentEaten, percentExpired, loopDate))
+                listBarChartEntry.add(BarChartEntry(percentEaten, percentExpired, barEntryDate))
             }
             listBarChartEntry
         }
