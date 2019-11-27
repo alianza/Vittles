@@ -19,8 +19,6 @@ import com.github.mikephil.charting.utils.Utils
  * @author Sarah Lange
  *
  * @property xAxis X axis of the bar chart.
- * @constructor
- * TODO
  *
  * @param viewPortHandler View port handler of the bar chart.
  * @param yAxis Y axis of the bar chart whose labels are to be rotated.
@@ -28,12 +26,17 @@ import com.github.mikephil.charting.utils.Utils
  */
 
 
-class CustomYAxisRenderer(viewPortHandler: ViewPortHandler, yAxis: YAxis, trans: Transformer, private val xAxis: XAxis ): YAxisRenderer(viewPortHandler, yAxis, trans) {
+class CustomYAxisRenderer(
+    viewPortHandler: ViewPortHandler,
+    yAxis: YAxis,
+    trans: Transformer,
+    private val xAxis: XAxis
+) : YAxisRenderer(viewPortHandler, yAxis, trans) {
 
     override fun renderAxisLabels(c: Canvas) {
-        c.translate(c.width.toFloat(),0f)
+        c.translate(c.width.toFloat(), 0f)
         c.rotate(180f)
-        c.translate(0f,-c.height.toFloat() - xAxis.mLabelHeight - xAxis.yOffset + 15f)
+        c.translate(0f, -c.height.toFloat() - xAxis.mLabelHeight - xAxis.yOffset + 15f)
 
         if (!mYAxis.isEnabled || !mYAxis.isDrawLabelsEnabled)
             return

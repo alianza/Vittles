@@ -9,7 +9,16 @@ import com.github.mikephil.charting.animation.ChartAnimator
 import com.github.mikephil.charting.interfaces.dataprovider.BarDataProvider
 import com.github.mikephil.charting.renderer.BarChartRenderer
 
-
+/**
+ * Renderer for adding radius to bar chart entries
+ *
+ * @author https://stackoverflow.com/questions/30761082/mpandroidchart-round-edged-bar-chart
+ *
+ *
+ * @param chart
+ * @param animator
+ * @param viewPortHandler
+ */
 class CustomBarChartRender(
     chart: BarDataProvider,
     animator: ChartAnimator,
@@ -105,7 +114,7 @@ class CustomBarChartRender(
                 break
 
             if (!isSingleColor) {
-                // Set the color for the currently drawn value. If the index
+                // Set the color for the currently drawn date. If the index
                 // is out of bounds, reuse colors.
                 mRenderPaint.color = dataSet.getColor(j / 4)
             }

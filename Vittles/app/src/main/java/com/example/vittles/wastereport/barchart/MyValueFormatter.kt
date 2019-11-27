@@ -4,7 +4,12 @@ import java.text.DecimalFormat
 import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.formatter.ValueFormatter
 
-
+/**
+ * Class for formatting axis labels
+ *
+ * @author Sarah Lange
+ *
+ */
 class MyValueFormatter : ValueFormatter() {
     private val format = DecimalFormat("###")
 

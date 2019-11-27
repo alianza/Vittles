@@ -19,6 +19,7 @@ import javax.inject.Inject
  *
  * @author Jeroen Flietstra
  * @author Arjen Simons
+ * @author Sarah Lange
  *
  * @property getProducts The GetProducts use case from the domain module.
  */

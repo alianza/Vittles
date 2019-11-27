@@ -70,16 +70,16 @@ class WasteTimeRangeMenu (private val onDateChange: (DateTime) -> Unit) {
      */
     private fun onSortClick(timeRange: TimeRange) {
         when(timeRange) {
-            TimeRange.LAST_SEVEN_DAYS -> loadData(TimeRange.LAST_SEVEN_DAYS.value)
-            TimeRange.LAST_30_DAYS -> loadData(TimeRange.LAST_30_DAYS.value)
-            TimeRange.LAST_YEAR -> loadData(TimeRange.LAST_YEAR.value)
+            TimeRange.LAST_SEVEN_DAYS -> loadData(TimeRange.LAST_SEVEN_DAYS.date)
+            TimeRange.LAST_30_DAYS -> loadData(TimeRange.LAST_30_DAYS.date)
+            TimeRange.LAST_YEAR -> loadData(TimeRange.LAST_YEAR.date)
         }
 
         previousTimeRange = currentTimeRange
         currentTimeRange = timeRange
 
         if (currentTimeRange != previousTimeRange) {
-            setTimeRangebtnText(timeRange)
+            setTimeRangeBtnText(timeRange)
         }
 
         if (::alertDialog.isInitialized) {
@@ -113,7 +113,7 @@ class WasteTimeRangeMenu (private val onDateChange: (DateTime) -> Unit) {
      *
      * @param timeRange The timeRange which was selected by the user.
      */
-    private fun setTimeRangebtnText(timeRange: TimeRange) {
+    private fun setTimeRangeBtnText(timeRange: TimeRange) {
         when(timeRange) {
             TimeRange.LAST_SEVEN_DAYS -> btnTimeRange.text = view.lastSevenDays.text
             TimeRange.LAST_30_DAYS -> btnTimeRange.text = view.last30Days.text

@@ -26,7 +26,7 @@ interface RefreshData {
     /**
      * Refreshes data after setting new date
      *
-     * @param date From this date up to now the value is calculated
+     * @param date From this date up to now the date is calculated
      * @param vittlesEaten Amount of eaten vittles
      * @param vittlesExpired Amount of expired vittles
      */
@@ -36,7 +36,7 @@ interface RefreshData {
 /**
  * Fragment class for the waste report.
  *
- * @property date From this date up to now the value is calculated
+ * @property date From this date up to now the date is calculated
  * @property vittlesEaten Amount of eaten vittles
  * @property vittlesExpired Amount of expired vittles
  */
@@ -67,7 +67,7 @@ class CircleChartFragment @Inject internal constructor(var date: DateTime, var v
     /**
      * Implementation of the refresh interface
      *
-     * @param date New date from which the value is calculated
+     * @param date New date from which the date is calculated
      * @param vittlesEaten New amount of eaten vittles
      * @param vittlesExpired New amount of expired vittles
      */
@@ -81,7 +81,7 @@ class CircleChartFragment @Inject internal constructor(var date: DateTime, var v
     /**
      * Draws circle chart
      *
-     * @param percent percent value
+     * @param percent percent date
      */
     override fun drawCircleChart(percent: Int) {
 

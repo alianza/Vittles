@@ -34,7 +34,6 @@ class BarChartFragment @Inject internal constructor(var date: DateTime) : Dagger
 
     @Inject
     lateinit var presenter: BarChartPresenter
-
     private lateinit var barChartEaten: BarChart
     private lateinit var barChartExpired: BarChart
     var timeRangeSteps = 0
@@ -86,28 +85,9 @@ class BarChartFragment @Inject internal constructor(var date: DateTime) : Dagger
      * @param barChartEntries Data to be shown in the charts.
      */
     override fun setupBarChartDataEaten(barChartEntries: List<BarChartEntry>) {
-        val barGroup = ArrayList<BarEntry>()
 
-        for (i in 0 until timeRangeSteps) {
-            if (timeRangeSteps == TimeRangeSteps.MONTH_YEAR.steps) {
-                barGroup.add(BarEntry(i.toFloat(), barChartEntries[i].vittlesEatenPercent, i.toString()))
-
-            } else {
-                barGroup.add(
-                    BarEntry(
-                        i.toFloat(),
-                        barChartEntries[timeRangeSteps - 1 - i].vittlesEatenPercent,
-                        i.toString()
-                    )
-                )
-            }
-        }
-        val barDataSet = BarDataSet(barGroup, "")
-
-        barDataSet.color = Color.rgb(38, 243, 145)
+        val barData = setDataEaten(barChartEntries)
         setRadius(barChartEaten)
-
-        val barData = BarData(barDataSet)
 
         barChartEaten.apply {
             data = barData
@@ -124,8 +104,58 @@ class BarChartFragment @Inject internal constructor(var date: DateTime) : Dagger
      * @param barChartEntries Data to be shown in the charts.
      */
     override fun setupBarChartDataExpired(barChartEntries: List<BarChartEntry>) {
-        val barGroup = ArrayList<BarEntry>()
+        val barData = setDataExpired(barChartEntries)
+        setRadius(barChartExpired)
 
+        setYAxisRenderer(barChartExpired)
+
+        barChartExpired.apply {
+            data = barData
+            rotation = 180f
+            setViewPortOffsets(80f, 100f, 80f, 25f)
+            axisRight.valueFormatter = MyValueFormatter()
+            axisLeft.valueFormatter = MyValueFormatter()
+        }
+
+        setupDesign(barChartExpired)
+        setXAxisLabels(barChartEntries, barChartExpired)
+    }
+
+    /**
+     * Sets bar data for bar chart of eaten products
+     *
+     * @param barChartEntries Data to be shown in the charts.
+     * @return Bar data to be displayed
+     */
+    override fun setDataEaten(barChartEntries: List<BarChartEntry>): BarData {
+        val barGroup = ArrayList<BarEntry>()
+        for (i in 0 until timeRangeSteps) {
+            if (timeRangeSteps == TimeRangeSteps.MONTH_YEAR.steps) {
+                barGroup.add(BarEntry(i.toFloat(), barChartEntries[i].vittlesEatenPercent, i.toString()))
+
+            } else {
+                barGroup.add(
+                    BarEntry(
+                        i.toFloat(),
+                        barChartEntries[timeRangeSteps - 1 - i].vittlesEatenPercent,
+                        i.toString()
+                    )
+                )
+            }
+        }
+        val barDataSet = BarDataSet(barGroup, "")
+        barDataSet.color = Color.rgb(38, 243, 145)
+        return BarData(barDataSet)
+    }
+
+    /**
+     * Sets bar data for bar chart of expired products
+     *
+     * @param barChartEntries Data to be shown in the charts.
+     * @return Bar data to be displayed
+     */
+    override fun setDataExpired(barChartEntries: List<BarChartEntry>): BarData {
+        val barGroup = ArrayList<BarEntry>()
         for (i in 0 until timeRangeSteps) {
             if (timeRangeSteps == TimeRangeSteps.MONTH_YEAR.steps) {
                 barGroup.add(
@@ -140,28 +170,22 @@ class BarChartFragment @Inject internal constructor(var date: DateTime) : Dagger
             }
         }
         val barDataSet = BarDataSet(barGroup, "")
-        setRadius(barChartExpired)
-
-        barChartExpired.rendererLeftYAxis = CustomYAxisRenderer(
-            barChartExpired.viewPortHandler,
-            barChartExpired.axisLeft,
-            barChartExpired.rendererXAxis.transformer,
-            barChartExpired.xAxis
-        )
-
         barDataSet.color = Color.RED
+        return BarData(barDataSet)
+    }
 
-        val barData = BarData(barDataSet)
-        barChartExpired.apply {
-            data = barData
-            rotation = 180f
-            setViewPortOffsets(80f, 100f, 80f, 25f)
-            axisRight.valueFormatter = MyValueFormatter()
-            axisLeft.valueFormatter = MyValueFormatter()
-        }
-
-        setupDesign(barChartExpired)
-        setXAxisLabels(barChartEntries, barChartExpired)
+    /**
+     * Sets y axis renderer
+     *
+     * @param barChart bar chart whose renderer should be set
+     */
+    override fun setYAxisRenderer(barChart: BarChart) {
+        barChart.rendererLeftYAxis = CustomYAxisRenderer(
+            barChart.viewPortHandler,
+            barChart.axisLeft,
+            barChart.rendererXAxis.transformer,
+            barChart.xAxis
+        )
     }
 
     /**
@@ -231,39 +255,40 @@ class BarChartFragment @Inject internal constructor(var date: DateTime) : Dagger
      * @param barChart bar Chart whose design should be set
      */
     override fun setupDesign(barChart: BarChart) {
-        barChart.setPinchZoom(false)
-        barChart.setScaleEnabled(false)
-        barChart.isHighlightPerTapEnabled = false
-        barChart.isHighlightPerDragEnabled = false
-        barChart.clipToPadding = true
-        barChart.description.isEnabled = false
-        barChart.animateY(1000)
-        barChart.legend.isEnabled = false
-        barChart.data.apply {
-            barWidth = 0.4f
-            setDrawValues(false)
-        }
-        barChart.xAxis.apply {
-            setDrawGridLines(false)
-            setDrawAxisLine(false)
-            xOffset = 0f
-            yOffset = 0f
+        barChart.apply {
+            setPinchZoom(false)
+            setScaleEnabled(false)
+            isHighlightPerTapEnabled = false
+            isHighlightPerDragEnabled = false
+            barChart.clipToPadding = true
+            description.isEnabled = false
+            animateY(1000)
+            legend.isEnabled = false
 
-        }
-
-        barChart.axisLeft.apply {
-            setDrawAxisLine(false)
-            axisMinimum = 0f
-            spaceBottom = 0f
-            axisMaximum = 100f
-            granularity = 50f
-        }
-        barChart.axisRight.apply {
-            setDrawAxisLine(false)
-            spaceBottom = 0f
-            axisMaximum = 100f
-            axisMinimum = 0f
-            granularity = 50f
+            data.apply {
+                barWidth = 0.4f
+                setDrawValues(false)
+            }
+            xAxis.apply {
+                setDrawGridLines(false)
+                setDrawAxisLine(false)
+                xOffset = 0f
+                yOffset = 0f
+            }
+            axisLeft.apply {
+                setDrawAxisLine(false)
+                axisMinimum = 0f
+                spaceBottom = 0f
+                axisMaximum = 100f
+                granularity = 50f
+            }
+            axisRight.apply {
+                setDrawAxisLine(false)
+                spaceBottom = 0f
+                axisMaximum = 100f
+                axisMinimum = 0f
+                granularity = 50f
+            }
         }
     }
 

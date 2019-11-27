@@ -1,6 +1,12 @@
 package com.example.vittles.enums
 
-import org.joda.time.DateTime
+/**
+ * Enumerator which holds the days of different time ranges
+ *
+ * @author Sarah Lange
+ *
+ * @property steps steps the time range has
+ */
 
 enum class TimeRangeSteps(val steps: Int) {
     SEVEN_DAYS(7),

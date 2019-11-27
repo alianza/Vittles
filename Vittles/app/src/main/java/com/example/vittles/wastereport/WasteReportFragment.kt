@@ -30,7 +30,7 @@ class WasteReportFragment : DaggerFragment(), WasteReportContract.View {
     @Inject
     lateinit var presenter: WasteReportPresenter
 
-    lateinit var timeRangeMenu: WasteTimeRangeMenu
+    private lateinit var timeRangeMenu: WasteTimeRangeMenu
     lateinit var tvVittlesEaten: TextView
     lateinit var tvVittlesExpired: TextView
     lateinit var ivDot: ImageView
@@ -78,9 +78,9 @@ class WasteReportFragment : DaggerFragment(), WasteReportContract.View {
         CoroutineScope(Dispatchers.Main).launch {
             withContext(Dispatchers.IO) {
                 val vittlesEaten =
-                    async { presenter.getCountEatenProducts(DateTime.now().minusHours(1)) }
+                    async { presenter.getCountEatenProducts(TimeRange.LAST_SEVEN_DAYS.date) }
                 val vittlesExpired =
-                    async { presenter.getCountExpiredProducts(DateTime.now().minusHours(1)) }
+                    async { presenter.getCountExpiredProducts(TimeRange.LAST_SEVEN_DAYS.date) }
 
                 initViews(vittlesEaten.await(), vittlesExpired.await())
             }
@@ -98,7 +98,7 @@ class WasteReportFragment : DaggerFragment(), WasteReportContract.View {
         Handler(Looper.getMainLooper()).post {
             adapter = ViewPagerAdapter(
                 activity!!.supportFragmentManager,
-                TimeRange.LAST_SEVEN_DAYS.value,
+                TimeRange.LAST_SEVEN_DAYS.date,
                 vittlesEaten,
                 vittlesExpired
             )

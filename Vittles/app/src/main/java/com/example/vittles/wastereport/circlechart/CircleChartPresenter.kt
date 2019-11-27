@@ -10,6 +10,8 @@ import javax.inject.Inject
 /**
  * This is the presenter for the waste report
  *
+ * @author Sarah Lange
+ *
  * @property getWastePercent The GetWastePercent use case from the domain module.
  */
 class CircleChartPresenter @Inject internal constructor( private val getWastePercent: GetWastePercent) :
@@ -17,9 +19,9 @@ class CircleChartPresenter @Inject internal constructor( private val getWastePer
 
 
     /**
-     * Loads the percent value of eaten products
+     * Loads the percent date of eaten products
      *
-     * @param date From this date up to now the value is calculated
+     * @param date From this date up to now the date is calculated
      * @param vittlesEaten Amount of eaten vittles
      * @param vittlesExpired Amount of expired vittles
      */
