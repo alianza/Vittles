@@ -396,9 +396,10 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         if (requestCode == REQUEST_CODE_PERMISSIONS) {
             if (presenter.allPermissionsGranted()) {
                 textureView.post { presenter.startCamera() }
-            } else {
-                onNoPermissionGranted()
             }
+//            else {
+//                onNoPermissionGranted()
+//            }
         }
     }
 
