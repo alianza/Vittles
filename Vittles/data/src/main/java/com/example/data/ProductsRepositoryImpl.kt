@@ -36,7 +36,7 @@ class ProductsRepositoryImpl(private val productDao: ProductDao,
     }
 
     /** {@inheritDoc} */
-    override fun patch(product: Product): Completable = Completable.fromAction { productDao.insert(mapper.toEntity(product)) }
+    override fun patch(product: Product): Completable = Completable.fromAction { productDao.update(mapper.toEntity(product)) }
 
     /** {@inheritDoc} */
     override fun delete(product: Product): Completable = Completable.fromAction { productDao.delete(mapper.toEntity(product)) }

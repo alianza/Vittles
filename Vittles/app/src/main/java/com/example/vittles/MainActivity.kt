@@ -76,6 +76,9 @@ class MainActivity : AppCompatActivity() {
                 R.id.scannerFragment -> {
                     showBottomNavigationBar(barVisibility = false, fabVisibility = false)
                 }
+                R.id.productInfoFragment -> {
+                    showBottomNavigationBar(barVisibility = false, fabVisibility = false)
+                }
                 // TODO add settingsFragment case
             }
         }
