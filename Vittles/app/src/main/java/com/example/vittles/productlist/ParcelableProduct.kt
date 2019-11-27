@@ -17,7 +17,7 @@ import org.joda.time.DateTime
  */
 @Parcelize
 data class ParcelableProduct (
-    val uid: Int?,
+    var uid: Int?,
     val productName: String,
     val expirationDate: DateTime,
     val creationDate: DateTime,

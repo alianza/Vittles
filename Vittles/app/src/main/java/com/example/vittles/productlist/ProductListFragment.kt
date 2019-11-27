@@ -356,6 +356,8 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
                 getProductToDelete(ParcelableProductMapper.fromParcelable(productArgs.ProductToDelete!!)) != null){
                     val productToDelete = getProductToDelete(ParcelableProductMapper.fromParcelable(productArgs.ProductToDelete!!))!!
                     onSafeDeleteProduct(productToDelete, productArgs.ProductToDelete!!.deleteType!!)
+
+                productArgs.ProductToDelete!!.uid = -1
             }
         }, 300)    }
 
