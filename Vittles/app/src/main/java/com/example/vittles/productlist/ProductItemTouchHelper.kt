@@ -89,7 +89,6 @@ class ProductItemTouchHelper(private val products: List<Product>, var context: C
         safeDelete(product, deleteType)
     }
 
-
     /**
      * Called by the ItemTouchHelper when the user interaction with an element is over.
      *

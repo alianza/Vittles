@@ -1,6 +1,5 @@
 package com.example.data.retrofit.off
 
-import com.example.data.BuildConfig
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -28,6 +27,15 @@ class OffApi {
             // Create an OkHttpClient to be able to make a log of the network traffic
             val okHttpClient = OkHttpClient.Builder()
                 .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+                .addInterceptor { chain ->
+                    val request = chain.request().newBuilder()
+                        .addHeader(
+                            "UserAgent",
+                            "Vittles - Android - Alpha01"
+                        )
+                        .build()
+                    chain.proceed(request)
+                }
                 .build()
 
             // Create the Retrofit instance

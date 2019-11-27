@@ -19,6 +19,8 @@
     <string name="et_expiration_date">Expiration date</string>
     <string name="expiration_format">%1$s/%2$s/%3$s</string>
     <string name="product_added">Product added!</string>
+    <string name="product_updated">Product updated!</string>
+    <string name="product_updated_failed">Could not update product!</string>
     <string name="product_name_invalid">Product name should not be empty!</string>
     <string name="product_deleted">Product deleted!</string>
     <string name="product_deleted_failed">Could not delete product!</string>
@@ -71,6 +73,11 @@
 
     <!--    Scan Products-->
     <string name="edit_icon">Edit</string>
+
+    <!--    Product info-->
+    <string name="tv_creation_date">Creation date</string>
+    <string name="select_eaten">Set product as eaten</string>
+    <string name="select_deleted">Set product as deleted</string>
 
     <!--    Menu-->
     <string name="menu_home">Home</string>

@@ -81,6 +81,10 @@ class MainActivity : AppCompatActivity() {
                     showBottomNavigationBar(barVisibility = true, fabVisibility = true)
                     getMenuItemByTitle(R.string.menu_settings)?.let { setMenuItemIconColor(it) }
                 }
+                R.id.productInfoFragment -> {
+                    showBottomNavigationBar(barVisibility = false, fabVisibility = false)
+                }
+                // TODO add settingsFragment case
             }
         }
 
