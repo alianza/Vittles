@@ -22,6 +22,7 @@ interface ScannerContract {
         fun onTextScanned(text: String)
         fun onTextNotFound()
         fun onNoPermissionGranted()
+        fun onRequestPermissionsFromFragment()
         fun onEditNameButtonClick()
         fun onEditExpirationButtonClick()
         fun onTorchButtonClicked()
@@ -37,6 +38,7 @@ interface ScannerContract {
         fun onExpirationDateEdited(text: String)
         fun onProductNameCheckboxChecked(productName: String)
         fun onExpirationDateCheckboxChecked(text: String)
+        fun onShowEditNameDialog(showMessage: Boolean = false)
     }
 
     interface Presenter {

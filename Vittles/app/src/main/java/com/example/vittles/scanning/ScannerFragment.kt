@@ -14,6 +14,7 @@ import androidx.camera.core.CameraX
 import androidx.camera.core.DisplayOrientedMeteringPointFactory
 import androidx.camera.core.FocusMeteringAction
 import androidx.core.content.ContextCompat
+import androidx.core.text.isDigitsOnly
 import androidx.core.widget.ImageViewCompat
 import androidx.navigation.fragment.NavHostFragment
 import com.example.domain.consts.DAYS_REMAINING_EXPIRED
@@ -208,9 +209,12 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
      */
     override fun onBarcodeScanned(productName: String) {
         if (!PreviewAnalyzer.hasBarCode) {
+            if (productName.isDigitsOnly()) {
+                onShowEditNameDialog(true)
+            }
             onProductNameCheckboxChecked(productName)
-            PreviewAnalyzer.hasBarCode = true
             ibRefreshProductName.visibility = View.VISIBLE
+            PreviewAnalyzer.hasBarCode = true
             onScanSuccessful()
         }
     }
@@ -402,7 +406,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
      * Asks for the needed permissions, called if the user did not grant any permissions.
      *
      */
-    fun onRequestPermissionsFromFragment() {
+    override fun onRequestPermissionsFromFragment() {
         requestPermissions(REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
     }
 
@@ -424,10 +428,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
      *
      */
     override fun onEditNameButtonClick() {
-        val dialog = ProductNameEditView(onFinished = { productName: String ->
-            onProductNameEdited(productName)
-        })
-        context?.let { dialog.openDialog(it, tvProductName.text.toString()) }
+        onShowEditNameDialog()
     }
 
     /**
@@ -470,6 +471,18 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
             dpd.datePicker.minDate = currentDate.millis
             dpd.show()
         }
+    }
+
+    /**
+     * Opens the edit product name dialog.
+     *
+     * @param showMessage Boolean value that represents if the message should be shown.
+     */
+    override fun onShowEditNameDialog(showMessage: Boolean) {
+        val dialog = ProductNameEditView(onFinished = { productName: String ->
+            onProductNameEdited(productName)
+        }, showMessage = showMessage)
+        context?.let { dialog.openDialog(it, tvProductName.text.toString()) }
     }
 
     /**

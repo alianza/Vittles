@@ -1,6 +1,5 @@
-package com.example.data.retrofit
+package com.example.data.retrofit.off
 
-import com.example.data.BuildConfig
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -12,25 +11,28 @@ import retrofit2.converter.gson.GsonConverterFactory
  *
  * @author Jeroen Flietstra
  */
-class ProductsApi {
+class OffApi {
     companion object {
         /**
          * Base url of the API.
          */
-        private const val baseUrl = "https://dev.tescolabs.com/"
+        private const val baseUrl = "https://world.openfoodfacts.org/api/v0/"
 
         /**
-         * Creates an instance of the [ProductsApiService].
+         * Creates an instance of the [OffApiService].
          *
-         * @return [ProductsApiService] The service class of the retrofit client.
+         * @return [OffApiService] The service class of the retrofit client.
          */
-        fun createApi(): ProductsApiService {
+        fun createApi(): OffApiService {
             // Create an OkHttpClient to be able to make a log of the network traffic
             val okHttpClient = OkHttpClient.Builder()
                 .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
                 .addInterceptor { chain ->
                     val request = chain.request().newBuilder()
-                        .addHeader("Ocp-Apim-Subscription-Key", BuildConfig.TescoAPIKey)
+                        .addHeader(
+                            "UserAgent",
+                            "Vittles - Android - Alpha01"
+                        )
                         .build()
                     chain.proceed(request)
                 }
@@ -44,8 +46,8 @@ class ProductsApi {
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build()
 
-            // Return the Retrofit ProductsApiService
-            return productsApi.create(ProductsApiService::class.java)
+            // Return the Retrofit OffApiService
+            return productsApi.create(OffApiService::class.java)
         }
     }
 }
