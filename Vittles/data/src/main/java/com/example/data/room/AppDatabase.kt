@@ -5,15 +5,29 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.example.data.room.barcodedictionary.BarcodeDao
+import com.example.data.room.barcodedictionary.BarcodeDictionaryEntity
+import com.example.data.room.product.ProductDao
+import com.example.data.room.product.ProductEntity
 
 /**
  * Creates the ProductDao.
  *
- * @param context The application context
+ * @param context The application context.
  * @return The ProductDao.
  */
 fun createProductDaoImpl(context: Context): ProductDao {
     return AppDatabase.getDatabase(context).productDao()
+}
+
+/**
+ * Creates the BarcodeDao.
+ *
+ * @param context The application context.
+ * @return The BarcodeDao.
+ */
+fun createBarcodeDaoImpl(context: Context): BarcodeDao {
+    return AppDatabase.getDatabase(context).barcodeDao()
 }
 
 /**
@@ -23,7 +37,7 @@ fun createProductDaoImpl(context: Context): ProductDao {
  * @author Jeroen Flietstra
  * @author Jan-Willem van Bremen
  */
-@Database(entities = [ProductEntity::class], version = 1, exportSchema = false)
+@Database(entities = [ProductEntity::class, BarcodeDictionaryEntity::class], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     /**
@@ -32,6 +46,8 @@ abstract class AppDatabase : RoomDatabase() {
      * @return The ProductDao.
      */
     abstract fun productDao(): ProductDao
+
+    abstract fun barcodeDao(): BarcodeDao
 
     companion object {
 
