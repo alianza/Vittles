@@ -17,7 +17,7 @@ interface ProductInfoContract {
         fun updateViews()
         fun onEditNameClicked()
         fun onEditExpirationDateClicked()
-        fun onEatenbuttonClicked()
+        fun onEatenButtonClicked()
         fun onDeleteButtonClicked()
         fun onNameChanged(productName: String)
         fun onExpirationDateChanged(expirationDate: DateTime)
@@ -27,6 +27,5 @@ interface ProductInfoContract {
 
     interface Presenter{
         fun updateProduct(product: Product)
-        fun deleteProduct(product: Product, deleteType: DeleteType)
     }
 }

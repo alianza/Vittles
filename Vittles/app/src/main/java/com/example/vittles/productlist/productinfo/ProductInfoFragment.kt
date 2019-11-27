@@ -84,7 +84,7 @@ class ProductInfoFragment : DaggerFragment(),
      *
      */
     override fun setListeners() {
-        ibEaten.setOnClickListener{ onEatenbuttonClicked() }
+        ibEaten.setOnClickListener{ onEatenButtonClicked() }
         ibDeleted.setOnClickListener{ onDeleteButtonClicked() }
         ibEditName.setOnClickListener{ onEditNameClicked() }
         ibEditExpDate.setOnClickListener{ onEditExpirationDateClicked() }
@@ -155,7 +155,7 @@ class ProductInfoFragment : DaggerFragment(),
      * Handles the eaten button being clicked.
      *
      */
-    override fun onEatenbuttonClicked() {
+    override fun onEatenButtonClicked() {
         NavHostFragment.
             findNavController(fragmentHost).
             navigate(ProductListFragmentDirections.actionGlobalProductListFragment(ParcelableProductMapper.toParcelable(product, DeleteType.EATEN)))

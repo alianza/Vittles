@@ -12,7 +12,6 @@ import javax.inject.Inject
 /**
  * The presenter for the productInfo Fragment.
  *
- * @property deleteProduct The DeleteProduct use case from the domain module.
  * @property updateProduct The UpdateProduct use case from the domain module.
  */
 class ProductInfoPresenter @Inject internal constructor(
@@ -31,20 +30,6 @@ class ProductInfoPresenter @Inject internal constructor(
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ view?.onProductUpdateSuccess() }, { view?.onProductUpdateFail() })
-        )
-    }
-
-    /**
-     * Deletes a product.
-     *
-     * @param product The product to delete.
-     * @param deleteType The DeleteType.
-     */
-    override fun deleteProduct(product: Product, deleteType: DeleteType) {
-        disposables.add(deleteProduct.invoke(product)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ }, { })
         )
     }
 }
