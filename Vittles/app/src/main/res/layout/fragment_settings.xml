@@ -27,17 +27,16 @@
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Vibration"
                 android:textAlignment="textStart"
                 android:textColor="@color/black"
-                android:textColorLink="@color/colorPrimary"
                 android:textSize="20dp" />
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Click to switch vibration on or off"
                 android:textAlignment="textStart" />
@@ -49,7 +48,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:theme="@style/SCBSwitch"
-            android:title="Notification"
+            android:defaultValue="true"
             tools:layout_editor_absoluteX="205dp"
             tools:layout_editor_absoluteY="508dp" />
 
@@ -59,7 +58,7 @@
         android:id="@+id/linearLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="0.075"
@@ -76,7 +75,7 @@
             <TextView
                 android:id="@+id/textView4"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Schedule"
                 android:textAlignment="textStart"
@@ -86,15 +85,15 @@
             <TextView
                 android:id="@+id/textView3"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Click for a list to choose from"
+                android:text="Notification schedule"
                 android:textAlignment="textStart" />
         </LinearLayout>
 
         <Spinner
             android:id="@+id/notification_timer"
-            android:layout_width="265dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:layout_weight="1"
@@ -107,7 +106,7 @@
         android:id="@+id/linearLayout3"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="0.075"
@@ -122,7 +121,7 @@
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Notification"
                 android:textAlignment="textStart"
@@ -131,7 +130,7 @@
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Click to switch notification on or off"
                 android:textAlignment="textStart" />
@@ -142,8 +141,8 @@
             android:layout_width="100dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:defaultValue="true"
             android:theme="@style/SCBSwitch"
-            android:title="Notification"
             tools:layout_editor_absoluteY="175dp" />
     </LinearLayout>
 
