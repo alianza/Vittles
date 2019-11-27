@@ -10,7 +10,6 @@ import com.example.vittles.R
 import com.example.vittles.services.notification.NotificationScheduleService
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_settings.*
-import javax.inject.Inject
 
 
 /**
@@ -20,22 +19,23 @@ import javax.inject.Inject
  */
 class SettingsFragment : DaggerFragment(), SettingsContract.View {
 
-    @Inject
-    lateinit var presenter: SettingsPresenter
+
+    /** @suppress */
     lateinit var lateView: View
+
+    /** @suppress */
     lateinit var sharedPreference: SharedPreference
 
+    /** @suppress */
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
-        with(presenter) {
-            start(this@SettingsFragment)
-        }
         return inflater.inflate(R.layout.fragment_settings, container, false)
     }
 
+    /** @suppress */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         lateView = view
