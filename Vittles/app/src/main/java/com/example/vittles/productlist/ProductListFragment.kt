@@ -54,7 +54,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
     /** The vibration manager used for vibration when a product is eaten or removed. */
     private lateinit var vibrator: Vibrator
 
-    /** @suppress */
+    /** Arguments passed to the fragment */
     private val productArgs: ProductListFragmentArgs by navArgs()
     /** @suppress */
     private lateinit var itemTouchHelper: ItemTouchHelper
