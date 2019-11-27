@@ -9,6 +9,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import android.widget.Toast
+import com.example.domain.enums.BarcodeDictionaryStatus
 import com.example.vittles.R
 import kotlinx.android.synthetic.main.dialog_productname_edit.view.*
 
@@ -18,10 +19,11 @@ import kotlinx.android.synthetic.main.dialog_productname_edit.view.*
  * @author Jeroen Flietstra
  *
  * @property onFinished Callback function on finished name change.
+ * @property notFound Indicates if a product could not be found on remote databases.
  */
 class ProductNameEditView(
     private val onFinished: (productName: String) -> Unit,
-    private val showMessage: Boolean = false
+    private val notFound: Boolean = false
 ) {
 
     /** @suppress */
@@ -49,7 +51,8 @@ class ProductNameEditView(
             view.etProductName.setText(productName)
         }
 
-        view.tvMessage.visibility = if (showMessage) TextView.VISIBLE else TextView.GONE
+        view.tvMessage.visibility =
+            if (productName == BarcodeDictionaryStatus.NOT_READY()) TextView.VISIBLE else TextView.GONE
 
         view.btnConfirm.setOnClickListener { onConfirmButtonClicked() }
         view.btnCancel.setOnClickListener { onCancelButtonClicked() }
