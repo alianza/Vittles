@@ -9,7 +9,7 @@
 
 
     <TextView
-        android:id="@+id/textPercentage"
+        android:id="@+id/tvPercentage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-thin"
@@ -23,25 +23,24 @@
         custom:layout_constraintVertical_bias="0.45" />
 
     <TextView
+        android:id="@+id/tvLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/food_eaten"
         android:textColor="@color/black"
         android:textSize="18sp"
+        custom:layout_constraintEnd_toEndOf="parent"
         custom:layout_constraintStart_toStartOf="parent"
-        custom:layout_constraintTop_toBottomOf="@+id/textPercentage"
-        custom:layout_constraintEnd_toEndOf="parent"/>
+        custom:layout_constraintTop_toBottomOf="@+id/tvPercentage" />
 
     <com.hookedonplay.decoviewlib.DecoView
-        android:padding="50dp"
         android:id="@+id/dynamicArcView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:padding="50dp"
         custom:dv_lineWidth="15dp"
         custom:layout_constraintHeight_percent="0.6"
         custom:layout_constraintStart_toStartOf="parent"
-        custom:layout_constraintTop_toTopOf="parent">
-
-    </com.hookedonplay.decoviewlib.DecoView>
+        custom:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
