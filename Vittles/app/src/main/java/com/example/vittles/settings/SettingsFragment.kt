@@ -15,6 +15,7 @@ import javax.inject.Inject
 
 /**
  * Fragment class for the Settings. This is the fragment that shows the settings.
+ *
  *@author Fethi Tewelde
  */
 class SettingsFragment : DaggerFragment(), SettingsContract.View {

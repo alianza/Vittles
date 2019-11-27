@@ -89,10 +89,9 @@ class NotificationScheduleService : DaggerBroadcastReceiver() {
         private lateinit var broadcast: PendingIntent
 
         /**
-         * checks if the notification is turned on or off
-         * changes when to send notification based on 'notificationTimer'
+         * Checks if the notification is turned on or off.
+         * Changes when to send notification based on 'notificationTimer'.
          * Schedules next audit to the next day.
-         *
          *
          * @param context The application context needed for the alarm manager.
          */
@@ -128,8 +127,9 @@ class NotificationScheduleService : DaggerBroadcastReceiver() {
         }
 
         /**
-         * checks if the notification is turned on or off
-         * then cancels broadcast of notification
+         * Checks if the notification is turned on or off
+         * Then based on that cancels broadcast of notification
+         *
          * @param context The application context needed for the alarm manager.
          */
         fun exitNotificationSchedule(context: Context) {
