@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
 import android.os.Vibrator
 import android.view.LayoutInflater
 import android.view.View
@@ -54,7 +55,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
     private lateinit var vibrator: Vibrator
 
     /** @suppress */
-    private var productArgs: ProductListFragmentArgs by navArgs()
+    private val productArgs: ProductListFragmentArgs by navArgs()
     /** @suppress */
     private lateinit var itemTouchHelper: ItemTouchHelper
     /** @suppress */
@@ -340,10 +341,32 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
         setEmptyView()
         onNoResults()
 
-        if (productArgs.ProductToDelete != null && productArgs.ProductToDelete!!.deleteType != null){
-            onSafeDeleteProduct(ParcelableProductMapper.fromParcelable(productArgs.ProductToDelete!!), productArgs.ProductToDelete!!.deleteType!!)
-            productArgs = ProductListFragmentArgs(null)
-        }
+        checkForDeletedProduct()
+    }
+
+    /**
+     * Checks if a product was deleted in another fragment.
+     * If it is deleted it will safeDelete the product.
+     *
+     */
+    override fun checkForDeletedProduct() {
+        Handler().postDelayed( {
+            if (productArgs.ProductToDelete != null &&
+                productArgs.ProductToDelete!!.deleteType != null &&
+                getProductToDelete(ParcelableProductMapper.fromParcelable(productArgs.ProductToDelete!!)) != null){
+                    val productToDelete = getProductToDelete(ParcelableProductMapper.fromParcelable(productArgs.ProductToDelete!!))!!
+                    onSafeDeleteProduct(productToDelete, productArgs.ProductToDelete!!.deleteType!!)
+            }
+        }, 300)    }
+
+    /**
+     * Gets the product that should be deleted.
+     *
+     * @param product The product that you want to delete.
+     * @return The product inside of the list that should be deleted.
+     */
+    override fun getProductToDelete(product: Product): Product? {
+            return products.find{ it.uid == product.uid }
     }
 
     /**

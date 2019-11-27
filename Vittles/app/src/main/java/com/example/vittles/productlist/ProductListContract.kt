@@ -26,6 +26,8 @@ interface ProductListContract {
         fun initUndoSnackbar()
         fun onShowUndoSnackbar()
         fun onRemoveButtonClicked(product: Product)
+        fun checkForDeletedProduct()
+        fun getProductToDelete(product: Product): Product?
         fun filter(query: String)
         fun onItemViewClicked(product: Product)
     }
