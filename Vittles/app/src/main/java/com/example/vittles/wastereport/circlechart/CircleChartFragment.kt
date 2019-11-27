@@ -4,16 +4,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import android.view.animation.AccelerateInterpolator
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat.animate
+import androidx.core.view.ViewPropertyAnimatorListener
+import androidx.core.view.setPadding
 import com.example.vittles.R
-import com.hookedonplay.decoviewlib.DecoView
+import com.hookedonplay.decoviewlib.charts.DecoDrawEffect
 import com.hookedonplay.decoviewlib.charts.SeriesItem
 import com.hookedonplay.decoviewlib.events.DecoEvent
 import dagger.android.support.DaggerFragment
+import kotlinx.android.synthetic.main.fragment_circle_chart.*
 import org.joda.time.DateTime
 import javax.inject.Inject
+
 
 /**
  * Interface for updating date
@@ -44,8 +49,9 @@ class CircleChartFragment @Inject internal constructor(var date: DateTime, var v
     @Inject
     lateinit var presenter: CircleChartPresenter
 
-    lateinit var dynamicArgView: DecoView
-    lateinit var textPercentage: TextView
+    companion object {
+        var hasDelighted = false
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_circle_chart, container, false)
@@ -53,8 +59,6 @@ class CircleChartFragment @Inject internal constructor(var date: DateTime, var v
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        dynamicArgView = view.findViewById(R.id.dynamicArcView)
-        textPercentage = view.findViewById(R.id.textPercentage)
         presenter.start(this)
         presenter.getEatenPercent(date, vittlesEaten, vittlesExpired)
     }
@@ -93,9 +97,7 @@ class CircleChartFragment @Inject internal constructor(var date: DateTime, var v
             .setRange(0f, 100f, 0f)
             .build()
 
-        val backIndex = dynamicArgView.addSeries(seriesItem)
-
-
+        val backIndex = dynamicArcView.addSeries(seriesItem)
 
         seriesItem2.addArcSeriesItemListener(object : SeriesItem.SeriesItemListener {
             override fun onSeriesItemAnimationProgress(
@@ -104,15 +106,13 @@ class CircleChartFragment @Inject internal constructor(var date: DateTime, var v
             ) {
                 val percentFilled =
                     (currentPosition - seriesItem2.minValue) / (seriesItem2.maxValue - seriesItem2.minValue)
-                textPercentage.text = String.format("%.0f%%", percentFilled * 100f)
+                    tvPercentage.text = String.format("%.0f%%", percentFilled * 100f)
             }
 
-            override fun onSeriesItemDisplayProgress(percentComplete: Float) {
-
-            }
+            override fun onSeriesItemDisplayProgress(percentComplete: Float) { }
         })
 
-        dynamicArgView.addEvent(
+        dynamicArcView.addEvent(
             DecoEvent.Builder(100f)
                 .setIndex(backIndex)
                 .setDuration(1)
@@ -120,16 +120,40 @@ class CircleChartFragment @Inject internal constructor(var date: DateTime, var v
         )
 
         if(percent.toFloat() == 0f) {
-            textPercentage.text = "0%"
+            tvPercentage.text = "0%"
         } else {
-            val series1Index = dynamicArgView.addSeries(seriesItem2)
-            dynamicArgView.addEvent(
+            val series1Index = dynamicArcView.addSeries(seriesItem2)
+            dynamicArcView.addEvent(
                 DecoEvent.Builder(percent.toFloat())
                     .setIndex(series1Index)
                     .build()
             )
-        }
 
+            // When percentage is 100% and delighter is not yet shown Show delighter
+            if (percent.toFloat() == 100f && !hasDelighted) {
+
+                dynamicArcView.addEvent(DecoEvent.Builder(DecoDrawEffect.EffectType.EFFECT_SPIRAL_EXPLODE)
+                    .setIndex(series1Index)
+                    .setDelay(2000)
+                    .setDuration(3000)
+                    .setDisplayText(getRandomPraise())
+                    .setListener(object : DecoEvent.ExecuteEventListener {
+                        override fun onEventStart(p0: DecoEvent?) {
+                            fadeOutAnim(tvLabel)
+                            fadeOutAnim(tvPercentage)
+                        }
+                        override fun onEventEnd(p0: DecoEvent?) {
+                            fadeInAnim(tvLabel)
+                            fadeInAnim(tvPercentage)
+
+                            hasDelighted = true
+                            drawCircleChart(percent)
+                        }
+                    })
+                    .build()
+                )
+            }
+        }
     }
 
     /**
@@ -137,7 +161,44 @@ class CircleChartFragment @Inject internal constructor(var date: DateTime, var v
      *
      */
     override fun setNoResultsView() {
-        Toast.makeText(context, "Error Cicrle Chart", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "Error Circle Chart", Toast.LENGTH_SHORT).show()
     }
 
+    /**
+     * Get's a random praise message from the strings resources file
+     *
+     * @return Returns praise message as string
+     */
+    private fun getRandomPraise(): String {
+        val praises = resources.getStringArray(R.array.praises).toList()
+        return praises.shuffled().take(1)[0]
+    }
+
+    /**
+     * Animation for fade in
+     *
+     * @param elem Element to animate
+     */
+    private fun fadeOutAnim(elem: View) {
+        animate(elem).apply {
+            interpolator = AccelerateInterpolator()
+            alpha(0f)
+            duration = 1000
+            start()
+        }
+    }
+
+    /**
+     * Animation for fade out
+     *
+     * @param elem Element to animate
+     */
+    private fun fadeInAnim(elem: View) {
+        animate(elem).apply {
+            interpolator = AccelerateInterpolator()
+            alpha(1f)
+            duration = 1000
+            start()
+        }
+    }
 }
