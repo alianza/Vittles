@@ -35,7 +35,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/lastSevenDays"
+        android:id="@+id/daysRemainingLH"
         style="?android:attr/borderlessButtonStyle"
         android:layout_width="0dp"
         android:layout_height="53dp"
@@ -60,25 +60,25 @@
         android:layout_height="25dp"
         android:layout_marginEnd="16dp"
         android:tint="@color/mediumGrey"
-        app:layout_constraintBottom_toTopOf="@+id/last30Days"
+        app:layout_constraintBottom_toTopOf="@+id/daysRemainingHL"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view"
         app:srcCompat="@drawable/ic_circle" />
 
     <ImageView
-        android:id="@+id/lastSevenDaysDot"
+        android:id="@+id/daysRemainingAsc"
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_marginEnd="16dp"
         android:alpha="0"
         android:tint="@android:color/darker_gray"
-        app:layout_constraintBottom_toTopOf="@+id/last30Days"
+        app:layout_constraintBottom_toTopOf="@+id/daysRemainingHL"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view"
         app:srcCompat="@drawable/ic_circle_filled" />
 
     <Button
-        android:id="@+id/last30Days"
+        android:id="@+id/daysRemainingHL"
         style="?android:attr/borderlessButtonStyle"
         android:layout_width="0dp"
         android:layout_height="53dp"
@@ -95,7 +95,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lastSevenDays"
+        app:layout_constraintTop_toBottomOf="@+id/daysRemainingLH"
         app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
@@ -104,25 +104,25 @@
         android:layout_height="25dp"
         android:layout_marginEnd="16dp"
         android:tint="@color/mediumGrey"
-        app:layout_constraintBottom_toTopOf="@+id/lastYear"
+        app:layout_constraintBottom_toTopOf="@+id/alfabeticAZ"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/last30Days"
+        app:layout_constraintTop_toTopOf="@+id/daysRemainingHL"
         app:srcCompat="@drawable/ic_circle" />
 
     <ImageView
-        android:id="@+id/last30DaysDot"
+        android:id="@+id/daysRemainingDesc"
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_marginEnd="16dp"
         android:alpha="0"
         android:tint="@android:color/darker_gray"
-        app:layout_constraintBottom_toTopOf="@+id/lastYear"
+        app:layout_constraintBottom_toTopOf="@+id/alfabeticAZ"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/last30Days"
+        app:layout_constraintTop_toTopOf="@+id/daysRemainingHL"
         app:srcCompat="@drawable/ic_circle_filled" />
 
     <Button
-        android:id="@+id/lastYear"
+        android:id="@+id/alfabeticAZ"
         style="?android:attr/borderlessButtonStyle"
         android:layout_width="0dp"
         android:layout_height="53dp"
@@ -139,7 +139,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/last30Days"
+        app:layout_constraintTop_toBottomOf="@+id/daysRemainingHL"
         app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
@@ -150,12 +150,12 @@
         android:tint="@color/mediumGrey"
         app:layout_constraintBottom_toTopOf="@+id/alfabeticZA"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/lastYear"
+        app:layout_constraintTop_toTopOf="@+id/alfabeticAZ"
         app:layout_constraintVertical_bias="0.538"
         app:srcCompat="@drawable/ic_circle" />
 
     <ImageView
-        android:id="@+id/lastYearDot"
+        android:id="@+id/alfabeticAz"
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_marginEnd="16dp"
@@ -163,7 +163,7 @@
         android:tint="@android:color/darker_gray"
         app:layout_constraintBottom_toTopOf="@+id/alfabeticZA"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/lastYear"
+        app:layout_constraintTop_toTopOf="@+id/alfabeticAZ"
         app:srcCompat="@drawable/ic_circle_filled" />
 
     <Button
@@ -184,7 +184,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lastYear"
+        app:layout_constraintTop_toBottomOf="@+id/alfabeticAZ"
         app:layout_constraintVertical_bias="0.0" />
 
     <ImageView

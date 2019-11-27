@@ -91,9 +91,9 @@ class SortMenu (private var sortList: MutableList<Product>, private var adapter:
      *
      */
     private fun setListeners() {
-        view.lastSevenDays.setOnClickListener { onSortClick(SortingType.DAYS_REMAINING_ASC, sortList)  }
-        view.last30Days.setOnClickListener { onSortClick(SortingType.DAYS_REMAINING_DESC, sortList) }
-        view.lastYear.setOnClickListener { onSortClick(SortingType.ALPHABETIC_AZ, sortList) }
+        view.daysRemainingLH.setOnClickListener { onSortClick(SortingType.DAYS_REMAINING_ASC, sortList)  }
+        view.daysRemainingHL.setOnClickListener { onSortClick(SortingType.DAYS_REMAINING_DESC, sortList) }
+        view.alfabeticAZ.setOnClickListener { onSortClick(SortingType.ALPHABETIC_AZ, sortList) }
         view.alfabeticZA.setOnClickListener { onSortClick(SortingType.ALPHABETIC_ZA, sortList) }
         view.newest.setOnClickListener { onSortClick(SortingType.NEWEST, sortList) }
         view.oldest.setOnClickListener { onSortClick(SortingType.OLDEST, sortList) }
@@ -134,9 +134,9 @@ class SortMenu (private var sortList: MutableList<Product>, private var adapter:
      */
     private fun setCircleColor() {
         when (currentSortingType) {
-            SortingType.DAYS_REMAINING_ASC -> view.lastSevenDaysDot.alpha = 1f
-            SortingType.DAYS_REMAINING_DESC -> view.last30DaysDot.alpha = 1f
-            SortingType.ALPHABETIC_AZ -> view.lastYearDot.alpha = 1f
+            SortingType.DAYS_REMAINING_ASC -> view.daysRemainingAsc.alpha = 1f
+            SortingType.DAYS_REMAINING_DESC -> view.daysRemainingDesc.alpha = 1f
+            SortingType.ALPHABETIC_AZ -> view.alfabeticAz.alpha = 1f
             SortingType.ALPHABETIC_ZA -> view.alfabeticZa.alpha = 1f
             SortingType.NEWEST -> view.newestSelected.alpha = 1f
             else -> view.oldestSelected.alpha = 1f
@@ -150,9 +150,9 @@ class SortMenu (private var sortList: MutableList<Product>, private var adapter:
      */
     private fun setSortBtnText(sortingType: SortingType) {
         when(sortingType) {
-            SortingType.DAYS_REMAINING_ASC -> btnSort.text = view.lastSevenDays.text
-            SortingType.DAYS_REMAINING_DESC -> btnSort.text = view.last30Days.text
-            SortingType.ALPHABETIC_AZ -> btnSort.text = view.lastYear.text
+            SortingType.DAYS_REMAINING_ASC -> btnSort.text = view.daysRemainingLH.text
+            SortingType.DAYS_REMAINING_DESC -> btnSort.text = view.daysRemainingHL.text
+            SortingType.ALPHABETIC_AZ -> btnSort.text = view.alfabeticAZ.text
             SortingType.ALPHABETIC_ZA -> btnSort.text = view.alfabeticZA.text
             SortingType.NEWEST -> btnSort.text = view.newest.text
             else -> btnSort.text = view.oldest.text
