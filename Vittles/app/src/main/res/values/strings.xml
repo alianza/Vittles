@@ -93,6 +93,39 @@
     <string name="remove_product_header">Remove Product</string>
     <string name="remove_product_subText">Do you want to remove this product? \n It won\'t be used for the food waste report.</string>
 
+    <!-- Praises for delighter -->
+    <string-array name="praises">
+        <item>😁</item>
+        <item>😃</item>
+        <item>😄</item>
+        <item>😊</item>
+        <item>😍</item>
+        <item>😘</item>
+        <item>🙌</item>
+        <item>✌</item>
+        <item>🌍</item>
+        <item>🍀</item>
+        <item>👌</item>
+        <item>👏</item>
+        <item>👍</item>
+        <item>💖</item>
+        <item>💪</item>
+        <item>Good job!</item>
+        <item>Great job!</item>
+        <item>Nice job!</item>
+        <item>Great work!</item>
+        <item>Good work!</item>
+        <item>Nice work!</item>
+        <item>Well done!</item>
+        <item>Nicely done!</item>
+        <item>Nailed it!</item>
+        <item>Terrific!</item>
+        <item>Splendid!</item>
+        <item>Remarkable!</item>
+        <item>Way to go!</item>
+        <item>Superb!</item>
+    </string-array>
+
     <!--    Content Descriptions-->
     <string name="cd_refresh_button">Refresh</string>
 </resources>
