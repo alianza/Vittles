@@ -30,7 +30,7 @@ class ProductsRepositoryImpl(
 
     /** {@inheritDoc} */
     override fun patch(product: Product): Completable =
-        Completable.fromAction { productDao.insert(mapper.toEntity(product)) }
+        Completable.fromAction { productDao.update(mapper.toEntity(product)) }
 
     /** {@inheritDoc} */
     override fun delete(product: Product): Completable =

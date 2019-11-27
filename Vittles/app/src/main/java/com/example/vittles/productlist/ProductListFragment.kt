@@ -1,21 +1,28 @@
 package com.example.vittles.productlist
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
 import android.os.Vibrator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
 import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.product.Product
 import com.example.vittles.R
 import com.example.vittles.enums.DeleteType
+import com.example.vittles.productlist.productinfo.ProductInfoFragment
+import com.example.vittles.productlist.productinfo.ProductInfoFragmentArgs
 import com.example.vittles.services.popups.PopupBase
 import com.example.vittles.services.popups.PopupButton
 import com.example.vittles.services.popups.PopupManager
@@ -23,6 +30,7 @@ import com.example.vittles.services.sorting.SortMenu
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
+import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.fragment_productlist.*
 import javax.inject.Inject
 
@@ -46,6 +54,8 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
     /** The vibration manager used for vibration when a product is eaten or removed. */
     private lateinit var vibrator: Vibrator
 
+    /** Arguments passed to the fragment */
+    private val productArgs: ProductListFragmentArgs by navArgs()
     /** @suppress */
     private lateinit var itemTouchHelper: ItemTouchHelper
     /** @suppress */
@@ -61,7 +71,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
     /** @suppress */
     private var filteredProducts = products
     /** @suppress */
-    private val productAdapter = ProductAdapter(products, this::onRemoveButtonClicked)
+    private val productAdapter = ProductAdapter(products, this::onItemViewClicked, this::onRemoveButtonClicked)
     /** @suppress */
     private val sortMenu = SortMenu(products, productAdapter)
 
@@ -263,6 +273,16 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
     }
 
     /**
+     * Handles the item view being clicked, opens the product info page
+     *
+     */
+    override fun onItemViewClicked(product: Product) {
+        NavHostFragment.
+            findNavController(fragmentHost).
+            navigate(ProductListFragmentDirections.actionProductListFragmentToProductInfoFragment(ParcelableProductMapper.toParcelable(product)))
+    }
+
+    /**
      * Attaches the ItemTouchHelper to the RecyclerView.
      *
      */
@@ -320,6 +340,35 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
         sortMenu.sortFilteredList(filteredProducts)
         setEmptyView()
         onNoResults()
+
+        checkForDeletedProduct()
+    }
+
+    /**
+     * Checks if a product was deleted in another fragment.
+     * If it is deleted it will safeDelete the product.
+     *
+     */
+    override fun checkForDeletedProduct() {
+        Handler().postDelayed( {
+            if (productArgs.ProductToDelete != null &&
+                productArgs.ProductToDelete!!.deleteType != null &&
+                getProductToDelete(ParcelableProductMapper.fromParcelable(productArgs.ProductToDelete!!)) != null){
+                    val productToDelete = getProductToDelete(ParcelableProductMapper.fromParcelable(productArgs.ProductToDelete!!))!!
+                    onSafeDeleteProduct(productToDelete, productArgs.ProductToDelete!!.deleteType!!)
+
+                productArgs.ProductToDelete!!.uid = -1
+            }
+        }, 300)    }
+
+    /**
+     * Gets the product that should be deleted.
+     *
+     * @param product The product that you want to delete.
+     * @return The product inside of the list that should be deleted.
+     */
+    override fun getProductToDelete(product: Product): Product? {
+            return products.find{ it.uid == product.uid }
     }
 
     /**

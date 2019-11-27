@@ -8,6 +8,7 @@ import com.crashlytics.android.Crashlytics
 import com.example.domain.exceptions.NotificationDataException
 import com.example.domain.notification.GetNotificationProductsExpired
 import com.example.domain.notification.Notification
+import com.example.vittles.settings.SharedPreference
 import dagger.android.DaggerBroadcastReceiver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -19,6 +20,7 @@ import javax.inject.Inject
  * Background scheduler for the notification service.
  *
  * @author Jeroen Flietstra
+ * @author Fethi Tewelde
  */
 class NotificationScheduleService : DaggerBroadcastReceiver() {
     /**
@@ -83,21 +85,60 @@ class NotificationScheduleService : DaggerBroadcastReceiver() {
 
     companion object {
 
+        private lateinit var alarmManager: AlarmManager
+        private lateinit var broadcast: PendingIntent
+
         /**
+         * Checks if the notification is turned on or off.
+         * Changes when to send notification based on 'notificationTimer'.
          * Schedules next audit to the next day.
          *
          * @param context The application context needed for the alarm manager.
          */
         fun scheduleNotificationAudit(context: Context) {
-            val alarmManager: AlarmManager =
-                context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            val intent = Intent(context, NotificationScheduleService::class.java)
-            val nextAudit = // Set nextAudit to tomorrow 12:00pm
-                DateTime().withDate(DateTime().toLocalDate().plusDays(1)).withHourOfDay(12)
-                    .withMinuteOfHour(0).withSecondOfMinute(0)
-            val broadcast = // Set alarm
-                PendingIntent.getBroadcast(context, 100, intent, PendingIntent.FLAG_UPDATE_CURRENT)
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP, nextAudit.millis, broadcast)
+            val sharedPreference = SharedPreference(context)
+            if (sharedPreference.getValueBoolean("Notification", true)) {
+                val notificationTimer = sharedPreference.getValueInt("NOTIFICATION_TIME")
+
+                var nextAudit = DateTime()
+
+                when (notificationTimer) {
+                    0 -> nextAudit = // Set nextAudit to Daily at 12:00PM
+                        DateTime().plusDays(1).withHourOfDay(12).withMinuteOfHour(0).withSecondOfMinute(0)
+                    1 -> nextAudit = // Set nextAudit to Weekly at 12:00PM
+                        DateTime().plusWeeks(1).withHourOfDay(12).withMinuteOfHour(0).withSecondOfMinute(0)
+                    2 -> nextAudit = // Set nextAudit to Monthly at 12:00PM
+                        DateTime().plusMonths(1).withHourOfDay(12).withMinuteOfHour(0).withSecondOfMinute(0)
+                }
+                alarmManager =
+                    context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+                val intent = Intent(context, NotificationScheduleService::class.java)
+
+                broadcast = // Set alarm
+                    PendingIntent.getBroadcast(
+                        context,
+                        100,
+                        intent,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                    )
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, nextAudit.millis, broadcast)
+            }
+
+        }
+
+        /**
+         * Checks if the notification is turned on or off
+         * Then based on that cancels broadcast of notification
+         *
+         * @param context The application context needed for the alarm manager.
+         */
+        fun exitNotificationSchedule(context: Context) {
+            val sharedPreference = SharedPreference(context)
+            if (!sharedPreference.getValueBoolean("Notification", false)) {
+                alarmManager =
+                    context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+                alarmManager.cancel(broadcast)
+            }
         }
     }
 
