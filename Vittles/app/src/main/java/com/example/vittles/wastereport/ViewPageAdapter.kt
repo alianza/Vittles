@@ -42,6 +42,8 @@ class ViewPagerAdapter internal constructor(
         this.vittlesEaten = vittlesEaten
         this.vittlesExpired = vittlesExpired
         notifyDataSetChanged()
+
+        CircleChartFragment.hasDelighted = false
     }
 
     override fun getItemPosition(obj: Any): Int {
