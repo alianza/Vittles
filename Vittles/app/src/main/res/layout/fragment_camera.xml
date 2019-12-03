@@ -216,6 +216,24 @@
             app:layout_constraintTop_toBottomOf="@+id/containerChecklist"
             app:srcCompat="@drawable/scanning_plane" />
 
+
+        <Button
+            android:id="@+id/btnUseCamera"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="?attr/selectableItemBackground"
+            android:text="@string/btn_use_camera"
+            android:textColor="@android:color/black"
+            android:visibility="gone"
+            android:padding="0dp"
+            app:layout_constraintBottom_toBottomOf="@+id/scanningPlane"
+            app:layout_constraintEnd_toEndOf="@+id/scanningPlane"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/scanningPlane"
+            app:layout_constraintTop_toTopOf="@+id/scanningPlane"
+            app:layout_constraintVertical_bias="0.0" />
+
         <Button
             android:id="@+id/btnScanVittle"
             android:layout_width="0dp"

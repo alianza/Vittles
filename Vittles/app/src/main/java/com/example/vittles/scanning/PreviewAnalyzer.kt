@@ -78,7 +78,6 @@ class PreviewAnalyzer(
                     NOTE: Non-fixable bug. Bug appears in fewer than 1% of all cases. At least this
                     try-catch might prevent the app from crashing.
                      */
-                    CameraX.unbindAll()
                 }
                 if (!hasBarCode && image != null) {
                     CoroutineScope(Dispatchers.Main).launch {

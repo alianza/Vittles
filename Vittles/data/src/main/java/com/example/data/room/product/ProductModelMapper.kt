@@ -1,4 +1,4 @@
-package com.example.data.room
+package com.example.data.room.product
 
 import com.example.domain.product.Product
 import javax.inject.Inject

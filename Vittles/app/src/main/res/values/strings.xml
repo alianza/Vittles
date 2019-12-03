@@ -83,6 +83,7 @@
     <string name="exp_date_title_scanner">Expiration date</string>
     <string name="cd_scanning_pane">Scanning pane</string>
     <string name="btn_add_vittle">Add Vittle</string>
+    <string name="btn_use_camera">Use camera</string>
 
     <!--    Add product manually-->
     <string name="edit_product_name">Edit product name</string>

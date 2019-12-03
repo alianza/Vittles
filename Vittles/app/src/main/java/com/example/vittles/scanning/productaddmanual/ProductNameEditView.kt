@@ -9,6 +9,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import android.widget.Toast
+import com.example.domain.enums.ProductDictionaryStatus
 import com.example.vittles.R
 import kotlinx.android.synthetic.main.dialog_productname_edit.view.*
 
@@ -20,8 +21,7 @@ import kotlinx.android.synthetic.main.dialog_productname_edit.view.*
  * @property onFinished Callback function on finished name change.
  */
 class ProductNameEditView(
-    private val onFinished: (productName: String) -> Unit,
-    private val showMessage: Boolean = false
+    private val onFinished: (productName: String, insertLocal: Boolean) -> Unit
 ) {
 
     /** @suppress */
@@ -30,6 +30,8 @@ class ProductNameEditView(
     private lateinit var dialog: AlertDialog
     /** @suppress */
     private lateinit var context: Context
+    /** @suppress */
+    private var insertLocal: Boolean = false
 
     /**
      * Opens the dialog.
@@ -45,11 +47,16 @@ class ProductNameEditView(
             AlertDialog.Builder(context).setView(view)
         dialog = mBuilder.show()
 
-        if (!productName.isNullOrBlank() && productName != context.getString(R.string.product_name_scanner)) {
+        if (!productName.isNullOrBlank()
+            && productName != context.getString(R.string.product_name_scanner)
+            && productName != ProductDictionaryStatus.NOT_FOUND()
+            && productName != ProductDictionaryStatus.NOT_READY()) {
             view.etProductName.setText(productName)
         }
 
-        view.tvMessage.visibility = if (showMessage) TextView.VISIBLE else TextView.GONE
+        view.tvMessage.visibility =
+            if (productName == ProductDictionaryStatus.NOT_FOUND()) TextView.VISIBLE else TextView.GONE
+        insertLocal = productName == ProductDictionaryStatus.NOT_FOUND()
 
         view.btnConfirm.setOnClickListener { onConfirmButtonClicked() }
         view.btnCancel.setOnClickListener { onCancelButtonClicked() }
@@ -61,7 +68,7 @@ class ProductNameEditView(
      */
     private fun onConfirmButtonClicked() {
         if (!view.etProductName.text.isNullOrBlank()) {
-            onFinished(view.etProductName.text.toString())
+            onFinished(view.etProductName.text.toString(), insertLocal)
             dismissKeyboard()
             dialog.dismiss()
         } else {

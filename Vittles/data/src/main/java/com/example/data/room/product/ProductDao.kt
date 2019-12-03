@@ -1,4 +1,4 @@
-package com.example.data.room
+package com.example.data.room.product
 
 import androidx.room.*
 import io.reactivex.Single

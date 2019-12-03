@@ -6,10 +6,15 @@ import com.example.data.retrofit.off.OffApi
 import com.example.data.retrofit.off.OffApiService
 import com.example.data.retrofit.tsco.TscoApi
 import com.example.data.retrofit.tsco.TscoApiService
-import com.example.data.room.ProductDao
-import com.example.data.room.ProductModelMapper
+import com.example.data.BarcodesRepositoryImpl
+import com.example.data.room.productdictionary.BarcodeDao
+import com.example.data.room.productdictionary.ProductDictionaryModelMapper
+import com.example.data.room.createBarcodeDaoImpl
+import com.example.data.room.product.ProductDao
+import com.example.data.room.product.ProductModelMapper
 import com.example.data.room.WasteReportModelMapper
 import com.example.data.room.createProductDaoImpl
+import com.example.domain.repositories.BarcodesRepository
 import com.example.domain.repositories.ProductsRepository
 import com.example.domain.repositories.WasteReportRepository
 import dagger.Module
@@ -27,6 +32,11 @@ class DataModule {
 
     @Singleton
     @Provides
+    fun provideBarcodeDaoImpl(context: Context) =
+        createBarcodeDaoImpl(context)
+
+    @Singleton
+    @Provides
     fun provideTscoProductsApiService() = TscoApi.createApi()
 
     @Singleton
@@ -37,10 +47,17 @@ class DataModule {
     @Provides
     fun provideProductsRepository(
         productDao: ProductDao,
+        mapper: ProductModelMapper
+    ): ProductsRepository = ProductsRepositoryImpl(productDao, mapper)
+
+    @Singleton
+    @Provides
+    fun provideBarcodesRepository(
+        barcodeDao: BarcodeDao,
         productsApiTSCO: TscoApiService,
         productsApiOFF: OffApiService,
-        mapper: ProductModelMapper
-    ): ProductsRepository = ProductsRepositoryImpl(productDao, productsApiTSCO, productsApiOFF, mapper)
+        mapper: ProductDictionaryModelMapper
+    ): BarcodesRepository = BarcodesRepositoryImpl(barcodeDao, productsApiTSCO, productsApiOFF, mapper)
 
     @Singleton
     @Provides
