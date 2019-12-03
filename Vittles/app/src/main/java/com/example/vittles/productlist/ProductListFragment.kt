@@ -362,6 +362,8 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
                 getProductToDelete(ParcelableProductMapper.fromParcelable(productArgs.ProductToDelete!!)) != null){
                     val productToDelete = getProductToDelete(ParcelableProductMapper.fromParcelable(productArgs.ProductToDelete!!))!!
                     onSafeDeleteProduct(productToDelete, productArgs.ProductToDelete!!.deleteType!!)
+
+                productArgs.ProductToDelete!!.uid = -1
             }
         }, 300)    }
 
@@ -415,9 +417,9 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
      *
      */
     override fun onSearchBarOpened() {
-        svSearch.setQuery("", true)
+        svSearch?.setQuery("", true)
         llSearch.visibility = View.VISIBLE
-        svSearch.isIconified = false
+        svSearch?.isIconified = false
         toolbar.visibility = View.GONE
     }
 
@@ -426,9 +428,9 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
      *
      */
     override fun onSearchBarClosed() {
-        svSearch.setQuery("", true)
-        llSearch.visibility = View.GONE
-        toolbar.visibility = View.VISIBLE
+        svSearch?.setQuery("", true)
+        llSearch?.visibility = View.GONE
+        toolbar?.visibility = View.VISIBLE
     }
 
     companion object {
