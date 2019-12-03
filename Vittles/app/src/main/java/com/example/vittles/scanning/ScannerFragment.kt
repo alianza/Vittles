@@ -7,8 +7,12 @@ import android.content.res.ColorStateList
 import android.os.Bundle
 import android.os.Handler
 import android.os.Vibrator
-import android.view.*
-import android.widget.*
+import android.view.LayoutInflater
+import android.view.MotionEvent
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.camera.core.CameraX
 import androidx.camera.core.DisplayOrientedMeteringPointFactory
@@ -16,13 +20,15 @@ import androidx.camera.core.FocusMeteringAction
 import androidx.core.content.ContextCompat
 import androidx.core.text.isDigitsOnly
 import androidx.core.widget.ImageViewCompat
-import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.domain.consts.DAYS_REMAINING_EXPIRED
 import com.example.domain.product.Product
 import com.example.vittles.NavigationGraphDirections
 import com.example.vittles.R
-import com.example.vittles.scanning.ScannerPresenter.Companion.REQUEST_CODE_PERMISSIONS
-import com.example.vittles.scanning.ScannerPresenter.Companion.REQUIRED_PERMISSIONS
+import com.example.vittles.VittlesApp.Companion.REQUEST_CODE_PERMISSIONS
+import com.example.vittles.VittlesApp.Companion.REQUIRED_PERMISSIONS
+import com.example.vittles.enums.PreviousFragmentIndex
 import com.example.vittles.scanning.productaddmanual.ProductNameEditView
 import com.example.vittles.services.popups.PopupBase
 import com.example.vittles.services.popups.PopupButton
@@ -30,7 +36,6 @@ import com.example.vittles.services.popups.PopupManager
 import com.example.vittles.services.scanner.DateFormatterService
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.fragment_camera.*
 import org.joda.time.DateTime
 import javax.inject.Inject
@@ -47,6 +52,8 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
      */
     @Inject
     lateinit var presenter: ScannerPresenter
+
+    private val args: ScannerFragmentArgs by navArgs()
 
     /** The vibration manager used for vibration when a product is scanned. */
     private lateinit var vibrator: Vibrator
@@ -68,6 +75,12 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
     /** {@inheritDoc} */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val onBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                onBackPressed()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(onBackPressedCallback)
         initViews(view)
         initListeners()
         presenter.checkPermissions()
@@ -145,7 +158,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
             DateTime(),
             null
         )
-        presenter.addProduct(product, true)
+        presenter.addProductToList(product, true)
     }
 
     /**
@@ -400,8 +413,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
                 textureView.post { presenter.startCamera() }
                 btnUseCamera.visibility = View.GONE
                 btnTorch.visibility = View.VISIBLE
-            }
-            else {
+            } else {
                 onNoPermissionGranted()
             }
         }
@@ -533,21 +545,26 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
      */
     @SuppressLint("DefaultLocale")
     override fun onShowCloseToExpirationPopup(product: Product) {
-        val multipleDaysChar = if (product.getDaysRemaining() == 1) { "" } else { "s" }
+        val multipleDaysChar = if (product.getDaysRemaining() == 1) {
+            ""
+        } else {
+            "s"
+        }
 
         context?.let {
             PopupManager.instance.showPopup(
                 it,
                 PopupBase(
                     getString(R.string.close_to_expiration_header),
-                    getString(R.string.close_to_expiration_subText,
+                    getString(
+                        R.string.close_to_expiration_subText,
                         product.getDaysRemaining(),
                         multipleDaysChar
                     )
                 ),
                 PopupButton(getString(R.string.btn_no).toUpperCase()),
                 PopupButton(getString(R.string.btn_yes).toUpperCase()) {
-                    presenter.addProduct(
+                    presenter.addProductToList(
                         product,
                         false
                     )
@@ -573,12 +590,24 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
                 ),
                 PopupButton(getString(R.string.btn_no).toUpperCase()),
                 PopupButton(getString(R.string.btn_yes).toUpperCase()) {
-                    presenter.addProduct(
+                    presenter.addProductToList(
                         product,
                         false
                     )
                 }
             )
+        }
+    }
+
+    private fun onBackPressed() {
+        when (args.previousFragment) {
+            PreviousFragmentIndex.PRODUCT_LIST() -> findNavController().navigate(
+                NavigationGraphDirections.actionGlobalProductListFragment(null, false)
+            )
+            PreviousFragmentIndex.SETTINGS() -> findNavController().navigate(
+                NavigationGraphDirections.actionGlobalSettingsFragment()
+            )
+            else -> findNavController().navigateUp()
         }
     }
 
