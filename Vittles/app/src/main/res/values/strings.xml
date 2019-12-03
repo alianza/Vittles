@@ -48,6 +48,8 @@
     <string name="settings_saved_detail">Remove saved product names.</string>
     <string name="settings_popup_confirm_header">Are you sure?</string>
     <string name="settings_popup_confirm_subtext">All saved product names will be removed. \n You will have to add them again.</string>
+    <string name="settings_remove_products_success">Removed product names!</string>
+    <string name="settings_remove_products_fail">Could not remove product names.</string>
 
 
     <!--    Image Content Descriptions-->

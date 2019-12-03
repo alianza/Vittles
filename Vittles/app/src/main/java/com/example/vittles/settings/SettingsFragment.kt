@@ -134,7 +134,7 @@ class SettingsFragment : DaggerFragment(), SettingsContract.View {
      *
      */
     override fun onProductDictionaryClearSuccess() {
-        Toast.makeText(context, "Removed product names!", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, getString(R.string.settings_remove_products_success), Toast.LENGTH_SHORT).show()
     }
 
     /**
@@ -142,7 +142,7 @@ class SettingsFragment : DaggerFragment(), SettingsContract.View {
      *
      */
     override fun onProductDictionaryClearFail() {
-        Toast.makeText(context, "Could not remove product names", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, getString(R.string.settings_remove_products_fail), Toast.LENGTH_SHORT).show()
     }
 
     override fun onRemoveSavedProductsClick() {
