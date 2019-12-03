@@ -119,7 +119,6 @@ dependencies {
 
     //Preferences
     implementation 'com.takisoft.fix:preference-v7:25.3.0.0'
-
 }
 
 buildscript {
