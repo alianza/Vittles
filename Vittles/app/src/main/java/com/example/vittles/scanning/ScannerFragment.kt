@@ -21,13 +21,11 @@ import androidx.core.content.ContextCompat
 import androidx.core.widget.ImageViewCompat
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.navigation.fragment.NavHostFragment
-import com.example.domain.barcode.BarcodeDictionary
-import com.example.domain.barcode.GetProductByBarcode
 import com.example.domain.barcode.ProductDictionary
 import com.example.domain.consts.DAYS_REMAINING_EXPIRED
 import com.example.domain.enums.ProductDictionaryStatus
 import com.example.domain.product.Product
+import com.example.vittles.NavigationGraphDirections
 import com.example.vittles.R
 import com.example.vittles.VittlesApp.Companion.REQUEST_CODE_PERMISSIONS
 import com.example.vittles.VittlesApp.Companion.REQUIRED_PERMISSIONS
@@ -63,7 +61,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
 
     /** @suppress */
     private var barcodeDictionary =
-        ProductDictionary(ProductDictionaryStatus.NOT_READY(), ProductDictionaryStatus.NOT_READY())
+        ProductDictionary(ProductDictionaryStatus.NOT_READY() as String, ProductDictionaryStatus.NOT_READY() as String)
 
     /** @suppress */
     private var expirationDate: DateTime? = null

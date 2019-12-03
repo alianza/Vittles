@@ -24,7 +24,7 @@ class GetProductByBarcode @Inject constructor(private val repository: BarcodesRe
         return repository.getProductNameByBarcodeTSCO(barcode).onExceptionResumeNext(
             repository.getProductNameByBarcodeOFF(barcode).onExceptionResumeNext(
                 repository.getProductNameByBarcodeRoom(barcode).onExceptionResumeNext(
-                    Observable.just(ProductDictionary(barcode, ProductDictionaryStatus.NOT_FOUND()))
+                    Observable.just(ProductDictionary(barcode, ProductDictionaryStatus.NOT_FOUND() as String))
                 )
             )
         )
