@@ -22,12 +22,14 @@ import javax.inject.Inject
  */
 class NotificationScheduleService : DaggerBroadcastReceiver(), NotificationScheduleContract.Service {
 
+    /** TODO */
     @Inject
     lateinit var presenter: NotificationSchedulePresenter
 
     /** Disposables contains all async calls made */
     private val disposables: CompositeDisposable = CompositeDisposable()
 
+    /** TODO: TESTING NOTIFICATION SCHEDULER */
     init {
         presenter.start(this)
     }
@@ -68,7 +70,9 @@ class NotificationScheduleService : DaggerBroadcastReceiver(), NotificationSched
 
     companion object {
 
+        /** The native alarm manager used for triggering the service. */
         private lateinit var alarmManager: AlarmManager
+        /** @suppress */
         private lateinit var broadcast: PendingIntent
 
         /**

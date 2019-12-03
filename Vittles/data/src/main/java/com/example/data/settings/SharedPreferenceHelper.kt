@@ -7,12 +7,12 @@ import android.content.SharedPreferences
 /**
  * Shared preference class used to store simple data in the internal storage privately for each application
  * that will be used to save setting preferences.
+ * TODO Check for unnecessary stuff that can be removed or other changes.
  *
- *@author Fethi Tewelde
+ * @author Fethi Tewelde
  *
- *@param context application context
+ * @param context application context
  */
-
 class SharedPreferenceHelper(context: Context) {
     private val PREFS_NAME = "Settings"
 
