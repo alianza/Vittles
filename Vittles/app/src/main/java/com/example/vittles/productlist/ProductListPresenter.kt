@@ -84,16 +84,5 @@ class ProductListPresenter @Inject internal constructor(
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe()
         )
-
-        disposables.add(addWasteReportProduct.invoke(WasteReportProduct(null, DateTime.now().minusDays(18).withTimeAtStartOfDay(), deleteType.name))
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe()
-        )
-        disposables.add(addWasteReportProduct.invoke(WasteReportProduct(null, DateTime.now().minusDays(15).withTimeAtStartOfDay(), deleteType.name))
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe()
-        )
     }
 }
