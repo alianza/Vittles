@@ -196,8 +196,7 @@ class WasteReportFragment : DaggerFragment(), WasteReportContract.View {
                             R.drawable.dot_selected
                         )
                     })
-                }
-                if (position == 1) {
+                } else if (position == 1) {
                     ivDotLeft.setImageDrawable(context?.let {
                         ContextCompat.getDrawable(
                             it,
