@@ -34,7 +34,6 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.fragment_productlist.*
-import tyrantgit.explosionfield.ExplosionField
 import javax.inject.Inject
 
 /**
@@ -186,10 +185,6 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
     @Suppress("DEPRECATION")
     override fun onSafeDeleteProduct(product: Product, deleteType: DeleteType) {
 
-        if (deleteType == DeleteType.EATEN) {
-            onShowDelighter(product)
-        }
-
         if (undoSnackbar.isShown) {
             presenter.deleteProduct(deletedProduct, deletedProductDeleteType)
             //removeItem(deletedProductIndex)
@@ -220,11 +215,6 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
         }
 
         onShowUndoSnackbar()
-    }
-
-    override fun onShowDelighter(product: Product) {
-        val explosionField = ExplosionField.attach2Window(activity.also { R.layout.fragment_productlist })
-        explosionField.explode(btnSort)
     }
 
     /**
