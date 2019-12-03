@@ -16,9 +16,9 @@ class UpdateBarcodeDictionary @Inject constructor(private val repository: Barcod
     /**
      * Calls the repository to update a barcode dictionary.
      *
-     * @param barcodeDictionary The barcode dictionary to insert.
+     * @param productDictionary The barcode dictionary to insert.
      * @return Completable to indicate if the action has succeeded.
      */
-    operator fun invoke(barcodeDictionary: BarcodeDictionary): Completable =
-        repository.updateBarcodeDictionaryRoom(barcodeDictionary)
+    operator fun invoke(productDictionary: ProductDictionary): Completable =
+        repository.updateBarcodeDictionaryRoom(productDictionary)
 }

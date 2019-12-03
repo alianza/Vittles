@@ -1,11 +1,9 @@
 package com.example.domain.repositories
 
-import com.example.domain.barcode.BarcodeDictionary
+import com.example.domain.barcode.ProductDictionary
 import com.example.domain.exceptions.ProductNotFoundException
 import io.reactivex.Completable
-import io.reactivex.Maybe
 import io.reactivex.Observable
-import io.reactivex.Single
 
 /**
  * Repository interface for the barcode dictionary.
@@ -22,7 +20,7 @@ interface BarcodesRepository {
      * @return Observable string value of the product name.
      */
     @Throws(ProductNotFoundException::class)
-    fun getProductNameByBarcodeTSCO(barcode: String): Observable<BarcodeDictionary>
+    fun getProductNameByBarcodeTSCO(barcode: String): Observable<ProductDictionary>
 
     /**
      * Calls external API to look for product name of the barcode.
@@ -31,7 +29,7 @@ interface BarcodesRepository {
      * @return Observable string value of the product name.
      */
     @Throws(ProductNotFoundException::class)
-    fun getProductNameByBarcodeOFF(barcode: String): Observable<BarcodeDictionary>
+    fun getProductNameByBarcodeOFF(barcode: String): Observable<ProductDictionary>
 
     /**
      * Retrieve product name by barcode from local database.
@@ -39,21 +37,21 @@ interface BarcodesRepository {
      * @param barcode The search query.
      * @return The product name.
      */
-    fun getProductNameByBarcodeRoom(barcode: String): Observable<BarcodeDictionary>
+    fun getProductNameByBarcodeRoom(barcode: String): Observable<ProductDictionary>
 
     /**
      * Insert barcode dictionary into the local database.
      *
-     * @param barcodeDictionary The dictionary to insert.
+     * @param productDictionary The dictionary to insert.
      * @return Completable that represents if the insert has succeeded.
      */
-    fun insertBarcodeDictionaryRoom(barcodeDictionary: BarcodeDictionary): Completable
+    fun insertBarcodeDictionaryRoom(productDictionary: ProductDictionary): Completable
 
     /**
      * Update barcode dictionary in the local database.
      *
-     * @param barcodeDictionary The dictionary to update.
+     * @param productDictionary The dictionary to update.
      * @return Completable that represents if the insert has succeeded.
      */
-    fun updateBarcodeDictionaryRoom(barcodeDictionary: BarcodeDictionary): Completable
+    fun updateBarcodeDictionaryRoom(productDictionary: ProductDictionary): Completable
 }

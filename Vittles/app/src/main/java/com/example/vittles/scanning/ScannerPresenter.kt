@@ -7,10 +7,9 @@ import android.view.ViewGroup
 import androidx.camera.core.*
 import androidx.core.content.ContextCompat
 import com.example.domain.barcode.AddBarcodeDictionary
-import com.example.domain.barcode.BarcodeDictionary
+import com.example.domain.barcode.ProductDictionary
 import com.example.domain.barcode.GetProductByBarcode
 import com.example.domain.barcode.UpdateBarcodeDictionary
-import com.example.domain.enums.BarcodeDictionaryStatus
 import com.example.domain.product.AddProduct
 import com.example.domain.product.Product
 import com.example.vittles.mvp.BasePresenter
@@ -78,11 +77,11 @@ class ScannerPresenter @Inject internal constructor(
     /**
      * Calls the use case to add a barcode dictionary.
      *
-     * @param barcodeDictionary The barcode dictionary to add.
+     * @param productDictionary The barcode dictionary to add.
      */
-    override fun addBarcode(barcodeDictionary: BarcodeDictionary) {
-        if (!barcodeDictionary.containsNotReady()) {
-            disposables.add(addBarcodeDictionary(barcodeDictionary)
+    override fun addProductDictionary(productDictionary: ProductDictionary) {
+        if (!productDictionary.containsNotReady()) {
+            disposables.add(addBarcodeDictionary(productDictionary)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe())
@@ -92,10 +91,10 @@ class ScannerPresenter @Inject internal constructor(
     /**
      * Calls the use case to update a barcode dictionary.
      *
-     * @param barcodeDictionary The barcode dictionary to update.
+     * @param productDictionary The barcode dictionary to update.
      */
-    override fun updateBarcode(barcodeDictionary: BarcodeDictionary) {
-        disposables.add(updateBarcodeDictionary(barcodeDictionary)
+    override fun updateBarcode(productDictionary: ProductDictionary) {
+        disposables.add(updateBarcodeDictionary(productDictionary)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe())

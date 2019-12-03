@@ -10,7 +10,7 @@ import com.example.domain.enums.BarcodeDictionaryStatus
  * @property barcode The key.
  * @property productName The value.
  */
-data class BarcodeDictionary(
+data class ProductDictionary(
     val barcode: String,
     val productName: String?
 ) {
