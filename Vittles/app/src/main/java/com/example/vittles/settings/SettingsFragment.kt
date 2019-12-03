@@ -6,9 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
+import androidx.lifecycle.Observer
+import com.example.data.settings.SharedPreferenceHelper
 import com.example.domain.settings.model.NotificationSchedule
 import com.example.vittles.R
-import com.example.vittles.services.notification.NotificationScheduleService
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_settings.*
 import javax.inject.Inject
@@ -21,28 +22,29 @@ import javax.inject.Inject
  */
 class SettingsFragment : DaggerFragment() {
 
-
-    /** To Store shared preferences(data) in the form of value-key*/
-    lateinit var sharedPreference: SharedPreference
-
     @Inject
-    lateinit var presenter: SettingsContract.Presenter
+    lateinit var presenter: SettingsPresenter
 
-    /** @suppress */
+    /** {@inheritDoc} */
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
+        presenter.start(this)
+        presenter.startPresenting(requireContext())
         return inflater.inflate(R.layout.fragment_settings, container, false)
     }
 
-    /** @suppress */
+    /** {@inheritDoc} */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        sharedPreference = SharedPreference(context!!)
 
         initViews()
+    }
+
+    override fun onDestroy() {
+        presenter.destroy()
+        super.onDestroy()
     }
 
     /**
@@ -55,14 +57,17 @@ class SettingsFragment : DaggerFragment() {
 
         setListeners()
 
-        val notificationToggle = sharedPreference.getValueBoolean("Notification", true)
-        notification_toggle.isChecked = notificationToggle
+        presenter.notificationEnabled.observe(this, Observer {
+            notification_toggle.isChecked = it
+        })
 
-        val notificationTimeSelection = sharedPreference.getValueInt("NOTIFICATION_TIME")
-        notification_timer.setSelection(notificationTimeSelection)
+        presenter.notificationSchedule.observe(this, Observer {
+            notification_timer.setSelection(it.ordinal)
+        })
 
-        val vibrationToggle = sharedPreference.getValueBoolean("Vibration", true)
-        vibration_toggle.isChecked = vibrationToggle
+        presenter.vibrationEnabled.observe(this, Observer {
+            vibration_toggle.isChecked = it
+        })
     }
 
     /**
@@ -76,11 +81,7 @@ class SettingsFragment : DaggerFragment() {
          *
          */
         vibration_toggle.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                sharedPreference.save("Vibration", true)
-            }else{
-                sharedPreference.save("Vibration", false)
-            }
+            presenter.onVibrationEnabledChanged(isChecked)
         }
 
         /*
@@ -88,13 +89,7 @@ class SettingsFragment : DaggerFragment() {
          *
          */
         notification_toggle.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                sharedPreference.save("Notification", true)
-                NotificationScheduleService.scheduleNotificationAudit(context!!)
-            } else {
-                sharedPreference.save("Notification", false)
-                NotificationScheduleService.exitNotificationSchedule(context!!)
-            }
+            presenter.onNotificationEnabledChanged(isChecked)
         }
 
 
@@ -112,8 +107,6 @@ class SettingsFragment : DaggerFragment() {
                 val notificationSchedule = NotificationSchedule.values()[position]
 
                 presenter.onNotificationScheduleChanged(notificationSchedule)
-
-//                sharedPreference.save("NOTIFICATION_TIME", position)
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {

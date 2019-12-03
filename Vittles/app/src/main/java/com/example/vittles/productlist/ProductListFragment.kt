@@ -1,7 +1,6 @@
 package com.example.vittles.productlist
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
@@ -12,7 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
 import android.widget.TextView
-import androidx.appcompat.widget.Toolbar
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -21,13 +19,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.product.Product
 import com.example.vittles.R
 import com.example.vittles.enums.DeleteType
-import com.example.vittles.productlist.productinfo.ProductInfoFragment
-import com.example.vittles.productlist.productinfo.ProductInfoFragmentArgs
 import com.example.vittles.services.popups.PopupBase
 import com.example.vittles.services.popups.PopupButton
 import com.example.vittles.services.popups.PopupManager
 import com.example.vittles.services.sorting.SortMenu
-import com.example.vittles.settings.SharedPreference
+import com.example.data.settings.SharedPreferenceHelper
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
@@ -54,9 +50,6 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
 
     /** The vibration manager used for vibration when a product is eaten or removed. */
     private lateinit var vibrator: Vibrator
-
-    /** To acces shared preferences(data) in the form of value-key*/
-    private lateinit var sharedPreference: SharedPreference
 
     /** Arguments passed to the fragment */
     private val productArgs: ProductListFragmentArgs by navArgs()
@@ -86,7 +79,6 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
     ): View? {
         with(presenter) { start(this@ProductListFragment) }
         vibrator = context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-        sharedPreference = SharedPreference(context!!)
         return inflater.inflate(R.layout.fragment_productlist, container, false)
     }
 
@@ -197,7 +189,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
 
         //checks the vibration setting then if it will give vibration feedback
 
-        if (vibrator.hasVibrator()&& sharedPreference.getValueBoolean("Vibration", true)) {
+        if (vibrator.hasVibrator() && presenter.getVibrationSetting()) {
             vibrator.vibrate(50)
         }
 

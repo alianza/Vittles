@@ -1,4 +1,4 @@
-package com.example.vittles.settings
+package com.example.data.settings
 
 
 import android.content.Context
@@ -10,10 +10,10 @@ import android.content.SharedPreferences
  *
  *@author Fethi Tewelde
  *
- * @property context application context
+ *@param context application context
  */
 
-class SharedPreference(context: Context) {
+class SharedPreferenceHelper(context: Context) {
     private val PREFS_NAME = "Settings"
 
     
