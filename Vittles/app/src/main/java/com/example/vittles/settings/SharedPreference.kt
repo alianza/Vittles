@@ -13,8 +13,10 @@ import android.content.SharedPreferences
  * @property context application context
  */
 
-class SharedPreference(val context: Context) {
+class SharedPreference(context: Context) {
     private val PREFS_NAME = "Settings"
+
+    
     val sharedPref: SharedPreferences =
         context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
@@ -24,13 +26,10 @@ class SharedPreference(val context: Context) {
      * @param KEY_NAME The key name of the preference.
      * @param text The string value of the key.
      */
-     fun save(KEY_NAME: String, text: String) {
-
-        val editor: SharedPreferences.Editor = sharedPref.edit()
-
-        editor.putString(KEY_NAME, text)
-
-        editor!!.commit()
+    fun save(KEY_NAME: String, text: String) {
+        sharedPref.edit()
+            .putString(KEY_NAME, text)
+            .apply()
     }
 
     /**
@@ -95,32 +94,8 @@ class SharedPreference(val context: Context) {
 
     }
 
-    /**
-     * Clears the entire shared preferences
-     * To remove a specific data
-     *
-     */
-    internal fun clearSharedPreference() {
+}
 
-        val editor: SharedPreferences.Editor = sharedPref.edit()
-
-        //sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-
-        editor.clear()
-        editor.commit()
-    }
-
-    /**
-     * Removes a specific data
-     *
-     * @param KEY_NAME The key name of the preference.
-     *
-     */
-    internal fun removeValue(KEY_NAME: String) {
-
-        val editor: SharedPreferences.Editor = sharedPref.edit()
-
-        editor.remove(KEY_NAME)
-        editor.commit()
-    }
+fun String.abc() {
+    ""
 }
