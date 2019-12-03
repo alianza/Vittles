@@ -52,7 +52,7 @@
                 app:titleTextColor="#000000">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/time_Range"
+                    android:id="@+id/timeRange"
                     style="@style/AppTheme.SortButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">

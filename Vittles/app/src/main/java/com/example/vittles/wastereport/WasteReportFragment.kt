@@ -6,15 +6,13 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.ViewPager
 import com.example.vittles.R
 import com.example.vittles.enums.TimeRange
 import dagger.android.support.DaggerFragment
+import kotlinx.android.synthetic.main.content_waste_history.*
 import kotlinx.android.synthetic.main.fragment_waste_report.*
 import kotlinx.coroutines.*
 import org.joda.time.DateTime
@@ -31,12 +29,6 @@ class WasteReportFragment : DaggerFragment(), WasteReportContract.View {
     lateinit var presenter: WasteReportPresenter
 
     private lateinit var timeRangeMenu: WasteTimeRangeMenu
-    lateinit var tvVittlesEaten: TextView
-    lateinit var tvVittlesExpired: TextView
-    lateinit var ivDot: ImageView
-    lateinit var ivDot2: ImageView
-    lateinit var timeRange: ConstraintLayout
-    lateinit var viewPager: ViewPager
 
     lateinit var adapter: ViewPagerAdapter
 
@@ -52,12 +44,6 @@ class WasteReportFragment : DaggerFragment(), WasteReportContract.View {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        tvVittlesEaten = view.findViewById(R.id.tvVittlesEaten)
-        tvVittlesExpired = view.findViewById(R.id.tvVittlesExpired)
-        ivDot = view.findViewById(R.id.ivDot1)
-        ivDot2 = view.findViewById(R.id.ivDot2)
-        timeRange = view.findViewById(R.id.time_Range)
-        viewPager = view.findViewById(R.id.view_pager)
 
         presenter.start(this)
 
@@ -198,13 +184,13 @@ class WasteReportFragment : DaggerFragment(), WasteReportContract.View {
 
             override fun onPageSelected(position: Int) {
                 if (position == 0) {
-                    ivDot2.setImageDrawable(context?.let {
+                    ivDotRight.setImageDrawable(context?.let {
                         ContextCompat.getDrawable(
                             it,
                             R.drawable.dot
                         )
                     })
-                    ivDot.setImageDrawable(context?.let {
+                    ivDotLeft.setImageDrawable(context?.let {
                         ContextCompat.getDrawable(
                             it,
                             R.drawable.dot_selected
@@ -212,13 +198,13 @@ class WasteReportFragment : DaggerFragment(), WasteReportContract.View {
                     })
                 }
                 if (position == 1) {
-                    ivDot.setImageDrawable(context?.let {
+                    ivDotLeft.setImageDrawable(context?.let {
                         ContextCompat.getDrawable(
                             it,
                             R.drawable.dot
                         )
                     })
-                    ivDot2.setImageDrawable(context?.let {
+                    ivDotRight.setImageDrawable(context?.let {
                         ContextCompat.getDrawable(
                             it,
                             R.drawable.dot_selected

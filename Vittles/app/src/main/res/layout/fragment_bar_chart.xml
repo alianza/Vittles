@@ -10,7 +10,7 @@
     android:paddingBottom="30dp">
 
     <com.github.mikephil.charting.charts.BarChart
-        android:id="@+id/barChart"
+        android:id="@+id/barChartEaten"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintHeight_percent="0.5"
@@ -24,6 +24,6 @@
         android:layout_height="0dp"
         app:layout_constraintHeight_percent="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/barChart" />
+        app:layout_constraintTop_toBottomOf="@id/barChartEaten" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

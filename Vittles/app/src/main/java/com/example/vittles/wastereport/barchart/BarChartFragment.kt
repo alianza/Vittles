@@ -18,6 +18,7 @@ import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import dagger.android.support.DaggerFragment
+import kotlinx.android.synthetic.main.fragment_bar_chart.*
 import org.joda.time.DateTime
 import org.joda.time.Days
 import javax.inject.Inject
@@ -34,8 +35,6 @@ class BarChartFragment @Inject internal constructor(var date: DateTime) : Dagger
 
     @Inject
     lateinit var presenter: BarChartPresenter
-    private lateinit var barChartEaten: BarChart
-    private lateinit var barChartExpired: BarChart
     var timeRangeSteps = 0
 
     override fun onCreateView(
@@ -49,8 +48,6 @@ class BarChartFragment @Inject internal constructor(var date: DateTime) : Dagger
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         timeRangeSteps = Days.daysBetween(date, DateTime.now().withTimeAtStartOfDay()).days
-        barChartEaten = view.findViewById(R.id.barChart)
-        barChartExpired = view.findViewById(R.id.barChartExpired)
         presenter.start(this)
         presenter.getWasteReportProducts(date)
     }
