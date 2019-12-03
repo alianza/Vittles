@@ -23,6 +23,7 @@ interface ProductListContract {
         fun onShowProductDeleteError()
         fun onSortMenuOpened()
         fun onSafeDeleteProduct(product: Product, deleteType: DeleteType)
+        fun onShowDelighter(product: Product)
         fun initUndoSnackbar()
         fun onShowUndoSnackbar()
         fun onRemoveButtonClicked(product: Product)
