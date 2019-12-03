@@ -28,7 +28,7 @@ import javax.inject.Inject
  *
  * @property getProductByBarcode The GetProductByBarcode use case from the domain module.
  * @property addProduct The AddProduct use case from the domain module.
- * @property addProductDictionary The AddBarcodeDictionary use case from the domain module.
+ * @property insertProductDictionary The AddBarcodeDictionary use case from the domain module.
  * @property updateProductDictionary The UpdateBarcodeDictionary use case from the domain module.
  */
 class ScannerPresenter @Inject internal constructor(
@@ -75,11 +75,11 @@ class ScannerPresenter @Inject internal constructor(
     }
 
     /**
-     * Calls the use case to add a barcode dictionary.
+     * Calls the use case to add a product dictionary.
      *
-     * @param productDictionary The barcode dictionary to add.
+     * @param productDictionary The product dictionary to add.
      */
-    override fun addBarcode(productDictionary: ProductDictionary) {
+    override fun insertProductDictionary(productDictionary: ProductDictionary) {
         if (!productDictionary.containsNotReady()) {
             disposables.add(addProductDictionary(productDictionary)
                 .subscribeOn(Schedulers.io())
@@ -93,7 +93,7 @@ class ScannerPresenter @Inject internal constructor(
      *
      * @param productDictionary The barcode dictionary to update.
      */
-    override fun updateBarcode(productDictionary: ProductDictionary) {
+    override fun patchProductDictionary(productDictionary: ProductDictionary) {
         disposables.add(updateProductDictionary(productDictionary)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
