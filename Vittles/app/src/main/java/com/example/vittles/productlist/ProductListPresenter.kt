@@ -73,6 +73,11 @@ class ProductListPresenter @Inject internal constructor(
         addWasteReportProduct(deleteType)
     }
 
+    /**
+     * Adds a waste report product to database when a product is deleted
+     *
+     * @param deleteType The delete type of the deleted product
+     */
     private fun addWasteReportProduct(deleteType: DeleteType) {
         disposables.add(addWasteReportProduct.invoke(WasteReportProduct(null, DateTime.now().withTimeAtStartOfDay(), deleteType.name))
             .subscribeOn(Schedulers.io())
