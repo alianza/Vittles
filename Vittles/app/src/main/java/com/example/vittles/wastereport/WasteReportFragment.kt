@@ -25,14 +25,18 @@ import javax.inject.Inject
  */
 class WasteReportFragment : DaggerFragment(), WasteReportContract.View {
 
+    /**
+     * The presenter of the fragment
+     */
     @Inject
     lateinit var presenter: WasteReportPresenter
 
+    /**@suppress*/
     private lateinit var timeRangeMenu: WasteTimeRangeMenu
-
+    /**@suppress*/
     lateinit var adapter: ViewPagerAdapter
 
-
+    /** {@inheritDoc} */
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -42,6 +46,7 @@ class WasteReportFragment : DaggerFragment(), WasteReportContract.View {
         return inflater.inflate(R.layout.fragment_waste_report, container, false)
     }
 
+    /** {@inheritDoc} */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -50,6 +55,7 @@ class WasteReportFragment : DaggerFragment(), WasteReportContract.View {
         initData()
     }
 
+    /** {@inheritDoc} */
     override fun onDestroy() {
         super.onDestroy()
         presenter.destroy()

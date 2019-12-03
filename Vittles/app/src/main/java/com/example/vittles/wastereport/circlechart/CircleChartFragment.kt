@@ -46,23 +46,31 @@ interface RefreshData {
  * @property vittlesExpired Amount of expired vittles
  */
 class CircleChartFragment @Inject internal constructor(var date: DateTime, var vittlesEaten: Int, var vittlesExpired: Int) : DaggerFragment(), CircleChartContract.View, RefreshData  {
+
+    /**
+     * The presenter of the fragment.
+     */
     @Inject
     lateinit var presenter: CircleChartPresenter
 
     companion object {
+        /** @suppress*/
         var hasDelighted = false
     }
 
+    /** {@inheritDoc} */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_circle_chart, container, false)
     }
 
+    /** {@inheritDoc} */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         presenter.start(this)
         presenter.getEatenPercent(date, vittlesEaten, vittlesExpired)
     }
 
+    /** {@inheritDoc} */
     override fun onDestroy() {
         super.onDestroy()
         presenter.destroy()

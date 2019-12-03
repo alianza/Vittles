@@ -25,14 +25,21 @@ class CustomBarChartRender(
     viewPortHandler: ViewPortHandler
 ) : BarChartRenderer(chart, animator, viewPortHandler) {
 
+    /** @suppress */
     private val mBarShadowRectBuffer = RectF()
-
+    /** @suppress */
     private var mRadius: Int = 0
 
+    /**
+     * Sets radius
+     *
+     * @param mRadius Radius to be set
+     */
     fun setRadius(mRadius: Int) {
         this.mRadius = mRadius
     }
 
+    /** {@inheritDoc} */
     override fun drawDataSet(c: Canvas, dataSet: IBarDataSet, index: Int) {
 
         val trans = mChart.getTransformer(dataSet.axisDependency)

@@ -11,8 +11,11 @@ import com.github.mikephil.charting.formatter.ValueFormatter
  *
  */
 class MyValueFormatter : ValueFormatter() {
+
+    /** @suppress*/
     private val format = DecimalFormat("###")
 
+    /** {@inheritDoc} */
     override fun getAxisLabel(value: Float, axis: AxisBase?): String {
         return format.format(100 - value.toInt())
     }

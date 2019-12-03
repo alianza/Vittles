@@ -33,6 +33,7 @@ class CustomYAxisRenderer(
     private val xAxis: XAxis
 ) : YAxisRenderer(viewPortHandler, yAxis, trans) {
 
+    /** {@inheritDoc} */
     override fun renderAxisLabels(c: Canvas) {
         c.translate(c.width.toFloat(), 0f)
         c.rotate(180f)

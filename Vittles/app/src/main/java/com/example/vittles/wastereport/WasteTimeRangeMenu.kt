@@ -24,10 +24,15 @@ import org.joda.time.DateTime
  */
 class WasteTimeRangeMenu (private val onDateChange: (DateTime) -> Unit) {
 
+    /**@suppress*/
     private var currentTimeRange: TimeRange = TimeRange.LAST_SEVEN_DAYS
+    /**@suppress*/
     private lateinit var previousTimeRange: TimeRange
+    /**@suppress*/
     private lateinit var btnTimeRange: TextView
+    /**@suppress*/
     lateinit var alertDialog: AlertDialog
+    /**@suppress*/
     lateinit var view: View
 
     /**

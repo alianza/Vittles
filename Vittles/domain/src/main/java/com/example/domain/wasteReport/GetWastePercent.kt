@@ -1,8 +1,6 @@
 package com.example.domain.wasteReport
 
-import com.example.domain.repositories.WasteReportRepository
 import io.reactivex.Single
-import org.joda.time.DateTime
 import javax.inject.Inject
 import kotlin.math.ceil
 

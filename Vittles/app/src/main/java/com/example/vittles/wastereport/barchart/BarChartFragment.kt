@@ -33,10 +33,16 @@ import javax.inject.Inject
 class BarChartFragment @Inject internal constructor(var date: DateTime) : DaggerFragment(),
     BarChartContract.View, RefreshData {
 
+    /**
+     * The presenter of the fragment.
+     */
     @Inject
     lateinit var presenter: BarChartPresenter
+
+    /** @suppress */
     var timeRangeSteps = 0
 
+    /** {@inheritDoc} */
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -45,6 +51,7 @@ class BarChartFragment @Inject internal constructor(var date: DateTime) : Dagger
         return inflater.inflate(R.layout.fragment_bar_chart, container, false)
     }
 
+    /** {@inheritDoc} */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         timeRangeSteps = Days.daysBetween(date, DateTime.now().withTimeAtStartOfDay()).days
@@ -52,11 +59,13 @@ class BarChartFragment @Inject internal constructor(var date: DateTime) : Dagger
         presenter.getWasteReportProducts(date)
     }
 
+    /** {@inheritDoc} */
     override fun onDestroy() {
         super.onDestroy()
         presenter.destroy()
     }
 
+    /** {@inheritDoc} */
     override fun refresh(date: DateTime, vittlesEaten: Int, vittlesExpired: Int) {
         this.date = date
         timeRangeSteps = Days.daysBetween(date, DateTime.now().withTimeAtStartOfDay()).days

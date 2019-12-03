@@ -26,7 +26,9 @@ class ViewPagerAdapter internal constructor(
     var vittlesExpired: Int
 ) : FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
+    /** @suppress*/
     private val count = 2
+    /** @suppress*/
     lateinit var fragment: Fragment
 
 
@@ -46,6 +48,7 @@ class ViewPagerAdapter internal constructor(
         CircleChartFragment.hasDelighted = false
     }
 
+    /** {@inheritDoc} */
     override fun getItemPosition(obj: Any): Int {
         if (obj is RefreshData) {
             obj.refresh(date, vittlesEaten, vittlesExpired)
@@ -53,6 +56,7 @@ class ViewPagerAdapter internal constructor(
         return super.getItemPosition(obj)
     }
 
+    /** {@inheritDoc} */
     override fun getItem(position: Int): Fragment {
         when (position) {
             0 -> { fragment = CircleChartFragment(date, vittlesEaten, vittlesExpired) }
@@ -61,10 +65,12 @@ class ViewPagerAdapter internal constructor(
         return fragment
     }
 
+    /** {@inheritDoc} */
     override fun getCount(): Int {
         return count
     }
 
+    /** {@inheritDoc} */
     override fun getPageTitle(position: Int): CharSequence? {
         return "Tab " + (position + 1)
     }
