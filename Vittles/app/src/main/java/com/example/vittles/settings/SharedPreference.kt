@@ -39,7 +39,7 @@ class SharedPreference(val context: Context) {
      * @param KEY_NAME The key name of the preference.
      * @param value The Int value of the key.
      */
-    fun save(KEY_NAME: String, value: Int) {
+    internal fun save(KEY_NAME: String, value: Int) {
         val editor: SharedPreferences.Editor = sharedPref.edit()
 
         editor.putInt(KEY_NAME, value)
@@ -53,7 +53,7 @@ class SharedPreference(val context: Context) {
      * @param KEY_NAME The key name of the preference.
      * @param status The boolean value of the key.
      */
-    fun save(KEY_NAME: String, status: Boolean) {
+    internal fun save(KEY_NAME: String, status: Boolean) {
 
         val editor: SharedPreferences.Editor = sharedPref.edit()
 
@@ -100,7 +100,7 @@ class SharedPreference(val context: Context) {
      * To remove a specific data
      *
      */
-    fun clearSharedPreference() {
+    internal fun clearSharedPreference() {
 
         val editor: SharedPreferences.Editor = sharedPref.edit()
 
@@ -116,7 +116,7 @@ class SharedPreference(val context: Context) {
      * @param KEY_NAME The key name of the preference.
      *
      */
-    fun removeValue(KEY_NAME: String) {
+    internal fun removeValue(KEY_NAME: String) {
 
         val editor: SharedPreferences.Editor = sharedPref.edit()
 
