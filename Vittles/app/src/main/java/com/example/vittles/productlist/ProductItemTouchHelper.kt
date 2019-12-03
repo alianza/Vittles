@@ -138,10 +138,22 @@ class ProductItemTouchHelper(private val products: List<Product>, var context: C
 
         if (dX < 0) {
             setBackgroundColor(c, viewHolder, ContextCompat.getColor(context, R.color.red))
-            drawIcon(c, viewHolder, context.getDrawable(R.drawable.ic_delete_white_24)!!, IconLocation.RIGHT)
+            if (dX > -300) {
+                drawIcon(c, viewHolder, context.getDrawable(R.drawable.ic_bin_closed)!!, IconLocation.RIGHT)
+            } else if (dX < -299 && dX > -600) {
+                drawIcon(c, viewHolder, context.getDrawable(R.drawable.ic_bin_half_open)!!, IconLocation.RIGHT)
+            } else if (dX < -599) {
+                drawIcon(c, viewHolder, context.getDrawable(R.drawable.ic_bin_full_open)!!, IconLocation.RIGHT)
+            }
         }else{
             setBackgroundColor(c, viewHolder, ContextCompat.getColor(context, R.color.green))
-            drawIcon(c, viewHolder, context.getDrawable(R.drawable.ic_eaten_white)!!, IconLocation.LEFT)
+            if (dX < 300) {
+                drawIcon(c, viewHolder, context.getDrawable(R.drawable.ic_full_apple)!!, IconLocation.LEFT)
+            } else if (dX > 299 && dX < 600) {
+                drawIcon(c, viewHolder, context.getDrawable(R.drawable.ic_half_apple)!!, IconLocation.LEFT)
+            } else if (dX > 599) {
+                drawIcon(c, viewHolder, context.getDrawable(R.drawable.ic_eaten_white)!!, IconLocation.LEFT)
+            }
         }
 
 
