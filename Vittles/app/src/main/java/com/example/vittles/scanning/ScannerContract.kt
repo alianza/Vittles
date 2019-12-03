@@ -3,7 +3,7 @@ package com.example.vittles.scanning
 import android.view.MotionEvent
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.Preview
-import com.example.domain.barcode.BarcodeDictionary
+import com.example.domain.barcode.ProductDictionary
 import com.example.domain.product.Product
 
 /**
@@ -18,7 +18,7 @@ interface ScannerContract {
         fun initListeners()
         fun onTapToFocus(event: MotionEvent): Boolean
         fun onAddVittleButtonClick()
-        fun onBarcodeScanned(barcodeDictionary: BarcodeDictionary)
+        fun onBarcodeScanned(productDictionary: ProductDictionary)
         fun onBarcodeNotFound()
         fun onTextScanned(text: String)
         fun onTextNotFound()
@@ -35,17 +35,17 @@ interface ScannerContract {
         fun onShowExpirationPopup(product: Product)
         fun onShowCloseToExpirationPopup(product: Product)
         fun onShowAlreadyExpiredPopup(product: Product)
-        fun onProductNameEdited(barcodeDictionary: BarcodeDictionary, insertLocal: Boolean = false)
+        fun onProductNameEdited(productDictionary: ProductDictionary, insertLocal: Boolean = false)
         fun onExpirationDateEdited(text: String)
         fun onProductNameCheckboxChecked(productName: String)
         fun onExpirationDateCheckboxChecked(text: String)
-        fun onShowEditNameDialog(barcodeDictionary: BarcodeDictionary)
+        fun onShowEditNameDialog(productDictionary: ProductDictionary)
     }
 
     interface Presenter {
         fun addProduct(product: Product, checkDate: Boolean)
-        fun addBarcode(barcodeDictionary: BarcodeDictionary)
-        fun updateBarcode(barcodeDictionary: BarcodeDictionary)
+        fun addBarcode(productDictionary: ProductDictionary)
+        fun updateBarcode(productDictionary: ProductDictionary)
         fun startCamera()
         fun getPreview(): Preview
         fun getImageAnalysis(): ImageAnalysis
