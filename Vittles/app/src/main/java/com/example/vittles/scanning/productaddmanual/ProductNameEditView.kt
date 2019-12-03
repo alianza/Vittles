@@ -9,7 +9,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import android.widget.Toast
-import com.example.domain.enums.ProductDictionaryStatus
+import com.example.domain.product.ProductDictionaryStatus
 import com.example.vittles.R
 import kotlinx.android.synthetic.main.dialog_productname_edit.view.*
 

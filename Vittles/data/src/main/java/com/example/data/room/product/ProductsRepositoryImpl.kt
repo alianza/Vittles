@@ -1,9 +1,7 @@
-package com.example.data
+package com.example.data.room.product
 
-import com.example.data.room.product.ProductDao
-import com.example.data.room.product.ProductModelMapper
 import com.example.domain.product.Product
-import com.example.domain.repositories.ProductsRepository
+import com.example.domain.product.ProductsRepository
 import io.reactivex.Completable
 import io.reactivex.Single
 

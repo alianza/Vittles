@@ -1,6 +1,6 @@
 package com.example.vittles.productlist
 
-import com.example.domain.enums.ExpirationIndicationColor
+import com.example.domain.product.ExpirationIndicationColor
 import com.example.domain.product.DeleteProduct
 import com.example.domain.product.Product
 import com.example.domain.product.GetProducts

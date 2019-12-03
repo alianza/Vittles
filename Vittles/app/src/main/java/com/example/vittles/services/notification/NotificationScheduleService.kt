@@ -5,7 +5,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import com.crashlytics.android.Crashlytics
-import com.example.domain.exceptions.NotificationDataException
+import com.example.domain.notification.NotificationDataException
 import com.example.domain.notification.GetNotificationProductsExpired
 import com.example.domain.notification.Notification
 import com.example.vittles.settings.SharedPreference

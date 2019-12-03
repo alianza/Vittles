@@ -1,4 +1,4 @@
-package com.example.domain.enums
+package com.example.domain.product
 
 /**
  * Enumerator for the colors that represent the days until a products expires.

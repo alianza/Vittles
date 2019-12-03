@@ -23,7 +23,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.domain.barcode.ProductDictionary
 import com.example.domain.consts.DAYS_REMAINING_EXPIRED
-import com.example.domain.enums.ProductDictionaryStatus
+import com.example.domain.product.ProductDictionaryStatus
 import com.example.domain.product.Product
 import com.example.vittles.NavigationGraphDirections
 import com.example.vittles.R

@@ -1,4 +1,4 @@
-package com.example.domain.repositories
+package com.example.domain.product
 
 import com.example.domain.product.Product
 import io.reactivex.Completable

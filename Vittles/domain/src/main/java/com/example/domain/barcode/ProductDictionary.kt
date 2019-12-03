@@ -1,6 +1,6 @@
 package com.example.domain.barcode
 
-import com.example.domain.enums.ProductDictionaryStatus
+import com.example.domain.product.ProductDictionaryStatus
 
 /**
  * Dictionary model for barcode (key), product name (value) pairs.

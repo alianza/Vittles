@@ -1,6 +1,5 @@
 package com.example.domain.barcode
 
-import com.example.domain.repositories.BarcodesRepository
 import io.reactivex.Completable
 import javax.inject.Inject
 

@@ -1,4 +1,4 @@
-package com.example.domain.enums
+package com.example.domain.wasteReport
 
 /**
  * Enumerator which holds the days of different time ranges
