@@ -32,7 +32,6 @@
                 android:text="@string/settings_vibration"
                 android:textAlignment="textStart"
                 android:textColor="@color/black"
-                android:textColorLink="@color/colorPrimary"
                 android:textSize="20sp" />
 
             <TextView
@@ -50,6 +49,7 @@
             android:layout_weight="1"
             android:theme="@style/SCBSwitch"
             android:title="@string/settings_notifications"
+            android:defaultValue="true"
             tools:layout_editor_absoluteX="205dp"
             tools:layout_editor_absoluteY="508dp" />
 
@@ -92,7 +92,7 @@
 
         <Spinner
             android:id="@+id/notification_timer"
-            android:layout_width="265dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="bottom"
             android:layout_weight="1"
@@ -140,6 +140,7 @@
             android:layout_width="100dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:defaultValue="true"
             android:theme="@style/SCBSwitch"
             android:title="@string/settings_notifications"
             tools:layout_editor_absoluteY="175dp" />

@@ -43,9 +43,9 @@ interface ScannerContract {
     }
 
     interface Presenter {
-        fun addProduct(product: Product, checkDate: Boolean)
-        fun addBarcode(productDictionary: ProductDictionary)
-        fun updateBarcode(productDictionary: ProductDictionary)
+        fun addProductToList(product: Product, checkDate: Boolean)
+        fun insertProductDictionary(productDictionary: ProductDictionary)
+        fun patchProductDictionary(productDictionary: ProductDictionary)
         fun startCamera()
         fun getPreview(): Preview
         fun getImageAnalysis(): ImageAnalysis

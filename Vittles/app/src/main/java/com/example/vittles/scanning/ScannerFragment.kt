@@ -7,26 +7,35 @@ import android.content.res.ColorStateList
 import android.os.Bundle
 import android.os.Handler
 import android.os.Vibrator
-import android.view.*
-import android.widget.*
+import android.view.LayoutInflater
+import android.view.MotionEvent
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.camera.core.CameraX
 import androidx.camera.core.DisplayOrientedMeteringPointFactory
 import androidx.camera.core.FocusMeteringAction
 import androidx.core.content.ContextCompat
 import androidx.core.widget.ImageViewCompat
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.domain.barcode.ProductDictionary
 import com.example.domain.consts.DAYS_REMAINING_EXPIRED
 import com.example.domain.enums.ProductDictionaryStatus
 import com.example.domain.product.Product
+import com.example.vittles.NavigationGraphDirections
 import com.example.vittles.R
-import com.example.vittles.scanning.ScannerPresenter.Companion.REQUEST_CODE_PERMISSIONS
-import com.example.vittles.scanning.ScannerPresenter.Companion.REQUIRED_PERMISSIONS
+import com.example.vittles.VittlesApp.Companion.REQUEST_CODE_PERMISSIONS
+import com.example.vittles.VittlesApp.Companion.REQUIRED_PERMISSIONS
+import com.example.vittles.enums.PreviousFragmentIndex
 import com.example.vittles.scanning.productaddmanual.ProductNameEditView
 import com.example.vittles.services.popups.PopupBase
 import com.example.vittles.services.popups.PopupButton
 import com.example.vittles.services.popups.PopupManager
 import com.example.vittles.services.scanner.DateFormatterService
+import com.example.vittles.settings.SharedPreference
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_camera.*
@@ -46,15 +55,21 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
     @Inject
     lateinit var presenter: ScannerPresenter
 
+    private val args: ScannerFragmentArgs by navArgs()
+
     /** The vibration manager used for vibration when a product is scanned. */
     private lateinit var vibrator: Vibrator
 
     /** @suppress */
     private var barcodeDictionary =
-        ProductDictionary(ProductDictionaryStatus.NOT_READY(), ProductDictionaryStatus.NOT_READY())
+        ProductDictionary(ProductDictionaryStatus.NOT_READY() as String, ProductDictionaryStatus.NOT_READY() as String)
 
     /** @suppress */
     private var expirationDate: DateTime? = null
+
+    /** To acces shared preferences(data) in the form of value-key*/
+    private lateinit var sharedPreference: SharedPreference
+
 
     /** {@inheritDoc} */
     override fun onCreateView(
@@ -63,12 +78,19 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
     ): View? {
         presenter.start(this@ScannerFragment)
         vibrator = context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        sharedPreference = SharedPreference(context!!)
         return inflater.inflate(R.layout.fragment_camera, container, false)
     }
 
     /** {@inheritDoc} */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val onBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                onBackPressed()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(onBackPressedCallback)
         initViews(view)
         initListeners()
         presenter.checkPermissions()
@@ -146,9 +168,9 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
             DateTime(),
             null
         )
-        presenter.addProduct(product, true)
-        if (!barcodeDictionary.containsNotReady() || !barcodeDictionary.containsNotFound()) {
-            presenter.updateBarcode(barcodeDictionary)
+        presenter.addProductToList(product, true)
+        if (!barcodeDictionary.containsNotReady() && !barcodeDictionary.containsNotFound()) {
+            presenter.patchProductDictionary(barcodeDictionary)
         }
     }
 
@@ -268,14 +290,15 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
     }
 
     /**
+     * Checks if vibration is enabled on the settings.
      * Lets the phone vibrate and colors the scanning plane.
      *
      */
     // Deprecation suppressed because we use an old API version
     @Suppress("DEPRECATION")
     fun onScanSuccessful() {
-        // Vibrate
-        if (vibrator.hasVibrator()) {
+        // Checks vibration setting and then Vibrate or not vibrate
+        if (vibrator.hasVibrator() && sharedPreference.getValueBoolean("Vibration", true)) {
             vibrator.vibrate(50)
         }
         // Turn scanning plane green, and back after 500 ms
@@ -306,7 +329,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         ibRefreshProductName.visibility = View.VISIBLE
         toggleAddVittleButton()
         if (insertLocal) {
-            presenter.addBarcode(productDictionary)
+            presenter.insertProductDictionary(productDictionary)
         }
     }
 
@@ -412,8 +435,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
                 textureView.post { presenter.startCamera() }
                 btnUseCamera.visibility = View.GONE
                 btnTorch.visibility = View.VISIBLE
-            }
-            else {
+            } else {
                 onNoPermissionGranted()
             }
         }
@@ -564,7 +586,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
                 ),
                 PopupButton(getString(R.string.btn_no).toUpperCase()),
                 PopupButton(getString(R.string.btn_yes).toUpperCase()) {
-                    presenter.addProduct(
+                    presenter.addProductToList(
                         product,
                         false
                     )
@@ -590,12 +612,24 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
                 ),
                 PopupButton(getString(R.string.btn_no).toUpperCase()),
                 PopupButton(getString(R.string.btn_yes).toUpperCase()) {
-                    presenter.addProduct(
+                    presenter.addProductToList(
                         product,
                         false
                     )
                 }
             )
+        }
+    }
+
+    private fun onBackPressed() {
+        when (args.previousFragment) {
+            PreviousFragmentIndex.PRODUCT_LIST() -> findNavController().navigate(
+                NavigationGraphDirections.actionGlobalProductListFragment(null, false)
+            )
+            PreviousFragmentIndex.SETTINGS() -> findNavController().navigate(
+                NavigationGraphDirections.actionGlobalSettingsFragment()
+            )
+            else -> findNavController().navigateUp()
         }
     }
 

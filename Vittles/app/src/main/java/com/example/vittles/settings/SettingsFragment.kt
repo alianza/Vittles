@@ -20,6 +20,7 @@ import kotlinx.android.synthetic.main.fragment_settings.*
 import javax.inject.Inject
 
 
+
 /**
  * Fragment class for the Settings. This is the fragment that shows the settings.
  *
@@ -63,12 +64,14 @@ class SettingsFragment : DaggerFragment(), SettingsContract.View {
 
         setListeners()
 
-        val notificationToggle = sharedPreference.getValueBoolean("Notification", false)
+        val notificationToggle = sharedPreference.getValueBoolean("Notification", true)
         notification_toggle.isChecked = notificationToggle
 
         val notificationTimeSelection = sharedPreference.getValueInt("NOTIFICATION_TIME")
         notification_timer.setSelection(notificationTimeSelection)
 
+        val vibrationToggle = sharedPreference.getValueBoolean("Vibration", true)
+        vibration_toggle.isChecked = vibrationToggle
     }
 
     /**
@@ -76,6 +79,18 @@ class SettingsFragment : DaggerFragment(), SettingsContract.View {
      *
      */
     override fun setListeners() {
+
+        /*
+         * called when the vibration switch is switched
+         *
+         */
+        vibration_toggle.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                sharedPreference.save("Vibration", true)
+            }else{
+                sharedPreference.save("Vibration", false)
+            }
+        }
 
         /*
          * called when the notification switch is switched

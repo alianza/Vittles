@@ -66,7 +66,25 @@
     <string name="oldest">Oldest</string>
 
     <!--    Waste Report-->
+    <string name="vittles_eaten">Vittles eaten</string>
+    <string name="vittles_expired">Vittles expired</string>
+    <string name="count_fail">Error while loading statistic</string>
+    <string name="this_week">This week</string>
+    <string name="waste_percent">%1$d%%</string>
+    <string name="food_eaten">Food eaten</string>
+    <string name="time_range">Time range</string>
+    <string name="last_seven_days">Last 7 days</string>
+    <string name="last_30_days">Last 30 days</string>
+    <string name="last_year">Last year</string>
+    <string name="content_description">Button time range</string>
+    <string name="null_percent">0%</string>
+    <string name="zero">0</string>
+    <string name="dot">Dot</string>
+
+    <!--    Waste Report-->
     <string name="waste_report_title">Waste report</string>
+    <string name="bar_chart_error">"Error Bar Chart"</string>
+    <string name="circle_chart_error">"Error Circle Chart"</string>
 
     <!--    Scan Vittles-->
     <string name="scan_vittles_title">Scan Vittles</string>
@@ -105,6 +123,32 @@
     <string name="already_expired_subText">The scanned product is already past it’s expiration date. \n Do you still want to add it?</string>
     <string name="remove_product_header">Remove Product</string>
     <string name="remove_product_subText">Do you want to remove this product? \n It won\'t be used for the food waste report.</string>
+
+    <!-- Praises for delighter -->
+    <string-array name="praises">
+        <item>😁</item>
+        <item>😃</item>
+        <item>😄</item>
+        <item>😊</item>
+        <item>😍</item>
+        <item>😘</item>
+        <item>🙌</item>
+        <item>✌</item>
+        <item>🌍</item>
+        <item>🍀</item>
+        <item>👌</item>
+        <item>👏</item>
+        <item>👍</item>
+        <item>💖</item>
+        <item>💪</item>
+        <item>🌳</item>
+        <item>🌻</item>
+        <item>🌞</item>
+        <item>✨</item>
+        <item>🍎</item>
+        <item>❤</item>
+        <item>🤩</item>
+    </string-array>
 
     <!--    Content Descriptions-->
     <string name="cd_refresh_button">Refresh</string>

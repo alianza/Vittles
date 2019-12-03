@@ -8,15 +8,26 @@ import androidx.appcompat.widget.ActionMenuView
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.size
+import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import com.example.vittles.productlist.ProductListFragment
+import com.example.vittles.productlist.ProductListFragmentDirections
+import com.example.vittles.wastereport.WasteReportFragmentDirections
 import com.google.android.material.bottomappbar.BottomAppBar
 import kotlinx.android.synthetic.main.content_main.*
 import androidx.navigation.findNavController as findNavSetup
+import android.content.Intent
+import androidx.core.app.ComponentActivity.ExtraData
+import androidx.core.content.ContextCompat.getSystemService
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import androidx.camera.core.CameraX
+import com.example.vittles.enums.PreviousFragmentIndex
+import com.example.vittles.settings.SettingsFragment
+
 
 /**
  * Main activity that only controls the navigation.
@@ -29,6 +40,9 @@ class MainActivity : AppCompatActivity() {
      * The Navigation Controller of the application.
      */
     private lateinit var navController: NavController
+
+    private val topLevelDestinations =
+        arrayOf(R.id.productListFragment, R.id.wasteReportFragment, R.id.settingsFragment)
 
     /** {@inheritDoc}*/
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,11 +71,8 @@ class MainActivity : AppCompatActivity() {
 
         val appBarConfiguration = AppBarConfiguration(navController.graph)
         // Make reports top-level so that the back button disables
-        appBarConfiguration.topLevelDestinations.add(R.id.reportsFragment)
-        appBarConfiguration.topLevelDestinations.add(R.id.settingsFragment)
+        appBarConfiguration.topLevelDestinations.addAll(topLevelDestinations)
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration)
-
-        mainToolbar.setupWithNavController(navController, appBarConfiguration)
 
         // Initialize navigation visibility
         navController.addOnDestinationChangedListener { _, destination, _ ->
@@ -70,14 +81,14 @@ class MainActivity : AppCompatActivity() {
                     showBottomNavigationBar(barVisibility = true, fabVisibility = true)
                     getMenuItemByTitle(R.string.menu_home)?.let { setMenuItemIconColor(it) }
                 }
-                R.id.reportsFragment -> {
+                R.id.wasteReportFragment -> {
                     showBottomNavigationBar(barVisibility = true, fabVisibility = true)
                     getMenuItemByTitle(R.string.menu_reports)?.let { setMenuItemIconColor(it) }
                 }
                 R.id.scannerFragment -> {
                     showBottomNavigationBar(barVisibility = false, fabVisibility = false)
                 }
-                R.id.settingsFragment-> {
+                R.id.settingsFragment -> {
                     showBottomNavigationBar(barVisibility = true, fabVisibility = true)
                     getMenuItemByTitle(R.string.menu_settings)?.let { setMenuItemIconColor(it) }
                 }
@@ -89,7 +100,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         // Distribute the menu items evenly
-        if(navView.childCount > 0) {
+        if (navView.childCount > 0) {
             val actionMenuView = navView.getChildAt(0) as ActionMenuView
             actionMenuView.layoutParams.width = ActionMenuView.LayoutParams.MATCH_PARENT
         }
@@ -102,7 +113,7 @@ class MainActivity : AppCompatActivity() {
      * @param fabVisibility Boolean value that represents if the FAB should be visible.
      */
     private fun showBottomNavigationBar(barVisibility: Boolean, fabVisibility: Boolean) {
-        navView.visibility =  if(barVisibility)  BottomAppBar.VISIBLE else BottomAppBar.GONE
+        navView.visibility = if (barVisibility) BottomAppBar.VISIBLE else BottomAppBar.GONE
         if (fabVisibility) fab.show() else fab.hide()
     }
 
@@ -114,7 +125,7 @@ class MainActivity : AppCompatActivity() {
         fab.setOnClickListener { onAddButtonClick() }
 
         navView.menu.getItem(0).setOnMenuItemClickListener { onNavigateHomeButtonClick() }
-        navView.menu.getItem(1).setOnMenuItemClickListener { onNavigateSearchButtonClick()}
+        navView.menu.getItem(1).setOnMenuItemClickListener { onNavigateSearchButtonClick() }
         navView.menu.getItem(4).setOnMenuItemClickListener { onNavigateReportsButtonClick() }
         navView.menu.getItem(5).setOnMenuItemClickListener { onNavigateSettingsButtonClick() }
     }
@@ -129,7 +140,8 @@ class MainActivity : AppCompatActivity() {
 
         for (x in 0 until navView.menu.size) {
             if (navView.menu.getItem(x).isEnabled && navView.menu.getItem(x).title != menuItem.title) {
-                val wrappedDrawableToReset = setDrawableTint(navView.menu.getItem(x).icon, R.color.black)
+                val wrappedDrawableToReset =
+                    setDrawableTint(navView.menu.getItem(x).icon, R.color.black)
                 navView.menu.getItem(x).icon = wrappedDrawableToReset
             }
         }
@@ -162,11 +174,50 @@ class MainActivity : AppCompatActivity() {
      */
     private fun getMenuItemByTitle(title: Int): MenuItem? {
         for (x in 0 until navView.menu.size) {
-            if (navView.menu.getItem(x).isEnabled && navView.menu.getItem(x).title == getString(title)) {
+            if (navView.menu.getItem(x).isEnabled && navView.menu.getItem(x).title == getString(
+                    title
+                )
+            ) {
                 return navView.menu.getItem(x)
             }
         }
         return null
+    }
+
+    /**
+     * Customized navigate up flow. Necessary for passing values on the navigate up flow.
+     *
+     * @return Boolean that represents if the action succeeded.
+     */
+    override fun onSupportNavigateUp(): Boolean {
+        return when (navController.currentDestination?.id) {
+            R.id.scannerFragment, R.id.productInfoFragment -> {
+                onBackPressedDispatcher.onBackPressed()
+                true
+            }
+            else -> super.onSupportNavigateUp()
+        }
+    }
+
+    /**
+     * Customized back button flow. Necessary for closing the app on top level destinations
+     * and passing values on the navigate up flow.
+     *
+     */
+    override fun onBackPressed() {
+        /*
+        If current destination is a top level destination, close the app. Otherwise follow the
+        navigate up flow.
+        */
+        if (topLevelDestinations.contains(navController.currentDestination?.id)) {
+            // Closes the app (returns to home screen) instead of quitting it with finish()
+            val intent = Intent(Intent.ACTION_MAIN)
+            intent.addCategory(Intent.CATEGORY_HOME)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
+        } else {
+            onSupportNavigateUp()
+        }
     }
 
     /**
@@ -185,9 +236,13 @@ class MainActivity : AppCompatActivity() {
      * @return Boolean value that represents if the navigation has succeeded.
      */
     private fun onNavigateSearchButtonClick(): Boolean {
-            ProductListFragment.withSearch = true
-            findNavController(fragmentHost).navigate(NavigationGraphDirections.actionGlobalProductListFragment())
-            return true
+        findNavController(fragmentHost).navigate(
+            NavigationGraphDirections.actionGlobalProductListFragment(
+                null,
+                true
+            )
+        )
+        return true
     }
 
     /**
@@ -210,7 +265,14 @@ class MainActivity : AppCompatActivity() {
      *
      */
     private fun onAddButtonClick() {
-        findNavController(fragmentHost).navigate(NavigationGraphDirections.actionGlobalScannerFragment())
+        val currentFragment =
+            supportFragmentManager.primaryNavigationFragment!!.childFragmentManager.fragments.first()
+        val previousFragment: PreviousFragmentIndex = when (currentFragment) {
+            is ProductListFragment -> PreviousFragmentIndex.PRODUCT_LIST
+            is SettingsFragment -> PreviousFragmentIndex.SETTINGS
+            else -> PreviousFragmentIndex.PRODUCT_LIST
+        }
+        findNavController(fragmentHost).navigate(NavigationGraphDirections.actionGlobalScannerFragment(previousFragment() as Int))
     }
 
     /**
@@ -219,7 +281,7 @@ class MainActivity : AppCompatActivity() {
      * @return Boolean value that represents if the navigation has succeeded.
      */
     private fun onNavigateReportsButtonClick(): Boolean {
-        return if (navController.currentDestination?.id != R.id.reportsFragment) {
+        return if (navController.currentDestination?.id != R.id.wasteReportFragment) {
             findNavController(fragmentHost).navigate(NavigationGraphDirections.actionGlobalReportsFragment())
             true
         } else {

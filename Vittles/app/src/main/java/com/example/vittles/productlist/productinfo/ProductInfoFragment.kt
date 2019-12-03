@@ -6,9 +6,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.domain.product.Product
+import com.example.vittles.NavigationGraphDirections
 import com.example.vittles.R
 import com.example.vittles.enums.DeleteType
 import com.example.vittles.productlist.ParcelableProductMapper
@@ -58,7 +61,12 @@ class ProductInfoFragment : DaggerFragment(),
     /** {@inheritDoc} */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                onBackPressed()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(callback)
         initViews()
     }
 
@@ -210,5 +218,9 @@ class ProductInfoFragment : DaggerFragment(),
 
         Snackbar.make(layout, getString(R.string.product_updated_failed), Snackbar.LENGTH_LONG)
             .show()
+    }
+
+    fun onBackPressed() {
+        findNavController().navigate(NavigationGraphDirections.actionGlobalProductListFragment(null))
     }
 }
