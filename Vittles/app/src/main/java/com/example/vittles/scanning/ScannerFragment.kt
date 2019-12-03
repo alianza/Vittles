@@ -23,7 +23,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.domain.barcode.ProductDictionary
 import com.example.domain.consts.DAYS_REMAINING_EXPIRED
-import com.example.domain.enums.ProductDictionaryStatus
+import com.example.domain.product.ProductDictionaryStatus
 import com.example.domain.product.Product
 import com.example.vittles.NavigationGraphDirections
 import com.example.vittles.R
@@ -55,6 +55,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
     @Inject
     lateinit var presenter: ScannerPresenter
 
+    /** @suppress */
     private val args: ScannerFragmentArgs by navArgs()
 
     /** The vibration manager used for vibration when a product is scanned. */
@@ -66,6 +67,9 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
 
     /** @suppress */
     private var expirationDate: DateTime? = null
+
+    /** To access shared preferences(data) in the form of value-key*/
+    private lateinit var sharedPreference: SharedPreference
 
 
     /** {@inheritDoc} */
@@ -421,7 +425,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
 
     /**
      * Process result from permission request dialog box, has the request
-     * been granted? If yes, start Camera. Otherwise display a toast
+     * been granted? If yes, start Camera. Otherwise display a toast.
      */
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<String>, grantResults: IntArray
@@ -594,7 +598,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
     /**
      * Shows the AlreadyExpired popup.
      *
-     * @param product Product to show AlreadyExpiredPopup of
+     * @param product Product to show AlreadyExpiredPopup of.
      */
     @SuppressLint("DefaultLocale")
     override fun onShowAlreadyExpiredPopup(product: Product) {
@@ -617,6 +621,10 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         }
     }
 
+    /**
+     * Handles the back button pressed.
+     *
+     */
     private fun onBackPressed() {
         when (args.previousFragment) {
             PreviousFragmentIndex.PRODUCT_LIST() -> findNavController().navigate(

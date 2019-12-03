@@ -1,6 +1,5 @@
 package com.example.vittles.scanning
 
-import androidx.camera.core.CameraX
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import com.example.vittles.services.scanner.ScanningService

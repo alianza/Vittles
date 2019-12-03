@@ -143,8 +143,7 @@ class ProductItemTouchHelper(private val products: List<Product>, var context: C
             setBackgroundColor(c, viewHolder, ContextCompat.getColor(context, R.color.green))
             drawIcon(c, viewHolder, context.getDrawable(R.drawable.ic_eaten_white)!!, IconLocation.LEFT)
         }
-
-
+        
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
     }
 

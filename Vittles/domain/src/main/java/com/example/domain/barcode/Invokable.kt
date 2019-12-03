@@ -1,4 +1,4 @@
-package com.example.domain.enums
+package com.example.domain.barcode
 
 /**
  * Interface for invokable enumerators.

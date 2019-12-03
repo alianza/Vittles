@@ -15,6 +15,8 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import com.example.vittles.productlist.ProductListFragment
+import com.example.vittles.productlist.ProductListFragmentDirections
+import com.example.vittles.wastereport.WasteReportFragmentDirections
 import com.google.android.material.bottomappbar.BottomAppBar
 import kotlinx.android.synthetic.main.content_main.*
 import androidx.navigation.findNavController as findNavSetup
@@ -40,7 +42,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
 
     private val topLevelDestinations =
-        arrayOf(R.id.productListFragment, R.id.reportsFragment, R.id.settingsFragment)
+        arrayOf(R.id.productListFragment, R.id.wasteReportFragment, R.id.settingsFragment)
 
     /** {@inheritDoc}*/
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,7 +81,7 @@ class MainActivity : AppCompatActivity() {
                     showBottomNavigationBar(barVisibility = true, fabVisibility = true)
                     getMenuItemByTitle(R.string.menu_home)?.let { setMenuItemIconColor(it) }
                 }
-                R.id.reportsFragment -> {
+                R.id.wasteReportFragment -> {
                     showBottomNavigationBar(barVisibility = true, fabVisibility = true)
                     getMenuItemByTitle(R.string.menu_reports)?.let { setMenuItemIconColor(it) }
                 }
@@ -279,7 +281,7 @@ class MainActivity : AppCompatActivity() {
      * @return Boolean value that represents if the navigation has succeeded.
      */
     private fun onNavigateReportsButtonClick(): Boolean {
-        return if (navController.currentDestination?.id != R.id.reportsFragment) {
+        return if (navController.currentDestination?.id != R.id.wasteReportFragment) {
             findNavController(fragmentHost).navigate(NavigationGraphDirections.actionGlobalReportsFragment())
             true
         } else {

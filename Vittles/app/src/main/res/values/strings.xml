@@ -37,6 +37,20 @@
 
     <!--    Settings-->
     <string name="settings_title">Settings</string>
+    <string name="settings_vibration">Vibrations</string>
+    <string name="settings_vibration_detail">Click to toggle vibrations.</string>
+    <string name="settings_notifications">Notifications</string>
+    <string name="settings_notifications_detail">Click to toggle notifications.</string>
+    <string name="settings_schedule">Schedule</string>
+    <string name="settings_schedule_detail">Choose notification schedule.</string>
+    <string name="settings_advanced">Advanced</string>
+    <string name="settings_saved">Saved products</string>
+    <string name="settings_saved_detail">Remove saved product names.</string>
+    <string name="settings_popup_confirm_header">Are you sure?</string>
+    <string name="settings_popup_confirm_subtext">All saved product names will be removed. \n You will have to add them again.</string>
+    <string name="settings_remove_products_success">Removed product names!</string>
+    <string name="settings_remove_products_fail">Could not remove product names.</string>
+
 
     <!--    Image Content Descriptions-->
     <string name="border">.</string>
@@ -54,7 +68,25 @@
     <string name="oldest">Oldest</string>
 
     <!--    Waste Report-->
+    <string name="vittles_eaten">Vittles eaten</string>
+    <string name="vittles_expired">Vittles expired</string>
+    <string name="count_fail">Error while loading statistic</string>
+    <string name="this_week">This week</string>
+    <string name="waste_percent">%1$d%%</string>
+    <string name="food_eaten">Food eaten</string>
+    <string name="time_range">Time range</string>
+    <string name="last_seven_days">Last 7 days</string>
+    <string name="last_30_days">Last 30 days</string>
+    <string name="last_year">Last year</string>
+    <string name="content_description">Button time range</string>
+    <string name="null_percent">0%</string>
+    <string name="zero">0</string>
+    <string name="dot">Dot</string>
+
+    <!--    Waste Report-->
     <string name="waste_report_title">Waste report</string>
+    <string name="bar_chart_error">"Error Bar Chart"</string>
+    <string name="circle_chart_error">"Error Circle Chart"</string>
 
     <!--    Scan Vittles-->
     <string name="scan_vittles_title">Scan Vittles</string>
@@ -94,9 +126,36 @@
     <string name="remove_product_header">Remove Product</string>
     <string name="remove_product_subText">Do you want to remove this product? \n It won\'t be used for the food waste report.</string>
 
+    <!-- Praises for delighter -->
+    <string-array name="praises">
+        <item>😁</item>
+        <item>😃</item>
+        <item>😄</item>
+        <item>😊</item>
+        <item>😍</item>
+        <item>😘</item>
+        <item>🙌</item>
+        <item>✌</item>
+        <item>🌍</item>
+        <item>🍀</item>
+        <item>👌</item>
+        <item>👏</item>
+        <item>👍</item>
+        <item>💖</item>
+        <item>💪</item>
+        <item>🌳</item>
+        <item>🌻</item>
+        <item>🌞</item>
+        <item>✨</item>
+        <item>🍎</item>
+        <item>❤</item>
+        <item>🤩</item>
+    </string-array>
+
     <!--    Content Descriptions-->
     <string name="cd_refresh_button">Refresh</string>
     <string name="cd_torch">Torch</string>
+    <string name="cd_expand">Expand</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="pref_int1">int1</string>
@@ -106,7 +165,6 @@
     <integer name="pref_int1_default">10</integer>
     <string name="int1_title">Set Int 1</string>
     <string name="int1_desc">Change the value of the first integer</string>
-
 
     <!-- Notification options -->
     <string-array name="notification_time">

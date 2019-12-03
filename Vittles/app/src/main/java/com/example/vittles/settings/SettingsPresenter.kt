@@ -9,7 +9,9 @@ import com.example.vittles.services.notification.NotificationScheduleService
 import javax.inject.Inject
 
 /**
- * TODO
+ * The presenter for the settings activity.
+ *
+ * @author Jan-Willem van Bremen
  *
  * @property setNotificationSchedule
  * @property setNotificationEnabled
@@ -70,5 +72,17 @@ class SettingsPresenter @Inject constructor(
     fun onVibrationEnabledChanged(isEnabled: Boolean) {
         setVibrationEnabled(isEnabled)
         this.vibrationEnabled.value = isEnabled
+    }
+
+    /**
+     * Method used to remove all local product names
+     *
+     */
+    override fun clearProductDictionary() {
+        disposables.add(
+            emptyProductDictionary().subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ view?.onProductDictionaryClearSuccess() }, { view?.onProductDictionaryClearFail() })
+        )
     }
 }

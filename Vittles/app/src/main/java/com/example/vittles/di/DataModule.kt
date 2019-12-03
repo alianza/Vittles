@@ -1,22 +1,27 @@
 package com.example.vittles.di
 
 import android.content.Context
-import com.example.data.*
 import com.example.data.retrofit.off.OffApi
 import com.example.data.retrofit.off.OffApiService
 import com.example.data.retrofit.tsco.TscoApi
 import com.example.data.retrofit.tsco.TscoApiService
-import com.example.data.BarcodesRepositoryImpl
+import com.example.data.room.productdictionary.BarcodesRepositoryImpl
 import com.example.data.room.productdictionary.BarcodeDao
 import com.example.data.room.productdictionary.ProductDictionaryModelMapper
 import com.example.data.room.createBarcodeDaoImpl
 import com.example.data.room.product.ProductDao
 import com.example.data.room.product.ProductModelMapper
+import com.example.data.room.wastereport.WasteReportModelMapper
 import com.example.data.room.createProductDaoImpl
 import com.example.data.settings.SharedPrefsSettingsRepository
 import com.example.domain.repositories.BarcodesRepository
 import com.example.domain.repositories.ProductsRepository
 import com.example.domain.settings.SettingsRepository
+import com.example.data.room.product.ProductsRepositoryImpl
+import com.example.data.room.wastereport.WasteReportRepositoryImpl
+import com.example.domain.barcode.BarcodesRepository
+import com.example.domain.product.ProductsRepository
+import com.example.domain.wasteReport.WasteReportRepository
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -64,5 +69,15 @@ class DataModule {
         productsApiTSCO: TscoApiService,
         productsApiOFF: OffApiService,
         mapper: ProductDictionaryModelMapper
-    ): BarcodesRepository = BarcodesRepositoryImpl(barcodeDao, productsApiTSCO, productsApiOFF, mapper)
+    ): BarcodesRepository = BarcodesRepositoryImpl(
+        barcodeDao,
+        productsApiTSCO,
+        productsApiOFF,
+        mapper
+    )
+
+    @Singleton
+    @Provides
+    fun provideWasteReportRepository(productDao: ProductDao, mapper: WasteReportModelMapper): WasteReportRepository =
+        WasteReportRepositoryImpl(productDao, mapper)
 }
