@@ -45,8 +45,8 @@ class ScannerPresenter @Inject internal constructor(
      * @param product The product to add.
      * @param checkDate If the date should be checked to show a popup.
      */
-    fun addProduct(product: Product, checkDate: Boolean) {
-        disposables.add(addProduct.invoke(product, checkDate)
+    fun addProductToList(product: Product, checkDate: Boolean) {
+        disposables.add(addProduct(product, checkDate)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
