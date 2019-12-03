@@ -13,8 +13,10 @@ import com.example.data.room.createBarcodeDaoImpl
 import com.example.data.room.product.ProductDao
 import com.example.data.room.product.ProductModelMapper
 import com.example.data.room.createProductDaoImpl
+import com.example.data.settings.SharedPrefsSettingsRepository
 import com.example.domain.repositories.BarcodesRepository
 import com.example.domain.repositories.ProductsRepository
+import com.example.domain.settings.SettingsRepository
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -47,6 +49,13 @@ class DataModule {
         productDao: ProductDao,
         mapper: ProductModelMapper
     ): ProductsRepository = ProductsRepositoryImpl(productDao, mapper)
+
+    @Singleton
+    @Provides
+    fun provideSettingsRepository(
+        sharedPrefsSettingsRepository: SharedPrefsSettingsRepository,
+        context: Context
+    ): SettingsRepository = SharedPrefsSettingsRepository(context)
 
     @Singleton
     @Provides

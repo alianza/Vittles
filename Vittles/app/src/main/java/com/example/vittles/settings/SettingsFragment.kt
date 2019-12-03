@@ -6,11 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
+import com.example.domain.settings.model.NotificationSchedule
 import com.example.vittles.R
 import com.example.vittles.services.notification.NotificationScheduleService
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_settings.*
-
+import javax.inject.Inject
 
 
 /**
@@ -18,11 +19,14 @@ import kotlinx.android.synthetic.main.fragment_settings.*
  *
  *@author Fethi Tewelde
  */
-class SettingsFragment : DaggerFragment(), SettingsContract.View {
+class SettingsFragment : DaggerFragment() {
 
 
     /** To Store shared preferences(data) in the form of value-key*/
     lateinit var sharedPreference: SharedPreference
+
+    @Inject
+    lateinit var presenter: SettingsContract.Presenter
 
     /** @suppress */
     override fun onCreateView(
@@ -47,7 +51,7 @@ class SettingsFragment : DaggerFragment(), SettingsContract.View {
      * shows/keeps the last selected value of notification time
      *
      */
-    override fun initViews() {
+    private fun initViews() {
 
         setListeners()
 
@@ -65,7 +69,7 @@ class SettingsFragment : DaggerFragment(), SettingsContract.View {
      * Sets all necessary event listeners on ui elements
      *
      */
-    override fun setListeners() {
+    private fun setListeners() {
 
         /*
          * called when the vibration switch is switched
@@ -105,7 +109,11 @@ class SettingsFragment : DaggerFragment(), SettingsContract.View {
                 position: Int,
                 id: Long
             ) {
-                sharedPreference.save("NOTIFICATION_TIME", position)
+                val notificationSchedule = NotificationSchedule.values()[position]
+
+                presenter.onNotificationScheduleChanged(notificationSchedule)
+
+//                sharedPreference.save("NOTIFICATION_TIME", position)
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {

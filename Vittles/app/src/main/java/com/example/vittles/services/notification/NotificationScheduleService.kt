@@ -8,6 +8,8 @@ import com.crashlytics.android.Crashlytics
 import com.example.domain.exceptions.NotificationDataException
 import com.example.domain.notification.GetNotificationProductsExpired
 import com.example.domain.notification.Notification
+import com.example.domain.settings.GetNotificationSchedule
+import com.example.domain.settings.model.NotificationSchedule
 import com.example.vittles.settings.SharedPreference
 import dagger.android.DaggerBroadcastReceiver
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -28,6 +30,9 @@ class NotificationScheduleService : DaggerBroadcastReceiver() {
      */
     @Inject
     lateinit var getNotification: GetNotificationProductsExpired
+
+    @Inject
+    lateinit var getNotificationSchedule: GetNotificationSchedule
 
     /** Disposables contains all async calls made */
     private val disposables: CompositeDisposable = CompositeDisposable()
@@ -95,20 +100,35 @@ class NotificationScheduleService : DaggerBroadcastReceiver() {
          *
          * @param context The application context needed for the alarm manager.
          */
-        fun scheduleNotificationAudit(context: Context) {
+        fun scheduleNotificationAudit(
+            context: Context,
+            getNotificationSchedule: GetNotificationSchedule
+        ) {
             val sharedPreference = SharedPreference(context)
             if (sharedPreference.getValueBoolean("Notification", true)) {
                 val notificationTimer = sharedPreference.getValueInt("NOTIFICATION_TIME")
 
                 var nextAudit = DateTime()
 
+                when (getNotificationSchedule.invoke()) {
+                    NotificationSchedule.DAILY -> {
+                    }
+                    NotificationSchedule.WEEKLY -> {
+                    }
+                    NotificationSchedule.MONTHLY -> {
+                    }
+                }
+
                 when (notificationTimer) {
                     0 -> nextAudit = // Set nextAudit to Daily at 12:00PM
-                        DateTime().plusDays(1).withHourOfDay(12).withMinuteOfHour(0).withSecondOfMinute(0)
+                        DateTime().plusDays(1).withHourOfDay(12).withMinuteOfHour(0)
+                            .withSecondOfMinute(0)
                     1 -> nextAudit = // Set nextAudit to Weekly at 12:00PM
-                        DateTime().plusWeeks(1).withHourOfDay(12).withMinuteOfHour(0).withSecondOfMinute(0)
+                        DateTime().plusWeeks(1).withHourOfDay(12).withMinuteOfHour(0)
+                            .withSecondOfMinute(0)
                     2 -> nextAudit = // Set nextAudit to Monthly at 12:00PM
-                        DateTime().plusMonths(1).withHourOfDay(12).withMinuteOfHour(0).withSecondOfMinute(0)
+                        DateTime().plusMonths(1).withHourOfDay(12).withMinuteOfHour(0)
+                            .withSecondOfMinute(0)
                 }
                 alarmManager =
                     context.getSystemService(Context.ALARM_SERVICE) as AlarmManager

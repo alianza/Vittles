@@ -1,5 +1,7 @@
 package com.example.vittles.settings
 
+import com.example.domain.settings.model.NotificationSchedule
+
 
 /**
  * MVP Contract for settings overview.
@@ -12,5 +14,8 @@ interface SettingsContract {
         fun setListeners()
     }
 
-    interface Presenter{}
+    interface Presenter{
+
+        fun onNotificationScheduleChanged(notificationSchedule: NotificationSchedule)
+    }
 }
