@@ -54,4 +54,11 @@ interface BarcodesRepository {
      * @return Completable that represents if the insert has succeeded.
      */
     fun updateProductDictionaryRoom(productDictionary: ProductDictionary): Completable
+
+    /**
+     * Delete product dictionaries in the local database.
+     *
+     * @return Completable that represents if the insert has succeeded.
+     */
+    fun emptyProductDictionaryRoom(): Completable
 }
