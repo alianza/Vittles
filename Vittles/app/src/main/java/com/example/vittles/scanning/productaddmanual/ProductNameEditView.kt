@@ -9,7 +9,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import android.widget.Toast
-import com.example.domain.enums.BarcodeDictionaryStatus
+import com.example.domain.enums.ProductDictionaryStatus
 import com.example.vittles.R
 import kotlinx.android.synthetic.main.dialog_productname_edit.view.*
 
@@ -49,14 +49,14 @@ class ProductNameEditView(
 
         if (!productName.isNullOrBlank()
             && productName != context.getString(R.string.product_name_scanner)
-            && productName != BarcodeDictionaryStatus.NOT_FOUND()
-            && productName != BarcodeDictionaryStatus.NOT_READY()) {
+            && productName != ProductDictionaryStatus.NOT_FOUND()
+            && productName != ProductDictionaryStatus.NOT_READY()) {
             view.etProductName.setText(productName)
         }
 
         view.tvMessage.visibility =
-            if (productName == BarcodeDictionaryStatus.NOT_FOUND()) TextView.VISIBLE else TextView.GONE
-        insertLocal = productName == BarcodeDictionaryStatus.NOT_FOUND()
+            if (productName == ProductDictionaryStatus.NOT_FOUND()) TextView.VISIBLE else TextView.GONE
+        insertLocal = productName == ProductDictionaryStatus.NOT_FOUND()
 
         view.btnConfirm.setOnClickListener { onConfirmButtonClicked() }
         view.btnCancel.setOnClickListener { onCancelButtonClicked() }
