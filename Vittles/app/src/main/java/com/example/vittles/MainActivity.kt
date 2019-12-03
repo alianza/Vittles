@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
 
     private val topLevelDestinations =
-        arrayOf(R.id.productListFragment, R.id.reportsFragment, R.id.settingsFragment)
+        arrayOf(R.id.productListFragment, R.id.wasteReportFragment, R.id.settingsFragment)
 
     /** {@inheritDoc}*/
     override fun onCreate(savedInstanceState: Bundle?) {
