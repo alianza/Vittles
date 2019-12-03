@@ -1,5 +1,6 @@
-package com.example.data.room
+package com.example.data.room.product
 
+import com.example.data.room.product.WasteReportEntity
 import com.example.domain.wasteReport.WasteReportProduct
 import javax.inject.Inject
 

@@ -180,51 +180,51 @@ class CustomBarChartRender(
         br: Boolean,
         bl: Boolean
     ): Path {
-        var rx = rx
-        var ry = ry
+        var radiusX = rx
+        var radiusY = ry
         val top = rect.top
         val left = rect.left
         val right = rect.right
         val bottom = rect.bottom
         val path = Path()
-        if (rx < 0) rx = 0f
-        if (ry < 0) ry = 0f
+        if (radiusX < 0) radiusX = 0f
+        if (radiusY < 0) radiusY = 0f
         val width = right - left
         val height = bottom - top
-        if (rx > width / 2) rx = width / 2
-        if (ry > height / 2) ry = height / 2
-        val widthMinusCorners = width - 2 * rx
-        val heightMinusCorners = height - 2 * ry
+        if (radiusX > width / 2) radiusX = width / 2
+        if (radiusY > height / 2) radiusY = height / 2
+        val widthMinusCorners = width - 2 * radiusX
+        val heightMinusCorners = height - 2 * radiusY
 
-        path.moveTo(right, top + ry)
+        path.moveTo(right, top + radiusY)
         if (tr)
-            path.rQuadTo(0f, -ry, -rx, -ry)//top-right corner
+            path.rQuadTo(0f, -radiusY, -radiusX, -radiusY)//top-right corner
         else {
-            path.rLineTo(0f, -ry)
-            path.rLineTo(-rx, 0f)
+            path.rLineTo(0f, -radiusY)
+            path.rLineTo(-radiusX, 0f)
         }
         path.rLineTo(-widthMinusCorners, 0f)
         if (tl)
-            path.rQuadTo(-rx, 0f, -rx, ry) //top-left corner
+            path.rQuadTo(-radiusX, 0f, -radiusX, radiusY) //top-left corner
         else {
-            path.rLineTo(-rx, 0f)
-            path.rLineTo(0f, ry)
+            path.rLineTo(-radiusX, 0f)
+            path.rLineTo(0f, radiusY)
         }
         path.rLineTo(0f, heightMinusCorners)
 
         if (bl)
-            path.rQuadTo(0f, ry, rx, ry)//bottom-left corner
+            path.rQuadTo(0f, radiusY, radiusX, radiusY)//bottom-left corner
         else {
-            path.rLineTo(0f, ry)
-            path.rLineTo(rx, 0f)
+            path.rLineTo(0f, radiusY)
+            path.rLineTo(radiusX, 0f)
         }
 
         path.rLineTo(widthMinusCorners, 0f)
         if (br)
-            path.rQuadTo(rx, 0f, rx, -ry) //bottom-right corner
+            path.rQuadTo(radiusX, 0f, radiusX, -radiusY) //bottom-right corner
         else {
-            path.rLineTo(rx, 0f)
-            path.rLineTo(0f, -ry)
+            path.rLineTo(radiusX, 0f)
+            path.rLineTo(0f, -radiusY)
         }
 
         path.rLineTo(0f, -heightMinusCorners)

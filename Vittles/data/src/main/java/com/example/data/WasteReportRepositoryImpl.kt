@@ -1,12 +1,11 @@
 package com.example.data
 
-import com.example.data.room.ProductDao
-import com.example.data.room.WasteReportModelMapper
+import com.example.data.room.product.WasteReportModelMapper
+import com.example.data.room.product.ProductDao
 import com.example.domain.repositories.WasteReportRepository
 import com.example.domain.wasteReport.WasteReportProduct
 import io.reactivex.Completable
 import io.reactivex.Single
-import org.joda.time.DateTime
 
 /**
  * This is the implementation of the WasteReportRepository in the Domain layer.

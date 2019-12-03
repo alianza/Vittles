@@ -12,7 +12,7 @@ import com.example.data.room.productdictionary.ProductDictionaryModelMapper
 import com.example.data.room.createBarcodeDaoImpl
 import com.example.data.room.product.ProductDao
 import com.example.data.room.product.ProductModelMapper
-import com.example.data.room.WasteReportModelMapper
+import com.example.data.room.product.WasteReportModelMapper
 import com.example.data.room.createProductDaoImpl
 import com.example.domain.repositories.BarcodesRepository
 import com.example.domain.repositories.ProductsRepository
