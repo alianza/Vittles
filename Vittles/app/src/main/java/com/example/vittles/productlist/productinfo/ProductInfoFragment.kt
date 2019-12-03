@@ -108,7 +108,7 @@ class ProductInfoFragment : DaggerFragment(),
      *
      */
     override fun onEditNameClicked() {
-        val dialog = ProductNameEditView(onFinished = { productName: String ->
+        val dialog = ProductNameEditView(onFinished = { productName: String, _: Boolean ->
             onNameChanged(productName)
         })
         context?.let { dialog.openDialog(it, tvProductName.text.toString()) }

@@ -6,7 +6,11 @@ import android.util.Size
 import android.view.ViewGroup
 import androidx.camera.core.*
 import androidx.core.content.ContextCompat
+import com.example.domain.barcode.AddBarcodeDictionary
+import com.example.domain.barcode.BarcodeDictionary
 import com.example.domain.barcode.GetProductByBarcode
+import com.example.domain.barcode.UpdateBarcodeDictionary
+import com.example.domain.enums.BarcodeDictionaryStatus
 import com.example.domain.product.AddProduct
 import com.example.domain.product.Product
 import com.example.vittles.mvp.BasePresenter
@@ -21,12 +25,18 @@ import javax.inject.Inject
 /**
  * The presenter for the scanning activity.
  *
+ * @author Jeroen Flietstra
+ *
  * @property getProductByBarcode The GetProductByBarcode use case from the domain module.
  * @property addProduct The AddProduct use case from the domain module.
+ * @property addBarcodeDictionary The AddBarcodeDictionary use case from the domain module.
+ * @property updateBarcodeDictionary The UpdateBarcodeDictionary use case from the domain module.
  */
 class ScannerPresenter @Inject internal constructor(
     private val getProductByBarcode: GetProductByBarcode,
-    private val addProduct: AddProduct
+    private val addProduct: AddProduct,
+    private val addBarcodeDictionary: AddBarcodeDictionary,
+    private val updateBarcodeDictionary: UpdateBarcodeDictionary
 ) :
     BasePresenter<ScannerFragment>(), ScannerContract.Presenter {
 
@@ -45,7 +55,7 @@ class ScannerPresenter @Inject internal constructor(
      * @param product The product to add.
      * @param checkDate If the date should be checked to show a popup.
      */
-    fun addProduct(product: Product, checkDate: Boolean) {
+    override fun addProduct(product: Product, checkDate: Boolean) {
         disposables.add(addProduct.invoke(product, checkDate)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -63,6 +73,32 @@ class ScannerPresenter @Inject internal constructor(
                 }
             )
         )
+    }
+
+    /**
+     * Calls the use case to add a barcode dictionary.
+     *
+     * @param barcodeDictionary The barcode dictionary to add.
+     */
+    override fun addBarcode(barcodeDictionary: BarcodeDictionary) {
+        if (!barcodeDictionary.containsNotReady()) {
+            disposables.add(addBarcodeDictionary(barcodeDictionary)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe())
+        }
+    }
+
+    /**
+     * Calls the use case to update a barcode dictionary.
+     *
+     * @param barcodeDictionary The barcode dictionary to update.
+     */
+    override fun updateBarcode(barcodeDictionary: BarcodeDictionary) {
+        disposables.add(updateBarcodeDictionary(barcodeDictionary)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe())
     }
 
     /**
@@ -108,7 +144,7 @@ class ScannerPresenter @Inject internal constructor(
     /**
      * Creates an ImageAnalysis used for the preview analysis.
      *
-     * @return The CameraX ImageAnalysis
+     * @return The CameraX ImageAnalysis.
      */
     override fun getImageAnalysis(): ImageAnalysis {
         // Setup image analysis pipeline that computes average pixel luminance
