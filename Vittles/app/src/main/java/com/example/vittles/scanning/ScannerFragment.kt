@@ -22,7 +22,11 @@ import androidx.core.text.isDigitsOnly
 import androidx.core.widget.ImageViewCompat
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.navigation.fragment.NavHostFragment
+import com.example.domain.barcode.BarcodeDictionary
+import com.example.domain.barcode.GetProductByBarcode
 import com.example.domain.consts.DAYS_REMAINING_EXPIRED
+import com.example.domain.enums.BarcodeDictionaryStatus
 import com.example.domain.product.Product
 import com.example.vittles.NavigationGraphDirections
 import com.example.vittles.R
@@ -59,8 +63,11 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
     private lateinit var vibrator: Vibrator
 
     /** @suppress */
-    private var expirationDate: DateTime? = null
+    private var barcodeDictionary =
+        BarcodeDictionary(BarcodeDictionaryStatus.NOT_READY(), BarcodeDictionaryStatus.NOT_READY())
 
+    /** @suppress */
+    private var expirationDate: DateTime? = null
 
     /** {@inheritDoc} */
     override fun onCreateView(
@@ -159,6 +166,9 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
             null
         )
         presenter.addProductToList(product, true)
+        if (!barcodeDictionary.containsNotReady() || !barcodeDictionary.containsNotFound()) {
+            presenter.updateBarcode(barcodeDictionary)
+        }
     }
 
     /**
@@ -220,14 +230,18 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
     /**
      * Handles interface actions once the productName has been successfully scanned.
      *
-     * @param productName The product name that has been retrieved from the camera.
+     * @param barcodeDictionary The product name with barcode that
+     *                          has been retrieved from the remote databases.
      */
-    override fun onBarcodeScanned(productName: String) {
+    override fun onBarcodeScanned(barcodeDictionary: BarcodeDictionary) {
         if (!PreviewAnalyzer.hasBarCode) {
-            if (productName.isDigitsOnly()) {
-                onShowEditNameDialog(true)
+            this.barcodeDictionary = barcodeDictionary
+            if (barcodeDictionary.containsNotFound()) {
+                onShowEditNameDialog(barcodeDictionary)
+                onProductNameCheckboxChecked(barcodeDictionary.barcode)
+            } else {
+                barcodeDictionary.productName?.let { onProductNameCheckboxChecked(it) }
             }
-            onProductNameCheckboxChecked(productName)
             ibRefreshProductName.visibility = View.VISIBLE
             PreviewAnalyzer.hasBarCode = true
             onScanSuccessful()
@@ -302,13 +316,17 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
     /**
      * Puts the necessary values on the right place after edit.
      *
-     * @param productName The new product name.
+     * @param barcodeDictionary The new product name with the barcode.
      */
-    override fun onProductNameEdited(productName: String) {
-        onProductNameCheckboxChecked(productName)
+    override fun onProductNameEdited(barcodeDictionary: BarcodeDictionary, insertLocal: Boolean) {
+        barcodeDictionary.productName?.let { onProductNameCheckboxChecked(it) }
+        this.barcodeDictionary = barcodeDictionary
         PreviewAnalyzer.hasBarCode = true
         ibRefreshProductName.visibility = View.VISIBLE
         toggleAddVittleButton()
+        if (insertLocal) {
+            presenter.addBarcode(barcodeDictionary)
+        }
     }
 
     /**
@@ -441,7 +459,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
      *
      */
     override fun onEditNameButtonClick() {
-        onShowEditNameDialog()
+        onShowEditNameDialog(barcodeDictionary)
     }
 
     /**
@@ -489,13 +507,13 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
     /**
      * Opens the edit product name dialog.
      *
-     * @param showMessage Boolean value that represents if the message should be shown.
+     * @param barcodeDictionary The current barcode dictionary.
      */
-    override fun onShowEditNameDialog(showMessage: Boolean) {
-        val dialog = ProductNameEditView(onFinished = { productName: String ->
-            onProductNameEdited(productName)
-        }, showMessage = showMessage)
-        context?.let { dialog.openDialog(it, tvProductName.text.toString()) }
+    override fun onShowEditNameDialog(barcodeDictionary: BarcodeDictionary) {
+        val dialog = ProductNameEditView(onFinished = { productName: String, insertLocal: Boolean ->
+            onProductNameEdited(BarcodeDictionary(barcodeDictionary.barcode, productName), insertLocal)
+        })
+        context?.let { dialog.openDialog(it, barcodeDictionary.productName) }
     }
 
     /**
@@ -543,7 +561,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
      *
      * @param product Product to show CloseToExpirationPopup of
      */
-    @SuppressLint("DefaultLocale")
+    @SuppressLint("DefaultLocale", "StringFormatInvalid")
     override fun onShowCloseToExpirationPopup(product: Product) {
         val multipleDaysChar = if (product.getDaysRemaining() == 1) {
             ""
