@@ -27,6 +27,7 @@ import com.example.vittles.services.popups.PopupBase
 import com.example.vittles.services.popups.PopupButton
 import com.example.vittles.services.popups.PopupManager
 import com.example.vittles.services.sorting.SortMenu
+import com.example.vittles.settings.SharedPreference
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
@@ -53,6 +54,9 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
 
     /** The vibration manager used for vibration when a product is eaten or removed. */
     private lateinit var vibrator: Vibrator
+
+    /** To acces shared preferences(data) in the form of value-key*/
+    private lateinit var sharedPreference: SharedPreference
 
     /** Arguments passed to the fragment */
     private val productArgs: ProductListFragmentArgs by navArgs()
@@ -82,6 +86,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
     ): View? {
         with(presenter) { start(this@ProductListFragment) }
         vibrator = context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        sharedPreference = SharedPreference(context!!)
         return inflater.inflate(R.layout.fragment_productlist, container, false)
     }
 
@@ -190,8 +195,9 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
 
         products.remove(product)
 
-        //Vibrate feedback
-        if (vibrator.hasVibrator()) {
+        //checks the vibration setting then if it will give vibration feedback
+
+        if (vibrator.hasVibrator()&& sharedPreference.getValueBoolean("Vibration", true)) {
             vibrator.vibrate(50)
         }
 
