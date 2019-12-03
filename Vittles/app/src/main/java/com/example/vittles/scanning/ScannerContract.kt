@@ -43,7 +43,7 @@ interface ScannerContract {
     }
 
     interface Presenter {
-        fun addProduct(product: Product, checkDate: Boolean)
+        fun addProductToList(product: Product, checkDate: Boolean)
         fun insertProductDictionary(productDictionary: ProductDictionary)
         fun patchProductDictionary(productDictionary: ProductDictionary)
         fun startCamera()

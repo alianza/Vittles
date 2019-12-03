@@ -27,6 +27,7 @@ import com.example.vittles.services.popups.PopupBase
 import com.example.vittles.services.popups.PopupButton
 import com.example.vittles.services.popups.PopupManager
 import com.example.vittles.services.sorting.SortMenu
+import com.example.vittles.settings.SharedPreference
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
@@ -54,6 +55,9 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
 
     /** The vibration manager used for vibration when a product is eaten or removed. */
     private lateinit var vibrator: Vibrator
+
+    /** To acces shared preferences(data) in the form of value-key*/
+    private lateinit var sharedPreference: SharedPreference
 
     /** Arguments passed to the fragment */
     private val productArgs: ProductListFragmentArgs by navArgs()
@@ -83,6 +87,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
     ): View? {
         with(presenter) { start(this@ProductListFragment) }
         vibrator = context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        sharedPreference = SharedPreference(context!!)
         return inflater.inflate(R.layout.fragment_productlist, container, false)
     }
 
@@ -96,9 +101,9 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
 
     /** {@inheritDoc} */
     override fun onDestroy() {
-        super.onDestroy()
         onSearchBarClosed()
         presenter.destroy()
+        super.onDestroy()
     }
 
     /**
@@ -124,7 +129,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
 
         setItemTouchHelper()
 
-        if (withSearch) {
+        if (productArgs.withSearch) {
             onSearchBarOpened()
         }
     }
@@ -137,7 +142,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
     override fun onResume() {
         super.onResume()
         onPopulateRecyclerView()
-        withSearch = false
+//        withSearch = false
 
         // Set sortBtn text to currentSortingType
         btnSort.text = getString(sortMenu.currentSortingType.textId)
@@ -191,8 +196,9 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
 
         products.remove(product)
 
-        //Vibrate feedback
-        if (vibrator.hasVibrator()) {
+        //checks the vibration setting then if it will give vibration feedback
+
+        if (vibrator.hasVibrator()&& sharedPreference.getValueBoolean("Vibration", true)) {
             vibrator.vibrate(50)
         }
 
@@ -357,8 +363,6 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
                 getProductToDelete(ParcelableProductMapper.fromParcelable(productArgs.ProductToDelete!!)) != null){
                     val productToDelete = getProductToDelete(ParcelableProductMapper.fromParcelable(productArgs.ProductToDelete!!))!!
                     onSafeDeleteProduct(productToDelete, productArgs.ProductToDelete!!.deleteType!!)
-
-                productArgs.ProductToDelete!!.uid = -1
             }
         }, 300)    }
 
@@ -413,9 +417,9 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
      */
     override fun onSearchBarOpened() {
         svSearch?.setQuery("", true)
-        llSearch.visibility = View.VISIBLE
+        llSearch?.visibility = View.VISIBLE
         svSearch?.isIconified = false
-        toolbar.visibility = View.GONE
+        toolbar?.visibility = View.GONE
     }
 
     /**
@@ -426,13 +430,5 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
         svSearch?.setQuery("", true)
         llSearch?.visibility = View.GONE
         toolbar?.visibility = View.VISIBLE
-    }
-
-    companion object {
-        /**
-         * Indicates if the fragment should be opened with the search
-         * field opened.
-         */
-        var withSearch = false
     }
 }
