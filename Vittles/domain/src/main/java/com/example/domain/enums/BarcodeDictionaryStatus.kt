@@ -19,17 +19,3 @@ enum class BarcodeDictionaryStatus(protected val status: String): Invokable {
         override operator fun invoke() = status
     }
 }
-
-/**
- * Interface for invokable enumerators.
- *
- * @author Jeroen Flietstra
- */
-interface Invokable {
-    /**
-     * Returns the assigned status value.
-     *
-     * @return The status value of the enumerator.
-     */
-    operator fun invoke(): String
-}
