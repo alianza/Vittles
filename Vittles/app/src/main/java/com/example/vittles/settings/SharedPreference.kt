@@ -24,7 +24,7 @@ class SharedPreference(val context: Context) {
      * @param KEY_NAME The key name of the preference.
      * @param text The string value of the key.
      */
-    fun save(KEY_NAME: String, text: String) {
+     fun save(KEY_NAME: String, text: String) {
 
         val editor: SharedPreferences.Editor = sharedPref.edit()
 
