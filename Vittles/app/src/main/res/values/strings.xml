@@ -71,6 +71,8 @@
 
     <!--    Waste Report-->
     <string name="waste_report_title">Waste report</string>
+    <string name="bar_chart_error">"Error Bar Chart"</string>
+    <string name="circle_chart_error">"Error Circle Chart"</string>
 
     <!--    Scan Vittles-->
     <string name="scan_vittles_title">Scan Vittles</string>

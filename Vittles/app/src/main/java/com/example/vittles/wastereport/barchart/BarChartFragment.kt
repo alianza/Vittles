@@ -303,7 +303,7 @@ class BarChartFragment @Inject internal constructor(var date: DateTime) : Dagger
      *
      */
     override fun fail() {
-        Toast.makeText(context, "Error Bar Chart", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, R.string.bar_chart_error, Toast.LENGTH_SHORT).show()
 
     }
 

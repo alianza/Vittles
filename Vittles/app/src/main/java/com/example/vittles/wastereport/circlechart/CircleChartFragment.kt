@@ -169,7 +169,7 @@ class CircleChartFragment @Inject internal constructor(var date: DateTime, var v
      *
      */
     override fun setNoResultsView() {
-        Toast.makeText(context, "Error Circle Chart", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, R.string.circle_chart_error, Toast.LENGTH_SHORT).show()
     }
 
     /**
