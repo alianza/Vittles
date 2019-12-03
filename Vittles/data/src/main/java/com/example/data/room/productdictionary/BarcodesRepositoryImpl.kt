@@ -1,12 +1,12 @@
-package com.example.data
+package com.example.data.room.productdictionary
 
 import com.example.data.retrofit.off.OffApiService
 import com.example.data.retrofit.tsco.TscoApiService
 import com.example.data.room.productdictionary.BarcodeDao
 import com.example.data.room.productdictionary.ProductDictionaryModelMapper
 import com.example.domain.barcode.ProductDictionary
-import com.example.domain.exceptions.ProductNotFoundException
-import com.example.domain.repositories.BarcodesRepository
+import com.example.domain.product.ProductNotFoundException
+import com.example.domain.barcode.BarcodesRepository
 import io.reactivex.Completable
 import io.reactivex.Observable
 

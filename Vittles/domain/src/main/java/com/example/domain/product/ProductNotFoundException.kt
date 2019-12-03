@@ -1,4 +1,4 @@
-package com.example.domain.exceptions
+package com.example.domain.product
 
 /**
  * Exception thrown when a product could not be found in an API.

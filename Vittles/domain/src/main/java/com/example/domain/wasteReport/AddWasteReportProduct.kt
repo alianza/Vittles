@@ -1,8 +1,6 @@
 package com.example.domain.wasteReport
 
-import com.example.domain.repositories.WasteReportRepository
 import io.reactivex.Completable
-import io.reactivex.Single
 import javax.inject.Inject
 
 /**

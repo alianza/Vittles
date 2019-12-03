@@ -1,7 +1,5 @@
 package com.example.domain.wasteReport
 
-import com.example.domain.enums.TimeRangeSteps
-import com.example.domain.repositories.WasteReportRepository
 import io.reactivex.Single
 import org.joda.time.DateTime
 import org.joda.time.Days

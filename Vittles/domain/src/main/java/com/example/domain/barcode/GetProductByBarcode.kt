@@ -1,7 +1,6 @@
 package com.example.domain.barcode
 
-import com.example.domain.enums.ProductDictionaryStatus
-import com.example.domain.repositories.BarcodesRepository
+import com.example.domain.product.ProductDictionaryStatus
 import io.reactivex.Observable
 import javax.inject.Inject
 

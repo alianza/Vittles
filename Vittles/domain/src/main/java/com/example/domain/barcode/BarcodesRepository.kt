@@ -1,7 +1,7 @@
-package com.example.domain.repositories
+package com.example.domain.barcode
 
 import com.example.domain.barcode.ProductDictionary
-import com.example.domain.exceptions.ProductNotFoundException
+import com.example.domain.product.ProductNotFoundException
 import io.reactivex.Completable
 import io.reactivex.Observable
 

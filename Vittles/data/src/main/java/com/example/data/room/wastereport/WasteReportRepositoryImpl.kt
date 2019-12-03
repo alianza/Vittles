@@ -1,8 +1,7 @@
-package com.example.data
+package com.example.data.room.wastereport
 
-import com.example.data.room.wastereport.WasteReportModelMapper
 import com.example.data.room.product.ProductDao
-import com.example.domain.repositories.WasteReportRepository
+import com.example.domain.wasteReport.WasteReportRepository
 import com.example.domain.wasteReport.WasteReportProduct
 import io.reactivex.Completable
 import io.reactivex.Single
