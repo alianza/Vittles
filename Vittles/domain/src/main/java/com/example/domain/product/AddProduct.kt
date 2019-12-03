@@ -22,7 +22,7 @@ class AddProduct @Inject constructor(private val repository: ProductsRepository)
      * @param product The product that will be added.
      * @return The compatibility status of adding the product ot the database.
      */
-    fun invoke(product: Product, checkDate: Boolean): Completable = validate(product, checkDate).andThen(repository.post(product))
+    operator fun invoke(product: Product, checkDate: Boolean): Completable = validate(product, checkDate).andThen(repository.post(product))
 
     /**
      * Validates if the product can be added to the database.
