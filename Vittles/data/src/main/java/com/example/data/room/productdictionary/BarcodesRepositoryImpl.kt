@@ -64,4 +64,8 @@ class BarcodesRepositoryImpl(
     /** {@inheritDoc} */
     override fun updateProductDictionaryRoom(productDictionary: ProductDictionary): Completable =
         Completable.fromAction { barcodeDao.updateProductDictionary(mapper.toEntity(productDictionary)) }
+
+    /** {@inheritDoc} */
+    override fun emptyProductDictionaryRoom(): Completable =
+        Completable.fromAction { barcodeDao.emptyProductDictionary() }
 }

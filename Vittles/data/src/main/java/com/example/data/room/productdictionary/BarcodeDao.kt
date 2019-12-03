@@ -1,9 +1,6 @@
 package com.example.data.room.productdictionary
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
 import io.reactivex.Maybe
 
 /**
@@ -39,4 +36,12 @@ interface BarcodeDao {
      */
     @Update
     fun updateProductDictionary(productDictionaryEntity: ProductDictionaryEntity)
+
+    /**
+     * Deletes all entities in the local database.
+     *
+     * @return Long value that returns the barcode if succeeded, otherwise it returns a negative value.
+     */
+    @Query("DELETE FROM ProductDictionaryEntity WHERE 1")
+    fun emptyProductDictionary()
 }
