@@ -1,5 +1,6 @@
 package com.example.domain.wasteReport
 
+import com.example.domain.enums.TimeRangeSteps
 import com.example.domain.repositories.WasteReportRepository
 import io.reactivex.Single
 import org.joda.time.DateTime
@@ -26,8 +27,8 @@ class GetWasteReportProducts @Inject constructor(private val repository: WasteRe
         return repository.getWasteReportProducts(date.millis).map { products ->
             val listBarChartEntry = mutableListOf<BarChartEntry>()
             var timeRangeDays = Days.daysBetween(date, DateTime.now().withTimeAtStartOfDay()).days
-            if(timeRangeDays == 365) {
-                timeRangeDays = 12
+            if(timeRangeDays == TimeRangeSteps.LAST_YEAR.steps) {
+                timeRangeDays = TimeRangeSteps.MONTH_YEAR.steps
             }
 
             for (i in 0 until timeRangeDays) {
@@ -35,7 +36,7 @@ class GetWasteReportProducts @Inject constructor(private val repository: WasteRe
                 var eaten: Int
                 var barEntryDate: DateTime
 
-                if(timeRangeDays == 12) {
+                if(timeRangeDays == TimeRangeSteps.MONTH_YEAR.steps) {
                     barEntryDate = DateTime.now().minusMonths(i-1)
                     productAmount = products.count {
                         it.creationDate.monthOfYear == i
