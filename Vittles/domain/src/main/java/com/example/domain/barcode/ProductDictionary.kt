@@ -1,6 +1,6 @@
 package com.example.domain.barcode
 
-import com.example.domain.enums.BarcodeDictionaryStatus
+import com.example.domain.enums.ProductDictionaryStatus
 
 /**
  * Dictionary model for barcode (key), product name (value) pairs.
@@ -10,15 +10,15 @@ import com.example.domain.enums.BarcodeDictionaryStatus
  * @property barcode The key.
  * @property productName The value.
  */
-data class BarcodeDictionary(
+data class ProductDictionary(
     val barcode: String,
     val productName: String?
 ) {
     fun containsNotReady(): Boolean {
-        return barcode == BarcodeDictionaryStatus.NOT_READY() || productName == BarcodeDictionaryStatus.NOT_READY()
+        return barcode == ProductDictionaryStatus.NOT_READY() || productName == ProductDictionaryStatus.NOT_READY()
     }
 
     fun containsNotFound(): Boolean {
-        return barcode == BarcodeDictionaryStatus.NOT_FOUND() || productName == BarcodeDictionaryStatus.NOT_FOUND()
+        return barcode == ProductDictionaryStatus.NOT_FOUND() || productName == ProductDictionaryStatus.NOT_FOUND()
     }
 }

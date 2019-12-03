@@ -18,17 +18,16 @@ import androidx.camera.core.CameraX
 import androidx.camera.core.DisplayOrientedMeteringPointFactory
 import androidx.camera.core.FocusMeteringAction
 import androidx.core.content.ContextCompat
-import androidx.core.text.isDigitsOnly
 import androidx.core.widget.ImageViewCompat
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.fragment.NavHostFragment
 import com.example.domain.barcode.BarcodeDictionary
 import com.example.domain.barcode.GetProductByBarcode
+import com.example.domain.barcode.ProductDictionary
 import com.example.domain.consts.DAYS_REMAINING_EXPIRED
-import com.example.domain.enums.BarcodeDictionaryStatus
+import com.example.domain.enums.ProductDictionaryStatus
 import com.example.domain.product.Product
-import com.example.vittles.NavigationGraphDirections
 import com.example.vittles.R
 import com.example.vittles.VittlesApp.Companion.REQUEST_CODE_PERMISSIONS
 import com.example.vittles.VittlesApp.Companion.REQUIRED_PERMISSIONS
@@ -64,7 +63,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
 
     /** @suppress */
     private var barcodeDictionary =
-        BarcodeDictionary(BarcodeDictionaryStatus.NOT_READY(), BarcodeDictionaryStatus.NOT_READY())
+        ProductDictionary(ProductDictionaryStatus.NOT_READY(), ProductDictionaryStatus.NOT_READY())
 
     /** @suppress */
     private var expirationDate: DateTime? = null
@@ -166,8 +165,8 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
             null
         )
         presenter.addProductToList(product, true)
-        if (!barcodeDictionary.containsNotReady() || !barcodeDictionary.containsNotFound()) {
-            presenter.updateBarcode(barcodeDictionary)
+        if (!barcodeDictionary.containsNotReady() && !barcodeDictionary.containsNotFound()) {
+            presenter.patchProductDictionary(barcodeDictionary)
         }
     }
 
@@ -230,17 +229,17 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
     /**
      * Handles interface actions once the productName has been successfully scanned.
      *
-     * @param barcodeDictionary The product name with barcode that
+     * @param productDictionary The product name with barcode that
      *                          has been retrieved from the remote databases.
      */
-    override fun onBarcodeScanned(barcodeDictionary: BarcodeDictionary) {
+    override fun onBarcodeScanned(productDictionary: ProductDictionary) {
         if (!PreviewAnalyzer.hasBarCode) {
-            this.barcodeDictionary = barcodeDictionary
-            if (barcodeDictionary.containsNotFound()) {
-                onShowEditNameDialog(barcodeDictionary)
-                onProductNameCheckboxChecked(barcodeDictionary.barcode)
+            this.barcodeDictionary = productDictionary
+            if (productDictionary.containsNotFound()) {
+                onShowEditNameDialog(productDictionary)
+                onProductNameCheckboxChecked(productDictionary.barcode)
             } else {
-                barcodeDictionary.productName?.let { onProductNameCheckboxChecked(it) }
+                productDictionary.productName?.let { onProductNameCheckboxChecked(it) }
             }
             ibRefreshProductName.visibility = View.VISIBLE
             PreviewAnalyzer.hasBarCode = true
@@ -316,16 +315,16 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
     /**
      * Puts the necessary values on the right place after edit.
      *
-     * @param barcodeDictionary The new product name with the barcode.
+     * @param productDictionary The new product name with the barcode.
      */
-    override fun onProductNameEdited(barcodeDictionary: BarcodeDictionary, insertLocal: Boolean) {
-        barcodeDictionary.productName?.let { onProductNameCheckboxChecked(it) }
-        this.barcodeDictionary = barcodeDictionary
+    override fun onProductNameEdited(productDictionary: ProductDictionary, insertLocal: Boolean) {
+        productDictionary.productName?.let { onProductNameCheckboxChecked(it) }
+        this.barcodeDictionary = productDictionary
         PreviewAnalyzer.hasBarCode = true
         ibRefreshProductName.visibility = View.VISIBLE
         toggleAddVittleButton()
         if (insertLocal) {
-            presenter.addBarcode(barcodeDictionary)
+            presenter.insertProductDictionary(productDictionary)
         }
     }
 
@@ -507,13 +506,13 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
     /**
      * Opens the edit product name dialog.
      *
-     * @param barcodeDictionary The current barcode dictionary.
+     * @param productDictionary The current barcode dictionary.
      */
-    override fun onShowEditNameDialog(barcodeDictionary: BarcodeDictionary) {
+    override fun onShowEditNameDialog(productDictionary: ProductDictionary) {
         val dialog = ProductNameEditView(onFinished = { productName: String, insertLocal: Boolean ->
-            onProductNameEdited(BarcodeDictionary(barcodeDictionary.barcode, productName), insertLocal)
+            onProductNameEdited(ProductDictionary(productDictionary.barcode, productName), insertLocal)
         })
-        context?.let { dialog.openDialog(it, barcodeDictionary.productName) }
+        context?.let { dialog.openDialog(it, productDictionary.productName) }
     }
 
     /**

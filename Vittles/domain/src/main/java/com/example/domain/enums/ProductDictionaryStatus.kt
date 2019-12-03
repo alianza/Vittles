@@ -1,13 +1,13 @@
 package com.example.domain.enums
 
 /**
- * Enumerator for the status of a barcode dictionary.
+ * Enumerator for the status of a product dictionary.
  *
  * @author Jeroen Flietstra
  *
  * @property status The status value of the enumerator.
  */
-enum class BarcodeDictionaryStatus(protected val status: String): Invokable {
+enum class ProductDictionaryStatus(protected val status: String): Invokable {
     /** Error code for when a product could not be found in the remote databases */
     NOT_FOUND("@NOT_FOUND@") {
         /** {@inheritDoc} */
