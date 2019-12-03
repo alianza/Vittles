@@ -43,6 +43,7 @@ import javax.inject.Inject
  * @author Jan-Willem van Bremen
  * @author Fethi Tewelde
  * @author Marc van Spronsen
+ * @author Sarah Lange
  */
 class ProductListFragment : DaggerFragment(), ProductListContract.View {
 
