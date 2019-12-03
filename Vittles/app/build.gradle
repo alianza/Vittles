@@ -112,10 +112,6 @@ dependencies {
 
     //Preferences
     implementation 'com.takisoft.fix:preference-v7:25.3.0.0'
-
-    //Delighter effect
-    implementation 'tyrantgit:explosionfield:1.0.1'
-
 }
 
 buildscript {
