@@ -9,7 +9,7 @@ import com.example.data.room.productdictionary.BarcodeDao
 import com.example.data.room.productdictionary.ProductDictionaryEntity
 import com.example.data.room.product.ProductDao
 import com.example.data.room.product.ProductEntity
-import com.example.data.room.product.WasteReportEntity
+import com.example.data.room.wastereport.WasteReportEntity
 
 /**
  * Creates the ProductDao.

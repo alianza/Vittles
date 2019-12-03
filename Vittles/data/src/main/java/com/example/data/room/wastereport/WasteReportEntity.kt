@@ -1,4 +1,4 @@
-package com.example.data.room.product
+package com.example.data.room.wastereport
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

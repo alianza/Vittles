@@ -1,6 +1,7 @@
 package com.example.data.room.product
 
 import androidx.room.*
+import com.example.data.room.wastereport.WasteReportEntity
 import io.reactivex.Single
 
 /**

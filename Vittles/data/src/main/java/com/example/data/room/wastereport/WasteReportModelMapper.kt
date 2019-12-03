@@ -1,6 +1,6 @@
-package com.example.data.room.product
+package com.example.data.room.wastereport
 
-import com.example.data.room.product.WasteReportEntity
+import com.example.data.room.wastereport.WasteReportEntity
 import com.example.domain.wasteReport.WasteReportProduct
 import javax.inject.Inject
 
@@ -24,5 +24,9 @@ class WasteReportModelMapper @Inject constructor() {
     * @param from The wasteProduct model.
     */
     fun toEntity(from: WasteReportProduct) =
-        WasteReportEntity(from.uid, from.creationDate, from.wasteType)
+        WasteReportEntity(
+            from.uid,
+            from.creationDate,
+            from.wasteType
+        )
 }

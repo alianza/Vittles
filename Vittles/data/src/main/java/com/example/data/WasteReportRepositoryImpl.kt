@@ -1,6 +1,6 @@
 package com.example.data
 
-import com.example.data.room.product.WasteReportModelMapper
+import com.example.data.room.wastereport.WasteReportModelMapper
 import com.example.data.room.product.ProductDao
 import com.example.domain.repositories.WasteReportRepository
 import com.example.domain.wasteReport.WasteReportProduct
