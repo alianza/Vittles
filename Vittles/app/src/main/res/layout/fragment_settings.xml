@@ -9,7 +9,6 @@
     tools:ignore="NestedWeights">
 
     <LinearLayout
-
         android:id="@+id/llVibration"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -52,7 +51,6 @@
             android:defaultValue="true"
             tools:layout_editor_absoluteX="205dp"
             tools:layout_editor_absoluteY="508dp" />
-
     </LinearLayout>
 
     <LinearLayout
@@ -92,7 +90,7 @@
 
         <Spinner
             android:id="@+id/notification_timer"
-            android:layout_width="match_parent"
+            android:layout_width="265dp"
             android:layout_height="match_parent"
             android:layout_gravity="bottom"
             android:layout_weight="1"
@@ -234,7 +232,6 @@
             android:tint="@color/darkGrey"
             app:srcCompat="@drawable/ic_arrow_drop_down"
             tools:ignore="PrivateResource" />
-
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
