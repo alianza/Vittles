@@ -28,7 +28,7 @@ import javax.inject.Inject
  *
  *@author Fethi Tewelde
  */
-class SettingsFragment : DaggerFragment() {
+class SettingsFragment : DaggerFragment(), SettingsContract.View {
 
     /**
      * The presenter of the fragment
@@ -64,7 +64,7 @@ class SettingsFragment : DaggerFragment() {
      * shows/keeps the last selected value of notification time
      *
      */
-    private fun initViews() {
+    override fun initViews() {
 
         setListeners()
 
@@ -85,7 +85,7 @@ class SettingsFragment : DaggerFragment() {
      * Sets all necessary event listeners on ui elements
      *
      */
-    private fun setListeners() {
+    override fun setListeners() {
 
         /*
          * called when the vibration switch is switched

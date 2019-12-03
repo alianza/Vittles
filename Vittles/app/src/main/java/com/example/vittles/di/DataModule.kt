@@ -14,8 +14,6 @@ import com.example.data.room.product.ProductModelMapper
 import com.example.data.room.wastereport.WasteReportModelMapper
 import com.example.data.room.createProductDaoImpl
 import com.example.data.settings.SharedPrefsSettingsRepository
-import com.example.domain.repositories.BarcodesRepository
-import com.example.domain.repositories.ProductsRepository
 import com.example.domain.settings.SettingsRepository
 import com.example.data.room.product.ProductsRepositoryImpl
 import com.example.data.room.wastereport.WasteReportRepositoryImpl
@@ -58,7 +56,6 @@ class DataModule {
     @Singleton
     @Provides
     fun provideSettingsRepository(
-        sharedPrefsSettingsRepository: SharedPrefsSettingsRepository,
         context: Context
     ): SettingsRepository = SharedPrefsSettingsRepository(context)
 

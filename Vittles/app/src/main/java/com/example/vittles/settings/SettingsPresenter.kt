@@ -2,10 +2,13 @@ package com.example.vittles.settings
 
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
+import com.example.domain.barcode.EmptyProductDictionary
 import com.example.domain.settings.*
 import com.example.domain.settings.model.NotificationSchedule
 import com.example.vittles.mvp.BasePresenter
 import com.example.vittles.services.notification.NotificationScheduleService
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 /**
@@ -19,6 +22,7 @@ import javax.inject.Inject
  * @property getNotificationSchedule
  * @property getNotificationEnabled
  * @property getVibrationEnabled
+ * @property emptyProductDictionary
  */
 class SettingsPresenter @Inject constructor(
     private val setNotificationSchedule: SetNotificationSchedule,
@@ -26,7 +30,8 @@ class SettingsPresenter @Inject constructor(
     private val setVibrationEnabled: SetVibrationEnabled,
     private val getNotificationSchedule: GetNotificationSchedule,
     private val getNotificationEnabled: GetNotificationEnabled,
-    private val getVibrationEnabled: GetVibrationEnabled
+    private val getVibrationEnabled: GetVibrationEnabled,
+    private val emptyProductDictionary: EmptyProductDictionary
 ) : BasePresenter<SettingsFragment>(), SettingsContract.Presenter {
 
     /** TODO */

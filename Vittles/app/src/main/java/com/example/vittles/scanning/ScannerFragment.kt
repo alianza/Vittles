@@ -68,9 +68,6 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
     /** @suppress */
     private var expirationDate: DateTime? = null
 
-    /** To access shared preferences(data) in the form of value-key*/
-    private lateinit var sharedPreference: SharedPreference
-
 
     /** {@inheritDoc} */
     override fun onCreateView(

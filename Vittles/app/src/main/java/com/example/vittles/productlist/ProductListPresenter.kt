@@ -29,8 +29,7 @@ import javax.inject.Inject
 class ProductListPresenter @Inject internal constructor(
     private val getProducts: GetProducts,
     private val deleteProduct: DeleteProduct,
-    private val addWasteReportProduct: AddWasteReportProduct
-    private val deleteProduct: DeleteProduct,
+    private val addWasteReportProduct: AddWasteReportProduct,
     private val getVibrationEnabled: GetVibrationEnabled
 ) :
     BasePresenter<ProductListFragment>(), ProductListContract.Presenter {

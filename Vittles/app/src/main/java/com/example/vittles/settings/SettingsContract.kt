@@ -3,7 +3,7 @@ package com.example.vittles.settings
 import com.example.domain.settings.model.NotificationSchedule
 
 /**
- * MVP Contract for settings overview.
+ * MVP Contract for settings overview. TODO: FIX this file
  *
  * @author Fethi Tewelde
  */
