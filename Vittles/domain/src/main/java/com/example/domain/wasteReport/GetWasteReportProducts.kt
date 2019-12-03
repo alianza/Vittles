@@ -39,10 +39,10 @@ class GetWasteReportProducts @Inject constructor(private val repository: WasteRe
                 if(timeRangeDays == TimeRangeSteps.MONTH_YEAR.steps) {
                     barEntryDate = DateTime.now().minusMonths(i-1)
                     productAmount = products.count {
-                        it.creationDate.monthOfYear == i
+                        it.creationDate.monthOfYear == i + 1
                     }
                     eaten = products.count{
-                        it.wasteType == "EATEN" && it.creationDate.monthOfYear == i
+                        it.wasteType == "EATEN" && it.creationDate.monthOfYear == i + 1
                     }
                 } else {
                     barEntryDate = DateTime.now().minusDays(i).withTimeAtStartOfDay()
