@@ -100,9 +100,9 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
 
     /** {@inheritDoc} */
     override fun onDestroy() {
-        super.onDestroy()
         onSearchBarClosed()
         presenter.destroy()
+        super.onDestroy()
     }
 
     /**
@@ -128,7 +128,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
 
         setItemTouchHelper()
 
-        if (withSearch) {
+        if (productArgs.withSearch) {
             onSearchBarOpened()
         }
     }
@@ -141,7 +141,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
     override fun onResume() {
         super.onResume()
         onPopulateRecyclerView()
-        withSearch = false
+//        withSearch = false
 
         // Set sortBtn text to currentSortingType
         btnSort.text = getString(sortMenu.currentSortingType.textId)
@@ -362,8 +362,6 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
                 getProductToDelete(ParcelableProductMapper.fromParcelable(productArgs.ProductToDelete!!)) != null){
                     val productToDelete = getProductToDelete(ParcelableProductMapper.fromParcelable(productArgs.ProductToDelete!!))!!
                     onSafeDeleteProduct(productToDelete, productArgs.ProductToDelete!!.deleteType!!)
-
-                productArgs.ProductToDelete!!.uid = -1
             }
         }, 300)    }
 
@@ -418,9 +416,9 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
      */
     override fun onSearchBarOpened() {
         svSearch?.setQuery("", true)
-        llSearch.visibility = View.VISIBLE
+        llSearch?.visibility = View.VISIBLE
         svSearch?.isIconified = false
-        toolbar.visibility = View.GONE
+        toolbar?.visibility = View.GONE
     }
 
     /**
@@ -431,13 +429,5 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
         svSearch?.setQuery("", true)
         llSearch?.visibility = View.GONE
         toolbar?.visibility = View.VISIBLE
-    }
-
-    companion object {
-        /**
-         * Indicates if the fragment should be opened with the search
-         * field opened.
-         */
-        var withSearch = false
     }
 }
