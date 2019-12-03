@@ -7,8 +7,8 @@ import com.example.data.retrofit.off.OffApiService
 import com.example.data.retrofit.tsco.TscoApi
 import com.example.data.retrofit.tsco.TscoApiService
 import com.example.data.BarcodesRepositoryImpl
-import com.example.data.room.barcodedictionary.BarcodeDao
-import com.example.data.room.barcodedictionary.BarcodeDictionaryModelMapper
+import com.example.data.room.productdictionary.BarcodeDao
+import com.example.data.room.productdictionary.ProductDictionaryModelMapper
 import com.example.data.room.createBarcodeDaoImpl
 import com.example.data.room.product.ProductDao
 import com.example.data.room.product.ProductModelMapper
@@ -54,6 +54,6 @@ class DataModule {
         barcodeDao: BarcodeDao,
         productsApiTSCO: TscoApiService,
         productsApiOFF: OffApiService,
-        mapper: BarcodeDictionaryModelMapper
+        mapper: ProductDictionaryModelMapper
     ): BarcodesRepository = BarcodesRepositoryImpl(barcodeDao, productsApiTSCO, productsApiOFF, mapper)
 }

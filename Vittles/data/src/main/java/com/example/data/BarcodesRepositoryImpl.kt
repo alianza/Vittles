@@ -2,8 +2,8 @@ package com.example.data
 
 import com.example.data.retrofit.off.OffApiService
 import com.example.data.retrofit.tsco.TscoApiService
-import com.example.data.room.barcodedictionary.BarcodeDao
-import com.example.data.room.barcodedictionary.BarcodeDictionaryModelMapper
+import com.example.data.room.productdictionary.BarcodeDao
+import com.example.data.room.productdictionary.ProductDictionaryModelMapper
 import com.example.domain.barcode.ProductDictionary
 import com.example.domain.exceptions.ProductNotFoundException
 import com.example.domain.repositories.BarcodesRepository
@@ -24,7 +24,7 @@ class BarcodesRepositoryImpl(
     private val barcodeDao: BarcodeDao,
     private val productsApiTSCO: TscoApiService,
     private val productsApiOFF: OffApiService,
-    private val mapper: BarcodeDictionaryModelMapper
+    private val mapper: ProductDictionaryModelMapper
 ) : BarcodesRepository {
 
     /** {@inheritDoc} */
@@ -51,17 +51,17 @@ class BarcodesRepositoryImpl(
 
     /** {@inheritDoc} */
     override fun getProductNameByBarcodeRoom(barcode: String): Observable<ProductDictionary> =
-        barcodeDao.getBarcode(barcode).map {
+        barcodeDao.getProductDictionary(barcode).map {
             mapper.fromEntity(it)
         }.doOnComplete {
             throw ProductNotFoundException(barcode)
         }.toObservable()
 
     /** {@inheritDoc} */
-    override fun insertBarcodeDictionaryRoom(productDictionary: ProductDictionary): Completable =
-        Completable.fromAction { barcodeDao.insertBarcode(mapper.toEntity(productDictionary)) }
+    override fun insertProductDictionaryRoom(productDictionary: ProductDictionary): Completable =
+        Completable.fromAction { barcodeDao.insertProductDictionary(mapper.toEntity(productDictionary)) }
 
     /** {@inheritDoc} */
-    override fun updateBarcodeDictionaryRoom(productDictionary: ProductDictionary): Completable =
-        Completable.fromAction { barcodeDao.updateBarcode(mapper.toEntity(productDictionary)) }
+    override fun updateProductDictionaryRoom(productDictionary: ProductDictionary): Completable =
+        Completable.fromAction { barcodeDao.updateProductDictionary(mapper.toEntity(productDictionary)) }
 }

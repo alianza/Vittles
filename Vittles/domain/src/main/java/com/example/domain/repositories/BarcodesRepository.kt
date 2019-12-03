@@ -40,18 +40,18 @@ interface BarcodesRepository {
     fun getProductNameByBarcodeRoom(barcode: String): Observable<ProductDictionary>
 
     /**
-     * Insert barcode dictionary into the local database.
+     * Insert product dictionary into the local database.
      *
      * @param productDictionary The dictionary to insert.
      * @return Completable that represents if the insert has succeeded.
      */
-    fun insertBarcodeDictionaryRoom(productDictionary: ProductDictionary): Completable
+    fun insertProductDictionaryRoom(productDictionary: ProductDictionary): Completable
 
     /**
-     * Update barcode dictionary in the local database.
+     * Update product dictionary in the local database.
      *
      * @param productDictionary The dictionary to update.
      * @return Completable that represents if the insert has succeeded.
      */
-    fun updateBarcodeDictionaryRoom(productDictionary: ProductDictionary): Completable
+    fun updateProductDictionaryRoom(productDictionary: ProductDictionary): Completable
 }

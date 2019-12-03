@@ -11,14 +11,14 @@ import javax.inject.Inject
  *
  * @property repository The products repository.
  */
-class UpdateBarcodeDictionary @Inject constructor(private val repository: BarcodesRepository) {
+class UpdateProductDictionary @Inject constructor(private val repository: BarcodesRepository) {
 
     /**
-     * Calls the repository to update a barcode dictionary.
+     * Calls the repository to update a product dictionary.
      *
-     * @param productDictionary The barcode dictionary to insert.
+     * @param productDictionary The product dictionary to insert.
      * @return Completable to indicate if the action has succeeded.
      */
     operator fun invoke(productDictionary: ProductDictionary): Completable =
-        repository.updateBarcodeDictionaryRoom(productDictionary)
+        repository.updateProductDictionaryRoom(productDictionary)
 }

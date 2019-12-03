@@ -1,6 +1,6 @@
 package com.example.domain.barcode
 
-import com.example.domain.enums.BarcodeDictionaryStatus
+import com.example.domain.enums.ProductDictionaryStatus
 import com.example.domain.repositories.BarcodesRepository
 import io.reactivex.Observable
 import javax.inject.Inject
@@ -24,7 +24,7 @@ class GetProductByBarcode @Inject constructor(private val repository: BarcodesRe
         return repository.getProductNameByBarcodeTSCO(barcode).onExceptionResumeNext(
             repository.getProductNameByBarcodeOFF(barcode).onExceptionResumeNext(
                 repository.getProductNameByBarcodeRoom(barcode).onExceptionResumeNext(
-                    Observable.just(ProductDictionary(barcode, BarcodeDictionaryStatus.NOT_FOUND()))
+                    Observable.just(ProductDictionary(barcode, ProductDictionaryStatus.NOT_FOUND()))
                 )
             )
         )

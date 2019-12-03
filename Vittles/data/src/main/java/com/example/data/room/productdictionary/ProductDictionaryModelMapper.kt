@@ -1,4 +1,4 @@
-package com.example.data.room.barcodedictionary
+package com.example.data.room.productdictionary
 
 import com.example.domain.barcode.ProductDictionary
 import javax.inject.Inject
@@ -8,16 +8,16 @@ import javax.inject.Inject
  *
  * @author Jeroen Flietstra
  */
-class BarcodeDictionaryModelMapper @Inject constructor() {
+class ProductDictionaryModelMapper @Inject constructor() {
 
-    fun fromEntity(barcodeDictionaryEntity: BarcodeDictionaryEntity) =
+    fun fromEntity(productDictionaryEntity: ProductDictionaryEntity) =
         ProductDictionary(
-            barcodeDictionaryEntity.barcode.toString(),
-            barcodeDictionaryEntity.productName
+            productDictionaryEntity.barcode.toString(),
+            productDictionaryEntity.productName
         )
 
     fun toEntity(productDictionary: ProductDictionary) =
-        BarcodeDictionaryEntity(
+        ProductDictionaryEntity(
             productDictionary.barcode.toLong(),
             productDictionary.productName
         )

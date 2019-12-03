@@ -17,7 +17,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.widget.ImageViewCompat
 import com.example.domain.barcode.ProductDictionary
 import com.example.domain.consts.DAYS_REMAINING_EXPIRED
-import com.example.domain.enums.BarcodeDictionaryStatus
+import com.example.domain.enums.ProductDictionaryStatus
 import com.example.domain.product.Product
 import com.example.vittles.R
 import com.example.vittles.scanning.ScannerPresenter.Companion.REQUEST_CODE_PERMISSIONS
@@ -51,7 +51,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
 
     /** @suppress */
     private var barcodeDictionary =
-        ProductDictionary(BarcodeDictionaryStatus.NOT_READY(), BarcodeDictionaryStatus.NOT_READY())
+        ProductDictionary(ProductDictionaryStatus.NOT_READY(), ProductDictionaryStatus.NOT_READY())
 
     /** @suppress */
     private var expirationDate: DateTime? = null

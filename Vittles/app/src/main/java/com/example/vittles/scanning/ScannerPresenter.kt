@@ -6,10 +6,10 @@ import android.util.Size
 import android.view.ViewGroup
 import androidx.camera.core.*
 import androidx.core.content.ContextCompat
-import com.example.domain.barcode.AddBarcodeDictionary
+import com.example.domain.barcode.AddProductDictionary
 import com.example.domain.barcode.ProductDictionary
 import com.example.domain.barcode.GetProductByBarcode
-import com.example.domain.barcode.UpdateBarcodeDictionary
+import com.example.domain.barcode.UpdateProductDictionary
 import com.example.domain.product.AddProduct
 import com.example.domain.product.Product
 import com.example.vittles.mvp.BasePresenter
@@ -28,14 +28,14 @@ import javax.inject.Inject
  *
  * @property getProductByBarcode The GetProductByBarcode use case from the domain module.
  * @property addProduct The AddProduct use case from the domain module.
- * @property addBarcodeDictionary The AddBarcodeDictionary use case from the domain module.
- * @property updateBarcodeDictionary The UpdateBarcodeDictionary use case from the domain module.
+ * @property addProductDictionary The AddBarcodeDictionary use case from the domain module.
+ * @property updateProductDictionary The UpdateBarcodeDictionary use case from the domain module.
  */
 class ScannerPresenter @Inject internal constructor(
     private val getProductByBarcode: GetProductByBarcode,
     private val addProduct: AddProduct,
-    private val addBarcodeDictionary: AddBarcodeDictionary,
-    private val updateBarcodeDictionary: UpdateBarcodeDictionary
+    private val addProductDictionary: AddProductDictionary,
+    private val updateProductDictionary: UpdateProductDictionary
 ) :
     BasePresenter<ScannerFragment>(), ScannerContract.Presenter {
 
@@ -94,7 +94,7 @@ class ScannerPresenter @Inject internal constructor(
      * @param productDictionary The barcode dictionary to update.
      */
     override fun updateBarcode(productDictionary: ProductDictionary) {
-        disposables.add(updateBarcodeDictionary(productDictionary)
+        disposables.add(updateProductDictionary(productDictionary)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe())
