@@ -142,7 +142,6 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
     override fun onResume() {
         super.onResume()
         onPopulateRecyclerView()
-//        withSearch = false
 
         // Set sortBtn text to currentSortingType
         btnSort.text = getString(sortMenu.currentSortingType.textId)
@@ -187,7 +186,6 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
 
         if (undoSnackbar.isShown) {
             presenter.deleteProduct(deletedProduct, deletedProductDeleteType)
-            //removeItem(deletedProductIndex)
         }
         //set deleted product
         deletedProduct = product
@@ -197,7 +195,6 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
         products.remove(product)
 
         //checks the vibration setting then if it will give vibration feedback
-
         if (vibrator.hasVibrator()&& sharedPreference.getValueBoolean("Vibration", true)) {
             vibrator.vibrate(50)
         }
@@ -275,7 +272,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
                 getString(R.string.remove_product_header),
                 getString(R.string.remove_product_subText)
             ),
-            PopupButton(getString(R.string.btn_no).toUpperCase()) {},
+            PopupButton(getString(R.string.btn_no).toUpperCase()),
             PopupButton(getString(R.string.btn_yes).toUpperCase()) { onSafeDeleteProduct(product, DeleteType.REMOVED) })
     }
 

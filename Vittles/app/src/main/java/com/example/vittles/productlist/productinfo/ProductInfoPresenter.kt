@@ -1,9 +1,7 @@
 package com.example.vittles.productlist.productinfo
 
-import com.example.domain.product.DeleteProduct
 import com.example.domain.product.Product
 import com.example.domain.product.UpdateProduct
-import com.example.vittles.enums.DeleteType
 import com.example.vittles.mvp.BasePresenter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -15,7 +13,6 @@ import javax.inject.Inject
  * @property updateProduct The UpdateProduct use case from the domain module.
  */
 class ProductInfoPresenter @Inject internal constructor(
-    private val deleteProduct: DeleteProduct,
     private val updateProduct: UpdateProduct
 ) : BasePresenter<ProductInfoFragment>(),
     ProductInfoContract.Presenter {

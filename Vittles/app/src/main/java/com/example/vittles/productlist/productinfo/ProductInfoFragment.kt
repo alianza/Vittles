@@ -220,6 +220,10 @@ class ProductInfoFragment : DaggerFragment(),
             .show()
     }
 
+    /**
+     * Handles the back button clicked.
+     *
+     */
     fun onBackPressed() {
         findNavController().navigate(NavigationGraphDirections.actionGlobalProductListFragment(null))
     }
