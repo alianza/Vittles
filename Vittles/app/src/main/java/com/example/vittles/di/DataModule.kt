@@ -12,9 +12,11 @@ import com.example.data.room.productdictionary.ProductDictionaryModelMapper
 import com.example.data.room.createBarcodeDaoImpl
 import com.example.data.room.product.ProductDao
 import com.example.data.room.product.ProductModelMapper
+import com.example.data.room.wastereport.WasteReportModelMapper
 import com.example.data.room.createProductDaoImpl
 import com.example.domain.repositories.BarcodesRepository
 import com.example.domain.repositories.ProductsRepository
+import com.example.domain.repositories.WasteReportRepository
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -56,4 +58,8 @@ class DataModule {
         productsApiOFF: OffApiService,
         mapper: ProductDictionaryModelMapper
     ): BarcodesRepository = BarcodesRepositoryImpl(barcodeDao, productsApiTSCO, productsApiOFF, mapper)
+
+    @Singleton
+    @Provides
+    fun provideWasteReportRepository(productDao: ProductDao, mapper: WasteReportModelMapper): WasteReportRepository = WasteReportRepositoryImpl(productDao, mapper)
 }
