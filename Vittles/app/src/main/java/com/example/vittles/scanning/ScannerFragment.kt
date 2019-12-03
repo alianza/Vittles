@@ -148,7 +148,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         )
         presenter.addProduct(product, true)
         if (!barcodeDictionary.containsNotReady() && !barcodeDictionary.containsNotFound()) {
-            presenter.updateBarcode(barcodeDictionary)
+            presenter.patchProductDictionary(barcodeDictionary)
         }
     }
 
@@ -306,7 +306,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         ibRefreshProductName.visibility = View.VISIBLE
         toggleAddVittleButton()
         if (insertLocal) {
-            presenter.addProductDictionary(productDictionary)
+            presenter.insertProductDictionary(productDictionary)
         }
     }
 
