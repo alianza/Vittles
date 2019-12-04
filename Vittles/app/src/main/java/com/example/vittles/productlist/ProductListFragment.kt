@@ -1,7 +1,6 @@
 package com.example.vittles.productlist
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
@@ -12,7 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
 import android.widget.TextView
-import androidx.appcompat.widget.Toolbar
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -21,8 +19,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.product.Product
 import com.example.vittles.R
 import com.example.vittles.enums.DeleteType
-import com.example.vittles.productlist.productinfo.ProductInfoFragment
-import com.example.vittles.productlist.productinfo.ProductInfoFragmentArgs
 import com.example.vittles.services.popups.PopupBase
 import com.example.vittles.services.popups.PopupButton
 import com.example.vittles.services.popups.PopupManager
