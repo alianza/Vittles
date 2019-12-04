@@ -161,7 +161,8 @@ class ScannerPresenter @Inject internal constructor(
                 onBarcodeFailure = { view?.onBarcodeNotFound() },
                 onBarcodeSuccess = { getProductNameByBarcode(it) },
                 onOcrFailure = { view?.onTextNotFound() },
-                onOcrSuccess = { view?.onTextScanned(it) }
+                onOcrSuccess = { view?.onTextScanned(it) },
+                context = view?.context!!
             ))
         }
     }

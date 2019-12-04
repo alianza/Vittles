@@ -1,8 +1,11 @@
 package com.example.vittles.scanning
 
+import android.content.Context
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
+import com.example.vittles.enums.SettingKeys
 import com.example.vittles.services.scanner.ScanningService
+import com.example.vittles.settings.SharedPreference
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.google.firebase.ml.vision.common.FirebaseVisionImageMetadata
@@ -10,23 +13,28 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.joda.time.DateTime
 import java.util.concurrent.TimeUnit
 
 /**
  * Analyzer used by CameraX to analyze frames from the camera preview.
  *
  * @author Jeroen Flietstra
+ * @author Marc van Spronsen
+ * @author Jan-Willem van Bremen
  *
  * @property onBarcodeSuccess Callback function for successful barcode scan.
  * @property onBarcodeFailure Callback function for unsuccessful barcode scan.
  * @property onOcrSuccess Callback function for successful OCR scan.
  * @property onOcrFailure Callback function for unsuccessful OCR scan.
+ * @property context Context from fragment
  */
 class PreviewAnalyzer(
     private val onBarcodeFailure: (exception: Exception) -> Unit,
     private val onBarcodeSuccess: (barcodes: List<FirebaseVisionBarcode>) -> Unit,
     private val onOcrFailure: (exception: Exception) -> Unit,
-    private val onOcrSuccess: (text: String) -> Unit
+    private val onOcrSuccess: (text: String) -> Unit,
+    private val context: Context
 ) : ImageAnalysis.Analyzer {
 
     companion object ProductProps {
@@ -61,10 +69,22 @@ class PreviewAnalyzer(
      * @param degrees Rotation degree of the camera.
      */
     override fun analyze(imageProxy: ImageProxy?, degrees: Int) {
+        val sharedPreference = SharedPreference(context)
+        val performanceInterval = sharedPreference.getValueInt(SettingKeys.Performance.value)
+        val interval: Long
+
+        // Set scanning interval to milliseconds, default 500ms
+        interval = when (performanceInterval) {
+            0 -> 200
+            1 -> 500
+            2 -> 1000
+            else -> 500
+        }
+
         // Scan only every 500 ms instead of every frame.
         val currentTimestamp = System.currentTimeMillis()
         if (currentTimestamp - lastAnalyzedTimestamp >=
-            TimeUnit.MILLISECONDS.toMillis(500)
+            TimeUnit.MILLISECONDS.toMillis(interval)
         ) {
             val mediaImage = imageProxy?.image
             val imageRotation = degreesToFirebaseRotation(degrees)
