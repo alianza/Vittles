@@ -5,10 +5,9 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import com.crashlytics.android.Crashlytics
-import com.example.domain.notification.NotificationDataException
 import com.example.domain.notification.Notification
+import com.example.domain.notification.NotificationDataException
 import com.example.domain.settings.model.NotificationSchedule
-import com.example.data.settings.SharedPreferenceHelper
 import dagger.android.DaggerBroadcastReceiver
 import io.reactivex.disposables.CompositeDisposable
 import org.joda.time.DateTime
@@ -20,7 +19,8 @@ import javax.inject.Inject
  * @author Jeroen Flietstra
  * @author Fethi Tewelde
  */
-class NotificationScheduleService : DaggerBroadcastReceiver(), NotificationScheduleContract.Service {
+class NotificationScheduleService : DaggerBroadcastReceiver(),
+    NotificationScheduleContract.Service {
 
     /** TODO ***
      * The presenter of the NotificationScheduler
@@ -31,13 +31,6 @@ class NotificationScheduleService : DaggerBroadcastReceiver(), NotificationSched
     /** Disposables contains all async calls made */
     private val disposables: CompositeDisposable = CompositeDisposable()
 
-    /** TODO: TESTING NOTIFICATION SCHEDULER ***
-     *
-     *
-     */
-    init {
-        presenter.start(this)
-    }
 
     /**
      * Overridden function that calls the audit notification method every time the audit timestamp
@@ -46,6 +39,7 @@ class NotificationScheduleService : DaggerBroadcastReceiver(), NotificationSched
      */
     override fun onReceive(p0: Context?, p1: Intent?) {
         super.onReceive(p0, p1)
+        presenter.start(this)
         p0?.let { presenter.startPresenting(it) }
         disposables.clear()
     }
@@ -98,24 +92,24 @@ class NotificationScheduleService : DaggerBroadcastReceiver(), NotificationSched
 
                 when (notificationSchedule) {
                     NotificationSchedule.DAILY -> {
-                        nextAudit = // Set nextAudit to Daily at 12:00PM
+                        // Set nextAudit to Daily at 12:00PM
 //                            DateTime().plusDays(1).withHourOfDay(12).withMinuteOfHour(0)
 //                                .withSecondOfMinute(0)
-                        DateTime().plusDays(0).withHourOfDay(0).withMinuteOfHour(0)
+                        nextAudit = DateTime().plusDays(0).withHourOfDay(0).withMinuteOfHour(0)
                             .withSecondOfMinute(5)
                     }
                     NotificationSchedule.WEEKLY -> {
-                        nextAudit = // Set nextAudit to Weekly at 12:00PM
+                        // Set nextAudit to Weekly at 12:00PM
 //                            DateTime().plusWeeks(1).withHourOfDay(12).withMinuteOfHour(0)
 //                                .withSecondOfMinute(0)
-                        DateTime().plusDays(0).withHourOfDay(0).withMinuteOfHour(0)
+                        nextAudit = DateTime().plusDays(0).withHourOfDay(0).withMinuteOfHour(0)
                             .withSecondOfMinute(10)
                     }
                     NotificationSchedule.MONTHLY -> {
-                        nextAudit = // Set nextAudit to Monthly at 12:00PM
+                        // Set nextAudit to Monthly at 12:00PM
 //                            DateTime().plusMonths(1).withHourOfDay(12).withMinuteOfHour(0)
 //                                .withSecondOfMinute(0)
-                        DateTime().plusDays(0).withHourOfDay(0).withMinuteOfHour(0)
+                        nextAudit = DateTime().plusDays(0).withHourOfDay(0).withMinuteOfHour(0)
                             .withSecondOfMinute(20)
                     }
                 }
