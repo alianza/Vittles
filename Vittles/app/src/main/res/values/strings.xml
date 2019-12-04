@@ -157,15 +157,6 @@
     <string name="cd_torch">Torch</string>
     <string name="cd_expand">Expand</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="pref_int1">int1</string>
-    <integer name="pref_int1_step">1</integer>
-    <integer name="pref_int1_min">0</integer>
-    <integer name="pref_int1_max">10</integer>
-    <integer name="pref_int1_default">10</integer>
-    <string name="int1_title">Set Int 1</string>
-    <string name="int1_desc">Change the value of the first integer</string>
-
     <!-- Notification options -->
     <string-array name="notification_time">
         <item>Daily</item>

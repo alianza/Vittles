@@ -3,16 +3,20 @@ package com.example.domain.settings
 import javax.inject.Inject
 
 /**
- * TODO
+ * TODO ***
  *
- * @property settingsRepository
+ * This class handles the business logic of setting data
+ *
+ * @author Fethi Tewelde
+ *
+ * @property settingsRepository The SettingsRepository.
  */
 class GetNotificationEnabled @Inject constructor(private val settingsRepository: SettingsRepository) {
 
     /**
-     * TODO
+     * TODO ***
      *
-     * @return
+     * @return the boolean value of notification
      */
     operator fun invoke(): Boolean {
         return settingsRepository.getNotificationEnabled()

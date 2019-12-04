@@ -24,7 +24,7 @@ import javax.inject.Inject
  *
  * @property getProducts The GetProducts use case from the domain module.
  * @property deleteProduct The DeleteProduct use cane from the domain module.
- * @property getVibrationEnabled TODO
+ * @property getVibrationEnabled The getVibrationEnabled use case from the domain module
  */
 class ProductListPresenter @Inject internal constructor(
     private val getProducts: GetProducts,
@@ -90,9 +90,7 @@ class ProductListPresenter @Inject internal constructor(
     }
 
     /**
-     * TODO
-     *
-     * @return
+     * @return the boolean value of vibration
      */
     fun getVibrationSetting(): Boolean {
         return getVibrationEnabled()

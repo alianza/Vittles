@@ -3,49 +3,50 @@ package com.example.domain.settings
 import com.example.domain.settings.model.NotificationSchedule
 
 /**
- * TODO
+ * Repository interface for the settings
  *
+ * @author Fethi Tewelde
  */
 interface SettingsRepository {
     /**
-     * TODO
+     * Gets the value of the notification schedule
      *
-     * @return
+     * @return The enum of notification schedule options.
      */
     fun getNotificationSchedule(): NotificationSchedule
 
     /**
-     * TODO
+     * Sets the value of the notification schedule
      *
-     * @param notificationSchedule
+     * @param notificationSchedule The enum value to set
      */
     fun setNotificationSchedule(notificationSchedule: NotificationSchedule)
 
     /**
-     * TODO
+     * Gets the value of the notification
      *
-     * @return
+     * @return boolean value of notification
      */
     fun getNotificationEnabled(): Boolean
 
     /**
-     * TODO
+     * Sets the value of the notification
      *
-     * @param isEnabled
+     * @param isEnabled boolean value to be set
      */
     fun setNotificationEnabled(isEnabled: Boolean)
 
     /**
-     * TODO
+     * Gets the value of the vibration
      *
-     * @return
+     * @return boolean value of vibration
      */
     fun getVibrationEnabled(): Boolean
 
     /**
-     * TODO
+     * Sets the value of the notification schedule
      *
-     * @param isEnabled
+     * @param isEnabled the boolean value to be set
      */
     fun setVibrationEnabled(isEnabled: Boolean)
 }

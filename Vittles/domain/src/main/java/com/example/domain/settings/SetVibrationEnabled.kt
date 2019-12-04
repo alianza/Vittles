@@ -3,16 +3,21 @@ package com.example.domain.settings
 import javax.inject.Inject
 
 /**
- * TODO
+ * TODO ***
  *
- * @property settingsRepository
+ * This class handles the business logic of setting data
+ *
+ * @author Fethi Tewelde
+ *
+ * @property settingsRepository The SettingsRepository
  */
 class SetVibrationEnabled @Inject constructor(private val settingsRepository: SettingsRepository) {
 
     /**
-     * TODO
+     * TODO ***
+     * Calls the repository to set the value of vibration
      *
-     * @param enabled
+     * @param enabled The boolean value to be set
      */
     operator fun invoke(enabled: Boolean) {
         settingsRepository.setVibrationEnabled(enabled)

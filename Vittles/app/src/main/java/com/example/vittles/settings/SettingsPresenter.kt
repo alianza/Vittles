@@ -14,15 +14,16 @@ import javax.inject.Inject
 /**
  * The presenter for the settings activity.
  *
+ * @author Fethi Tewelde
  * @author Jan-Willem van Bremen
  *
- * @property setNotificationSchedule
- * @property setNotificationEnabled
- * @property setVibrationEnabled
- * @property getNotificationSchedule
- * @property getNotificationEnabled
- * @property getVibrationEnabled
- * @property emptyProductDictionary
+ * @property setNotificationSchedule The setNotificationSchedule use case from the domain module.
+ * @property setNotificationEnabled The setNotificationEnabled use case from the domain module.
+ * @property setVibrationEnabled The setVibrationEnabled use case from the domain module.
+ * @property getNotificationSchedule The getNotificationSchedule use case from the domain module.
+ * @property getNotificationEnabled The getNotificationEnabled use case from the domain module.
+ * @property getVibrationEnabled The getVibrationEnabled use case from the domain module.
+ * @property emptyProductDictionary The emptyProductDictionary use case from the domain module.
  */
 class SettingsPresenter @Inject constructor(
     private val setNotificationSchedule: SetNotificationSchedule,
@@ -34,13 +35,23 @@ class SettingsPresenter @Inject constructor(
     private val emptyProductDictionary: EmptyProductDictionary
 ) : BasePresenter<SettingsFragment>(), SettingsContract.Presenter {
 
-    /** TODO */
+    /** @suppress */
     private lateinit var context: Context
-    /** TODO */
+    /**
+     * observes LiveData objects for changes .
+     *
+     **/
     val notificationEnabled = MutableLiveData<Boolean>(true)
-    /** TODO */
+    /**
+     * observes LiveData objects for changes .
+     *
+     **/
+
     val notificationSchedule = MutableLiveData<NotificationSchedule>()
-    /** TODO */
+    /**
+     * observes LiveData objects for changes .
+     *
+     **/
     val vibrationEnabled = MutableLiveData<Boolean>(true)
 
     fun startPresenting(context: Context) {
@@ -70,7 +81,7 @@ class SettingsPresenter @Inject constructor(
                 getNotificationEnabled()
             )
         } else {
-            NotificationScheduleService.exitNotificationSchedule(context)
+            NotificationScheduleService.exitNotificationSchedule(context, getNotificationEnabled())
         }
     }
 

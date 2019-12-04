@@ -22,14 +22,19 @@ import javax.inject.Inject
  */
 class NotificationScheduleService : DaggerBroadcastReceiver(), NotificationScheduleContract.Service {
 
-    /** TODO */
+    /** TODO ***
+     * The presenter of the NotificationScheduler
+     */
     @Inject
     lateinit var presenter: NotificationSchedulePresenter
 
     /** Disposables contains all async calls made */
     private val disposables: CompositeDisposable = CompositeDisposable()
 
-    /** TODO: TESTING NOTIFICATION SCHEDULER */
+    /** TODO: TESTING NOTIFICATION SCHEDULER ***
+     *
+     *
+     */
     init {
         presenter.start(this)
     }
@@ -94,18 +99,24 @@ class NotificationScheduleService : DaggerBroadcastReceiver(), NotificationSched
                 when (notificationSchedule) {
                     NotificationSchedule.DAILY -> {
                         nextAudit = // Set nextAudit to Daily at 12:00PM
-                            DateTime().plusDays(1).withHourOfDay(12).withMinuteOfHour(0)
-                                .withSecondOfMinute(0)
+//                            DateTime().plusDays(1).withHourOfDay(12).withMinuteOfHour(0)
+//                                .withSecondOfMinute(0)
+                        DateTime().plusDays(0).withHourOfDay(0).withMinuteOfHour(0)
+                            .withSecondOfMinute(5)
                     }
                     NotificationSchedule.WEEKLY -> {
                         nextAudit = // Set nextAudit to Weekly at 12:00PM
-                            DateTime().plusWeeks(1).withHourOfDay(12).withMinuteOfHour(0)
-                                .withSecondOfMinute(0)
+//                            DateTime().plusWeeks(1).withHourOfDay(12).withMinuteOfHour(0)
+//                                .withSecondOfMinute(0)
+                        DateTime().plusDays(0).withHourOfDay(0).withMinuteOfHour(0)
+                            .withSecondOfMinute(10)
                     }
                     NotificationSchedule.MONTHLY -> {
                         nextAudit = // Set nextAudit to Monthly at 12:00PM
-                            DateTime().plusMonths(1).withHourOfDay(12).withMinuteOfHour(0)
-                                .withSecondOfMinute(0)
+//                            DateTime().plusMonths(1).withHourOfDay(12).withMinuteOfHour(0)
+//                                .withSecondOfMinute(0)
+                        DateTime().plusDays(0).withHourOfDay(0).withMinuteOfHour(0)
+                            .withSecondOfMinute(20)
                     }
                 }
 
@@ -131,10 +142,8 @@ class NotificationScheduleService : DaggerBroadcastReceiver(), NotificationSched
          *
          * @param context The application context needed for the alarm manager.
          */
-        fun exitNotificationSchedule(context: Context) {
-            val sharedPreference =
-                SharedPreferenceHelper(context)
-            if (!sharedPreference.getValueBoolean("Notification", false)) {
+        fun exitNotificationSchedule(context: Context, notificationEnabled: Boolean) {
+            if (!notificationEnabled) {
                 alarmManager =
                     context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
                 alarmManager.cancel(broadcast)
