@@ -155,8 +155,7 @@ class ProductItemTouchHelper(private val products: List<Product>, var context: C
                 drawIcon(c, viewHolder, context.getDrawable(R.drawable.ic_eaten_white)!!, IconLocation.LEFT)
             }
         }
-
-
+        
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
     }
 

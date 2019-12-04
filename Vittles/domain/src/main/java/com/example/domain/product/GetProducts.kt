@@ -1,7 +1,5 @@
 package com.example.domain.product
 
-import com.example.domain.repositories.ProductsRepository
-import com.example.domain.product.Product
 import io.reactivex.Single
 import javax.inject.Inject
 

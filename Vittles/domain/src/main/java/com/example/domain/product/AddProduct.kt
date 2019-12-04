@@ -1,7 +1,6 @@
 package com.example.domain.product
 
 import com.example.domain.consts.DAYS_REMAINING_BOUNDARY_CLOSE
-import com.example.domain.repositories.ProductsRepository
 import io.reactivex.Completable
 import java.lang.Exception
 import javax.inject.Inject

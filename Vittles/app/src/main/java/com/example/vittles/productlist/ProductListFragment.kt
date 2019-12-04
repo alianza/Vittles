@@ -1,7 +1,6 @@
 package com.example.vittles.productlist
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
@@ -12,7 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
 import android.widget.TextView
-import androidx.appcompat.widget.Toolbar
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -21,8 +19,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.product.Product
 import com.example.vittles.R
 import com.example.vittles.enums.DeleteType
-import com.example.vittles.productlist.productinfo.ProductInfoFragment
-import com.example.vittles.productlist.productinfo.ProductInfoFragmentArgs
 import com.example.vittles.services.popups.PopupBase
 import com.example.vittles.services.popups.PopupButton
 import com.example.vittles.services.popups.PopupManager
@@ -43,6 +39,7 @@ import javax.inject.Inject
  * @author Jan-Willem van Bremen
  * @author Fethi Tewelde
  * @author Marc van Spronsen
+ * @author Sarah Lange
  */
 class ProductListFragment : DaggerFragment(), ProductListContract.View {
 
@@ -141,14 +138,13 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
     override fun onResume() {
         super.onResume()
         onPopulateRecyclerView()
-//        withSearch = false
 
         // Set sortBtn text to currentSortingType
         btnSort.text = getString(sortMenu.currentSortingType.textId)
     }
 
     /**
-     * Sets all necessary event listeners on ui elements
+     * Sets all necessary event listeners on ui elements.
      *
      */
     override fun setListeners() {
@@ -186,7 +182,6 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
 
         if (undoSnackbar.isShown) {
             presenter.deleteProduct(deletedProduct, deletedProductDeleteType)
-            //removeItem(deletedProductIndex)
         }
         //set deleted product
         deletedProduct = product
@@ -196,7 +191,6 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
         products.remove(product)
 
         //checks the vibration setting then if it will give vibration feedback
-
         if (vibrator.hasVibrator()&& sharedPreference.getValueBoolean("Vibration", true)) {
             vibrator.vibrate(50)
         }
@@ -212,6 +206,8 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
                 productAdapter.notifyItemChanged(deletedProductIndex - 1)
             }
         }
+
+        setAllNoResultStates()
 
         onShowUndoSnackbar()
     }
@@ -243,6 +239,8 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
                     if (deletedProductIndex == products.count() - 1){
                         productAdapter.notifyItemChanged(deletedProductIndex - 1)
                     }
+
+                    setAllNoResultStates()
                 }
             }
         })
@@ -264,7 +262,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
     }
 
     /**
-     * Handles the action of the remove button on a product
+     * Handles the action of the remove button on a product.
      *
      */
     @SuppressLint("DefaultLocale")
@@ -274,12 +272,12 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
                 getString(R.string.remove_product_header),
                 getString(R.string.remove_product_subText)
             ),
-            PopupButton(getString(R.string.btn_no).toUpperCase()) {},
+            PopupButton(getString(R.string.btn_no).toUpperCase()),
             PopupButton(getString(R.string.btn_yes).toUpperCase()) { onSafeDeleteProduct(product, DeleteType.REMOVED) })
     }
 
     /**
-     * Handles the item view being clicked, opens the product info page
+     * Handles the item view being clicked, opens the product info page.
      *
      */
     override fun onItemViewClicked(product: Product) {
@@ -322,6 +320,14 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
         }
     }
 
+    /**
+     * Enables the empty view and the no result view.
+     *
+     */
+    override fun setAllNoResultStates() {
+        setEmptyView()
+        onNoResults()
+    }
 
     /**
      * Populates the RecyclerView with items from the local database.
@@ -385,9 +391,9 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
     }
 
     /**
-     * Method that is called when text is entered in search view
+     * Method that is called when text is entered in search view.
      *
-     * @param query entered string used as search query
+     * @param query entered string used as search query.
      */
     @SuppressLint("DefaultLocale")
     override fun filter(query: String) {
@@ -411,7 +417,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
     }
 
     /**
-     * Method to show the search bar and hide the toolbar
+     * Method to show the search bar and hide the toolbar.
      *
      */
     override fun onSearchBarOpened() {
@@ -422,7 +428,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
     }
 
     /**
-     * Method to hide the search bar and show the toolbar
+     * Method to hide the search bar and show the toolbar.
      *
      */
     override fun onSearchBarClosed() {

@@ -2,8 +2,7 @@ package com.example.domain.notification
 
 import com.example.domain.consts.DAYS_REMAINING_BOUNDARY_CLOSE
 import com.example.domain.consts.DAYS_REMAINING_EXPIRED
-import com.example.domain.exceptions.NotificationDataException
-import com.example.domain.repositories.ProductsRepository
+import com.example.domain.product.ProductsRepository
 import io.reactivex.Single
 import java.lang.StringBuilder
 import javax.inject.Inject

@@ -9,6 +9,7 @@ import com.example.data.room.productdictionary.BarcodeDao
 import com.example.data.room.productdictionary.ProductDictionaryEntity
 import com.example.data.room.product.ProductDao
 import com.example.data.room.product.ProductEntity
+import com.example.data.room.wastereport.WasteReportEntity
 
 /**
  * Creates the ProductDao.
@@ -36,8 +37,9 @@ fun createBarcodeDaoImpl(context: Context): BarcodeDao {
  *
  * @author Jeroen Flietstra
  * @author Jan-Willem van Bremen
+ * @author Sarah Lange
  */
-@Database(entities = [ProductEntity::class, ProductDictionaryEntity::class], version = 1, exportSchema = false)
+@Database(entities = [ProductEntity::class, WasteReportEntity::class,  ProductDictionaryEntity::class], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     /**

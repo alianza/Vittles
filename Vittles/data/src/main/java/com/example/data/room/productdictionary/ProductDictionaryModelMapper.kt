@@ -12,13 +12,13 @@ class ProductDictionaryModelMapper @Inject constructor() {
 
     fun fromEntity(productDictionaryEntity: ProductDictionaryEntity) =
         ProductDictionary(
-            productDictionaryEntity.barcode.toString(),
+            productDictionaryEntity.barcode,
             productDictionaryEntity.productName
         )
 
     fun toEntity(productDictionary: ProductDictionary) =
         ProductDictionaryEntity(
-            productDictionary.barcode.toLong(),
+            productDictionary.barcode,
             productDictionary.productName
         )
 }

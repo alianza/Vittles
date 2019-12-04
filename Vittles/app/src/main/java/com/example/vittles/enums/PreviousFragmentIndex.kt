@@ -1,6 +1,6 @@
 package com.example.vittles.enums
 
-import com.example.domain.enums.Invokable
+import com.example.domain.barcode.Invokable
 
 /**
  * Enumerator for navigating to deeper fragments that have an overridden onBackPressed.

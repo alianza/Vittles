@@ -1,6 +1,7 @@
 package com.example.data.room.product
 
 import androidx.room.*
+import com.example.data.room.wastereport.WasteReportEntity
 import io.reactivex.Single
 
 /**
@@ -8,6 +9,7 @@ import io.reactivex.Single
  *
  * @author Jeroen Flietstra
  * @author Jan-Willem van Bremen
+ * @author Sarah Lange
  */
 @Dao
 interface ProductDao {
@@ -64,4 +66,41 @@ interface ProductDao {
     @Delete
     fun delete(product: ProductEntity): Int
 
+
+    /**
+     * Insert the given wasteReportProduct into the database
+     *
+     * @param wasteReportProduct WasteReportProduct to be inserted
+     */
+    @Insert
+    fun insertWasteReportProduct(wasteReportProduct: WasteReportEntity)
+
+
+    /**
+     * Gets amount of eaten vittles
+     *
+     * @param date from this date up to now the amount is calculated
+     * @return amount of eaten vittles
+     */
+    @Query("SELECT COUNT(waste_type) FROM WasteReportEntity WHERE waste_type = 'EATEN' AND creation_date >= :date")
+    fun getCountEatenProducts(date: Long): Single<Int>
+
+    /**
+     * Gets amount of expired vittles
+     *
+     * @param date from this date up to now the amount is calculated
+     * @return amount of expired vittles
+     * */
+    @Query("SELECT COUNT(waste_type) FROM WasteReportEntity WHERE waste_type = 'THROWN_AWAY' AND creation_date >= :date")
+    fun getCountExpiredProducts(date: Long): Single<Int>
+
+    /**
+    Gets the waste report products
+     *
+     * @param date From this date up to now the data should be given
+     * @return List of vittles
+     *
+     */
+    @Query("SELECT * FROM WasteReportEntity WHERE creation_date >= :date")
+    fun getWasteReportProducts(date: Long): Single<List<WasteReportEntity>>
 }
