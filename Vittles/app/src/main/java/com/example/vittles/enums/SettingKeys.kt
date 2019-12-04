@@ -1,11 +1,10 @@
 package com.example.vittles.enums
 
 /**
+ * Enum class for settings and their key in the sharedPreferences DB
  *
  * @author Jan-Willem van Bremen
  * @author Marc van Spronsen
- *
- * Enum class for settings and their key in the sharedPreferences DB
  *
  * @property value Value of the key
  */

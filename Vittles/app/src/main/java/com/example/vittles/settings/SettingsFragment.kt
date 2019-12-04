@@ -125,8 +125,7 @@ class SettingsFragment : DaggerFragment(), SettingsContract.View {
                 sharedPreference.save(SettingKeys.NotificationTime.value, position)
             }
 
-            override fun onNothingSelected(parent: AdapterView<*>) {
-            }
+            override fun onNothingSelected(parent: AdapterView<*>) { }
         }
 
         performance_picker.onItemSelectedListener = object : OnItemSelectedListener {
@@ -138,9 +137,7 @@ class SettingsFragment : DaggerFragment(), SettingsContract.View {
                 ) {
                     sharedPreference.save(SettingKeys.Performance.value, position)
                 }
-
-                override fun onNothingSelected(parent: AdapterView<*>) {
-                }
+                override fun onNothingSelected(parent: AdapterView<*>) { }
         }
 
         llAdvanced.setOnClickListener { onAdvancedClick() }

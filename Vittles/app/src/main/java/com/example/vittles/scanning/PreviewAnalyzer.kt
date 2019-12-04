@@ -13,7 +13,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.joda.time.DateTime
 import java.util.concurrent.TimeUnit
 
 /**
@@ -47,6 +46,9 @@ class PreviewAnalyzer(
     /** Value used for the scanning delay */
     private var lastAnalyzedTimestamp = 0L
 
+    /** SharedPreference to retrieve settings */
+    private val sharedPreference = SharedPreference(context)
+
     /**
      * Convert the rotation degree to firebase rotation degree.
      *
@@ -69,12 +71,8 @@ class PreviewAnalyzer(
      * @param degrees Rotation degree of the camera.
      */
     override fun analyze(imageProxy: ImageProxy?, degrees: Int) {
-        val sharedPreference = SharedPreference(context)
-        val performanceInterval = sharedPreference.getValueInt(SettingKeys.Performance.value)
-        val interval: Long
-
-        // Set scanning interval to milliseconds, default 500ms
-        interval = when (performanceInterval) {
+        // Set scanning interval to milliseconds from sharedPreferences setting, default 500ms
+        val interval: Long = when (sharedPreference.getValueInt(SettingKeys.Performance.value)) {
             0 -> 200
             1 -> 500
             2 -> 1000
