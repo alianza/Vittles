@@ -12,6 +12,6 @@ import androidx.room.PrimaryKey
  */
 @Entity
 data class ProductDictionaryEntity (
-    @PrimaryKey @ColumnInfo(name ="gtin") val barcode: Long,
+    @PrimaryKey @ColumnInfo(name ="gtin") val barcode: String,
     @ColumnInfo(name = "product_name") val productName: String?
 )
