@@ -30,6 +30,7 @@ import com.example.vittles.R
 import com.example.vittles.VittlesApp.Companion.REQUEST_CODE_PERMISSIONS
 import com.example.vittles.VittlesApp.Companion.REQUIRED_PERMISSIONS
 import com.example.vittles.enums.PreviousFragmentIndex
+import com.example.vittles.enums.SettingKeys
 import com.example.vittles.scanning.productaddmanual.ProductNameEditView
 import com.example.vittles.services.popups.PopupBase
 import com.example.vittles.services.popups.PopupButton
@@ -299,7 +300,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
     @Suppress("DEPRECATION")
     fun onScanSuccessful() {
         // Checks vibration setting and then Vibrate or not vibrate
-        if (vibrator.hasVibrator() && sharedPreference.getValueBoolean("Vibration", true)) {
+        if (vibrator.hasVibrator() && sharedPreference.getValueBoolean(SettingKeys.Vibration.value, true)) {
             vibrator.vibrate(50)
         }
         // Turn scanning plane green, and back after 500 ms

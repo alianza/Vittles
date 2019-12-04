@@ -8,6 +8,7 @@ import com.crashlytics.android.Crashlytics
 import com.example.domain.notification.NotificationDataException
 import com.example.domain.notification.GetNotificationProductsExpired
 import com.example.domain.notification.Notification
+import com.example.vittles.enums.SettingKeys
 import com.example.vittles.settings.SharedPreference
 import dagger.android.DaggerBroadcastReceiver
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -97,8 +98,8 @@ class NotificationScheduleService : DaggerBroadcastReceiver() {
          */
         fun scheduleNotificationAudit(context: Context) {
             val sharedPreference = SharedPreference(context)
-            if (sharedPreference.getValueBoolean("Notification", true)) {
-                val notificationTimer = sharedPreference.getValueInt("NOTIFICATION_TIME")
+            if (sharedPreference.getValueBoolean(SettingKeys.Notifications.value, true)) {
+                val notificationTimer = sharedPreference.getValueInt(SettingKeys.NotificationTime.value)
 
                 var nextAudit = DateTime()
 
@@ -110,6 +111,7 @@ class NotificationScheduleService : DaggerBroadcastReceiver() {
                     2 -> nextAudit = // Set nextAudit to Monthly at 12:00PM
                         DateTime().plusMonths(1).withHourOfDay(12).withMinuteOfHour(0).withSecondOfMinute(0)
                 }
+
                 alarmManager =
                     context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
                 val intent = Intent(context, NotificationScheduleService::class.java)
@@ -134,7 +136,7 @@ class NotificationScheduleService : DaggerBroadcastReceiver() {
          */
         fun exitNotificationSchedule(context: Context) {
             val sharedPreference = SharedPreference(context)
-            if (!sharedPreference.getValueBoolean("Notification", false)) {
+            if (!sharedPreference.getValueBoolean(SettingKeys.Notifications.value, false)) {
                 alarmManager =
                     context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
                 alarmManager.cancel(broadcast)
