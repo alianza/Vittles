@@ -11,7 +11,6 @@ import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 /**
- * TODO ***
  * The presenter for the NotificationSchedule
  *
  * @property getNotificationSchedule The getNotificationSchedule use case from the domain module.
@@ -26,8 +25,8 @@ class NotificationSchedulePresenter @Inject constructor(
 ) : BasePresenter<NotificationScheduleService>(), NotificationScheduleContract.Presenter {
 
     /**
-     * TODO ***
      * Creates the notification in the notification tray and schedule
+     *
      * @param context The application context needed for the notification service.
      */
     override fun startPresenting(context: Context) {
@@ -46,7 +45,6 @@ class NotificationSchedulePresenter @Inject constructor(
     }
 
     /**
-     * TODO ***
      * Method used to schedule notification
      *
      * @param context The application context needed for the notification service.

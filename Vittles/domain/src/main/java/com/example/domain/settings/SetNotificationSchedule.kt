@@ -4,8 +4,6 @@ import com.example.domain.settings.model.NotificationSchedule
 import javax.inject.Inject
 
 /**
- * TODO ***
- *
  * This class handles the business logic of setting data
  *
  * @author Fethi Tewelde
@@ -15,7 +13,6 @@ import javax.inject.Inject
 class SetNotificationSchedule @Inject constructor(private val settingsRepository: SettingsRepository) {
 
     /**
-     * TODO ***
      * Calls the repository to set the value of notificationSchedule
      *
      * @param notificationSchedule

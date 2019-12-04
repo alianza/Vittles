@@ -20,17 +20,6 @@ class SharedPreferenceHelper(context: Context) {
     val sharedPref: SharedPreferences =
         context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
-    /**
-     * Saves shared preference
-     *
-     * @param KEY_NAME The key name of the preference.
-     * @param text The string value of the key.
-     */
-    fun save(KEY_NAME: String, text: String) {
-        sharedPref.edit()
-            .putString(KEY_NAME, text)
-            .apply()
-    }
 
     /**
      * Saves shared preference
@@ -53,25 +42,11 @@ class SharedPreferenceHelper(context: Context) {
      * @param status The boolean value of the key.
      */
     internal fun save(KEY_NAME: String, status: Boolean) {
-
         val editor: SharedPreferences.Editor = sharedPref.edit()
-
         editor.putBoolean(KEY_NAME, status!!)
-
         editor.commit()
     }
 
-    /**
-     * Gets the string value of the shared preference
-     *
-     * @param KEY_NAME The key name of the preference.
-     */
-    fun getValueString(KEY_NAME: String): String? {
-
-        return sharedPref.getString(KEY_NAME, null)
-
-
-    }
 
     /**
      * Gets the Int value of the shared preference
@@ -79,7 +54,6 @@ class SharedPreferenceHelper(context: Context) {
      * @param KEY_NAME The key name of the preference.
      */
     fun getValueInt(KEY_NAME: String): Int {
-
         return sharedPref.getInt(KEY_NAME, 0)
     }
 
@@ -89,9 +63,7 @@ class SharedPreferenceHelper(context: Context) {
      * @param KEY_NAME The key name of the preference.
      */
     fun getValueBoolean(KEY_NAME: String, defaultValue: Boolean): Boolean {
-
         return sharedPref.getBoolean(KEY_NAME, defaultValue)
-
     }
 
 }

@@ -22,7 +22,7 @@ import javax.inject.Inject
 class NotificationScheduleService : DaggerBroadcastReceiver(),
     NotificationScheduleContract.Service {
 
-    /** TODO ***
+    /**
      * The presenter of the NotificationScheduler
      */
     @Inject
@@ -93,24 +93,19 @@ class NotificationScheduleService : DaggerBroadcastReceiver(),
                 when (notificationSchedule) {
                     NotificationSchedule.DAILY -> {
                         // Set nextAudit to Daily at 12:00PM
-//                            DateTime().plusDays(1).withHourOfDay(12).withMinuteOfHour(0)
-//                                .withSecondOfMinute(0)
-                        nextAudit = DateTime().plusDays(0).withHourOfDay(0).withMinuteOfHour(0)
-                            .withSecondOfMinute(5)
+                        nextAudit = DateTime().plusDays(1).withHourOfDay(12).withMinuteOfHour(0)
+                            .withSecondOfMinute(0)
                     }
                     NotificationSchedule.WEEKLY -> {
                         // Set nextAudit to Weekly at 12:00PM
-//                            DateTime().plusWeeks(1).withHourOfDay(12).withMinuteOfHour(0)
-//                                .withSecondOfMinute(0)
-                        nextAudit = DateTime().plusDays(0).withHourOfDay(0).withMinuteOfHour(0)
-                            .withSecondOfMinute(10)
+                        nextAudit = DateTime().plusWeeks(1).withHourOfDay(12).withMinuteOfHour(0)
+                            .withSecondOfMinute(0)
+
                     }
                     NotificationSchedule.MONTHLY -> {
                         // Set nextAudit to Monthly at 12:00PM
-//                            DateTime().plusMonths(1).withHourOfDay(12).withMinuteOfHour(0)
-//                                .withSecondOfMinute(0)
-                        nextAudit = DateTime().plusDays(0).withHourOfDay(0).withMinuteOfHour(0)
-                            .withSecondOfMinute(20)
+                        nextAudit = DateTime().plusMonths(1).withHourOfDay(12).withMinuteOfHour(0)
+                            .withSecondOfMinute(0)
                     }
                 }
 
