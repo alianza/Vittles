@@ -148,7 +148,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
     }
 
     /**
-     * Sets all necessary event listeners on ui elements
+     * Sets all necessary event listeners on ui elements.
      *
      */
     override fun setListeners() {
@@ -211,6 +211,8 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
             }
         }
 
+        setAllNoResultStates()
+
         onShowUndoSnackbar()
     }
 
@@ -241,6 +243,8 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
                     if (deletedProductIndex == products.count() - 1){
                         productAdapter.notifyItemChanged(deletedProductIndex - 1)
                     }
+
+                    setAllNoResultStates()
                 }
             }
         })
@@ -262,7 +266,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
     }
 
     /**
-     * Handles the action of the remove button on a product
+     * Handles the action of the remove button on a product.
      *
      */
     @SuppressLint("DefaultLocale")
@@ -277,7 +281,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
     }
 
     /**
-     * Handles the item view being clicked, opens the product info page
+     * Handles the item view being clicked, opens the product info page.
      *
      */
     override fun onItemViewClicked(product: Product) {
@@ -320,6 +324,14 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
         }
     }
 
+    /**
+     * Enables the empty view and the no result view.
+     *
+     */
+    override fun setAllNoResultStates() {
+        setEmptyView()
+        onNoResults()
+    }
 
     /**
      * Populates the RecyclerView with items from the local database.
@@ -383,9 +395,9 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
     }
 
     /**
-     * Method that is called when text is entered in search view
+     * Method that is called when text is entered in search view.
      *
-     * @param query entered string used as search query
+     * @param query entered string used as search query.
      */
     @SuppressLint("DefaultLocale")
     override fun filter(query: String) {
@@ -409,7 +421,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
     }
 
     /**
-     * Method to show the search bar and hide the toolbar
+     * Method to show the search bar and hide the toolbar.
      *
      */
     override fun onSearchBarOpened() {
@@ -420,7 +432,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
     }
 
     /**
-     * Method to hide the search bar and show the toolbar
+     * Method to hide the search bar and show the toolbar.
      *
      */
     override fun onSearchBarClosed() {
