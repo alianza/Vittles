@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.core.view.ViewCompat.animate
 import androidx.core.view.ViewPropertyAnimatorListener
 import com.example.vittles.R
+import com.example.vittles.enums.SettingKeys
 import com.example.vittles.services.notification.NotificationScheduleService
 import com.example.vittles.services.popups.PopupBase
 import com.example.vittles.services.popups.PopupButton
@@ -64,14 +65,18 @@ class SettingsFragment : DaggerFragment(), SettingsContract.View {
 
         setListeners()
 
-        val notificationToggle = sharedPreference.getValueBoolean("Notification", true)
+        // Retrieve settings and set layout
+        val notificationToggle = sharedPreference.getValueBoolean(SettingKeys.Notifications.value, true)
         notification_toggle.isChecked = notificationToggle
 
-        val notificationTimeSelection = sharedPreference.getValueInt("NOTIFICATION_TIME")
+        val notificationTimeSelection = sharedPreference.getValueInt(SettingKeys.NotificationTime.value)
         notification_timer.setSelection(notificationTimeSelection)
 
-        val vibrationToggle = sharedPreference.getValueBoolean("Vibration", true)
+        val vibrationToggle = sharedPreference.getValueBoolean(SettingKeys.Vibration.value, true)
         vibration_toggle.isChecked = vibrationToggle
+
+        val performanceSettingSelection = sharedPreference.getValueInt(SettingKeys.Performance.value)
+        performance_picker.setSelection(performanceSettingSelection)
     }
 
     /**
@@ -86,9 +91,9 @@ class SettingsFragment : DaggerFragment(), SettingsContract.View {
          */
         vibration_toggle.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                sharedPreference.save("Vibration", true)
+                sharedPreference.save(SettingKeys.Vibration.value, true)
             }else{
-                sharedPreference.save("Vibration", false)
+                sharedPreference.save(SettingKeys.Vibration.value, false)
             }
         }
 
@@ -98,10 +103,10 @@ class SettingsFragment : DaggerFragment(), SettingsContract.View {
          */
         notification_toggle.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                sharedPreference.save("Notification", true)
+                sharedPreference.save(SettingKeys.Notifications.value, true)
                 NotificationScheduleService.scheduleNotificationAudit(context!!)
             } else {
-                sharedPreference.save("Notification", false)
+                sharedPreference.save(SettingKeys.Notifications.value, false)
                 NotificationScheduleService.exitNotificationSchedule(context!!)
             }
         }
@@ -117,11 +122,25 @@ class SettingsFragment : DaggerFragment(), SettingsContract.View {
                 position: Int,
                 id: Long
             ) {
-                sharedPreference.save("NOTIFICATION_TIME", position)
+                sharedPreference.save(SettingKeys.NotificationTime.value, position)
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
             }
+        }
+
+        performance_picker.onItemSelectedListener = object : OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    sharedPreference.save(SettingKeys.Performance.value, position)
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>) {
+                }
         }
 
         llAdvanced.setOnClickListener { onAdvancedClick() }
@@ -176,10 +195,10 @@ class SettingsFragment : DaggerFragment(), SettingsContract.View {
     override fun expandAdvancedSettings() {
         if (ibAdvanced.rotation == 0f) {
             ibAdvanced.animate().rotation(180f).start()
-            fadeInAnim(llSavedProducts)
+            fadeInAnim(llAdvancedSettings)
         } else {
             ibAdvanced.animate().rotation(0f).start()
-            fadeOutAnim(llSavedProducts)
+            fadeOutAnim(llAdvancedSettings)
 
         }
     }
@@ -212,7 +231,7 @@ class SettingsFragment : DaggerFragment(), SettingsContract.View {
     override fun fadeInAnim(elem: View) {
         animate(elem).apply {
             interpolator = AccelerateInterpolator()
-            translationY(120f)
+            translationY(llAdvanced.height.toFloat())
             alpha(1f)
             duration = 250
             setListener(object : ViewPropertyAnimatorListener {
