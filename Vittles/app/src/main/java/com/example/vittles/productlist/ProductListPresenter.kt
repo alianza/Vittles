@@ -68,7 +68,7 @@ class ProductListPresenter @Inject internal constructor(
         disposables.add(deleteProduct.invoke(product)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ view?.setEmptyView() }, { view?.onShowProductDeleteError() })
+            .subscribe({ view?.setAllNoResultStates() }, { view?.onShowProductDeleteError() })
         )
         addWasteReportProduct(deleteType)
     }

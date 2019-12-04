@@ -16,6 +16,7 @@ interface ProductListContract {
         fun setItemTouchHelper()
         fun setEmptyView()
         fun onNoResults()
+        fun setAllNoResultStates()
         fun onSearchBarOpened()
         fun onSearchBarClosed()
         fun onPopulateRecyclerView()
