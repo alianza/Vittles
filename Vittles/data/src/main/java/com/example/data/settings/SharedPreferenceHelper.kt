@@ -7,7 +7,6 @@ import android.content.SharedPreferences
 /**
  * Shared preference class used to store simple data in the internal storage privately for each application
  * that will be used to save setting preferences.
- * TODO Check for unnecessary stuff that can be removed or other changes.
  *
  * @author Fethi Tewelde
  *
@@ -15,10 +14,7 @@ import android.content.SharedPreferences
  */
 class SharedPreferenceHelper(context: Context) {
     private val PREFS_NAME = "Settings"
-
-    
-    val sharedPref: SharedPreferences =
-        context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+    val sharedPref: SharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
 
     /**
@@ -29,10 +25,8 @@ class SharedPreferenceHelper(context: Context) {
      */
     internal fun save(KEY_NAME: String, value: Int) {
         val editor: SharedPreferences.Editor = sharedPref.edit()
-
         editor.putInt(KEY_NAME, value)
-
-        editor.commit()
+        editor.apply()
     }
 
     /**
@@ -44,7 +38,7 @@ class SharedPreferenceHelper(context: Context) {
     internal fun save(KEY_NAME: String, status: Boolean) {
         val editor: SharedPreferences.Editor = sharedPref.edit()
         editor.putBoolean(KEY_NAME, status!!)
-        editor.commit()
+            editor.apply()
     }
 
 
@@ -66,8 +60,4 @@ class SharedPreferenceHelper(context: Context) {
         return sharedPref.getBoolean(KEY_NAME, defaultValue)
     }
 
-}
-
-fun String.abc() {
-    ""
 }

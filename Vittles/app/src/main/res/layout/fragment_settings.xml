@@ -11,7 +11,7 @@
     <LinearLayout
         android:id="@+id/llVibration"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
@@ -46,9 +46,9 @@
             android:layout_width="100dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:defaultValue="true"
             android:theme="@style/SCBSwitch"
             android:title="@string/settings_notifications"
-            android:defaultValue="true"
             tools:layout_editor_absoluteX="205dp"
             tools:layout_editor_absoluteY="508dp" />
     </LinearLayout>
@@ -56,7 +56,7 @@
     <LinearLayout
         android:id="@+id/llSchedule"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
@@ -103,7 +103,7 @@
     <LinearLayout
         android:id="@+id/llNotifications"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
@@ -149,6 +149,7 @@
         android:id="@+id/llSavedProducts"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="18dp"
         android:alpha="0"
         android:orientation="horizontal"
         android:visibility="invisible"
@@ -199,7 +200,7 @@
         android:id="@+id/llAdvanced"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="12dp"
         android:background="@color/white"
         android:backgroundTint="@color/white"
         android:orientation="horizontal"
@@ -214,8 +215,8 @@
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
             android:layout_weight="1"
-            android:text="@string/settings_advanced"
             android:gravity="center_vertical"
+            android:text="@string/settings_advanced"
             android:textColor="@color/black"
             android:textSize="20sp" />
 
