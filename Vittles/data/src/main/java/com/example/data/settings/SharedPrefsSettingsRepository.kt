@@ -11,9 +11,13 @@ class  SharedPrefsSettingsRepository @Inject constructor(context: Context): Sett
     /** The shared preferences instance. */
     private val sharedPreferences = SharedPreferenceHelper(context)
 
+    /** performanceKey key value */
     private val performanceKey = "SCANNING_PERFORMANCE"
+    /** notificationTimeKey key value */
     private val notificationTimeKey = "NOTIFICATION_TIME"
+    /** notificationsKey key value */
     private val notificationsKey = "NOTIFICATIONS"
+    /** vibrationKey key value */
     private val vibrationKey = "VIBRATION"
 
     /** {@inheritDoc} */
