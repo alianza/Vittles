@@ -12,7 +12,7 @@ import io.reactivex.disposables.CompositeDisposable
  *
  * @param V The activity (V: View) of the presenter.
  */
-abstract class BasePresenter<V : Fragment> : MvpPresenter {
+abstract class BasePresenter<V : Any> : MvpPresenter {
 
     /** Contains all async calls made. */
     protected val disposables: CompositeDisposable = CompositeDisposable()

@@ -3,9 +3,8 @@ package com.example.vittles.scanning
 import android.content.Context
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
-import com.example.vittles.enums.SettingKeys
+import com.example.domain.settings.GetPerformanceSetting
 import com.example.vittles.services.scanner.ScanningService
-import com.example.vittles.settings.SharedPreference
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.google.firebase.ml.vision.common.FirebaseVisionImageMetadata
@@ -34,7 +33,8 @@ class PreviewAnalyzer(
     private val onOcrFailure: (exception: Exception) -> Unit,
     private val onOcrSuccess: (text: String) -> Unit,
     private val context: Context
-) : ImageAnalysis.Analyzer {
+
+    ) : ImageAnalysis.Analyzer {
 
     companion object ProductProps {
         /** Value that indicates if a barcode has been scanned already */
@@ -46,8 +46,7 @@ class PreviewAnalyzer(
     /** Value used for the scanning delay */
     private var lastAnalyzedTimestamp = 0L
 
-    /** SharedPreference to retrieve settings */
-    private val sharedPreference = SharedPreference(context)
+    private lateinit var getPerformanceSetting: GetPerformanceSetting
 
     /**
      * Convert the rotation degree to firebase rotation degree.
@@ -71,12 +70,10 @@ class PreviewAnalyzer(
      * @param degrees Rotation degree of the camera.
      */
     override fun analyze(imageProxy: ImageProxy?, degrees: Int) {
-        // Set scanning interval to milliseconds from sharedPreferences setting, default 500ms
-        val interval: Long = when (sharedPreference.getValueInt(SettingKeys.Performance.value)) {
-            0 -> 200
-            1 -> 500
-            2 -> 1000
-            else -> 500
+        var interval: Long = getPerformanceSetting.invoke().ms.toLong()
+
+        if (interval.toString().isEmpty()) {
+            interval = 500L
         }
 
         // Scan only every 500 ms instead of every frame.

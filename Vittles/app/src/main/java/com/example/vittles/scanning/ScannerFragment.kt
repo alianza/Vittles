@@ -36,7 +36,7 @@ import com.example.vittles.services.popups.PopupBase
 import com.example.vittles.services.popups.PopupButton
 import com.example.vittles.services.popups.PopupManager
 import com.example.vittles.services.scanner.DateFormatterService
-import com.example.vittles.settings.SharedPreference
+import com.example.data.settings.SharedPreferenceHelper
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_camera.*
@@ -69,9 +69,6 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
     /** @suppress */
     private var expirationDate: DateTime? = null
 
-    /** To access shared preferences(data) in the form of value-key*/
-    private lateinit var sharedPreference: SharedPreference
-
 
     /** {@inheritDoc} */
     override fun onCreateView(
@@ -80,7 +77,6 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
     ): View? {
         presenter.start(this@ScannerFragment)
         vibrator = context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-        sharedPreference = SharedPreference(context!!)
         return inflater.inflate(R.layout.fragment_camera, container, false)
     }
 
@@ -300,7 +296,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
     @Suppress("DEPRECATION")
     fun onScanSuccessful() {
         // Checks vibration setting and then Vibrate or not vibrate
-        if (vibrator.hasVibrator() && sharedPreference.getValueBoolean(SettingKeys.Vibration.value, true)) {
+        if (vibrator.hasVibrator() && presenter.getVibrationSetting()) {
             vibrator.vibrate(50)
         }
         // Turn scanning plane green, and back after 500 ms

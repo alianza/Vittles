@@ -38,9 +38,9 @@
     <!--    Settings-->
     <string name="settings_title">Settings</string>
     <string name="settings_vibration">Vibrations</string>
-    <string name="settings_vibration_detail">Click to toggle vibrations.</string>
+    <string name="settings_vibration_detail">Scanning and swiping vibrations.</string>
     <string name="settings_notifications">Notifications</string>
-    <string name="settings_notifications_detail">Click to toggle notifications.</string>
+    <string name="settings_notifications_detail">Receiving notifications for expiring products.</string>
     <string name="settings_schedule">Schedule</string>
     <string name="settings_schedule_detail">Choose notification schedule.</string>
     <string name="settings_advanced">Advanced</string>
@@ -158,15 +158,6 @@
     <string name="cd_refresh_button">Refresh</string>
     <string name="cd_torch">Torch</string>
     <string name="cd_expand">Expand</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="pref_int1">int1</string>
-    <integer name="pref_int1_step">1</integer>
-    <integer name="pref_int1_min">0</integer>
-    <integer name="pref_int1_max">10</integer>
-    <integer name="pref_int1_default">10</integer>
-    <string name="int1_title">Set Int 1</string>
-    <string name="int1_desc">Change the value of the first integer</string>
 
     <!-- Notification options -->
     <string-array name="notification_time">
