@@ -18,6 +18,7 @@ import com.example.vittles.enums.DeleteType
  * Creates an ItemTouchHelper and defines what happens on swiping.
  *
  * @author Sarah Lange
+ * @author Marc van Spronsen
  *
  * @param products The List of products from the recycler View.
  * @param context Application Context.
@@ -138,10 +139,22 @@ class ProductItemTouchHelper(private val products: List<Product>, var context: C
 
         if (dX < 0) {
             setBackgroundColor(c, viewHolder, ContextCompat.getColor(context, R.color.red))
-            drawIcon(c, viewHolder, context.getDrawable(R.drawable.ic_delete_white_24)!!, IconLocation.RIGHT)
+            if (dX > -300) {
+                drawIcon(c, viewHolder, context.getDrawable(R.drawable.ic_delete_1)!!, IconLocation.RIGHT)
+            } else if (dX < -299 && dX > -600) {
+                drawIcon(c, viewHolder, context.getDrawable(R.drawable.ic_delete_2)!!, IconLocation.RIGHT)
+            } else if (dX < -599) {
+                drawIcon(c, viewHolder, context.getDrawable(R.drawable.ic_delete_3)!!, IconLocation.RIGHT)
+            }
         }else{
             setBackgroundColor(c, viewHolder, ContextCompat.getColor(context, R.color.green))
-            drawIcon(c, viewHolder, context.getDrawable(R.drawable.ic_eaten_white)!!, IconLocation.LEFT)
+            if (dX < 300) {
+                drawIcon(c, viewHolder, context.getDrawable(R.drawable.ic_eaten_1)!!, IconLocation.LEFT)
+            } else if (dX > 299 && dX < 600) {
+                drawIcon(c, viewHolder, context.getDrawable(R.drawable.ic_eaten_2)!!, IconLocation.LEFT)
+            } else if (dX > 599) {
+                drawIcon(c, viewHolder, context.getDrawable(R.drawable.ic_eaten_3)!!, IconLocation.LEFT)
+            }
         }
         
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
