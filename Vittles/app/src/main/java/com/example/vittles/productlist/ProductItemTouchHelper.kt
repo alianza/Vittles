@@ -139,20 +139,20 @@ class ProductItemTouchHelper(private val products: List<Product>, var context: C
 
         if (dX < 0) {
             setBackgroundColor(c, viewHolder, ContextCompat.getColor(context, R.color.red))
-            if (dX > -300) {
+            if (dX > -viewHolder.itemView.width/3) {
                 drawIcon(c, viewHolder, context.getDrawable(R.drawable.ic_delete_1)!!, IconLocation.RIGHT)
-            } else if (dX < -299 && dX > -600) {
+            } else if (dX < -viewHolder.itemView.width/3 && dX > -viewHolder.itemView.width/2) {
                 drawIcon(c, viewHolder, context.getDrawable(R.drawable.ic_delete_2)!!, IconLocation.RIGHT)
-            } else if (dX < -599) {
+            } else if (dX < -viewHolder.itemView.width/2) {
                 drawIcon(c, viewHolder, context.getDrawable(R.drawable.ic_delete_3)!!, IconLocation.RIGHT)
             }
         }else{
             setBackgroundColor(c, viewHolder, ContextCompat.getColor(context, R.color.green))
-            if (dX < 300) {
+            if (dX < viewHolder.itemView.width/3) {
                 drawIcon(c, viewHolder, context.getDrawable(R.drawable.ic_eaten_1)!!, IconLocation.LEFT)
-            } else if (dX > 299 && dX < 600) {
+            } else if (dX > viewHolder.itemView.width/3 && dX < viewHolder.itemView.width/2) {
                 drawIcon(c, viewHolder, context.getDrawable(R.drawable.ic_eaten_2)!!, IconLocation.LEFT)
-            } else if (dX > 599) {
+            } else if (dX > viewHolder.itemView.width/2) {
                 drawIcon(c, viewHolder, context.getDrawable(R.drawable.ic_eaten_3)!!, IconLocation.LEFT)
             }
         }
