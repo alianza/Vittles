@@ -12,11 +12,12 @@ import com.example.domain.barcode.GetProductByBarcode
 import com.example.domain.barcode.UpdateProductDictionary
 import com.example.domain.product.AddProduct
 import com.example.domain.product.Product
+import com.example.domain.settings.GetVibrationEnabled
 import com.example.vittles.mvp.BasePresenter
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.fragment_camera.*
+import kotlinx.android.synthetic.main.fragment_scanner.*
 import java.lang.Exception
 import java.util.concurrent.Executors
 import javax.inject.Inject
@@ -30,12 +31,14 @@ import javax.inject.Inject
  * @property addProduct The AddProduct use case from the domain module.
  * @property insertProductDictionary The AddBarcodeDictionary use case from the domain module.
  * @property updateProductDictionary The UpdateBarcodeDictionary use case from the domain module.
+ * @property getVibrationEnabled The GetVibrationEnabled use case from the domain module.
  */
 class ScannerPresenter @Inject internal constructor(
     private val getProductByBarcode: GetProductByBarcode,
     private val addProduct: AddProduct,
     private val addProductDictionary: AddProductDictionary,
-    private val updateProductDictionary: UpdateProductDictionary
+    private val updateProductDictionary: UpdateProductDictionary,
+    private val getVibrationEnabled: GetVibrationEnabled
 ) :
     BasePresenter<ScannerFragment>(), ScannerContract.Presenter {
 
@@ -98,6 +101,15 @@ class ScannerPresenter @Inject internal constructor(
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe())
+    }
+
+    /**
+     * Gets the boolean value of vibration setting.
+     *
+     * @return The boolean value of Vibration setting.
+     */
+    override fun getVibrationSetting(): Boolean {
+        return getVibrationEnabled()
     }
 
     /**
