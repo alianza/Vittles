@@ -46,6 +46,7 @@ interface ScannerContract {
         fun addProductToList(product: Product, checkDate: Boolean)
         fun insertProductDictionary(productDictionary: ProductDictionary)
         fun patchProductDictionary(productDictionary: ProductDictionary)
+        fun getVibrationSetting(): Boolean
         fun startCamera()
         fun getPreview(): Preview
         fun getImageAnalysis(): ImageAnalysis

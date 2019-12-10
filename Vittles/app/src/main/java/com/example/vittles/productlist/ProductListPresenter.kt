@@ -4,6 +4,7 @@ import com.example.domain.product.ExpirationIndicationColor
 import com.example.domain.product.DeleteProduct
 import com.example.domain.product.Product
 import com.example.domain.product.GetProducts
+import com.example.domain.settings.GetVibrationEnabled
 import com.example.domain.wasteReport.AddWasteReportProduct
 import com.example.domain.wasteReport.WasteReportProduct
 import com.example.vittles.enums.DeleteType
@@ -23,11 +24,13 @@ import javax.inject.Inject
  *
  * @property getProducts The GetProducts use case from the domain module.
  * @property deleteProduct The DeleteProduct use cane from the domain module.
+ * @property getVibrationEnabled The getVibrationEnabled use case from the domain module
  */
 class ProductListPresenter @Inject internal constructor(
     private val getProducts: GetProducts,
     private val deleteProduct: DeleteProduct,
-    private val addWasteReportProduct: AddWasteReportProduct
+    private val addWasteReportProduct: AddWasteReportProduct,
+    private val getVibrationEnabled: GetVibrationEnabled
 ) :
     BasePresenter<ProductListFragment>(), ProductListContract.Presenter {
 
@@ -84,5 +87,12 @@ class ProductListPresenter @Inject internal constructor(
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe()
         )
+    }
+
+    /**
+     * @return the boolean value of vibration
+     */
+    fun getVibrationSetting(): Boolean {
+        return getVibrationEnabled()
     }
 }
