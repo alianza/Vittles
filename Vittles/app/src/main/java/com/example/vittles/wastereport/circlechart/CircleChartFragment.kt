@@ -96,6 +96,7 @@ class CircleChartFragment @Inject internal constructor(var date: DateTime, var v
      * @param percent percent date
      */
     override fun drawCircleChart(percent: Int) {
+        dynamicArcView.executeReset()
 
         val seriesItem = SeriesItem.Builder(ContextCompat.getColor(context!!, R.color.lightGrey))
             .setRange(0f, 100f, 0f)
@@ -162,6 +163,7 @@ class CircleChartFragment @Inject internal constructor(var date: DateTime, var v
                 )
             }
         }
+        hasDelighted = false
     }
 
     /**
