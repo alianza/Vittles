@@ -106,6 +106,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
     override fun initViews(view: View) {
         ibRefreshDate.visibility = View.INVISIBLE
         ibRefreshProductName.visibility = View.INVISIBLE
+        toggleAddVittleButton()
     }
 
     /**
