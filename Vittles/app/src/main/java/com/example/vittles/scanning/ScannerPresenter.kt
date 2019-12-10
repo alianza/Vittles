@@ -12,16 +12,12 @@ import com.example.domain.barcode.ProductDictionary
 import com.example.domain.barcode.UpdateProductDictionary
 import com.example.domain.product.AddProduct
 import com.example.domain.product.Product
-import com.example.domain.settings.GetPerformanceSetting
 import com.example.domain.settings.GetVibrationEnabled
-import com.example.domain.settings.SettingsRepository
 import com.example.vittles.mvp.BasePresenter
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_scanner.*
-import java.lang.Exception
-import kotlinx.android.synthetic.main.fragment_camera.*
 import java.util.concurrent.Executors
 import javax.inject.Inject
 
