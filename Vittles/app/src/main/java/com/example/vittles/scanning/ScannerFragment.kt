@@ -181,7 +181,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
                 context?.let {
                     getDrawable(
                         it,
-                        R.drawable.ic_flash_on_black_36dp
+                        R.drawable.ic_flash_on_black_28dp
                     )
                 }
             )
@@ -190,7 +190,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
                 context?.let {
                     getDrawable(
                         it,
-                        R.drawable.ic_flash_off_black_36dp
+                        R.drawable.ic_flash_off_black_28dp
                     )
                 }
             )
