@@ -13,6 +13,8 @@ import com.example.data.room.product.ProductDao
 import com.example.data.room.product.ProductModelMapper
 import com.example.data.room.wastereport.WasteReportModelMapper
 import com.example.data.room.createProductDaoImpl
+import com.example.data.settings.SharedPrefsSettingsRepository
+import com.example.domain.settings.SettingsRepository
 import com.example.data.room.product.ProductsRepositoryImpl
 import com.example.data.room.wastereport.WasteReportRepositoryImpl
 import com.example.domain.barcode.BarcodesRepository
@@ -50,6 +52,12 @@ class DataModule {
         productDao: ProductDao,
         mapper: ProductModelMapper
     ): ProductsRepository = ProductsRepositoryImpl(productDao, mapper)
+
+    @Singleton
+    @Provides
+    fun provideSettingsRepository(
+        context: Context
+    ): SettingsRepository = SharedPrefsSettingsRepository(context)
 
     @Singleton
     @Provides

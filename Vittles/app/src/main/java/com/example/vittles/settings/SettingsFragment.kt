@@ -7,6 +7,9 @@ import android.view.ViewGroup
 import android.view.animation.AccelerateInterpolator
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
+import androidx.lifecycle.Observer
+import com.example.data.settings.SharedPreferenceHelper
+import com.example.domain.settings.model.NotificationSchedule
 import android.widget.Toast
 import androidx.core.view.ViewCompat.animate
 import androidx.core.view.ViewPropertyAnimatorListener
@@ -18,7 +21,6 @@ import com.example.vittles.services.popups.PopupManager
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_settings.*
 import javax.inject.Inject
-
 
 
 /**
@@ -34,24 +36,26 @@ class SettingsFragment : DaggerFragment(), SettingsContract.View {
     @Inject
     lateinit var presenter: SettingsPresenter
 
-    /** To Store shared preferences(data) in the form of value-key*/
-    lateinit var sharedPreference: SharedPreference
-
-    /** @suppress */
+    /** {@inheritDoc} */
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        presenter.start(this@SettingsFragment)
+        presenter.start(this)
+        presenter.startPresenting(requireContext())
         return inflater.inflate(R.layout.fragment_settings, container, false)
     }
 
-    /** @suppress */
+    /** {@inheritDoc} */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        sharedPreference = SharedPreference(context!!)
 
         initViews()
+    }
+
+    override fun onDestroy() {
+        presenter.destroy()
+        super.onDestroy()
     }
 
     /**
@@ -64,14 +68,17 @@ class SettingsFragment : DaggerFragment(), SettingsContract.View {
 
         setListeners()
 
-        val notificationToggle = sharedPreference.getValueBoolean("Notification", true)
-        notification_toggle.isChecked = notificationToggle
+        presenter.notificationEnabled.observe(this, Observer {
+            notification_toggle.isChecked = it
+        })
 
-        val notificationTimeSelection = sharedPreference.getValueInt("NOTIFICATION_TIME")
-        notification_timer.setSelection(notificationTimeSelection)
+        presenter.notificationSchedule.observe(this, Observer {
+            notification_timer.setSelection(it.ordinal)
+        })
 
-        val vibrationToggle = sharedPreference.getValueBoolean("Vibration", true)
-        vibration_toggle.isChecked = vibrationToggle
+        presenter.vibrationEnabled.observe(this, Observer {
+            vibration_toggle.isChecked = it
+        })
     }
 
     /**
@@ -85,11 +92,7 @@ class SettingsFragment : DaggerFragment(), SettingsContract.View {
          *
          */
         vibration_toggle.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                sharedPreference.save("Vibration", true)
-            }else{
-                sharedPreference.save("Vibration", false)
-            }
+            presenter.onVibrationEnabledChanged(isChecked)
         }
 
         /*
@@ -97,13 +100,7 @@ class SettingsFragment : DaggerFragment(), SettingsContract.View {
          *
          */
         notification_toggle.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                sharedPreference.save("Notification", true)
-                NotificationScheduleService.scheduleNotificationAudit(context!!)
-            } else {
-                sharedPreference.save("Notification", false)
-                NotificationScheduleService.exitNotificationSchedule(context!!)
-            }
+            presenter.onNotificationEnabledChanged(isChecked)
         }
 
         /*
@@ -117,7 +114,9 @@ class SettingsFragment : DaggerFragment(), SettingsContract.View {
                 position: Int,
                 id: Long
             ) {
-                sharedPreference.save("NOTIFICATION_TIME", position)
+                val notificationSchedule = NotificationSchedule.values()[position]
+
+                presenter.onNotificationScheduleChanged(notificationSchedule)
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {

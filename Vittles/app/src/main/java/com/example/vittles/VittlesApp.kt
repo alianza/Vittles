@@ -2,6 +2,7 @@ package com.example.vittles
 
 import android.Manifest
 import androidx.core.app.NotificationManagerCompat
+import com.example.domain.settings.model.NotificationSchedule
 import com.example.vittles.di.AppModule
 import com.example.vittles.di.DaggerAppComponent
 import com.example.vittles.services.notification.NotificationService
@@ -22,7 +23,7 @@ import javax.net.ssl.SSLContext
  * @author Jeroen Flietstra
  */
 class VittlesApp : DaggerApplication() {
-    /** {@inheritDoc}*/
+    /** {@link AndroidInjector}*/
     override fun applicationInjector(): AndroidInjector<VittlesApp> {
         val appComponent = DaggerAppComponent.builder()
             .applicationBind(this)
@@ -45,7 +46,7 @@ class VittlesApp : DaggerApplication() {
             getString(R.string.app_name), "App notification channel.")
 
         // Setup notification scheduler
-        NotificationScheduleService.scheduleNotificationAudit(applicationContext)
+        NotificationScheduleService.scheduleNotificationAudit(applicationContext, NotificationSchedule.DAILY, true)
 
         // Necessary for creating a connection with the OFF API
         try {
