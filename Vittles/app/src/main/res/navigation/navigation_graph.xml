@@ -35,7 +35,7 @@
         android:id="@+id/scannerFragment"
         android:name="com.example.vittles.scanning.ScannerFragment"
         android:label="@string/scan_vittles_title"
-        tools:layout="@layout/fragment_camera" >
+        tools:layout="@layout/fragment_scanner" >
         <argument
             android:name="previousFragment"
             app:argType="integer"

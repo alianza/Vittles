@@ -38,7 +38,7 @@ import com.example.vittles.services.scanner.DateFormatterService
 import com.example.vittles.settings.SharedPreference
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.fragment_camera.*
+import kotlinx.android.synthetic.main.fragment_scanner.*
 import org.joda.time.DateTime
 import javax.inject.Inject
 
@@ -80,7 +80,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         presenter.start(this@ScannerFragment)
         vibrator = context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         sharedPreference = SharedPreference(context!!)
-        return inflater.inflate(R.layout.fragment_camera, container, false)
+        return inflater.inflate(R.layout.fragment_scanner, container, false)
     }
 
     /** {@inheritDoc} */
