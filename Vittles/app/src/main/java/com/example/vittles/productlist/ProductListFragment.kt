@@ -19,14 +19,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.product.Product
 import com.example.vittles.R
 import com.example.vittles.enums.DeleteType
-import com.example.vittles.enums.SettingKeys
-import com.example.vittles.productlist.productinfo.ProductInfoFragment
-import com.example.vittles.productlist.productinfo.ProductInfoFragmentArgs
 import com.example.vittles.services.popups.PopupBase
 import com.example.vittles.services.popups.PopupButton
 import com.example.vittles.services.popups.PopupManager
 import com.example.vittles.services.sorting.SortMenu
-import com.example.data.settings.SharedPreferenceHelper
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment

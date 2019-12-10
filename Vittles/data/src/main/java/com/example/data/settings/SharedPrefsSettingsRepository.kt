@@ -11,43 +11,48 @@ class  SharedPrefsSettingsRepository @Inject constructor(context: Context): Sett
     /** The shared preferences instance. */
     private val sharedPreferences = SharedPreferenceHelper(context)
 
+    private val performanceKey = "SCANNING_PERFORMANCE"
+    private val notificationTimeKey = "NOTIFICATION_TIME"
+    private val notificationsKey = "NOTIFICATIONS"
+    private val vibrationKey = "VIBRATION"
+
     /** {@inheritDoc} */
     override fun getNotificationSchedule(): NotificationSchedule {
-         return NotificationSchedule.values()[sharedPreferences.getValueInt("NOTIFICATION_TIME")]
+         return NotificationSchedule.values()[sharedPreferences.getValueInt(notificationTimeKey)]
     }
 
     /** {@inheritDoc} */
     override fun setNotificationSchedule(notificationSchedule: NotificationSchedule) {
-        sharedPreferences.save("NOTIFICATION_TIME", notificationSchedule.ordinal)
+        sharedPreferences.save(notificationTimeKey, notificationSchedule.ordinal)
     }
 
     /** {@inheritDoc} */
     override fun setNotificationEnabled(isEnabled: Boolean) {
-        sharedPreferences.save("NOTIFICATION", isEnabled)
+        sharedPreferences.save(notificationsKey, isEnabled)
     }
 
     /** {@inheritDoc} */
     override fun getNotificationEnabled(): Boolean {
-        return sharedPreferences.getValueBoolean("NOTIFICATION", true)
+        return sharedPreferences.getValueBoolean(notificationsKey, true)
     }
 
     /** {@inheritDoc} */
     override fun getVibrationEnabled(): Boolean {
-        return sharedPreferences.getValueBoolean("VIBRATION", true)
+        return sharedPreferences.getValueBoolean(vibrationKey, true)
     }
 
     /** {@inheritDoc} */
     override fun setVibrationEnabled(isEnabled: Boolean) {
-        sharedPreferences.save("VIBRATION", isEnabled)
+        sharedPreferences.save(vibrationKey, isEnabled)
     }
 
     /** {@inheritDoc} */
     override fun getPerformanceSetting(): PerformanceSetting {
-       return PerformanceSetting.values()[sharedPreferences.getValueInt("SCANNING_PERFORMANCE")]
+       return PerformanceSetting.values()[sharedPreferences.getValueInt(performanceKey)]
     }
 
     /** {@inheritDoc} */
     override fun setPerformanceSetting(performanceSetting: PerformanceSetting) {
-        sharedPreferences.save("SCANNING_PERFORMANCE", performanceSetting.ordinal)
+        sharedPreferences.save(performanceKey, performanceSetting.ordinal)
     }
 }

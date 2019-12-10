@@ -8,15 +8,12 @@ import android.view.animation.AccelerateInterpolator
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import androidx.lifecycle.Observer
-import com.example.data.settings.SharedPreferenceHelper
 import com.example.domain.settings.model.NotificationSchedule
 import android.widget.Toast
 import androidx.core.view.ViewCompat.animate
 import androidx.core.view.ViewPropertyAnimatorListener
 import com.example.domain.settings.model.PerformanceSetting
 import com.example.vittles.R
-import com.example.vittles.enums.SettingKeys
-import com.example.vittles.services.notification.NotificationScheduleService
 import com.example.vittles.services.popups.PopupBase
 import com.example.vittles.services.popups.PopupButton
 import com.example.vittles.services.popups.PopupManager

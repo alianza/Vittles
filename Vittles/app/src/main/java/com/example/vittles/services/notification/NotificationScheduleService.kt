@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import com.crashlytics.android.Crashlytics
 import com.example.domain.notification.Notification
-import com.example.vittles.enums.SettingKeys
 import com.example.domain.notification.NotificationDataException
 import com.example.domain.settings.model.NotificationSchedule
 import dagger.android.DaggerBroadcastReceiver
