@@ -26,14 +26,12 @@ import java.util.concurrent.TimeUnit
  * @property onBarcodeFailure Callback function for unsuccessful barcode scan.
  * @property onOcrSuccess Callback function for successful OCR scan.
  * @property onOcrFailure Callback function for unsuccessful OCR scan.
- * @property context Context from fragment
  */
 class PreviewAnalyzer(
     private val onBarcodeFailure: (exception: Exception) -> Unit,
     private val onBarcodeSuccess: (barcodes: List<FirebaseVisionBarcode>) -> Unit,
     private val onOcrFailure: (exception: Exception) -> Unit,
     private val onOcrSuccess: (text: String) -> Unit,
-    private val context: Context,
     private val performanceSetting: PerformanceSetting
     ) : ImageAnalysis.Analyzer {
 
