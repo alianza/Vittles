@@ -148,7 +148,7 @@
     <LinearLayout
         android:id="@+id/llSavedProducts"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="18dp"
         android:alpha="0"
         android:orientation="horizontal"
@@ -159,7 +159,7 @@
         app:layout_constraintTop_toTopOf="@+id/llAdvanced">
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical">

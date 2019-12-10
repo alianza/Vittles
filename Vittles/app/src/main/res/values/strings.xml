@@ -38,7 +38,7 @@
     <!--    Settings-->
     <string name="settings_title">Settings</string>
     <string name="settings_vibration">Vibrations</string>
-    <string name="settings_vibration_detail">Scanning and Swiping vibrations.</string>
+    <string name="settings_vibration_detail">Scanning and swiping vibrations.</string>
     <string name="settings_notifications">Notifications</string>
     <string name="settings_notifications_detail">Receiving notifications for expiring products.</string>
     <string name="settings_schedule">Schedule</string>

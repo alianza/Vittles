@@ -103,6 +103,11 @@ class ScannerPresenter @Inject internal constructor(
             .subscribe())
     }
 
+    /**
+     * Gets the boolean value of vibration setting.
+     *
+     * @return The boolean value of Vibration setting.
+     */
     override fun getVibrationSetting(): Boolean {
         return getVibrationEnabled()
     }
