@@ -210,7 +210,7 @@
             android:layout_height="wrap_content"
             android:contentDescription="@string/cd_scanning_pane"
             android:tint="@color/black"
-            app:layout_constraintBottom_toTopOf="@+id/btnScanVittle"
+            app:layout_constraintBottom_toTopOf="@+id/constraintLayout3"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/containerChecklist"
@@ -234,30 +234,58 @@
             app:layout_constraintTop_toTopOf="@+id/scanningPlane"
             app:layout_constraintVertical_bias="0.0" />
 
-        <Button
-            android:id="@+id/btnScanVittle"
-            android:layout_width="0dp"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout3"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            android:text="@string/btn_add_vittle"
-            android:enabled="false"
-            android:alpha=".5"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="-4dp"
+            android:elevation="4dp"
+            android:outlineProvider="bounds"
+            android:paddingTop="4dp"
             app:layout_constraintBottom_toBottomOf="@+id/textureView"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent">
 
-        <ImageButton
-            android:id="@+id/btnTorch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/transparent"
-            android:contentDescription="@string/cd_torch"
-            android:src="@drawable/ic_flash_off_black_36dp"
-            android:tint="@color/colorPrimary"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/containerChecklist" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout2"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:background="@drawable/camera_bottom_dock_shape"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/btnScanVittle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/fab_margin"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:src="@drawable/ic_vector_plus"
+                    android:tint="@android:color/white"
+                    app:borderWidth="0dp"
+                    app:elevation="8dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageButton
+                    android:id="@+id/btnTorch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/transparent"
+                    android:contentDescription="@string/cd_torch"
+                    android:src="@drawable/ic_flash_off_black_28dp"
+                    android:tint="@color/black"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/btnScanVittle"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

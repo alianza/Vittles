@@ -39,7 +39,7 @@ import com.example.vittles.services.scanner.DateFormatterService
 import com.example.data.settings.SharedPreferenceHelper
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.fragment_camera.*
+import kotlinx.android.synthetic.main.fragment_scanner.*
 import org.joda.time.DateTime
 import javax.inject.Inject
 
@@ -77,7 +77,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
     ): View? {
         presenter.start(this@ScannerFragment)
         vibrator = context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-        return inflater.inflate(R.layout.fragment_camera, container, false)
+        return inflater.inflate(R.layout.fragment_scanner, container, false)
     }
 
     /** {@inheritDoc} */
@@ -182,7 +182,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
                 context?.let {
                     getDrawable(
                         it,
-                        R.drawable.ic_flash_on_black_36dp
+                        R.drawable.ic_flash_on_black_28dp
                     )
                 }
             )
@@ -191,7 +191,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
                 context?.let {
                     getDrawable(
                         it,
-                        R.drawable.ic_flash_off_black_36dp
+                        R.drawable.ic_flash_off_black_28dp
                     )
                 }
             )
