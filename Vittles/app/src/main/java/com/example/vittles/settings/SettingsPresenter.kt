@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.domain.barcode.EmptyProductDictionary
 import com.example.domain.settings.*
 import com.example.domain.settings.model.NotificationSchedule
+import com.example.domain.settings.model.PerformanceSetting
 import com.example.vittles.mvp.BasePresenter
 import com.example.vittles.services.notification.NotificationScheduleService
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -29,9 +30,11 @@ class SettingsPresenter @Inject constructor(
     private val setNotificationSchedule: SetNotificationSchedule,
     private val setNotificationEnabled: SetNotificationEnabled,
     private val setVibrationEnabled: SetVibrationEnabled,
+    private val setPerformanceSetting: SetPerformanceSetting,
     private val getNotificationSchedule: GetNotificationSchedule,
     private val getNotificationEnabled: GetNotificationEnabled,
     private val getVibrationEnabled: GetVibrationEnabled,
+    private val getPerformanceSetting: GetPerformanceSetting,
     private val emptyProductDictionary: EmptyProductDictionary
 ) : BasePresenter<SettingsFragment>(), SettingsContract.Presenter {
 
@@ -54,13 +57,30 @@ class SettingsPresenter @Inject constructor(
      **/
     val vibrationEnabled = MutableLiveData<Boolean>(true)
 
+    /**
+     * observes LiveData objects for changes .
+     *
+     **/
+    val performanceSetting = MutableLiveData<PerformanceSetting>()
+
+    /**
+     * Method to start presenting
+     *
+     * @param context Context passed by fragment
+     */
     fun startPresenting(context: Context) {
         this.context = context
         notificationEnabled.value = getNotificationEnabled()
         notificationSchedule.value = getNotificationSchedule()
         vibrationEnabled.value = getVibrationEnabled()
+        performanceSetting.value = getPerformanceSetting()
     }
 
+    /**
+     * Checks for notificationSchedule settings changes
+     *
+     * @param notificationSchedule Notification schedule to be passed
+     */
     override fun onNotificationScheduleChanged(notificationSchedule: NotificationSchedule) {
         setNotificationSchedule(notificationSchedule)
         this.notificationSchedule.value = notificationSchedule
@@ -71,6 +91,11 @@ class SettingsPresenter @Inject constructor(
         )
     }
 
+    /**
+     * Checks for notificationEnabled settings changes
+     *
+     * @param isEnabled Boolean to pass
+     */
     fun onNotificationEnabledChanged(isEnabled: Boolean) {
         setNotificationEnabled(isEnabled)
         this.notificationEnabled.value = isEnabled
@@ -85,9 +110,24 @@ class SettingsPresenter @Inject constructor(
         }
     }
 
+    /**
+     * Checks for VibrationEnabled settings changes
+     *
+     * @param isEnabled Boolean to pass
+     */
     fun onVibrationEnabledChanged(isEnabled: Boolean) {
         setVibrationEnabled(isEnabled)
         this.vibrationEnabled.value = isEnabled
+    }
+
+    /**
+     * Checks for PerformanceSetting settings changes
+     *
+     * @param performanceSetting PerformanceSetting to pass
+     */
+    fun onPerformanceSettingChanged(performanceSetting: PerformanceSetting) {
+        setPerformanceSetting(performanceSetting)
+        this.performanceSetting.value = performanceSetting
     }
 
     /**

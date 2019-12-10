@@ -1,6 +1,7 @@
 package com.example.domain.settings
 
 import com.example.domain.settings.model.NotificationSchedule
+import com.example.domain.settings.model.PerformanceSetting
 
 /**
  * Repository interface for the settings
@@ -49,4 +50,18 @@ interface SettingsRepository {
      * @param isEnabled the boolean value to be set
      */
     fun setVibrationEnabled(isEnabled: Boolean)
+
+    /**
+     * Gets the value for the performance setting
+     *
+     * @return PerformanceSetting enum class
+     */
+    fun getPerformanceSetting(): PerformanceSetting
+
+    /**
+     * Sets the value for the performance setting
+     *
+     * @param performanceSetting enum class
+     */
+    fun setPerformanceSetting(performanceSetting: PerformanceSetting)
 }

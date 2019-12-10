@@ -8,13 +8,12 @@ import android.view.animation.AccelerateInterpolator
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import androidx.lifecycle.Observer
-import com.example.data.settings.SharedPreferenceHelper
 import com.example.domain.settings.model.NotificationSchedule
 import android.widget.Toast
 import androidx.core.view.ViewCompat.animate
 import androidx.core.view.ViewPropertyAnimatorListener
+import com.example.domain.settings.model.PerformanceSetting
 import com.example.vittles.R
-import com.example.vittles.services.notification.NotificationScheduleService
 import com.example.vittles.services.popups.PopupBase
 import com.example.vittles.services.popups.PopupButton
 import com.example.vittles.services.popups.PopupManager
@@ -79,6 +78,10 @@ class SettingsFragment : DaggerFragment(), SettingsContract.View {
         presenter.vibrationEnabled.observe(this, Observer {
             vibration_toggle.isChecked = it
         })
+
+        presenter.performanceSetting.observe(this, Observer {
+            performance_picker.setSelection(it.ordinal)
+        })
     }
 
     /**
@@ -119,8 +122,22 @@ class SettingsFragment : DaggerFragment(), SettingsContract.View {
                 presenter.onNotificationScheduleChanged(notificationSchedule)
             }
 
-            override fun onNothingSelected(parent: AdapterView<*>) {
-            }
+            override fun onNothingSelected(parent: AdapterView<*>) { }
+        }
+
+        performance_picker.onItemSelectedListener = object : OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    val performanceSetting = PerformanceSetting.values()[position]
+
+                    presenter.onPerformanceSettingChanged(performanceSetting)
+
+                }
+                override fun onNothingSelected(parent: AdapterView<*>) { }
         }
 
         llAdvanced.setOnClickListener { onAdvancedClick() }
@@ -175,10 +192,10 @@ class SettingsFragment : DaggerFragment(), SettingsContract.View {
     override fun expandAdvancedSettings() {
         if (ibAdvanced.rotation == 0f) {
             ibAdvanced.animate().rotation(180f).start()
-            fadeInAnim(llSavedProducts)
+            fadeInAnim(llAdvancedSettings)
         } else {
             ibAdvanced.animate().rotation(0f).start()
-            fadeOutAnim(llSavedProducts)
+            fadeOutAnim(llAdvancedSettings)
 
         }
     }
@@ -211,7 +228,7 @@ class SettingsFragment : DaggerFragment(), SettingsContract.View {
     override fun fadeInAnim(elem: View) {
         animate(elem).apply {
             interpolator = AccelerateInterpolator()
-            translationY(120f)
+            translationY(llAdvanced.height.toFloat())
             alpha(1f)
             duration = 250
             setListener(object : ViewPropertyAnimatorListener {

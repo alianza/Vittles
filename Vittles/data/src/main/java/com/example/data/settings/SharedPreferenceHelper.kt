@@ -37,7 +37,7 @@ class SharedPreferenceHelper(context: Context) {
      */
     internal fun save(KEY_NAME: String, status: Boolean) {
         val editor: SharedPreferences.Editor = sharedPref.edit()
-        editor.putBoolean(KEY_NAME, status!!)
+        editor.putBoolean(KEY_NAME, status)
             editor.apply()
     }
 

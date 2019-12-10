@@ -3,40 +3,60 @@ package com.example.data.settings
 import android.content.Context
 import com.example.domain.settings.SettingsRepository
 import com.example.domain.settings.model.NotificationSchedule
+import com.example.domain.settings.model.PerformanceSetting
 import javax.inject.Inject
 
-class SharedPrefsSettingsRepository @Inject constructor(context: Context): SettingsRepository {
+class  SharedPrefsSettingsRepository @Inject constructor(context: Context): SettingsRepository {
 
     /** The shared preferences instance. */
     private val sharedPreferences = SharedPreferenceHelper(context)
 
+    /** performanceKey key value */
+    private val performanceKey = "SCANNING_PERFORMANCE"
+    /** notificationTimeKey key value */
+    private val notificationTimeKey = "NOTIFICATION_TIME"
+    /** notificationsKey key value */
+    private val notificationsKey = "NOTIFICATIONS"
+    /** vibrationKey key value */
+    private val vibrationKey = "VIBRATION"
+
     /** {@inheritDoc} */
     override fun getNotificationSchedule(): NotificationSchedule {
-         return NotificationSchedule.values()[sharedPreferences.getValueInt("NOTIFICATION_TIME")]
+         return NotificationSchedule.values()[sharedPreferences.getValueInt(notificationTimeKey)]
     }
 
     /** {@inheritDoc} */
     override fun setNotificationSchedule(notificationSchedule: NotificationSchedule) {
-        sharedPreferences.save("NOTIFICATION_TIME", notificationSchedule.ordinal)
+        sharedPreferences.save(notificationTimeKey, notificationSchedule.ordinal)
     }
 
     /** {@inheritDoc} */
     override fun setNotificationEnabled(isEnabled: Boolean) {
-        sharedPreferences.save("NOTIFICATION", isEnabled)
+        sharedPreferences.save(notificationsKey, isEnabled)
     }
 
     /** {@inheritDoc} */
     override fun getNotificationEnabled(): Boolean {
-        return sharedPreferences.getValueBoolean("NOTIFICATION", true)
+        return sharedPreferences.getValueBoolean(notificationsKey, true)
     }
 
     /** {@inheritDoc} */
     override fun getVibrationEnabled(): Boolean {
-        return sharedPreferences.getValueBoolean("VIBRATION", true)
+        return sharedPreferences.getValueBoolean(vibrationKey, true)
     }
 
     /** {@inheritDoc} */
     override fun setVibrationEnabled(isEnabled: Boolean) {
-        sharedPreferences.save("VIBRATION", isEnabled)
+        sharedPreferences.save(vibrationKey, isEnabled)
+    }
+
+    /** {@inheritDoc} */
+    override fun getPerformanceSetting(): PerformanceSetting {
+       return PerformanceSetting.values()[sharedPreferences.getValueInt(performanceKey)]
+    }
+
+    /** {@inheritDoc} */
+    override fun setPerformanceSetting(performanceSetting: PerformanceSetting) {
+        sharedPreferences.save(performanceKey, performanceSetting.ordinal)
     }
 }

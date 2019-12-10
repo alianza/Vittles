@@ -35,7 +35,6 @@ import com.example.vittles.services.popups.PopupBase
 import com.example.vittles.services.popups.PopupButton
 import com.example.vittles.services.popups.PopupManager
 import com.example.vittles.services.scanner.DateFormatterService
-import com.example.data.settings.SharedPreferenceHelper
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_scanner.*

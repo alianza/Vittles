@@ -46,6 +46,8 @@
     <string name="settings_advanced">Advanced</string>
     <string name="settings_saved">Saved products</string>
     <string name="settings_saved_detail">Remove saved product names.</string>
+    <string name="settings_performance">Performance</string>
+    <string name="settings_performance_detail">Select scanning frequency.</string>
     <string name="settings_popup_confirm_header">Are you sure?</string>
     <string name="settings_popup_confirm_subtext">All saved product names will be removed. \n You will have to add them again.</string>
     <string name="settings_remove_products_success">Removed product names!</string>
@@ -162,5 +164,12 @@
         <item>Daily</item>
         <item>Weekly</item>
         <item>Monthly</item>
+    </string-array>
+
+    <!-- Performance options -->
+    <string-array name="performance_options">
+        <item>200ms</item>
+        <item>500ms</item>
+        <item>1000ms</item>
     </string-array>
 </resources>

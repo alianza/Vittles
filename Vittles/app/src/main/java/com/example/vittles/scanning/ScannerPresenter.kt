@@ -6,19 +6,22 @@ import android.util.Size
 import android.view.ViewGroup
 import androidx.camera.core.*
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.MutableLiveData
 import com.example.domain.barcode.AddProductDictionary
-import com.example.domain.barcode.ProductDictionary
 import com.example.domain.barcode.GetProductByBarcode
+import com.example.domain.barcode.ProductDictionary
 import com.example.domain.barcode.UpdateProductDictionary
 import com.example.domain.product.AddProduct
 import com.example.domain.product.Product
+import com.example.domain.settings.GetPerformanceSetting
 import com.example.domain.settings.GetVibrationEnabled
+import com.example.domain.settings.SetPerformanceSetting
+import com.example.domain.settings.model.PerformanceSetting
 import com.example.vittles.mvp.BasePresenter
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_scanner.*
-import java.lang.Exception
 import java.util.concurrent.Executors
 import javax.inject.Inject
 
@@ -38,8 +41,9 @@ class ScannerPresenter @Inject internal constructor(
     private val addProduct: AddProduct,
     private val addProductDictionary: AddProductDictionary,
     private val updateProductDictionary: UpdateProductDictionary,
-    private val getVibrationEnabled: GetVibrationEnabled
-) :
+    private val getVibrationEnabled: GetVibrationEnabled,
+    private val getPerformanceSetting: GetPerformanceSetting
+    ) :
     BasePresenter<ScannerFragment>(), ScannerContract.Presenter {
 
     /** CameraX preview element. */
@@ -48,8 +52,10 @@ class ScannerPresenter @Inject internal constructor(
     private lateinit var imageAnalysis: ImageAnalysis
     /** Executor for the analysis on a different thread. */
     private val executor = Executors.newSingleThreadExecutor()
-    /** The analyzer for the preview/ */
+    /** The analyzer for the preview */
     private lateinit var analyzer: PreviewAnalyzer
+    /** observes LiveData objects for changes.**/
+    private val performanceSetting = MutableLiveData<PerformanceSetting>()
 
     /**
      * Method used to add a product.
@@ -167,15 +173,26 @@ class ScannerPresenter @Inject internal constructor(
         PreviewAnalyzer.hasBarCode = false
         PreviewAnalyzer.hasExpirationDate = false
 
+        fetchPerformanceSetting()
+
         // Build the image analysis use case and instantiate our analyzer
         return ImageAnalysis(analyzerConfig).apply {
             setAnalyzer(executor, PreviewAnalyzer(
                 onBarcodeFailure = { view?.onBarcodeNotFound() },
                 onBarcodeSuccess = { getProductNameByBarcode(it) },
                 onOcrFailure = { view?.onTextNotFound() },
-                onOcrSuccess = { view?.onTextScanned(it) }
+                onOcrSuccess = { view?.onTextScanned(it) },
+                performanceSetting = performanceSetting.value!!
             ))
         }
+    }
+
+    /**
+     * Checks for PerformanceSetting settings changes
+     *
+     */
+    private fun fetchPerformanceSetting() {
+        performanceSetting.value = getPerformanceSetting()
     }
 
     /**
@@ -236,12 +253,6 @@ class ScannerPresenter @Inject internal constructor(
     }
 
     companion object {
-        /**
-        This is an arbitrary number we are using to keep track of the permission
-        request. Where an app has multiple context for requesting permission,
-        this can help differentiate the different contexts.
-        */
-        const val REQUEST_CODE_PERMISSIONS = 10
 
         /** This is an array of all the permission specified in the manifest. */
         val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
