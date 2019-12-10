@@ -63,6 +63,11 @@ class SettingsPresenter @Inject constructor(
      **/
     val performanceSetting = MutableLiveData<PerformanceSetting>()
 
+    /**
+     * Method to start presenting
+     *
+     * @param context Context passed by fragment
+     */
     fun startPresenting(context: Context) {
         this.context = context
         notificationEnabled.value = getNotificationEnabled()
@@ -71,6 +76,11 @@ class SettingsPresenter @Inject constructor(
         performanceSetting.value = getPerformanceSetting()
     }
 
+    /**
+     * Checks for notificationSchedule settings changes
+     *
+     * @param notificationSchedule Notification schedule to be passed
+     */
     override fun onNotificationScheduleChanged(notificationSchedule: NotificationSchedule) {
         setNotificationSchedule(notificationSchedule)
         this.notificationSchedule.value = notificationSchedule
@@ -81,6 +91,11 @@ class SettingsPresenter @Inject constructor(
         )
     }
 
+    /**
+     * Checks for notificationEnabled settings changes
+     *
+     * @param isEnabled Boolean to pass
+     */
     fun onNotificationEnabledChanged(isEnabled: Boolean) {
         setNotificationEnabled(isEnabled)
         this.notificationEnabled.value = isEnabled
@@ -95,11 +110,21 @@ class SettingsPresenter @Inject constructor(
         }
     }
 
+    /**
+     * Checks for VibrationEnabled settings changes
+     *
+     * @param isEnabled Boolean to pass
+     */
     fun onVibrationEnabledChanged(isEnabled: Boolean) {
         setVibrationEnabled(isEnabled)
         this.vibrationEnabled.value = isEnabled
     }
 
+    /**
+     * Checks for PerformanceSetting settings changes
+     *
+     * @param performanceSetting PerformanceSetting to pass
+     */
     fun onPerformanceSettingChanged(performanceSetting: PerformanceSetting) {
         setPerformanceSetting(performanceSetting)
         this.performanceSetting.value = performanceSetting

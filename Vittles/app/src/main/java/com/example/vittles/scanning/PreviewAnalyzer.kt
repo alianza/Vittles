@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import com.example.domain.settings.GetPerformanceSetting
+import com.example.domain.settings.model.PerformanceSetting
 import com.example.vittles.services.scanner.ScanningService
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
@@ -32,8 +33,8 @@ class PreviewAnalyzer(
     private val onBarcodeSuccess: (barcodes: List<FirebaseVisionBarcode>) -> Unit,
     private val onOcrFailure: (exception: Exception) -> Unit,
     private val onOcrSuccess: (text: String) -> Unit,
-    private val context: Context
-
+    private val context: Context,
+    private val performanceSetting: PerformanceSetting
     ) : ImageAnalysis.Analyzer {
 
     companion object ProductProps {
@@ -45,8 +46,6 @@ class PreviewAnalyzer(
 
     /** Value used for the scanning delay */
     private var lastAnalyzedTimestamp = 0L
-
-    private lateinit var getPerformanceSetting: GetPerformanceSetting
 
     /**
      * Convert the rotation degree to firebase rotation degree.
@@ -70,7 +69,7 @@ class PreviewAnalyzer(
      * @param degrees Rotation degree of the camera.
      */
     override fun analyze(imageProxy: ImageProxy?, degrees: Int) {
-        var interval: Long = getPerformanceSetting.invoke().ms.toLong()
+        var interval: Long = performanceSetting.ms.toLong()
 
         if (interval.toString().isEmpty()) {
             interval = 500L
