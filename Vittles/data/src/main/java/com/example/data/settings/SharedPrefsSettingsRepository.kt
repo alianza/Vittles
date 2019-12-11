@@ -22,7 +22,7 @@ class  SharedPrefsSettingsRepository @Inject constructor(context: Context): Sett
 
     /** {@inheritDoc} */
     override fun getNotificationSchedule(): NotificationSchedule {
-         return NotificationSchedule.values()[sharedPreferences.getValueInt(notificationTimeKey)]
+         return NotificationSchedule.values()[sharedPreferences.getValueInt(notificationTimeKey, 0)]
     }
 
     /** {@inheritDoc} */
@@ -52,7 +52,7 @@ class  SharedPrefsSettingsRepository @Inject constructor(context: Context): Sett
 
     /** {@inheritDoc} */
     override fun getPerformanceSetting(): PerformanceSetting {
-       return PerformanceSetting.values()[sharedPreferences.getValueInt(performanceKey)]
+       return PerformanceSetting.values()[sharedPreferences.getValueInt(performanceKey, 1)]
     }
 
     /** {@inheritDoc} */

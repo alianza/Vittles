@@ -168,8 +168,8 @@
 
     <!-- Performance options -->
     <string-array name="performance_options">
-        <item>200ms</item>
-        <item>500ms</item>
-        <item>1000ms</item>
+        <item>Low</item>
+        <item>Normal</item>
+        <item>High</item>
     </string-array>
 </resources>
