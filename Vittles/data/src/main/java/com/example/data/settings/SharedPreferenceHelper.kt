@@ -47,7 +47,7 @@ class SharedPreferenceHelper(context: Context) {
      *
      * @param KEY_NAME The key name of the preference.
      */
-    fun getValueInt(KEY_NAME: String): Int {
+    fun getValueInt(KEY_NAME: String, defaultValue: Int): Int {
         return sharedPref.getInt(KEY_NAME, 0)
     }
 

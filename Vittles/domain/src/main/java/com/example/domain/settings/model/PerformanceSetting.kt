@@ -7,7 +7,7 @@ package com.example.domain.settings.model
  */
 
 enum class PerformanceSetting(var ms: Int) {
-    LOW(200),
+    LOW(1000),
     MEDIUM(500),
-    HIGH(1000)
+    HIGH(200)
 }
