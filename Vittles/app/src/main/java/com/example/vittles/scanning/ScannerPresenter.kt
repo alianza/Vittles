@@ -15,8 +15,8 @@ import com.example.domain.product.AddProduct
 import com.example.domain.product.Product
 import com.example.domain.settings.GetPerformanceSetting
 import com.example.domain.settings.GetVibrationEnabled
-import com.example.domain.settings.SetPerformanceSetting
 import com.example.domain.settings.model.PerformanceSetting
+import com.example.vittles.VittlesApp.PermissionProperties.REQUIRED_PERMISSIONS
 import com.example.vittles.mvp.BasePresenter
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -127,7 +127,8 @@ class ScannerPresenter @Inject internal constructor(
         preview = getPreview()
 
         CameraX.bindToLifecycle(view, preview, imageAnalysis)
-        analyzer = imageAnalysis.analyzer as PreviewAnalyzer
+
+        disableTorch()
     }
 
     /**
@@ -244,17 +245,44 @@ class ScannerPresenter @Inject internal constructor(
      */
     fun toggleTorch(): Boolean {
         return if (preview.isTorchOn) {
-            preview.enableTorch(false)
+            disableTorch()
             false
         } else {
-            preview.enableTorch(true)
+            enableTorch()
             true
         }
     }
 
-    companion object {
+    /**
+     * Returns the value of the current torch state.
+     *
+     * @return The boolean value of the current torch state; enabled or not.
+     */
+    fun torchEnabled(): Boolean {
+        return if (::preview.isInitialized) {
+            preview.isTorchOn
+        } else {
+            false
+        }
+    }
 
-        /** This is an array of all the permission specified in the manifest. */
-        val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
+    /**
+     * Enables the torch of the preview.
+     *
+     */
+    private fun enableTorch() {
+        if (::preview.isInitialized) {
+            preview.enableTorch(true)
+        }
+    }
+
+    /**
+     * Disabled teh torch of the preview.
+     *
+     */
+    private fun disableTorch() {
+        if (::preview.isInitialized) {
+            preview.enableTorch(false)
+        }
     }
 }

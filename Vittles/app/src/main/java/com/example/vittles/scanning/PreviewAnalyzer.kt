@@ -1,9 +1,7 @@
 package com.example.vittles.scanning
 
-import android.content.Context
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
-import com.example.domain.settings.GetPerformanceSetting
 import com.example.domain.settings.model.PerformanceSetting
 import com.example.vittles.services.scanner.ScanningService
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
