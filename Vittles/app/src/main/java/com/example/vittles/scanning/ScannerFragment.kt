@@ -27,8 +27,8 @@ import com.example.domain.product.ProductDictionaryStatus
 import com.example.domain.product.Product
 import com.example.vittles.NavigationGraphDirections
 import com.example.vittles.R
-import com.example.vittles.VittlesApp.Companion.REQUEST_CODE_PERMISSIONS
-import com.example.vittles.VittlesApp.Companion.REQUIRED_PERMISSIONS
+import com.example.vittles.VittlesApp.PermissionProperties.REQUEST_CODE_PERMISSIONS
+import com.example.vittles.VittlesApp.PermissionProperties.REQUIRED_PERMISSIONS
 import com.example.vittles.enums.PreviousFragmentIndex
 import com.example.vittles.scanning.productaddmanual.ProductNameEditView
 import com.example.vittles.services.popups.PopupBase
@@ -62,7 +62,10 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
 
     /** @suppress */
     private var barcodeDictionary =
-        ProductDictionary(ProductDictionaryStatus.NOT_READY() as String, ProductDictionaryStatus.NOT_READY() as String)
+        ProductDictionary(
+            ProductDictionaryStatus.NOT_READY() as String,
+            ProductDictionaryStatus.NOT_READY() as String
+        )
 
     /** @suppress */
     private var expirationDate: DateTime? = null
@@ -133,6 +136,32 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
     }
 
     /**
+     * Initializes the actual torch state.
+     *
+     */
+    private fun initTorchState() {
+        if (presenter.torchEnabled()) {
+            btnTorch.setImageDrawable(
+                context?.let {
+                    getDrawable(
+                        it,
+                        R.drawable.ic_flash_on_black_28dp
+                    )
+                }
+            )
+        } else {
+            btnTorch.setImageDrawable(
+                context?.let {
+                    getDrawable(
+                        it,
+                        R.drawable.ic_flash_off_black_28dp
+                    )
+                }
+            )
+        }
+    }
+
+    /**
      * Set up the tap to focus listener.
      *
      */
@@ -176,25 +205,8 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
      *
      */
     override fun onTorchButtonClicked() {
-        if (presenter.toggleTorch()) {
-            btnTorch.setImageDrawable(
-                context?.let {
-                    getDrawable(
-                        it,
-                        R.drawable.ic_flash_on_black_28dp
-                    )
-                }
-            )
-        } else {
-            btnTorch.setImageDrawable(
-                context?.let {
-                    getDrawable(
-                        it,
-                        R.drawable.ic_flash_off_black_28dp
-                    )
-                }
-            )
-        }
+        presenter.toggleTorch()
+        initTorchState()
     }
 
     /**
@@ -512,7 +524,10 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
      */
     override fun onShowEditNameDialog(productDictionary: ProductDictionary) {
         val dialog = ProductNameEditView(onFinished = { productName: String, insertLocal: Boolean ->
-            onProductNameEdited(ProductDictionary(productDictionary.barcode, productName), insertLocal)
+            onProductNameEdited(
+                ProductDictionary(productDictionary.barcode, productName),
+                insertLocal
+            )
         })
         context?.let { dialog.openDialog(it, productDictionary.productName) }
     }
