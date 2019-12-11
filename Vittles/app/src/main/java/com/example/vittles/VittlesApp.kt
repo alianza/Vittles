@@ -66,7 +66,7 @@ class VittlesApp : DaggerApplication() {
         }
     }
 
-    companion object {
+    companion object PermissionProperties {
         /**
         This is an arbitrary number we are using to keep track of the permission
         request. Where an app has multiple context for requesting permission,
