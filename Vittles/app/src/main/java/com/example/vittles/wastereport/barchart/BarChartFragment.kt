@@ -98,7 +98,6 @@ class BarChartFragment @Inject internal constructor(var date: DateTime) : Dagger
         barChartEaten.apply {
             data = barData
             xAxis.isEnabled = false
-            setViewPortOffsets(80f, 40f, 80f, 10f)
         }
 
         setupDesign(barChartEaten)
@@ -118,7 +117,6 @@ class BarChartFragment @Inject internal constructor(var date: DateTime) : Dagger
         barChartExpired.apply {
             data = barData
             rotation = 180f
-            setViewPortOffsets(80f, 100f, 80f, 25f)
             axisRight.valueFormatter = MyValueFormatter()
             axisLeft.valueFormatter = MyValueFormatter()
         }
@@ -190,7 +188,8 @@ class BarChartFragment @Inject internal constructor(var date: DateTime) : Dagger
             barChart.viewPortHandler,
             barChart.axisLeft,
             barChart.rendererXAxis.transformer,
-            barChart.xAxis
+            barChart.xAxis,
+            requireContext().resources.displayMetrics.density
         )
     }
 
@@ -207,7 +206,7 @@ class BarChartFragment @Inject internal constructor(var date: DateTime) : Dagger
                 barChart.viewPortHandler
             )
         when (timeRangeSteps) {
-            TimeRangeSteps.SEVEN_DAYS.steps -> barChartRender.setRadius(25)
+            TimeRangeSteps.SEVEN_DAYS.steps -> barChartRender.setRadius(30)
             TimeRangeSteps.THIRTY_DAYS.steps -> barChartRender.setRadius(10)
             TimeRangeSteps.MONTH_YEAR.steps -> barChartRender.setRadius(18)
         }
@@ -249,8 +248,8 @@ class BarChartFragment @Inject internal constructor(var date: DateTime) : Dagger
             textColor = Color.BLACK
             labelRotationAngle = 180f
             position = XAxis.XAxisPosition.TOP
-            xOffset = 20f
-            yOffset = 20f
+            yOffset = 15f
+            mLabelRotatedHeight = 50
         }
 
     }
