@@ -224,6 +224,10 @@ class ScannerPresenter @Inject internal constructor(
         } == PackageManager.PERMISSION_GRANTED
     }
 
+    /**
+     * Lowers the performance setting by one level if possible.
+     *
+     */
     override fun onPerformanceSettingLowered() {
         val currentPerformanceSetting = getPerformanceSetting().ordinal
         if (currentPerformanceSetting > 0) {

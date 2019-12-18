@@ -651,6 +651,10 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         }
     }
 
+    /**
+     * Will create a dialog to warn the user about memory usage. Action can be taken from this dialog.
+     *
+     */
     override fun onAnalyzerError() {
         Handler(Looper.getMainLooper()).post {
             PopupManager.instance.showPopup(this.context!!, PopupBase(
