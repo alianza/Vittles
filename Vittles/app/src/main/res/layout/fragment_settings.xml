@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
+    android:paddingTop="16dp"
+    android:paddingStart="24dp"
+    android:paddingEnd="24dp"
     tools:context=".MainActivity"
     tools:ignore="NestedWeights">
 
@@ -31,7 +33,7 @@
                 android:text="@string/settings_vibration"
                 android:textAlignment="textStart"
                 android:textColor="@color/black"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -78,7 +80,7 @@
                 android:text="@string/settings_schedule"
                 android:textAlignment="textStart"
                 android:textColor="@color/black"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/textView3"
@@ -123,7 +125,7 @@
                 android:text="@string/settings_notifications"
                 android:textAlignment="textStart"
                 android:textColor="@color/black"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -177,7 +179,7 @@
                     android:text="@string/settings_performance"
                     android:textAlignment="textStart"
                     android:textColor="@color/black"
-                    android:textSize="20sp" />
+                    android:textSize="18sp"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -222,7 +224,7 @@
                     android:text="@string/settings_saved"
                     android:textAlignment="textStart"
                     android:textColor="@color/black"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -271,7 +273,7 @@
             android:gravity="center_vertical"
             android:text="@string/settings_advanced"
             android:textColor="@color/black"
-            android:textSize="20sp" />
+            android:textSize="18sp" />
 
         <ImageButton
             android:id="@+id/ibAdvanced"
