@@ -101,6 +101,7 @@ class WasteReportFragment : DaggerFragment(), WasteReportContract.View {
             showExpiredVittles(vittlesExpired)
         }
         timeRange.setOnClickListener { showTimeRangeSelector() }
+        changeDate(TimeRange.LAST_SEVEN_DAYS.date)
     }
 
 
