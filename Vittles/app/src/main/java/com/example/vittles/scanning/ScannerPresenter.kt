@@ -1,6 +1,5 @@
 package com.example.vittles.scanning
 
-import android.Manifest
 import android.content.pm.PackageManager
 import android.util.Size
 import android.view.ViewGroup
@@ -15,6 +14,7 @@ import com.example.domain.product.AddProduct
 import com.example.domain.product.Product
 import com.example.domain.settings.GetPerformanceSetting
 import com.example.domain.settings.GetVibrationEnabled
+import com.example.domain.settings.SetPerformanceSetting
 import com.example.domain.settings.model.PerformanceSetting
 import com.example.vittles.VittlesApp.PermissionProperties.REQUIRED_PERMISSIONS
 import com.example.vittles.mvp.BasePresenter
@@ -42,7 +42,8 @@ class ScannerPresenter @Inject internal constructor(
     private val addProductDictionary: AddProductDictionary,
     private val updateProductDictionary: UpdateProductDictionary,
     private val getVibrationEnabled: GetVibrationEnabled,
-    private val getPerformanceSetting: GetPerformanceSetting
+    private val getPerformanceSetting: GetPerformanceSetting,
+    private val setPerformanceSetting: SetPerformanceSetting
     ) :
     BasePresenter<ScannerFragment>(), ScannerContract.Presenter {
 
@@ -183,6 +184,7 @@ class ScannerPresenter @Inject internal constructor(
                 onBarcodeSuccess = { getProductNameByBarcode(it) },
                 onOcrFailure = { view?.onTextNotFound() },
                 onOcrSuccess = { view?.onTextScanned(it) },
+                onOutOfMemory = { view?.onAnalyzerError() },
                 performanceSetting = performanceSetting.value!!
             ))
         }
@@ -220,6 +222,14 @@ class ScannerPresenter @Inject internal constructor(
                 it1!!, it
             )
         } == PackageManager.PERMISSION_GRANTED
+    }
+
+    override fun onPerformanceSettingLowered() {
+        val currentPerformanceSetting = getPerformanceSetting().ordinal
+        if (currentPerformanceSetting > 0) {
+            val newPerformanceSetting = PerformanceSetting.values()[currentPerformanceSetting - 1]
+            setPerformanceSetting(newPerformanceSetting)
+        }
     }
 
     /**
