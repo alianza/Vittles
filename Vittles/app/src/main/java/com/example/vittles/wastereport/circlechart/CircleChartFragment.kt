@@ -143,7 +143,7 @@ class CircleChartFragment @Inject internal constructor(var date: DateTime, var v
 
                 dynamicArcView.addEvent(DecoEvent.Builder(DecoDrawEffect.EffectType.EFFECT_SPIRAL_EXPLODE)
                     .setIndex(series1Index)
-                    .setDelay(2000)
+                    .setDelay(2100)
                     .setDuration(3000)
                     .setDisplayText(getRandomPraise())
                     .setListener(object : DecoEvent.ExecuteEventListener {
