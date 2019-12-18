@@ -21,7 +21,7 @@
             android:maxLines="1"
             android:text="Product Name"
             android:textColor="@android:color/black"
-            android:textSize="24sp"
+            android:textSize="20sp"
             app:layout_constraintEnd_toStartOf="@+id/ibEditName"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -48,7 +48,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:text="@string/et_expiration_date"
-            android:textSize="12sp"
+            android:textSize="14sp"
             app:layout_constraintStart_toStartOf="@+id/tvProductName"
             app:layout_constraintTop_toBottomOf="@+id/tvProductName" />
 
@@ -58,7 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
             android:text="10.11.2019"
-            android:textSize="14sp"
+            android:textSize="16sp"
             android:textColor="@android:color/black"
             app:layout_constraintStart_toStartOf="@+id/tvExpDateHeader"
             app:layout_constraintTop_toBottomOf="@+id/tvExpDateHeader" />
@@ -75,7 +75,7 @@
             android:padding="10dp"
             app:layout_constraintBottom_toBottomOf="@+id/tvExpirationDate"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tvExpirationDate"
+            app:layout_constraintTop_toTopOf="@+id/tvExpDateHeader"
             app:srcCompat="@drawable/ic_edit_black_24dp"
             tools:ignore="PrivateResource" />
 
@@ -85,7 +85,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="@string/tv_creation_date"
-            android:textSize="12sp"
+            android:textSize="14sp"
             app:layout_constraintStart_toStartOf="@+id/tvProductName"
             app:layout_constraintTop_toBottomOf="@+id/tvExpirationDate" />
 
@@ -96,7 +96,7 @@
             android:layout_marginTop="3dp"
             android:text="10.11.2019"
             android:textColor="@android:color/black"
-            android:textSize="14sp"
+            android:textSize="16sp"
             app:layout_constraintStart_toStartOf="@+id/tvExpDateHeader"
             app:layout_constraintTop_toBottomOf="@+id/tvCreationDateHeader" />
 

@@ -43,7 +43,7 @@
         android:scrollHorizontally="true"
         android:text="textView"
         android:textColor="@android:color/black"
-        android:textSize="18dp"
+        android:textSize="16sp"
         android:textStyle="normal"
         app:layout_constraintEnd_toEndOf="@+id/borderDecorator"
         app:layout_constraintStart_toEndOf="@+id/ivColor"
