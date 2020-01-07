@@ -230,7 +230,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
             override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
                 super.onDismissed(transientBottomBar, event)
 
-                if(event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT){
+                if(event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT || event == Snackbar.Callback.DISMISS_EVENT_MANUAL){
                     presenter.deleteProduct(deletedProduct, deletedProductDeleteType)
                 }
                 else{
@@ -282,6 +282,8 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
      *
      */
     override fun onItemViewClicked(product: Product) {
+        undoSnackbar.dismiss()
+
         NavHostFragment.
             findNavController(fragmentHost).
             navigate(ProductListFragmentDirections.actionProductListFragmentToProductInfoFragment(ParcelableProductMapper.toParcelable(product)))
@@ -302,6 +304,9 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
      *
      */
     override fun setEmptyView() {
+        if (tvAddNewVittle == null){
+            return
+        }
         if (productAdapter.itemCount == 0) {
             tvAddNewVittle.visibility = View.VISIBLE
         } else {
@@ -314,6 +319,9 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
      *
      */
     override fun onNoResults() {
+        if (tvNoResults == null){
+            return
+        }
         if (productAdapter.itemCount == 0) {
             tvNoResults.visibility = View.VISIBLE
         } else {
