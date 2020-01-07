@@ -100,6 +100,8 @@
     <string name="cd_scanning_pane">Scanning pane</string>
     <string name="btn_add_vittle">Add Vittle</string>
     <string name="btn_use_camera">Use camera</string>
+    <string name="scanner_oom_title">Warning!</string>
+    <string name="scanner_oom_text">The scanning process is too heavy for your device. We suggest you lower the performance setting. Do you want to lower the performance setting to fix this issue?</string>
 
     <!--    Add product manually-->
     <string name="edit_product_name">Edit product name</string>

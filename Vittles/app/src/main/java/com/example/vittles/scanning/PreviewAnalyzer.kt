@@ -4,9 +4,11 @@ import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import com.example.domain.settings.model.PerformanceSetting
 import com.example.vittles.services.scanner.ScanningService
+import com.google.android.gms.tasks.Task
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.google.firebase.ml.vision.common.FirebaseVisionImageMetadata
+import com.google.firebase.ml.vision.text.FirebaseVisionText
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -30,10 +32,13 @@ class PreviewAnalyzer(
     private val onBarcodeSuccess: (barcodes: List<FirebaseVisionBarcode>) -> Unit,
     private val onOcrFailure: (exception: Exception) -> Unit,
     private val onOcrSuccess: (text: String) -> Unit,
+    private val onOutOfMemory: () -> Unit,
     private val performanceSetting: PerformanceSetting
-    ) : ImageAnalysis.Analyzer {
+) : ImageAnalysis.Analyzer {
 
-    companion object ProductProps {
+    companion object {
+        /** Value that indicates the minimum percentage of allocated heap left. */
+        private const val MIN_ALLOCATED_HEAP_LEFT_PERCENTAGE = 5
         /** Value that indicates if a barcode has been scanned already */
         var hasBarCode = false
         /** Value that indicates if an expiration date has been scanned already */
@@ -42,6 +47,8 @@ class PreviewAnalyzer(
 
     /** Value used for the scanning delay */
     private var lastAnalyzedTimestamp = 0L
+    private var barcodeTask: Task<MutableList<FirebaseVisionBarcode>>? = null
+    private var ocrTask: Task<FirebaseVisionText>? = null
 
     /**
      * Convert the rotation degree to firebase rotation degree.
@@ -65,16 +72,15 @@ class PreviewAnalyzer(
      * @param degrees Rotation degree of the camera.
      */
     override fun analyze(imageProxy: ImageProxy?, degrees: Int) {
-        var interval: Long = performanceSetting.ms.toLong()
-
-        if (interval.toString().isEmpty()) {
-            interval = 500L
+        if (!hasAvailableHeap()) {
+            onOutOfMemory()
+            return
         }
 
-        // Scan only every 500 ms instead of every frame.
+        // Scan only every {200, 500, 1000 ms} instead of every frame.
         val currentTimestamp = System.currentTimeMillis()
         if (currentTimestamp - lastAnalyzedTimestamp >=
-            TimeUnit.MILLISECONDS.toMillis(interval)
+            TimeUnit.MILLISECONDS.toMillis(performanceSetting.ms)
         ) {
             val mediaImage = imageProxy?.image
             val imageRotation = degreesToFirebaseRotation(degrees)
@@ -88,10 +94,10 @@ class PreviewAnalyzer(
                     try-catch might prevent the app from crashing.
                      */
                 }
-                if (!hasBarCode && image != null) {
+                if (!hasBarCode && image != null && barcodeTask?.isComplete != false) {
                     CoroutineScope(Dispatchers.Main).launch {
                         withContext(Dispatchers.IO) {
-                            ScanningService.scanForBarcode(
+                            barcodeTask = ScanningService.scanForBarcode(
                                 image,
                                 onBarcodeSuccess,
                                 onBarcodeFailure
@@ -99,10 +105,10 @@ class PreviewAnalyzer(
                         }
                     }
                 }
-                if (!hasExpirationDate && image != null) {
+                if (!hasExpirationDate && image != null && ocrTask?.isComplete != false) {
                     CoroutineScope(Dispatchers.Main).launch {
                         withContext(Dispatchers.IO) {
-                            ScanningService.scanForExpirationDate(
+                            ocrTask = ScanningService.scanForExpirationDate(
                                 image,
                                 onOcrSuccess,
                                 onOcrFailure
@@ -113,5 +119,19 @@ class PreviewAnalyzer(
                 lastAnalyzedTimestamp = currentTimestamp
             }
         }
+    }
+
+    /**
+     * Checks if the app has enable memory allocated in order to use the camera.
+     *
+     * @return Boolean value that represents if the app has enough allocated memory.
+     */
+    private fun hasAvailableHeap(): Boolean {
+        val runtime = Runtime.getRuntime()
+        val usedMemInMB = (runtime.totalMemory() - runtime.freeMemory()) / 1048576L
+        val maxHeapSizeInMB = runtime.maxMemory() / 1048576L
+        val availHeapSizeInMB = maxHeapSizeInMB - usedMemInMB
+        val percentage = (availHeapSizeInMB.toDouble() / maxHeapSizeInMB.toDouble()) * 100
+        return percentage >= MIN_ALLOCATED_HEAP_LEFT_PERCENTAGE
     }
 }

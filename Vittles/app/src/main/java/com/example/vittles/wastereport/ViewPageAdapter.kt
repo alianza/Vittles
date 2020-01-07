@@ -31,7 +31,6 @@ class ViewPagerAdapter internal constructor(
     /** @suppress*/
     lateinit var fragment: Fragment
 
-
     /**
      * Is called when time range is changed
      *

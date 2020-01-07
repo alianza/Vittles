@@ -1,15 +1,18 @@
 package com.example.vittles.services.scanner
 
 import android.annotation.SuppressLint
+import com.google.android.gms.tasks.Task
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcodeDetectorOptions
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
+import com.google.firebase.ml.vision.text.FirebaseVisionText
 
 /**
  * Service for scanning barcodes and recognizing text.
  *
  * @author Jeroen Flietstra
+ * @author Jan-Willem van Bremen
  * @author Marc van Spronsen
  */
 object ScanningService {
@@ -21,6 +24,22 @@ object ScanningService {
     private val shortRegex = Regex("(?<![A-Za-z0-9]|[\\/\\-: ])(?:(0[1-9]{1}|1[0-2]{1})([\\/\\-.: ]\\d{4}))(?![A-Za-z0-9]|[\\/\\-: ])|" +
             "(?<![A-Za-z0-9]|[\\/\\-: ])(?:jan|feb|mar|apr|may|jun|jul|aug|oct|nov|dec|okt|mei|mrt{3})([\\/\\-.: ]\\d{4})(?![A-Za-z0-9]|[\\/\\-: ])")
 
+    private val ocrDetector = FirebaseVision.getInstance() .onDeviceTextRecognizer
+
+    // Only scan EAN codes, add more if needed.
+    private val options = FirebaseVisionBarcodeDetectorOptions.Builder()
+        .setBarcodeFormats(
+            FirebaseVisionBarcode.FORMAT_EAN_13,
+            FirebaseVisionBarcode.FORMAT_EAN_8,
+            FirebaseVisionBarcode.FORMAT_UPC_A,
+            FirebaseVisionBarcode.FORMAT_UPC_E,
+            FirebaseVisionBarcode.FORMAT_ITF,
+            FirebaseVisionBarcode.TYPE_ISBN
+        )
+        .build()
+    private val barcodeDetector = FirebaseVision.getInstance()
+        .getVisionBarcodeDetector(options)
+
     /**
      * Scans the image for barcodes and retrieves the value from the barcodes to return it to
      * the callback function.
@@ -28,26 +47,15 @@ object ScanningService {
      * @param image The frame that will be scanned.
      * @param onBarcodesSuccess Callback function for successful scan.
      * @param onBarcodesFailure Callback function for unsuccessful scan.
+     *
+     * @return Task of the detection.
      */
     fun scanForBarcode(
         image: FirebaseVisionImage,
         onBarcodesSuccess: (barcodes: List<FirebaseVisionBarcode>) -> Unit,
         onBarcodesFailure: (exception: Exception) -> Unit
-    ) {
-        // Only scan EAN codes, add more if needed.
-        val options = FirebaseVisionBarcodeDetectorOptions.Builder()
-            .setBarcodeFormats(
-                FirebaseVisionBarcode.FORMAT_EAN_13,
-                FirebaseVisionBarcode.FORMAT_EAN_8,
-                FirebaseVisionBarcode.FORMAT_UPC_A,
-                FirebaseVisionBarcode.FORMAT_UPC_E,
-                FirebaseVisionBarcode.FORMAT_ITF,
-                FirebaseVisionBarcode.TYPE_ISBN
-            )
-            .build()
-        val detector = FirebaseVision.getInstance()
-            .getVisionBarcodeDetector(options)
-        detector.detectInImage(image)
+    ): Task<MutableList<FirebaseVisionBarcode>> {
+        return barcodeDetector.detectInImage(image)
             .addOnSuccessListener { barcodes ->
                 onBarcodesSuccess(barcodes)
             }
@@ -63,16 +71,16 @@ object ScanningService {
      * @param image The frame that will be scanned.
      * @param onOcrSuccess Callback function for successful scan.
      * @param onOcrFailure Callback function for unsuccessful scan.
+     *
+     * @return Task of the detection.
      */
     @SuppressLint("DefaultLocale")
     fun scanForExpirationDate(
         image: FirebaseVisionImage,
         onOcrSuccess: (text: String) -> Unit,
         onOcrFailure: (exception: Exception) -> Unit
-    ) {
-        val detector = FirebaseVision.getInstance() .onDeviceTextRecognizer
-
-                detector.processImage(image)
+    ): Task<FirebaseVisionText> {
+                return ocrDetector.processImage(image)
                     .addOnSuccessListener { firebaseVisionText ->
                         var matchedText = regex.find(firebaseVisionText.text.toLowerCase(), 0)
 

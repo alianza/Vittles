@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.os.Vibrator
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -99,6 +100,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
     override fun onDestroy() {
         super.onDestroy()
         CameraX.unbindAll()
+        textureView.surfaceTexture.detachFromGLContext()
         presenter.destroy()
     }
 
@@ -646,6 +648,33 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
                 NavigationGraphDirections.actionGlobalSettingsFragment()
             )
             else -> findNavController().navigateUp()
+        }
+    }
+
+    /**
+     * Will create a dialog to warn the user about memory usage. Action can be taken from this dialog.
+     *
+     */
+    override fun onAnalyzerError() {
+        Handler(Looper.getMainLooper()).post {
+            PopupManager.instance.showPopup(this.context!!, PopupBase(
+                getString(R.string.scanner_oom_title),
+                getString(R.string.scanner_oom_text)
+            ),
+                PopupButton(getString(R.string.btn_no)),
+                PopupButton(getString(R.string.btn_yes)) {
+                    presenter.onPerformanceSettingLowered()
+                    val currentFragment =
+                        requireActivity().supportFragmentManager.primaryNavigationFragment!!
+                            .childFragmentManager.fragments.first()
+                    if (currentFragment is ScannerFragment) {
+                        val fragTransaction =
+                            requireActivity().supportFragmentManager.beginTransaction()
+                        fragTransaction.detach(currentFragment)
+                        fragTransaction.attach(currentFragment)
+                        fragTransaction.commit()
+                    }
+                })
         }
     }
 

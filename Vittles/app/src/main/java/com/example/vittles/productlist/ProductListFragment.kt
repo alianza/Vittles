@@ -91,6 +91,12 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
     }
 
     /** {@inheritDoc} */
+    override fun onDestroyView() {
+        rvProducts.adapter = null
+        super.onDestroyView()
+    }
+
+    /** {@inheritDoc} */
     override fun onDestroy() {
         onSearchBarClosed()
         presenter.destroy()

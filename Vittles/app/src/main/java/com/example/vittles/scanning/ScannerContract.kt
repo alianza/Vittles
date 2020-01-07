@@ -40,6 +40,7 @@ interface ScannerContract {
         fun onProductNameCheckboxChecked(productName: String)
         fun onExpirationDateCheckboxChecked(text: String)
         fun onShowEditNameDialog(productDictionary: ProductDictionary)
+        fun onAnalyzerError()
     }
 
     interface Presenter {
@@ -52,5 +53,6 @@ interface ScannerContract {
         fun getImageAnalysis(): ImageAnalysis
         fun checkPermissions()
         fun allPermissionsGranted(): Boolean
+        fun onPerformanceSettingLowered()
     }
 }
