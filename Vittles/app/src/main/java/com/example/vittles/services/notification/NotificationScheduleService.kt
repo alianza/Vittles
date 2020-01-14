@@ -107,6 +107,10 @@ class NotificationScheduleService : DaggerBroadcastReceiver(),
                         nextAudit = DateTime().plusMonths(1).withHourOfDay(12).withMinuteOfHour(0)
                             .withSecondOfMinute(0)
                     }
+                    NotificationSchedule.TEST -> {
+                        // Set nextAudit to 5 seconds
+                        nextAudit = DateTime.now().plusSeconds(5)
+                    }
                 }
 
                 alarmManager =

@@ -10,5 +10,7 @@ enum class NotificationSchedule {
     /** Schedule weekly. */
     WEEKLY,
     /** Schedule monthly. */
-    MONTHLY
+    MONTHLY,
+    /** Scheduling test **/
+    TEST
 }

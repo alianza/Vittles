@@ -166,6 +166,7 @@
         <item>Daily</item>
         <item>Weekly</item>
         <item>Monthly</item>
+        <item>Test</item>
     </string-array>
 
     <!-- Performance options -->
