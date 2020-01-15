@@ -21,6 +21,7 @@ import org.joda.time.DateTime
  * @property btnTimeRange The button which shows the current time range.
  * @property alertDialog The entire alertDialog of the time range.
  * @property view The View which holds the sortingMenu.
+ * @property onDateChange Callback for when a data changes.
  */
 class WasteTimeRangeMenu (private val onDateChange: (DateTime) -> Unit) {
 

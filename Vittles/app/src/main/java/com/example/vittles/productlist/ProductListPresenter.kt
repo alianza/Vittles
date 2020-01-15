@@ -24,7 +24,8 @@ import javax.inject.Inject
  *
  * @property getProducts The GetProducts use case from the domain module.
  * @property deleteProduct The DeleteProduct use cane from the domain module.
- * @property getVibrationEnabled The getVibrationEnabled use case from the domain module
+ * @property getVibrationEnabled The GetVibrationEnabled use case from the domain module
+ * @property addWasteReportProduct The AddWasteReportProduct use case from the domain module.
  */
 class ProductListPresenter @Inject internal constructor(
     private val getProducts: GetProducts,

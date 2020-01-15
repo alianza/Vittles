@@ -171,6 +171,7 @@ class CustomBarChartRender(
 
     }
 
+    /** @suppress **/
     private fun roundRect(
         rect: RectF,
         rx: Float,

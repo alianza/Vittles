@@ -25,6 +25,8 @@ import javax.inject.Inject
  * @property getNotificationEnabled The getNotificationEnabled use case from the domain module.
  * @property getVibrationEnabled The getVibrationEnabled use case from the domain module.
  * @property emptyProductDictionary The emptyProductDictionary use case from the domain module.
+ * @property setPerformanceSetting The SetPerformanceSetting use case from the domain module.
+ * @property getPerformanceSetting The GetPerformanceSetting use case from the domain module.
  */
 class SettingsPresenter @Inject constructor(
     private val setNotificationSchedule: SetNotificationSchedule,

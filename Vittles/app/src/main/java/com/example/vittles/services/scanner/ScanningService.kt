@@ -24,8 +24,10 @@ object ScanningService {
     private val shortRegex = Regex("(?<![A-Za-z0-9]|[\\/\\-: ])(?:(0[1-9]{1}|1[0-2]{1})([\\/\\-.: ]\\d{4}))(?![A-Za-z0-9]|[\\/\\-: ])|" +
             "(?<![A-Za-z0-9]|[\\/\\-: ])(?:jan|feb|mar|apr|may|jun|jul|aug|oct|nov|dec|okt|mei|mrt{3})([\\/\\-.: ]\\d{4})(?![A-Za-z0-9]|[\\/\\-: ])")
 
+    /** The firebase detector for optical text recognition. **/
     private val ocrDetector = FirebaseVision.getInstance() .onDeviceTextRecognizer
 
+    /** @suppress **/
     // Only scan EAN codes, add more if needed.
     private val options = FirebaseVisionBarcodeDetectorOptions.Builder()
         .setBarcodeFormats(
@@ -37,6 +39,7 @@ object ScanningService {
             FirebaseVisionBarcode.TYPE_ISBN
         )
         .build()
+    /** The firebase detector for barcodes. **/
     private val barcodeDetector = FirebaseVision.getInstance()
         .getVisionBarcodeDetector(options)
 

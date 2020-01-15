@@ -41,6 +41,7 @@ class MainActivity : AppCompatActivity() {
      */
     private lateinit var navController: NavController
 
+    /** All the top-level destinations of the application **/
     private val topLevelDestinations =
         arrayOf(R.id.productListFragment, R.id.wasteReportFragment, R.id.settingsFragment)
 

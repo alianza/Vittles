@@ -14,6 +14,7 @@ import org.joda.time.DateTime
  * @property productName The product name.
  * @property expirationDate The product expiration date.
  * @property creationDate The date the product was added to the room database.
+ * @property deleteType The DeleteType of the product.
  */
 @Parcelize
 data class ParcelableProduct (
