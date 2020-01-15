@@ -49,6 +49,11 @@ abstract class AppDatabase : RoomDatabase() {
      */
     abstract fun productDao(): ProductDao
 
+    /**
+     * Retrieves the BarcodeDao.
+     *
+     * @return The BarcodeDao.
+     */
     abstract fun barcodeDao(): BarcodeDao
 
     companion object {

@@ -52,6 +52,7 @@ class SettingsFragment : DaggerFragment(), SettingsContract.View {
         initViews()
     }
 
+    /** {@inheritDoc} **/
     override fun onDestroy() {
         presenter.destroy()
         super.onDestroy()
@@ -161,6 +162,10 @@ class SettingsFragment : DaggerFragment(), SettingsContract.View {
         Toast.makeText(context, getString(R.string.settings_remove_products_fail), Toast.LENGTH_SHORT).show()
     }
 
+    /**
+     * Removes all saved product names from the local database.
+     *
+     */
     override fun onRemoveSavedProductsClick() {
         PopupManager.instance.showPopup(this.context!!, PopupBase(
             getString(R.string.settings_popup_confirm_header),

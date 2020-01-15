@@ -31,6 +31,7 @@ internal class PopupManager {
         /** Instance of the pop up manager. */
         private var INSTANCE: PopupManager? = null
 
+        /** The instance of the pop-up manager. **/
         val instance: PopupManager
             get(){
                 if(INSTANCE == null){

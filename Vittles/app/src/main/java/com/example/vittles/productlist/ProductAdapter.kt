@@ -23,6 +23,7 @@ import javax.inject.Inject
  *
  * @property products The list of products that should be displayed in the RecyclerView.
  * @property removeClickListener Click listener used for the delete button.
+ * @property itemClickListener Click listener for when an item has been clicked.
  */
 class ProductAdapter @Inject constructor(initialProducts: List<Product>, private val itemClickListener: (Product) -> Unit, private val removeClickListener: (Product) -> Unit) :
     RecyclerView.Adapter<ProductAdapter.ViewHolder>() {

@@ -35,6 +35,9 @@ import javax.inject.Inject
  * @property insertProductDictionary The AddBarcodeDictionary use case from the domain module.
  * @property updateProductDictionary The UpdateBarcodeDictionary use case from the domain module.
  * @property getVibrationEnabled The GetVibrationEnabled use case from the domain module.
+ * @property addProductDictionary The AddProductDictionary use case from the domain module.
+ * @property getPerformanceSetting The GetPerformanceSetting use case from the domain module.
+ * @property setPerformanceSetting The SetPerformanceSetting use case from the domain module.
  */
 class ScannerPresenter @Inject internal constructor(
     private val getProductByBarcode: GetProductByBarcode,

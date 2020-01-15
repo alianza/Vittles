@@ -26,6 +26,8 @@ import java.util.concurrent.TimeUnit
  * @property onBarcodeFailure Callback function for unsuccessful barcode scan.
  * @property onOcrSuccess Callback function for successful OCR scan.
  * @property onOcrFailure Callback function for unsuccessful OCR scan.
+ * @property onOutOfMemory Callback function for when the scanner allocates too much memory.
+ * @property performanceSetting The performance setting of the scanner.
  */
 class PreviewAnalyzer(
     private val onBarcodeFailure: (exception: Exception) -> Unit,
@@ -47,7 +49,9 @@ class PreviewAnalyzer(
 
     /** Value used for the scanning delay */
     private var lastAnalyzedTimestamp = 0L
+    /** The task for analyzing a frame for a barcode **/
     private var barcodeTask: Task<MutableList<FirebaseVisionBarcode>>? = null
+    /** The task for analyzing a frame for an expiration date **/
     private var ocrTask: Task<FirebaseVisionText>? = null
 
     /**

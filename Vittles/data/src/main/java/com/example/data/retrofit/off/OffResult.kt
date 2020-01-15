@@ -7,6 +7,7 @@ import com.google.gson.annotations.SerializedName
  *
  * @author Jeroen Flietstra
  *
+ * @property status The status code of the product.
  * @property product The retrieved product.
  */
 data class OffResult (
