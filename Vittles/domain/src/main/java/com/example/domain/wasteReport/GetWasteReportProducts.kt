@@ -32,24 +32,32 @@ class GetWasteReportProducts @Inject constructor(private val repository: WasteRe
             for (i in 0 until timeRangeDays) {
                 var productAmount: Int
                 var eaten: Int
+                var expired: Int
                 var barEntryDate: DateTime
 
                 if(timeRangeDays == TimeRangeSteps.MONTH_YEAR.steps) {
                     barEntryDate = DateTime.now().minusMonths(i-1)
                     productAmount = products.count {
-                        it.creationDate.monthOfYear == i + 1
+                        it.creationDate.monthOfYear == i + 1 && it.wasteType != "REMOVED"
                     }
                     eaten = products.count{
                         it.wasteType == "EATEN" && it.creationDate.monthOfYear == i + 1
                     }
+                    expired = products.count{
+                        it.wasteType == "THROWN_AWAY" && it.creationDate.monthOfYear == i + 1
+                    }
                 } else {
                     barEntryDate = DateTime.now().minusDays(i).withTimeAtStartOfDay()
                     productAmount = products.count {
-                        it.creationDate == barEntryDate
+                        it.creationDate == barEntryDate && it.wasteType != "REMOVED"
                     }
                     eaten =
                         products.count {
                             it.wasteType == "EATEN" && it.creationDate == barEntryDate
+                        }
+                    expired =
+                        products.count{
+                            it.wasteType == "THROWN_AWAY" && it.creationDate == barEntryDate
                         }
                 }
                 val percentEaten: Float
@@ -57,7 +65,7 @@ class GetWasteReportProducts @Inject constructor(private val repository: WasteRe
                 if (productAmount != 0) {
                     percentEaten = eaten.toFloat() / productAmount.toFloat() * 100
                     percentExpired =
-                        (productAmount - eaten.toFloat()) / productAmount.toFloat() * 100
+                        expired.toFloat() / productAmount.toFloat() * 100
                 } else {
                     percentEaten = 0f
                     percentExpired = 0f
