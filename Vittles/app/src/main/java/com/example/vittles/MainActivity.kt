@@ -211,10 +211,14 @@ class MainActivity : AppCompatActivity() {
         */
         if (topLevelDestinations.contains(navController.currentDestination?.id)) {
             // Closes the app (returns to home screen) instead of quitting it with finish()
-            val intent = Intent(Intent.ACTION_MAIN)
-            intent.addCategory(Intent.CATEGORY_HOME)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            startActivity(intent)
+            if (navController.currentDestination?.id == R.id.productListFragment) {
+                val intent = Intent(Intent.ACTION_MAIN)
+                intent.addCategory(Intent.CATEGORY_HOME)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(intent)
+            } else {
+                navController.navigate(R.id.productListFragment)
+            }
         } else {
             onSupportNavigateUp()
         }
