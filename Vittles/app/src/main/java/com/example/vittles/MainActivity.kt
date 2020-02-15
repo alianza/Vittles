@@ -8,23 +8,15 @@ import androidx.appcompat.widget.ActionMenuView
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.size
-import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
-import androidx.navigation.ui.setupWithNavController
-import com.example.vittles.productlist.ProductListFragment
-import com.example.vittles.productlist.ProductListFragmentDirections
-import com.example.vittles.wastereport.WasteReportFragmentDirections
+import com.example.vittles.productlist.productlist.ProductListFragment
 import com.google.android.material.bottomappbar.BottomAppBar
 import kotlinx.android.synthetic.main.content_main.*
 import androidx.navigation.findNavController as findNavSetup
 import android.content.Intent
-import androidx.core.app.ComponentActivity.ExtraData
-import androidx.core.content.ContextCompat.getSystemService
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-import androidx.camera.core.CameraX
 import com.example.vittles.enums.PreviousFragmentIndex
 import com.example.vittles.settings.SettingsFragment
 

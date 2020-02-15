@@ -1,4 +1,4 @@
-package com.example.vittles.productlist
+package com.example.vittles.productlist.productlist
 
 import android.content.Context
 import android.graphics.Color
@@ -7,14 +7,17 @@ import android.os.Vibrator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.vittles.R
 import com.example.vittles.enums.DeleteType
+import com.example.vittles.productlist.model.ProductViewModel
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
+import kotlinx.android.synthetic.main.content_main.*
+import kotlinx.android.synthetic.main.content_main.view.*
 import kotlinx.android.synthetic.main.fragment_productlist.*
 import java.util.*
 import javax.inject.Inject
@@ -26,11 +29,9 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
 
     private lateinit var vibrator: Vibrator
 
-    private lateinit var productItemTouchHelper: ProductItemTouchHelper
+    private lateinit var itemTouchHelper: ProductItemTouchHelper
 
-    private lateinit var productAdapter: ProductAdapter
-
-    private lateinit var undoSnackbar: Snackbar
+    private lateinit var adapter: ProductAdapter
 
     private val productArgs: ProductListFragmentArgs by navArgs()
 
@@ -43,18 +44,18 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         vibrator = requireContext().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-        productItemTouchHelper =
+        itemTouchHelper =
             ProductItemTouchHelper(
                 ProductItemTouchHelper.ProductItemTouchCallback(
                     requireContext(),
                     this::onProductSwiped
                 )
             )
-        productAdapter =
+        adapter =
             ProductAdapter(
                 this::onProductClicked,
                 this::onProductRemoveClicked,
-                productItemTouchHelper
+                itemTouchHelper
             )
 
         initViews()
@@ -72,19 +73,18 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
     }
 
     private fun initViews() {
-        rvProducts.layoutManager =
-            LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-        rvProducts.adapter = productAdapter.apply { notifyDataSetChanged() }
+        rvProducts.layoutManager = object : LinearLayoutManager(requireContext()) {
+            override fun supportsPredictiveItemAnimations(): Boolean = true
+        }.apply {
+            supportsPredictiveItemAnimations()
+        }
+        rvProducts.adapter = adapter
 
-        productItemTouchHelper.attachToRecyclerView(rvProducts)
-
-        undoSnackbar = Snackbar.make(content, "", Snackbar.LENGTH_LONG)
-        undoSnackbar.setAction("UNDO") {}
-        undoSnackbar.setActionTextColor(Color.WHITE)
+        itemTouchHelper.attachToRecyclerView(rvProducts)
     }
 
     override fun onProductsUpdated(products: List<ProductViewModel>) {
-        productAdapter.products = products.toCollection(arrayListOf())
+        adapter.submitList(products)
     }
 
     private fun onProductClicked(product: ProductViewModel) {
@@ -92,15 +92,22 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
     }
 
     private fun onProductRemoveClicked(product: ProductViewModel) {
-        undoSnackbar
+        createSnackbar()
             .addCallback(ProductSnackbarCallback(product, DeleteType.REMOVED))
             .show()
     }
 
     private fun onProductSwiped(product: ProductViewModel, deleteType: DeleteType) {
-        undoSnackbar
+        createSnackbar()
             .addCallback(ProductSnackbarCallback(product, deleteType))
             .show()
+    }
+
+    private fun createSnackbar(): Snackbar {
+        return Snackbar.make(content, "", Snackbar.LENGTH_LONG).apply {
+            setAction("UNDO") {}
+            setActionTextColor(Color.WHITE)
+        }
     }
 
     inner class ProductSnackbarCallback(
@@ -108,13 +115,8 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
         private val deleteType: DeleteType
     ) : BaseTransientBottomBar.BaseCallback<Snackbar>() {
 
-        private val productIndex = productAdapter.products.indexOf(product)
-
         init {
-            productAdapter.run {
-                products.removeAt(productIndex)
-                notifyItemRemoved(productIndex)
-            }
+            presenter.onProductDelete(product, deleteType)
         }
 
         override fun onShown(transientBottomBar: Snackbar?) {
@@ -128,13 +130,8 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
         }
 
         override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-            if (event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT || event == Snackbar.Callback.DISMISS_EVENT_MANUAL) {
-                presenter.onProductDelete(product, deleteType)
-            } else {
-                productAdapter.run {
-                    products.add(productIndex, product)
-                    notifyItemInserted(productIndex)
-                }
+            if (event == Snackbar.Callback.DISMISS_EVENT_ACTION) {
+                presenter.onProductInsert(product)
             }
             super.onDismissed(transientBottomBar, event)
         }

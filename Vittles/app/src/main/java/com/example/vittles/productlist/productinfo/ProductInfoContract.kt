@@ -1,8 +1,6 @@
 package com.example.vittles.productlist.productinfo
 
-import com.example.domain.product.Product
-import com.example.vittles.enums.DeleteType
-import com.example.vittles.productlist.ProductViewModel
+import com.example.vittles.productlist.model.ProductViewModel
 import org.joda.time.DateTime
 
 /**

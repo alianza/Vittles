@@ -1,7 +1,7 @@
 package com.example.vittles.di
 
 import com.example.vittles.settings.SettingsFragment
-import com.example.vittles.productlist.ProductListFragment
+import com.example.vittles.productlist.productlist.ProductListFragment
 import com.example.vittles.productlist.productinfo.ProductInfoFragment
 import com.example.vittles.scanning.ScannerFragment
 import com.example.vittles.services.notification.NotificationScheduleService

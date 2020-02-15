@@ -1,7 +1,7 @@
-package com.example.vittles.productlist
+package com.example.vittles.productlist.productlist
 
+import com.example.domain.product.AddProduct
 import com.example.domain.product.DeleteProduct
-import com.example.domain.product.Product
 import com.example.domain.product.GetProducts
 import com.example.domain.settings.GetVibrationEnabled
 import com.example.domain.wasteReport.AddWasteReportProduct
@@ -12,6 +12,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.joda.time.DateTime
 import com.example.vittles.extension.*
+import com.example.vittles.productlist.ProductMapper
+import com.example.vittles.productlist.model.ProductViewModel
 import javax.inject.Inject
 
 /**
@@ -28,6 +30,7 @@ import javax.inject.Inject
  */
 class ProductListPresenter @Inject internal constructor(
     private val mapper: ProductMapper,
+    private val addProduct: AddProduct,
     private val getProducts: GetProducts,
     private val deleteProduct: DeleteProduct,
     private val addWasteReportProduct: AddWasteReportProduct,
@@ -68,6 +71,13 @@ class ProductListPresenter @Inject internal constructor(
 //        )
 //        addWasteReportProduct(deleteType)
         deleteProduct(mapper.fromParcelable(product))
+            .subscribeOnIoObserveOnMain()
+            .subscribe()
+            .addTo(disposables)
+    }
+
+    override fun onProductInsert(product: ProductViewModel) {
+        addProduct(mapper.fromParcelable(product), false)
             .subscribeOnIoObserveOnMain()
             .subscribe()
             .addTo(disposables)

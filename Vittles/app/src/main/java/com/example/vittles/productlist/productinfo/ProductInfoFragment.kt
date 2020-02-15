@@ -12,8 +12,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.vittles.NavigationGraphDirections
 import com.example.vittles.R
-import com.example.vittles.productlist.ProductListFragmentDirections
-import com.example.vittles.productlist.ProductViewModel
+import com.example.vittles.productlist.model.ProductViewModel
+import com.example.vittles.productlist.productlist.ProductListFragmentDirections
 import com.example.vittles.scanning.ScannerFragment
 import com.example.vittles.scanning.productaddmanual.ProductNameEditView
 import com.google.android.material.snackbar.Snackbar

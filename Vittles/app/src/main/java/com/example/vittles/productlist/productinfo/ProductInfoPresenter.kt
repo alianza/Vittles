@@ -3,7 +3,7 @@ package com.example.vittles.productlist.productinfo
 import com.example.domain.product.UpdateProduct
 import com.example.vittles.mvp.BasePresenter
 import com.example.vittles.productlist.ProductMapper
-import com.example.vittles.productlist.ProductViewModel
+import com.example.vittles.productlist.model.ProductViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject

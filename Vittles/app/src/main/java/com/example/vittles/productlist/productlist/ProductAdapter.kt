@@ -1,4 +1,4 @@
-package com.example.vittles.productlist
+package com.example.vittles.productlist.productlist
 
 import android.content.Context
 import android.graphics.PorterDuff
@@ -7,8 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vittles.R
+import com.example.vittles.productlist.model.ProductViewModel
 import kotlinx.android.synthetic.main.item_product.view.*
 import javax.inject.Inject
 
@@ -17,15 +20,15 @@ class ProductAdapter @Inject constructor(
     private val onRemoveItemClicked: (ProductViewModel) -> Unit,
     private val itemTouchHelper: ProductItemTouchHelper
 ) :
-    RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
+    ListAdapter<ProductViewModel, ProductAdapter.ViewHolder>(itemDiff) {
 
     lateinit var context: Context
 
     var products: ArrayList<ProductViewModel> = arrayListOf()
         set(value) {
             field = value
+            submitList(value)
             itemTouchHelper.products = value
-            notifyDataSetChanged()
         }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -36,13 +39,37 @@ class ProductAdapter @Inject constructor(
     }
 
     override fun getItemCount(): Int {
-        products
-        return products.size
+        return currentList.size
+    }
+
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(products[position])
+        holder.bind(currentList[position])
     }
+
+    override fun submitList(list: List<ProductViewModel>?) {
+        list?.let { itemTouchHelper.products = list }
+        super.submitList(list)
+    }
+
+//    fun removeProduct(position: Int) {
+//        products = products.apply { removeAt(position) }
+////        notifyItemRemoved(position)
+////        if (position > 0) {
+////            notifyItemChanged(position - 1)
+////        }
+//    }
+//
+//    fun insertProduct(position: Int, product: ProductViewModel) {
+//        products = products.apply { add(position, product) }
+////        notifyItemInserted(position)
+////        if (position > 0) {
+////            notifyItemChanged(position - 1)
+////        }
+//    }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -69,7 +96,7 @@ class ProductAdapter @Inject constructor(
                 ConstraintLayout.LayoutParams.WRAP_CONTENT
             )
             // Last product in list, remove decorator and add extra bottom-margin
-            if (products[products.lastIndex] == product) {
+            if (currentList.lastOrNull() == product) {
                 itemView.borderDecorator.visibility = View.INVISIBLE
                 val unbounded = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
                 itemView.measure(unbounded, unbounded)
@@ -106,6 +133,19 @@ class ProductAdapter @Inject constructor(
                     product.getIndicationColor().value
                 )
             ) //DaysLeft number
+        }
+    }
+
+    companion object {
+
+        private val itemDiff = object : DiffUtil.ItemCallback<ProductViewModel>() {
+            override fun areItemsTheSame(oldItem: ProductViewModel, newItem: ProductViewModel): Boolean {
+                return oldItem.uid == newItem.uid
+            }
+
+            override fun areContentsTheSame(oldItem: ProductViewModel, newItem: ProductViewModel): Boolean {
+                return oldItem == newItem
+            }
         }
     }
 }

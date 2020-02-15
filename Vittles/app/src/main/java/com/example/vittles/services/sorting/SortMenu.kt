@@ -6,10 +6,9 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
-import com.example.domain.product.Product
 import com.example.vittles.R
-import com.example.vittles.productlist.ProductAdapter
-import com.example.vittles.productlist.ProductViewModel
+import com.example.vittles.productlist.productlist.ProductAdapter
+import com.example.vittles.productlist.model.ProductViewModel
 import kotlinx.android.synthetic.main.dialog_sort.view.*
 
 /**
@@ -117,7 +116,7 @@ class SortMenu (private var sortList: ArrayList<ProductViewModel>, private var a
         }
         previousSortingType = currentSortingType
         currentSortingType = sortingType
-        adapter.products = sortList
+        adapter.submitList(sortList)
         adapter.notifyDataSetChanged()
 
         if (currentSortingType != previousSortingType) {
