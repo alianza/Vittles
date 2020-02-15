@@ -20,8 +20,8 @@ class ProductModelMapper @Inject constructor() {
         from.uid,
         from.productName,
         from.expirationDate,
-        from.creationDate,
-        null)
+        from.creationDate
+    )
 
     /**
      * Maps product model to product entity.

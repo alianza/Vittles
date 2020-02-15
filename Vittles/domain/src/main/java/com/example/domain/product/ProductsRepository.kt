@@ -1,8 +1,7 @@
 package com.example.domain.product
 
-import com.example.domain.product.Product
 import io.reactivex.Completable
-import io.reactivex.Single
+import io.reactivex.Observable
 
 /**
  * Repository interface for the products.
@@ -17,7 +16,7 @@ interface ProductsRepository {
      *
      * @return A list containing all the products.
      */
-    fun get(): Single<List<Product>>
+    fun get(): Observable<List<Product>>
 
     /**
      * Updates a product in the database.

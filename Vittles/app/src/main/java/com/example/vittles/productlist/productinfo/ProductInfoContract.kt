@@ -2,6 +2,7 @@ package com.example.vittles.productlist.productinfo
 
 import com.example.domain.product.Product
 import com.example.vittles.enums.DeleteType
+import com.example.vittles.productlist.ProductViewModel
 import org.joda.time.DateTime
 
 /**
@@ -26,6 +27,6 @@ interface ProductInfoContract {
     }
 
     interface Presenter{
-        fun updateProduct(product: Product)
+        fun onProductUpdate(product: ProductViewModel)
     }
 }

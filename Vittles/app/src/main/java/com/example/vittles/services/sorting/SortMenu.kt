@@ -9,6 +9,7 @@ import android.widget.TextView
 import com.example.domain.product.Product
 import com.example.vittles.R
 import com.example.vittles.productlist.ProductAdapter
+import com.example.vittles.productlist.ProductViewModel
 import kotlinx.android.synthetic.main.dialog_sort.view.*
 
 /**
@@ -24,7 +25,7 @@ import kotlinx.android.synthetic.main.dialog_sort.view.*
  * @property alertDialog The entire alertDialog of the sortMenu.
  * @property view The View which holds the sortingMenu.
  */
-class SortMenu (private var sortList: MutableList<Product>, private var adapter: ProductAdapter) {
+class SortMenu (private var sortList: ArrayList<ProductViewModel>, private var adapter: ProductAdapter) {
 
     var currentSortingType: SortingType = SortingType.DAYS_REMAINING_ASC
     private lateinit var btnSort: TextView
@@ -60,7 +61,7 @@ class SortMenu (private var sortList: MutableList<Product>, private var adapter:
      * @param filteredList The list that should be sorted.
      */
     @SuppressLint("InflateParams")
-    fun openMenu(context: Context, button: TextView, filteredList: MutableList<Product>) {
+    fun openMenu(context: Context, button: TextView, filteredList: ArrayList<ProductViewModel>) {
 
         val mDialogView =
             LayoutInflater.from(context).inflate(R.layout.dialog_sort, null)
@@ -82,7 +83,7 @@ class SortMenu (private var sortList: MutableList<Product>, private var adapter:
      *
      * @param sortList The list that should be sorted.
      */
-    fun sortFilteredList(sortList: MutableList<Product>) {
+    fun sortFilteredList(sortList: ArrayList<ProductViewModel>) {
         onSortClick(currentSortingType, sortList)
     }
 
@@ -105,7 +106,7 @@ class SortMenu (private var sortList: MutableList<Product>, private var adapter:
      * @param sortingType The sortingType which was selected by the user.
      * @param sortList The list that should be sorted.
      */
-    private fun onSortClick(sortingType: SortingType, sortList: MutableList<Product>) {
+    private fun onSortClick(sortingType: SortingType, sortList: ArrayList<ProductViewModel>) {
         when(sortingType) {
             SortingType.DAYS_REMAINING_ASC -> sortList.sortBy { it.expirationDate }
             SortingType.DAYS_REMAINING_DESC -> sortList.sortByDescending { it.expirationDate }

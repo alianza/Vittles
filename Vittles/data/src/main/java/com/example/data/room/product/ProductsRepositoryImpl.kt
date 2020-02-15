@@ -3,6 +3,7 @@ package com.example.data.room.product
 import com.example.domain.product.Product
 import com.example.domain.product.ProductsRepository
 import io.reactivex.Completable
+import io.reactivex.Observable
 import io.reactivex.Single
 
 /**
@@ -21,7 +22,7 @@ class ProductsRepositoryImpl(
     ProductsRepository {
 
     /** {@inheritDoc} */
-    override fun get(): Single<List<Product>> {
+    override fun get(): Observable<List<Product>> {
         return productDao.getAll()
             .map { it.map(mapper::fromEntity) }
     }

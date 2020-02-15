@@ -1,6 +1,6 @@
 package com.example.domain.product
 
-import io.reactivex.Single
+import io.reactivex.Observable
 import javax.inject.Inject
 
 /**
@@ -17,5 +17,5 @@ class GetProducts @Inject constructor(private val repository: ProductsRepository
      *
      * @return A list containing all the products.
      */
-    operator fun invoke(): Single<List<Product>> = repository.get()
+    operator fun invoke(): Observable<List<Product>> = repository.get()
 }

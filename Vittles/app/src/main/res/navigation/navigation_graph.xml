@@ -15,7 +15,7 @@
             app:destination="@id/productInfoFragment"/>
         <argument
             android:name="ProductToDelete"
-            app:argType="com.example.vittles.productlist.ParcelableProduct"
+            app:argType="com.example.vittles.productlist.ProductViewModel"
             app:nullable="true"
             android:defaultValue="@null" />
         <argument
@@ -48,7 +48,7 @@
         tools:layout="@layout/fragment_product_info">
         <argument
             android:name="product"
-            app:argType="com.example.vittles.productlist.ParcelableProduct" />
+            app:argType="com.example.vittles.productlist.ProductViewModel" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"

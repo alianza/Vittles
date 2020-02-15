@@ -3,6 +3,7 @@ package com.example.domain.notification
 import com.example.domain.consts.DAYS_REMAINING_BOUNDARY_CLOSE
 import com.example.domain.consts.DAYS_REMAINING_EXPIRED
 import com.example.domain.product.ProductsRepository
+import io.reactivex.Observable
 import io.reactivex.Single
 import java.lang.StringBuilder
 import javax.inject.Inject
@@ -21,7 +22,7 @@ class GetNotificationProductsExpired @Inject constructor(private val repository:
      *
      * @return The newly created notification.
      */
-    operator fun invoke(): Single<Notification> {
+    operator fun invoke(): Observable<Notification> {
         return repository.get()
             .map { products ->
                 val expiring =

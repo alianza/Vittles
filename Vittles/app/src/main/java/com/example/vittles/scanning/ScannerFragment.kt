@@ -190,11 +190,10 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
      */
     override fun onAddVittleButtonClick() {
         val product = Product(
-            null,
+            0,
             tvProductName.text.toString(),
             expirationDate!!,
-            DateTime(),
-            null
+            DateTime()
         )
         presenter.addProductToList(product, true)
         if (!barcodeDictionary.containsNotReady() && !barcodeDictionary.containsNotFound()) {

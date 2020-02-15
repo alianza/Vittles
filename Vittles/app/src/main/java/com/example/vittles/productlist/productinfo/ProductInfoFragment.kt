@@ -10,12 +10,10 @@ import androidx.activity.OnBackPressedCallback
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.example.domain.product.Product
 import com.example.vittles.NavigationGraphDirections
 import com.example.vittles.R
-import com.example.vittles.enums.DeleteType
-import com.example.vittles.productlist.ParcelableProductMapper
 import com.example.vittles.productlist.ProductListFragmentDirections
+import com.example.vittles.productlist.ProductViewModel
 import com.example.vittles.scanning.ScannerFragment
 import com.example.vittles.scanning.productaddmanual.ProductNameEditView
 import com.google.android.material.snackbar.Snackbar
@@ -44,9 +42,9 @@ class ProductInfoFragment : DaggerFragment(),
     /** @suppress */
     private val productArgs: ProductInfoFragmentArgs by navArgs()
     /** @suppress */
-    private lateinit var product: Product
+    private lateinit var product: ProductViewModel
     /** @suppress */
-    private lateinit var updatedProduct: Product
+    private lateinit var updatedProduct: ProductViewModel
 
     /** {@inheritDoc} */
     override fun onCreateView(
@@ -75,14 +73,15 @@ class ProductInfoFragment : DaggerFragment(),
      *
      */
     override fun initViews() {
-        product = ParcelableProductMapper.fromParcelable(productArgs.product)
+        product = productArgs.product
         updatedProduct = product
 
         tvCreationDate.text = context!!.resources.getString(
             R.string.expiration_format,
             product.creationDate.dayOfMonth.toString(),
             product.creationDate.monthOfYear.toString(),
-            product.creationDate.year.toString())
+            product.creationDate.year.toString()
+        )
         updateViews()
         setListeners()
     }
@@ -92,10 +91,10 @@ class ProductInfoFragment : DaggerFragment(),
      *
      */
     override fun setListeners() {
-        ibEaten.setOnClickListener{ onEatenButtonClicked() }
-        ibDeleted.setOnClickListener{ onDeleteButtonClicked() }
-        ibEditName.setOnClickListener{ onEditNameClicked() }
-        ibEditExpDate.setOnClickListener{ onEditExpirationDateClicked() }
+        ibEaten.setOnClickListener { onEatenButtonClicked() }
+        ibDeleted.setOnClickListener { onDeleteButtonClicked() }
+        ibEditName.setOnClickListener { onEditNameClicked() }
+        ibEditExpDate.setOnClickListener { onEditExpirationDateClicked() }
     }
 
     /**
@@ -108,7 +107,8 @@ class ProductInfoFragment : DaggerFragment(),
             R.string.expiration_format,
             product.expirationDate.dayOfMonth.toString(),
             product.expirationDate.monthOfYear.toString(),
-            product.expirationDate.year.toString())
+            product.expirationDate.year.toString()
+        )
     }
 
     /**
@@ -137,7 +137,13 @@ class ProductInfoFragment : DaggerFragment(),
                 it1,
                 DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
                     val expirationDate =
-                        DateTime(year, monthOfYear + ScannerFragment.MONTHS_OFFSET, dayOfMonth, 0, 0)
+                        DateTime(
+                            year,
+                            monthOfYear + ScannerFragment.MONTHS_OFFSET,
+                            dayOfMonth,
+                            0,
+                            0
+                        )
                     onExpirationDateChanged(expirationDate)
                 }, year, month - ScannerFragment.MONTHS_OFFSET, day
             )
@@ -154,7 +160,11 @@ class ProductInfoFragment : DaggerFragment(),
                 dpd
             )
             dpd.datePicker.minDate = currentDate.millis
-            dpd.datePicker.updateDate(this.product.expirationDate.year, this.product.expirationDate.monthOfYear - 1, this.product.expirationDate.dayOfMonth)
+            dpd.datePicker.updateDate(
+                this.product.expirationDate.year,
+                this.product.expirationDate.monthOfYear - 1,
+                this.product.expirationDate.dayOfMonth
+            )
             dpd.show()
         }
     }
@@ -164,9 +174,11 @@ class ProductInfoFragment : DaggerFragment(),
      *
      */
     override fun onEatenButtonClicked() {
-        NavHostFragment.
-            findNavController(fragmentHost).
-            navigate(ProductListFragmentDirections.actionGlobalProductListFragment(ParcelableProductMapper.toParcelable(product, DeleteType.EATEN)))
+        NavHostFragment.findNavController(fragmentHost).navigate(
+            ProductListFragmentDirections.actionGlobalProductListFragment(
+                product
+            )
+        )
     }
 
     /**
@@ -174,9 +186,11 @@ class ProductInfoFragment : DaggerFragment(),
      *
      */
     override fun onDeleteButtonClicked() {
-        NavHostFragment.
-            findNavController(fragmentHost).
-            navigate(ProductListFragmentDirections.actionGlobalProductListFragment(ParcelableProductMapper.toParcelable(product, DeleteType.THROWN_AWAY)))
+        NavHostFragment.findNavController(fragmentHost).navigate(
+            ProductListFragmentDirections.actionGlobalProductListFragment(
+                product
+            )
+        )
     }
 
     /**
@@ -184,8 +198,10 @@ class ProductInfoFragment : DaggerFragment(),
      *
      */
     override fun onNameChanged(productName: String) {
-        updatedProduct = Product(product.uid, productName, product.expirationDate, product.creationDate, product.indicationColor)
-        presenter.updateProduct(updatedProduct)
+        updatedProduct = product.apply {
+            this.productName = productName
+        }
+        presenter.onProductUpdate(updatedProduct)
     }
 
     /**
@@ -193,8 +209,10 @@ class ProductInfoFragment : DaggerFragment(),
      *
      */
     override fun onExpirationDateChanged(expirationDate: DateTime) {
-        updatedProduct = Product(product.uid, product.productName, expirationDate, product.creationDate, product.indicationColor)
-        presenter.updateProduct(updatedProduct)
+        updatedProduct = product.apply {
+            this.expirationDate = expirationDate
+        }
+        presenter.onProductUpdate(updatedProduct)
     }
 
     /**

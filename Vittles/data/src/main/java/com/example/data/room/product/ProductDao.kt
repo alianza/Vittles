@@ -2,6 +2,7 @@ package com.example.data.room.product
 
 import androidx.room.*
 import com.example.data.room.wastereport.WasteReportEntity
+import io.reactivex.Observable
 import io.reactivex.Single
 
 /**
@@ -20,7 +21,7 @@ interface ProductDao {
      * @return list of products as a result from the query.
      */
     @Query("SELECT * FROM ProductEntity ORDER BY expiration_date")
-    fun getAll(): Single<List<ProductEntity>>
+    fun getAll(): Observable<List<ProductEntity>>
 
     /**
      * Retrieves all products from the database with the given uid's in the parameters.
