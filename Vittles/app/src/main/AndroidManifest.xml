@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
-        android:name=".VittlesApp"
+        android:name=".app.VittlesApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -17,7 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".MainActivity"
+        <activity android:name=".main.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.Launcher"
             android:windowSoftInputMode="adjustPan|stateHidden"

@@ -1,10 +1,11 @@
-package com.example.vittles
+package com.example.vittles.app
 
 import android.Manifest
 import androidx.core.app.NotificationManagerCompat
 import com.example.domain.settings.model.NotificationSchedule
-import com.example.vittles.di.AppModule
-import com.example.vittles.di.DaggerAppComponent
+import com.example.vittles.R
+import com.example.vittles.app.di.AppModule
+import com.example.vittles.app.di.DaggerAppComponent
 import com.example.vittles.services.notification.NotificationService
 import com.example.vittles.services.notification.NotificationScheduleService
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException

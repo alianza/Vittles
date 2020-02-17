@@ -7,7 +7,7 @@
     android:paddingTop="16dp"
     android:paddingStart="24dp"
     android:paddingEnd="24dp"
-    tools:context=".MainActivity"
+    tools:context=".main.MainActivity"
     tools:ignore="NestedWeights">
 
     <LinearLayout

@@ -1,6 +1,6 @@
-package com.example.vittles.di
+package com.example.vittles.app.di
 
-import com.example.vittles.VittlesApp
+import com.example.vittles.app.VittlesApp
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjector

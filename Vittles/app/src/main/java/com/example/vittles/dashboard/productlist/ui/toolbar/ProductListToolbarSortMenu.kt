@@ -1,143 +1,45 @@
 package com.example.vittles.dashboard.productlist.ui.toolbar
 
-import android.annotation.SuppressLint
-import android.app.AlertDialog
-import android.content.Context
+import android.app.Dialog
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.TextView
+import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import com.example.vittles.R
-import com.example.vittles.dashboard.productlist.ui.list.ProductAdapter
-import com.example.vittles.dashboard.model.ProductViewModel
-import kotlinx.android.synthetic.main.dialog_sort.view.*
+import com.example.vittles.dashboard.model.ProductSortingType
+import com.example.vittles.dashboard.productlist.ProductListTextProvider
+import dagger.android.support.DaggerDialogFragment
+import javax.inject.Inject
 
-class ProductListToolbarSortMenu(private var sortList: ArrayList<ProductViewModel>, private var adapter: ProductAdapter) {
+class ProductListToolbarSortMenu @Inject constructor(
+    private val provider: ProductListTextProvider
+) : DaggerDialogFragment() {
 
-    var currentSortingType: SortingType =
-        SortingType.DAYS_REMAINING_ASC
-    private lateinit var btnSort: TextView
-    private lateinit var alertDialog: AlertDialog
-    private lateinit var previousSortingType: SortingType
-    lateinit var view: View
-
-    /**
-     * Sets enums for all of the different sorting options
-     *
-     * @param textId Text id of the string.
-     */
-    enum class SortingType(val textId: Int) {
-        DAYS_REMAINING_ASC(R.string.days_remaining_lh),
-        DAYS_REMAINING_DESC(R.string.days_remaining_hl),
-        ALPHABETIC_AZ(R.string.alphabetic_az),
-        ALPHABETIC_ZA(R.string.alphabetic_za),
-        NEWEST(R.string.newest),
-        OLDEST(R.string.oldest)
-    }
-
-    /**
-     * Inflates the sortingMenu.
-     *
-     * @param context The context in which the sortingMenu is active.
-     * @param button The button which shows the current sortingType.
-     * @param filteredList The list that should be sorted.
-     */
-    @SuppressLint("InflateParams")
-    fun openMenu(context: Context, button: TextView, filteredList: ArrayList<ProductViewModel>) {
-
-        val mDialogView =
-            LayoutInflater.from(context).inflate(R.layout.dialog_sort, null)
-        val mBuilder =
-            AlertDialog.Builder(context).setView(mDialogView)
-        val  mAlertDialog = mBuilder.show()
-
-        btnSort = button
-        alertDialog = mAlertDialog
-        view = mDialogView
-        sortList = filteredList
-
-        setCircleColor()
-        setListeners()
-    }
-
-    /**
-     * Called when text is entered in the search view.
-     *
-     * @param sortList The list that should be sorted.
-     */
-    fun sortFilteredList(sortList: ArrayList<ProductViewModel>) {
-        onSortClick(currentSortingType, sortList)
-    }
-
-    /**
-     * Sets all the onClickListeners
-     *
-     */
-    private fun setListeners() {
-        view.daysRemainingLH.setOnClickListener { onSortClick(SortingType.DAYS_REMAINING_ASC, sortList)  }
-        view.daysRemainingHL.setOnClickListener { onSortClick(SortingType.DAYS_REMAINING_DESC, sortList) }
-        view.alfabeticAZ.setOnClickListener { onSortClick(SortingType.ALPHABETIC_AZ, sortList) }
-        view.alfabeticZA.setOnClickListener { onSortClick(SortingType.ALPHABETIC_ZA, sortList) }
-        view.newest.setOnClickListener { onSortClick(SortingType.NEWEST, sortList) }
-        view.oldest.setOnClickListener { onSortClick(SortingType.OLDEST, sortList) }
-    }
-
-    /**
-     * Handles all actions that happen when a button is clicked
-     *
-     * @param sortingType The sortingType which was selected by the user.
-     * @param sortList The list that should be sorted.
-     */
-    private fun onSortClick(sortingType: SortingType, sortList: ArrayList<ProductViewModel>) {
-        when(sortingType) {
-            SortingType.DAYS_REMAINING_ASC -> sortList.sortBy { it.expirationDate }
-            SortingType.DAYS_REMAINING_DESC -> sortList.sortByDescending { it.expirationDate }
-            SortingType.ALPHABETIC_AZ -> sortList.sortBy { it.productName }
-            SortingType.ALPHABETIC_ZA -> sortList.sortByDescending { it.productName }
-            SortingType.NEWEST -> sortList.sortByDescending { it.creationDate }
-            else -> sortList.sortBy { it.creationDate }
-        }
-        previousSortingType = currentSortingType
-        currentSortingType = sortingType
-        adapter.submitList(sortList)
-        adapter.notifyDataSetChanged()
-
-        if (currentSortingType != previousSortingType) {
-            setSortBtnText(sortingType)
-        }
-
-        if (::alertDialog.isInitialized) {
-            alertDialog.dismiss()
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return requireActivity().let {
+            val selectedItems = ArrayList<Int>() // Where we track the selected items
+            val builder = AlertDialog.Builder(it)
+                // Set the dialog title
+//            builder.setTitle(R.string.pick_toppings)
+                // Specify the list array, the items to be selected by default (null for none),
+                // and the listener through which to receive callbacks when items are selected
+                .setMultiChoiceItems(
+                    ProductSortingType.values().map(provider::getSortingTypeText).toTypedArray(), null
+                ) { dialog, which, isChecked ->
+                    if (isChecked) {
+                        // If the user checked the item, add it to the selected items
+                        selectedItems.add(which)
+                    } else if (selectedItems.contains(which)) {
+                        // Else, if the item is already in the array, remove it
+                        selectedItems.remove(Integer.valueOf(which))
+                    }
+                }
+            builder.create()
         }
     }
 
-    /**
-     * Sets the circle alpha to 1 of the selected sorting method.
-     *
-     */
-    private fun setCircleColor() {
-        when (currentSortingType) {
-            SortingType.DAYS_REMAINING_ASC -> view.daysRemainingAsc.alpha = 1f
-            SortingType.DAYS_REMAINING_DESC -> view.daysRemainingDesc.alpha = 1f
-            SortingType.ALPHABETIC_AZ -> view.alfabeticAz.alpha = 1f
-            SortingType.ALPHABETIC_ZA -> view.alfabeticZa.alpha = 1f
-            SortingType.NEWEST -> view.newestSelected.alpha = 1f
-            else -> view.oldestSelected.alpha = 1f
-        }
-    }
-
-    /**
-     * Sets the buttonText to the current sorting method.
-     *
-     * @param sortingType The sortingType which was selected by the user.
-     */
-    private fun setSortBtnText(sortingType: SortingType) {
-        when(sortingType) {
-            SortingType.DAYS_REMAINING_ASC -> btnSort.text = view.daysRemainingLH.text
-            SortingType.DAYS_REMAINING_DESC -> btnSort.text = view.daysRemainingHL.text
-            SortingType.ALPHABETIC_AZ -> btnSort.text = view.alfabeticAZ.text
-            SortingType.ALPHABETIC_ZA -> btnSort.text = view.alfabeticZA.text
-            SortingType.NEWEST -> btnSort.text = view.newest.text
-            else -> btnSort.text = view.oldest.text
-        }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.dialog_sort, container, false)
     }
 }

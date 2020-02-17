@@ -16,7 +16,7 @@ import com.example.domain.settings.GetPerformanceSetting
 import com.example.domain.settings.GetVibrationEnabled
 import com.example.domain.settings.SetPerformanceSetting
 import com.example.domain.settings.model.PerformanceSetting
-import com.example.vittles.VittlesApp.PermissionProperties.REQUIRED_PERMISSIONS
+import com.example.vittles.app.VittlesApp.PermissionProperties.REQUIRED_PERMISSIONS
 import com.example.vittles.mvp.BasePresenter
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
 import io.reactivex.android.schedulers.AndroidSchedulers

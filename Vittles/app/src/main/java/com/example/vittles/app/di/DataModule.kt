@@ -1,4 +1,4 @@
-package com.example.vittles.di
+package com.example.vittles.app.di
 
 import android.content.Context
 import com.example.data.retrofit.off.OffApi

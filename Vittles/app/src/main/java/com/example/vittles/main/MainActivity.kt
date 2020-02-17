@@ -1,9 +1,8 @@
-package com.example.vittles
+package com.example.vittles.main
 
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.MenuItem
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.ActionMenuView
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
@@ -17,8 +16,11 @@ import com.google.android.material.bottomappbar.BottomAppBar
 import kotlinx.android.synthetic.main.content_main.*
 import androidx.navigation.findNavController as findNavSetup
 import android.content.Intent
+import com.example.vittles.NavigationGraphDirections
+import com.example.vittles.R
 import com.example.vittles.enums.PreviousFragmentIndex
 import com.example.vittles.settings.SettingsFragment
+import dagger.android.support.DaggerAppCompatActivity
 
 
 /**
@@ -27,7 +29,7 @@ import com.example.vittles.settings.SettingsFragment
  * @author Jeroen Flietstra
  * @author Fethi Tewelde
  */
-class MainActivity : AppCompatActivity() {
+class MainActivity : DaggerAppCompatActivity() {
     /**
      * The Navigation Controller of the application.
      */
@@ -35,7 +37,11 @@ class MainActivity : AppCompatActivity() {
 
     /** All the top-level destinations of the application **/
     private val topLevelDestinations =
-        arrayOf(R.id.productListFragment, R.id.wasteReportFragment, R.id.settingsFragment)
+        arrayOf(
+            R.id.productListFragment,
+            R.id.wasteReportFragment,
+            R.id.settingsFragment
+        )
 
     /** {@inheritDoc}*/
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -268,7 +274,11 @@ class MainActivity : AppCompatActivity() {
             is SettingsFragment -> PreviousFragmentIndex.SETTINGS
             else -> PreviousFragmentIndex.PRODUCT_LIST
         }
-        findNavController(fragmentHost).navigate(NavigationGraphDirections.actionGlobalScannerFragment(previousFragment() as Int))
+        findNavController(fragmentHost).navigate(
+            NavigationGraphDirections.actionGlobalScannerFragment(
+                previousFragment() as Int
+            )
+        )
     }
 
     /**

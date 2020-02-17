@@ -82,6 +82,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
             ).also {
                 rvProducts.adapter = it
                 productListToolbar.adapter = it
+                productListToolbar.parent = this
             }
     }
 
