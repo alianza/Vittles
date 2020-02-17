@@ -1,4 +1,4 @@
-package com.example.vittles.productlist.productlist
+package com.example.vittles.dashboard.productlist
 
 import android.content.Context
 import android.graphics.Color
@@ -7,17 +7,16 @@ import android.os.Vibrator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.vittles.R
 import com.example.vittles.enums.DeleteType
-import com.example.vittles.productlist.model.ProductViewModel
+import com.example.vittles.dashboard.model.ProductViewModel
+import com.example.vittles.dashboard.productlist.ui.list.ProductAdapter
+import com.example.vittles.dashboard.productlist.ui.list.ProductItemTouchHelper
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.content_main.*
-import kotlinx.android.synthetic.main.content_main.view.*
 import kotlinx.android.synthetic.main.fragment_productlist.*
 import java.util.*
 import javax.inject.Inject
@@ -44,20 +43,6 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         vibrator = requireContext().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-        itemTouchHelper =
-            ProductItemTouchHelper(
-                ProductItemTouchHelper.ProductItemTouchCallback(
-                    requireContext(),
-                    this::onProductSwiped
-                )
-            )
-        adapter =
-            ProductAdapter(
-                this::onProductClicked,
-                this::onProductRemoveClicked,
-                itemTouchHelper
-            )
-
         initViews()
         super.onViewCreated(view, savedInstanceState)
     }
@@ -78,9 +63,26 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
         }.apply {
             supportsPredictiveItemAnimations()
         }
-        rvProducts.adapter = adapter
 
-        itemTouchHelper.attachToRecyclerView(rvProducts)
+        itemTouchHelper =
+            ProductItemTouchHelper(
+                ProductItemTouchHelper.ProductItemTouchCallback(
+                    requireContext(),
+                    this::onProductSwiped
+                )
+            ).apply {
+                attachToRecyclerView(rvProducts)
+            }
+
+        adapter =
+            ProductAdapter(
+                this::onProductClicked,
+                this::onProductRemoveClicked,
+                itemTouchHelper
+            ).also {
+                rvProducts.adapter = it
+                productListToolbar.adapter = it
+            }
     }
 
     override fun onProductsUpdated(products: List<ProductViewModel>) {
@@ -115,23 +117,27 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
         private val deleteType: DeleteType
     ) : BaseTransientBottomBar.BaseCallback<Snackbar>() {
 
+        private val index = adapter.currentList.indexOf(product)
+
         init {
-            presenter.onProductDelete(product, deleteType)
+            adapter.submitList(adapter.products.apply { remove(product) })
         }
 
         override fun onShown(transientBottomBar: Snackbar?) {
             transientBottomBar?.setText(
                 "${product.productName} has been ${deleteType
-                .toString()
-                .toLowerCase(Locale.getDefault())
-                .replace("_", " ")}"
+                    .toString()
+                    .toLowerCase(Locale.getDefault())
+                    .replace("_", " ")}"
             )
             super.onShown(transientBottomBar)
         }
 
         override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
             if (event == Snackbar.Callback.DISMISS_EVENT_ACTION) {
-                presenter.onProductInsert(product)
+                adapter.submitList(adapter.products.apply { add(index, product) })
+            } else {
+                presenter.onProductDelete(product, deleteType)
             }
             super.onDismissed(transientBottomBar, event)
         }

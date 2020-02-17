@@ -1,7 +1,7 @@
-package com.example.vittles.productlist.productlist
+package com.example.vittles.dashboard.productlist
 
 import com.example.vittles.enums.DeleteType
-import com.example.vittles.productlist.model.ProductViewModel
+import com.example.vittles.dashboard.model.ProductViewModel
 
 /**
  * MVP Contract for products overview.

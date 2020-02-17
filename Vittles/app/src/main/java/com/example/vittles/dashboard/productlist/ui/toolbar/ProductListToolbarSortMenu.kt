@@ -1,4 +1,4 @@
-package com.example.vittles.services.sorting
+package com.example.vittles.dashboard.productlist.ui.toolbar
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
@@ -7,26 +7,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
 import com.example.vittles.R
-import com.example.vittles.productlist.productlist.ProductAdapter
-import com.example.vittles.productlist.model.ProductViewModel
+import com.example.vittles.dashboard.productlist.ui.list.ProductAdapter
+import com.example.vittles.dashboard.model.ProductViewModel
 import kotlinx.android.synthetic.main.dialog_sort.view.*
 
-/**
- * Class for the sorting Menu, This menu shows all the sorting types and the current sorting type.
- *
- * @author Marc van Spronsen
- *
- * @property currentSortingType The current sorting type that is used.
- * @property previousSortingType The previous sorting type that was used.
- * @property sortList The list that should be sorted.
- * @property adapter the adapter for the list that should be sorted.
- * @property btnSort The button which shows the current sortingType.
- * @property alertDialog The entire alertDialog of the sortMenu.
- * @property view The View which holds the sortingMenu.
- */
-class SortMenu (private var sortList: ArrayList<ProductViewModel>, private var adapter: ProductAdapter) {
+class ProductListToolbarSortMenu(private var sortList: ArrayList<ProductViewModel>, private var adapter: ProductAdapter) {
 
-    var currentSortingType: SortingType = SortingType.DAYS_REMAINING_ASC
+    var currentSortingType: SortingType =
+        SortingType.DAYS_REMAINING_ASC
     private lateinit var btnSort: TextView
     private lateinit var alertDialog: AlertDialog
     private lateinit var previousSortingType: SortingType
@@ -38,17 +26,11 @@ class SortMenu (private var sortList: ArrayList<ProductViewModel>, private var a
      * @param textId Text id of the string.
      */
     enum class SortingType(val textId: Int) {
-        /** Sort by days remaining ascending. */
         DAYS_REMAINING_ASC(R.string.days_remaining_lh),
-        /** Sort by days remaining descending. */
         DAYS_REMAINING_DESC(R.string.days_remaining_hl),
-        /** Sort alphabetically ascending */
         ALPHABETIC_AZ(R.string.alphabetic_az),
-        /** Sort alphabetically descending. */
         ALPHABETIC_ZA(R.string.alphabetic_za),
-        /** Sort by newest. */
         NEWEST(R.string.newest),
-        /** Sort by oldest. */
         OLDEST(R.string.oldest)
     }
 

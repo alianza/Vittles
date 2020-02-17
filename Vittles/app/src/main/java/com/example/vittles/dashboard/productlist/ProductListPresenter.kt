@@ -1,4 +1,4 @@
-package com.example.vittles.productlist.productlist
+package com.example.vittles.dashboard.productlist
 
 import com.example.domain.product.AddProduct
 import com.example.domain.product.DeleteProduct
@@ -12,8 +12,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.joda.time.DateTime
 import com.example.vittles.extension.*
-import com.example.vittles.productlist.ProductMapper
-import com.example.vittles.productlist.model.ProductViewModel
+import com.example.vittles.dashboard.ProductMapper
+import com.example.vittles.dashboard.model.ProductViewModel
 import javax.inject.Inject
 
 /**

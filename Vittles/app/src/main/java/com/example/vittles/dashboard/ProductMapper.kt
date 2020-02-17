@@ -1,7 +1,7 @@
-package com.example.vittles.productlist
+package com.example.vittles.dashboard
 
 import com.example.domain.product.Product
-import com.example.vittles.productlist.model.ProductViewModel
+import com.example.vittles.dashboard.model.ProductViewModel
 import javax.inject.Inject
 
 class ProductMapper @Inject constructor() {

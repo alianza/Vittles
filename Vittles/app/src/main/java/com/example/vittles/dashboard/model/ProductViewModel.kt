@@ -1,4 +1,4 @@
-package com.example.vittles.productlist.model
+package com.example.vittles.dashboard.model
 
 import android.os.Parcelable
 import com.example.domain.consts.DAYS_REMAINING_BOUNDARY_CLOSE

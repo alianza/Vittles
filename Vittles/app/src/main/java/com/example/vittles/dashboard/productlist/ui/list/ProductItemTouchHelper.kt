@@ -1,4 +1,4 @@
-package com.example.vittles.productlist.productlist
+package com.example.vittles.dashboard.productlist.ui.list
 
 import android.content.Context
 import android.view.View
@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_product.view.*
 import android.graphics.*
 import com.example.vittles.enums.DeleteType
-import com.example.vittles.productlist.model.ProductViewModel
+import com.example.vittles.dashboard.model.ProductViewModel
 import java.lang.UnsupportedOperationException
 import kotlin.math.sign
 

@@ -1,8 +1,8 @@
 package com.example.vittles.di
 
 import com.example.vittles.settings.SettingsFragment
-import com.example.vittles.productlist.productlist.ProductListFragment
-import com.example.vittles.productlist.productinfo.ProductInfoFragment
+import com.example.vittles.dashboard.productlist.ProductListFragment
+import com.example.vittles.dashboard.productinfo.ProductInfoFragment
 import com.example.vittles.scanning.ScannerFragment
 import com.example.vittles.services.notification.NotificationScheduleService
 import com.example.vittles.wastereport.barchart.BarChartFragment

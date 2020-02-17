@@ -15,7 +15,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.example.domain.notification.Notification
 import com.example.vittles.R
-import com.example.vittles.productlist.productlist.ProductListFragment
+import com.example.vittles.dashboard.productlist.ProductListFragment
 
 /**
  * Creates a notification Channel and Notifications

@@ -1,6 +1,6 @@
-package com.example.vittles.productlist.productinfo
+package com.example.vittles.dashboard.productinfo
 
-import com.example.vittles.productlist.model.ProductViewModel
+import com.example.vittles.dashboard.model.ProductViewModel
 import org.joda.time.DateTime
 
 /**

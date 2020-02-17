@@ -1,4 +1,4 @@
-package com.example.vittles.productlist.productlist
+package com.example.vittles.dashboard.productlist.ui.list
 
 import android.content.Context
 import android.graphics.Canvas
@@ -54,8 +54,12 @@ class ProductItemSwipeAnimator {
     private fun setBackground(context: Context, c: Canvas, vh: RecyclerView.ViewHolder, direction: Int) {
         val background = ColorDrawable()
         background.color = when (direction) {
-            ItemTouchHelper.RIGHT -> ContextCompat.getColor(context, SWIPE_RIGHT_CANVAS_COLOR)
-            ItemTouchHelper.LEFT -> ContextCompat.getColor(context, SWIPE_LEFT_CANVAS_COLOR)
+            ItemTouchHelper.RIGHT -> ContextCompat.getColor(context,
+                SWIPE_RIGHT_CANVAS_COLOR
+            )
+            ItemTouchHelper.LEFT -> ContextCompat.getColor(context,
+                SWIPE_LEFT_CANVAS_COLOR
+            )
             else -> throw UnsupportedOperationException()
         }
         background.setBounds(

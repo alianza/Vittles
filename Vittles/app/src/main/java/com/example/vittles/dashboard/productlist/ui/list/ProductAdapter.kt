@@ -1,17 +1,19 @@
-package com.example.vittles.productlist.productlist
+package com.example.vittles.dashboard.productlist.ui.list
 
 import android.content.Context
 import android.graphics.PorterDuff
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vittles.R
-import com.example.vittles.productlist.model.ProductViewModel
+import com.example.vittles.dashboard.model.ProductViewModel
 import kotlinx.android.synthetic.main.item_product.view.*
 import javax.inject.Inject
 
@@ -20,14 +22,22 @@ class ProductAdapter @Inject constructor(
     private val onRemoveItemClicked: (ProductViewModel) -> Unit,
     private val itemTouchHelper: ProductItemTouchHelper
 ) :
-    ListAdapter<ProductViewModel, ProductAdapter.ViewHolder>(itemDiff) {
+    ListAdapter<ProductViewModel, ProductAdapter.ViewHolder>(
+        itemDiff
+    ), Filterable {
 
     lateinit var context: Context
+    private val filter = ProductListFilter(this)
 
     var products: ArrayList<ProductViewModel> = arrayListOf()
         set(value) {
             field = value
-            submitList(value)
+            itemTouchHelper.products = value
+        }
+
+    var filteredProducts: ArrayList<ProductViewModel> = arrayListOf()
+        set(value) {
+            field = value
             itemTouchHelper.products = value
         }
 
@@ -43,33 +53,24 @@ class ProductAdapter @Inject constructor(
     }
 
     override fun getItemId(position: Int): Long {
-        return position.toLong()
+        return getItem(position).uid.toLong()
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(currentList[position])
     }
 
+    override fun getFilter(): Filter = filter
+
     override fun submitList(list: List<ProductViewModel>?) {
-        list?.let { itemTouchHelper.products = list }
+        list?.let { products = ArrayList(list) }
         super.submitList(list)
     }
 
-//    fun removeProduct(position: Int) {
-//        products = products.apply { removeAt(position) }
-////        notifyItemRemoved(position)
-////        if (position > 0) {
-////            notifyItemChanged(position - 1)
-////        }
-//    }
-//
-//    fun insertProduct(position: Int, product: ProductViewModel) {
-//        products = products.apply { add(position, product) }
-////        notifyItemInserted(position)
-////        if (position > 0) {
-////            notifyItemChanged(position - 1)
-////        }
-//    }
+    fun submitFilteredList(list: List<ProductViewModel>) {
+        filteredProducts = ArrayList(list)
+        super.submitList(list)
+    }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
