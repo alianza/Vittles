@@ -48,13 +48,6 @@ class ProductListPresenter @Inject internal constructor(
             .subscribe({ view.onProductsUpdated(it) }, { TODO() })
             .addTo(disposables)
     }
-    /**
-     * Loads the products.
-     *
-     */
-    override fun startPresenting() {
-
-    }
 
     /**
      * Deletes a product.

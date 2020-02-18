@@ -23,6 +23,7 @@
             android:id="@+id/rvProducts"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:clipToPadding="false"
             android:overScrollMode="never"
             android:backgroundTint="@android:color/white"
             app:layout_constraintBottom_toBottomOf="parent"

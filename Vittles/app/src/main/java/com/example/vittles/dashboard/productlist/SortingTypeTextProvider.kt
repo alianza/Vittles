@@ -5,11 +5,11 @@ import com.example.vittles.R
 import com.example.vittles.dashboard.model.ProductSortingType
 import javax.inject.Inject
 
-class ProductListTextProvider @Inject internal constructor(
+class SortingTypeTextProvider @Inject internal constructor(
     private val context: Context
-) : ProductListContract.Provider {
+) {
 
-    override fun getSortingTypeText(sortingType: ProductSortingType): String {
+    fun getSortingTypeText(sortingType: ProductSortingType): String {
         return when (sortingType) {
             ProductSortingType.DAYS_REMAINING_ASC -> context.getString(R.string.days_remaining_lh)
             ProductSortingType.DAYS_REMAINING_DESC -> context.getString(R.string.days_remaining_hl)

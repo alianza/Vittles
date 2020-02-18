@@ -1,45 +1,59 @@
 package com.example.vittles.dashboard.productlist.ui.toolbar
 
+import android.annotation.SuppressLint
 import android.app.Dialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import com.example.vittles.R
 import com.example.vittles.dashboard.model.ProductSortingType
-import com.example.vittles.dashboard.productlist.ProductListTextProvider
+import com.example.vittles.dashboard.productlist.SortingTypeTextProvider
 import dagger.android.support.DaggerDialogFragment
-import javax.inject.Inject
+import kotlinx.android.synthetic.main.select_dialog_singlechoice.view.*
 
-class ProductListToolbarSortMenu @Inject constructor(
-    private val provider: ProductListTextProvider
-) : DaggerDialogFragment() {
+class ProductListToolbarSortMenu(
+    private val provider: SortingTypeTextProvider,
+    private val onItemSelected: (sortingType: ProductSortingType) -> Unit,
+    private val sortingType: ProductSortingType
+) : DaggerDialogFragment(), DialogInterface.OnClickListener {
+
+    private lateinit var adapter: ArrayAdapter<String>
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return requireActivity().let {
-            val selectedItems = ArrayList<Int>() // Where we track the selected items
-            val builder = AlertDialog.Builder(it)
-                // Set the dialog title
-//            builder.setTitle(R.string.pick_toppings)
-                // Specify the list array, the items to be selected by default (null for none),
-                // and the listener through which to receive callbacks when items are selected
-                .setMultiChoiceItems(
-                    ProductSortingType.values().map(provider::getSortingTypeText).toTypedArray(), null
-                ) { dialog, which, isChecked ->
-                    if (isChecked) {
-                        // If the user checked the item, add it to the selected items
-                        selectedItems.add(which)
-                    } else if (selectedItems.contains(which)) {
-                        // Else, if the item is already in the array, remove it
-                        selectedItems.remove(Integer.valueOf(which))
+            adapter = object : ArrayAdapter<String>(
+                requireContext(),
+                R.layout.select_dialog_singlechoice,
+                R.id.tvSortingOption,
+                ProductSortingType.values().map(provider::getSortingTypeText).toTypedArray()
+            ) {
+                @SuppressLint("ViewHolder")
+                override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+                    return LayoutInflater.from(requireContext()).inflate(R.layout.select_dialog_singlechoice, parent, false).apply {
+                        if (position == sortingType.ordinal) {
+                            convertView?.ivCheckbox?.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_circle_darkened_filled))
+                        }
                     }
                 }
+            }
+            val builder = AlertDialog.Builder(it).apply {
+                view?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_cr)
+                setSingleChoiceItems(adapter, 0, this@ProductListToolbarSortMenu)
+            }
             builder.create()
         }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.dialog_sort, container, false)
+    }
+
+    override fun onClick(p0: DialogInterface?, p1: Int) {
+        onItemSelected.invoke(ProductSortingType.values()[p1])
     }
 }

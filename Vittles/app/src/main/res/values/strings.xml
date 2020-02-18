@@ -62,10 +62,10 @@
     <!--    Sorting-->
     <string name="sort_by">Sort by</string>
     <string name="sorting">Sorting </string>
-    <string name="days_remaining_lh">Days Remaining (Asc)</string>
-    <string name="days_remaining_hl">Days Remaining (Desc)</string>
-    <string name="alphabetic_az">Alphabetic (A-Z)</string>
-    <string name="alphabetic_za">Alphabetic (Z-A)</string>
+    <string name="days_remaining_lh">Days remaining (asc)</string>
+    <string name="days_remaining_hl">Days remaining (desc)</string>
+    <string name="alphabetic_az">Alphabetic (asc)</string>
+    <string name="alphabetic_za">Alphabetic (desc)</string>
     <string name="newest">Newest</string>
     <string name="oldest">Oldest</string>
 

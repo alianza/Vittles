@@ -6,16 +6,19 @@ import android.view.LayoutInflater
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import com.example.vittles.R
-import com.example.vittles.dashboard.productlist.ProductListTextProvider
+import com.example.vittles.dashboard.model.ProductSortingType
+import com.example.vittles.dashboard.productlist.SortingTypeTextProvider
 import com.example.vittles.dashboard.productlist.ui.list.ProductAdapter
 import com.example.vittles.extension.setGone
 import com.example.vittles.extension.setVisible
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.toolbar_productlist.view.*
-import javax.inject.Inject
 
 class ProductListToolbar (context: Context, attrs: AttributeSet) : AppBarLayout(context, attrs),
     SearchView.OnQueryTextListener {
+
+    private var provider: SortingTypeTextProvider? = null
+    private var sortingType = ProductSortingType.DAYS_REMAINING_ASC
 
     var adapter: ProductAdapter? = null
         set(value) {
@@ -39,9 +42,13 @@ class ProductListToolbar (context: Context, attrs: AttributeSet) : AppBarLayout(
         ibCloseSearch.setOnClickListener { closeSearchInput() }
         btnSort.setOnClickListener {
             parent?.let {
+                provider = SortingTypeTextProvider(it.requireContext())
                 ProductListToolbarSortMenu(
-                    ProductListTextProvider(it.requireContext())
-                ).show(it.requireFragmentManager(), TAG)
+                    provider!!,
+                    this::onSortingTypeSelected,
+                    sortingType
+                )
+                .show(it.requireFragmentManager(), TAG)
             }
         }
     }
@@ -80,6 +87,15 @@ class ProductListToolbar (context: Context, attrs: AttributeSet) : AppBarLayout(
 
     override fun onQueryTextChange(p0: String?): Boolean {
         return onQueryTextSubmit(p0)
+    }
+
+    private fun onSortingTypeSelected(sortingType: ProductSortingType) {
+        adapter?.let { adapter ->
+            provider?.let {
+                adapter.sort(sortingType)
+                btnSort.tvSortType.text = it.getSortingTypeText(sortingType)
+            }
+        }
     }
 
     companion object {

@@ -98,8 +98,8 @@ class MainActivity : DaggerAppCompatActivity() {
         }
 
         // Distribute the menu items evenly
-        if (navView.childCount > 0) {
-            val actionMenuView = navView.getChildAt(0) as ActionMenuView
+        if (navigationBottomBar.childCount > 0) {
+            val actionMenuView = navigationBottomBar.getChildAt(0) as ActionMenuView
             actionMenuView.layoutParams.width = ActionMenuView.LayoutParams.MATCH_PARENT
         }
     }
@@ -111,7 +111,7 @@ class MainActivity : DaggerAppCompatActivity() {
      * @param fabVisibility Boolean value that represents if the FAB should be visible.
      */
     private fun showBottomNavigationBar(barVisibility: Boolean, fabVisibility: Boolean) {
-        navView.visibility = if (barVisibility) BottomAppBar.VISIBLE else BottomAppBar.GONE
+        navigationBottomBar.visibility = if (barVisibility) BottomAppBar.VISIBLE else BottomAppBar.GONE
         if (fabVisibility) fab.show() else fab.hide()
     }
 
@@ -122,10 +122,10 @@ class MainActivity : DaggerAppCompatActivity() {
     private fun setListeners() {
         fab.setOnClickListener { onAddButtonClick() }
 
-        navView.menu.getItem(0).setOnMenuItemClickListener { onNavigateHomeButtonClick() }
-        navView.menu.getItem(1).setOnMenuItemClickListener { onNavigateSearchButtonClick() }
-        navView.menu.getItem(4).setOnMenuItemClickListener { onNavigateReportsButtonClick() }
-        navView.menu.getItem(5).setOnMenuItemClickListener { onNavigateSettingsButtonClick() }
+        navigationBottomBar.menu.getItem(0).setOnMenuItemClickListener { onNavigateHomeButtonClick() }
+        navigationBottomBar.menu.getItem(1).setOnMenuItemClickListener { onNavigateSearchButtonClick() }
+        navigationBottomBar.menu.getItem(4).setOnMenuItemClickListener { onNavigateReportsButtonClick() }
+        navigationBottomBar.menu.getItem(5).setOnMenuItemClickListener { onNavigateSettingsButtonClick() }
     }
 
     /**
@@ -136,11 +136,11 @@ class MainActivity : DaggerAppCompatActivity() {
     private fun setMenuItemIconColor(menuItem: MenuItem) {
         val wrappedDrawable = setDrawableTint(menuItem.icon, R.color.colorPrimary)
 
-        for (x in 0 until navView.menu.size) {
-            if (navView.menu.getItem(x).isEnabled && navView.menu.getItem(x).title != menuItem.title) {
+        for (x in 0 until navigationBottomBar.menu.size) {
+            if (navigationBottomBar.menu.getItem(x).isEnabled && navigationBottomBar.menu.getItem(x).title != menuItem.title) {
                 val wrappedDrawableToReset =
-                    setDrawableTint(navView.menu.getItem(x).icon, R.color.black)
-                navView.menu.getItem(x).icon = wrappedDrawableToReset
+                    setDrawableTint(navigationBottomBar.menu.getItem(x).icon, R.color.black)
+                navigationBottomBar.menu.getItem(x).icon = wrappedDrawableToReset
             }
         }
 
@@ -171,12 +171,12 @@ class MainActivity : DaggerAppCompatActivity() {
      * @return Returns found MenuItem of null if not found.
      */
     private fun getMenuItemByTitle(title: Int): MenuItem? {
-        for (x in 0 until navView.menu.size) {
-            if (navView.menu.getItem(x).isEnabled && navView.menu.getItem(x).title == getString(
+        for (x in 0 until navigationBottomBar.menu.size) {
+            if (navigationBottomBar.menu.getItem(x).isEnabled && navigationBottomBar.menu.getItem(x).title == getString(
                     title
                 )
             ) {
-                return navView.menu.getItem(x)
+                return navigationBottomBar.menu.getItem(x)
             }
         }
         return null

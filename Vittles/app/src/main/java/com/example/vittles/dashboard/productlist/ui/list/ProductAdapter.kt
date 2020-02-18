@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vittles.R
+import com.example.vittles.dashboard.model.ProductSortingType
 import com.example.vittles.dashboard.model.ProductViewModel
 import kotlinx.android.synthetic.main.item_product.view.*
 import javax.inject.Inject
@@ -67,9 +68,34 @@ class ProductAdapter @Inject constructor(
         super.submitList(list)
     }
 
+    override fun submitList(list: MutableList<ProductViewModel>?, commitCallback: Runnable?) {
+        list?.let { products = ArrayList(list) }
+        super.submitList(list, commitCallback)
+    }
+
     fun submitFilteredList(list: List<ProductViewModel>) {
         filteredProducts = ArrayList(list)
         super.submitList(list)
+    }
+
+    fun sort(sortingType: ProductSortingType) {
+        var index: Int? = null
+        submitList(products.apply {
+            val last = this.lastOrNull()
+            when(sortingType) {
+                ProductSortingType.DAYS_REMAINING_ASC -> sortBy { it.daysRemaining }
+                ProductSortingType.DAYS_REMAINING_DESC -> sortByDescending { it.daysRemaining }
+                ProductSortingType.ALPHABETIC_AZ -> sortBy { it.productName }
+                ProductSortingType.ALPHABETIC_ZA -> sortByDescending { it.productName }
+                ProductSortingType.NEWEST -> sortBy { it.creationDate }
+                ProductSortingType.OLDEST -> sortByDescending { it.creationDate }
+            }
+            index = last?.let{ indexOf(it) }
+        }) {
+            index?.let {
+                notifyDataSetChanged()
+            }
+        }
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -91,23 +117,12 @@ class ProductAdapter @Inject constructor(
                 else -> product.daysRemaining.toString()
             }
 
-            // LayoutParams for setting margins programmatically
-            val lp = ConstraintLayout.LayoutParams(
-                ConstraintLayout.LayoutParams.MATCH_PARENT,
-                ConstraintLayout.LayoutParams.WRAP_CONTENT
-            )
             // Last product in list, remove decorator and add extra bottom-margin
             if (currentList.lastOrNull() == product) {
                 itemView.borderDecorator.visibility = View.INVISIBLE
-                val unbounded = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
-                itemView.measure(unbounded, unbounded)
-                val bottomMargin = itemView.measuredHeight
-                lp.setMargins(0, 0, 0, bottomMargin)
             } else {
                 itemView.borderDecorator.visibility = View.VISIBLE
-                lp.setMargins(0, 0, 0, 0)
             }
-            itemView.layoutParams = lp
 
             // Set values in layout
             itemView.tvName.text = product.productName

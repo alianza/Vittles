@@ -4,9 +4,13 @@ import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Vibrator
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.content.ContextCompat
+import androidx.core.view.updateMarginsRelative
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.vittles.R
@@ -31,6 +35,8 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
     private lateinit var itemTouchHelper: ProductItemTouchHelper
 
     private lateinit var adapter: ProductAdapter
+
+    private var navBarHeight: Int = 0
 
     private val productArgs: ProductListFragmentArgs by navArgs()
 
@@ -63,6 +69,13 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
         }.apply {
             supportsPredictiveItemAnimations()
         }
+
+        val unbounded = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+        navBarHeight = requireActivity().findViewById<CoordinatorLayout>(R.id.coordinator).run {
+            measure(unbounded, unbounded)
+            measuredHeight
+        }
+        rvProducts.setPadding(0, 0, 0, navBarHeight)
 
         itemTouchHelper =
             ProductItemTouchHelper(
@@ -109,7 +122,14 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View {
     private fun createSnackbar(): Snackbar {
         return Snackbar.make(content, "", Snackbar.LENGTH_LONG).apply {
             setAction("UNDO") {}
-            setActionTextColor(Color.WHITE)
+            setActionTextColor(Color.BLACK)
+            setTextColor(Color.BLACK)
+            view.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_cr)
+            val lp = view.layoutParams as CoordinatorLayout.LayoutParams
+            lp.updateMarginsRelative(bottom = 40)
+            lp.gravity = Gravity.CENTER_HORIZONTAL
+            lp.width = (content.width * 0.9).toInt()
+            view.layoutParams = lp
         }
     }
 

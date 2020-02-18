@@ -1,8 +1,7 @@
 package com.example.vittles.dashboard.productlist
 
-import com.example.vittles.dashboard.model.ProductSortingType
-import com.example.vittles.enums.DeleteType
 import com.example.vittles.dashboard.model.ProductViewModel
+import com.example.vittles.enums.DeleteType
 
 /**
  * MVP Contract for products overview.
@@ -16,12 +15,7 @@ interface ProductListContract {
     }
 
     interface Presenter {
-        fun startPresenting()
         fun onProductDelete(product: ProductViewModel, deleteType: DeleteType)
         fun onProductInsert(product: ProductViewModel)
-    }
-
-    interface Provider {
-        fun getSortingTypeText(sortingType: ProductSortingType): String
     }
 }
