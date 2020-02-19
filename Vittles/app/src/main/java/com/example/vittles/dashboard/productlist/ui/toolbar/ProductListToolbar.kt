@@ -92,6 +92,7 @@ class ProductListToolbar (context: Context, attrs: AttributeSet) : AppBarLayout(
     private fun onSortingTypeSelected(sortingType: ProductSortingType) {
         adapter?.let { adapter ->
             provider?.let {
+                this.sortingType = sortingType
                 adapter.sort(sortingType)
                 btnSort.tvSortType.text = it.getSortingTypeText(sortingType)
             }

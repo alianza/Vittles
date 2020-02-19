@@ -1,6 +1,5 @@
 package com.example.vittles.dashboard.productlist.ui.toolbar
 
-import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
@@ -11,10 +10,10 @@ import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import com.example.vittles.R
+import com.example.vittles.SingleChoiceMenuAdapter
 import com.example.vittles.dashboard.model.ProductSortingType
 import com.example.vittles.dashboard.productlist.SortingTypeTextProvider
 import dagger.android.support.DaggerDialogFragment
-import kotlinx.android.synthetic.main.select_dialog_singlechoice.view.*
 
 class ProductListToolbarSortMenu(
     private val provider: SortingTypeTextProvider,
@@ -26,21 +25,12 @@ class ProductListToolbarSortMenu(
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return requireActivity().let {
-            adapter = object : ArrayAdapter<String>(
+            adapter = SingleChoiceMenuAdapter(
                 requireContext(),
                 R.layout.select_dialog_singlechoice,
-                R.id.tvSortingOption,
-                ProductSortingType.values().map(provider::getSortingTypeText).toTypedArray()
-            ) {
-                @SuppressLint("ViewHolder")
-                override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-                    return LayoutInflater.from(requireContext()).inflate(R.layout.select_dialog_singlechoice, parent, false).apply {
-                        if (position == sortingType.ordinal) {
-                            convertView?.ivCheckbox?.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_circle_darkened_filled))
-                        }
-                    }
-                }
-            }
+                ProductSortingType.values().map(provider::getSortingTypeText).toTypedArray(),
+                provider.getSortingTypeText(sortingType)
+            )
             val builder = AlertDialog.Builder(it).apply {
                 view?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_cr)
                 setSingleChoiceItems(adapter, 0, this@ProductListToolbarSortMenu)
@@ -55,5 +45,6 @@ class ProductListToolbarSortMenu(
 
     override fun onClick(p0: DialogInterface?, p1: Int) {
         onItemSelected.invoke(ProductSortingType.values()[p1])
+        requireDialog().cancel()
     }
 }

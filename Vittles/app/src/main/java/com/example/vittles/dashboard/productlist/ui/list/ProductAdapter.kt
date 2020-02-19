@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -36,7 +35,7 @@ class ProductAdapter @Inject constructor(
             itemTouchHelper.products = value
         }
 
-    var filteredProducts: ArrayList<ProductViewModel> = arrayListOf()
+    private var filteredProducts: ArrayList<ProductViewModel> = arrayListOf()
         set(value) {
             field = value
             itemTouchHelper.products = value
@@ -93,7 +92,8 @@ class ProductAdapter @Inject constructor(
             index = last?.let{ indexOf(it) }
         }) {
             index?.let {
-                notifyDataSetChanged()
+                notifyItemChanged(it)
+                notifyItemChanged(currentList.lastIndex)
             }
         }
     }

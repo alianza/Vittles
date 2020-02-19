@@ -8,8 +8,8 @@
     android:layout_weight="6">
 
     <TextView
-        android:id="@+id/tvSortingOption"
-        android:layout_width="wrap_content"
+        android:id="@+id/tvSingleOption"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@android:color/white"
         android:checkMark="?android:attr/listChoiceIndicatorSingle"
@@ -27,7 +27,8 @@
         android:id="@+id/ivCheckbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_circle_darkened"
+        android:src="@drawable/ic_circle"
         tools:ignore="ContentDescription"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        android:layout_marginEnd="@dimen/fab_margin"/>
 </LinearLayout>
