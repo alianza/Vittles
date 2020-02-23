@@ -16,23 +16,17 @@ import com.google.android.material.bottomappbar.BottomAppBar
 import kotlinx.android.synthetic.main.content_main.*
 import androidx.navigation.findNavController as findNavSetup
 import android.content.Intent
+import android.graphics.Color
+import android.widget.TextView
+import android.widget.Toast
 import com.example.vittles.NavigationGraphDirections
 import com.example.vittles.R
 import com.example.vittles.enums.PreviousFragmentIndex
 import com.example.vittles.settings.SettingsFragment
 import dagger.android.support.DaggerAppCompatActivity
 
-
-/**
- * Main activity that only controls the navigation.
- *
- * @author Jeroen Flietstra
- * @author Fethi Tewelde
- */
 class MainActivity : DaggerAppCompatActivity() {
-    /**
-     * The Navigation Controller of the application.
-     */
+
     private lateinit var navController: NavController
 
     /** All the top-level destinations of the application **/
@@ -43,7 +37,6 @@ class MainActivity : DaggerAppCompatActivity() {
             R.id.settingsFragment
         )
 
-    /** {@inheritDoc}*/
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme_NoActionBar) // Finish splash screen
         super.onCreate(savedInstanceState)
@@ -52,19 +45,19 @@ class MainActivity : DaggerAppCompatActivity() {
         initViews()
     }
 
-    /**
-     * Initializes the view elements.
-     *
-     */
     private fun initViews() {
         initNavigation()
         setListeners()
     }
 
-    /**
-     * Initializes the bottom navigation.
-     *
-     */
+    fun createErrorToast() {
+        Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG).apply {
+            view.setBackgroundColor(ContextCompat.getColor(this@MainActivity, R.color.red))
+            view.findViewById<TextView>(android.R.id.message)?.setTextColor(Color.WHITE)
+            show()
+        }
+    }
+
     private fun initNavigation() {
         navController = findNavSetup(R.id.fragmentHost)
 
@@ -104,21 +97,11 @@ class MainActivity : DaggerAppCompatActivity() {
         }
     }
 
-    /**
-     * Will hide/show the navigation bar and/or the floating action button.
-     *
-     * @param barVisibility Boolean value that represents if the navigation should be visible.
-     * @param fabVisibility Boolean value that represents if the FAB should be visible.
-     */
     private fun showBottomNavigationBar(barVisibility: Boolean, fabVisibility: Boolean) {
         navigationBottomBar.visibility = if (barVisibility) BottomAppBar.VISIBLE else BottomAppBar.GONE
         if (fabVisibility) fab.show() else fab.hide()
     }
 
-    /**
-     * Sets all necessary event listeners on UI elements.
-     *
-     */
     private fun setListeners() {
         fab.setOnClickListener { onAddButtonClick() }
 
@@ -128,11 +111,6 @@ class MainActivity : DaggerAppCompatActivity() {
         navigationBottomBar.menu.getItem(5).setOnMenuItemClickListener { onNavigateSettingsButtonClick() }
     }
 
-    /**
-     * Sets the color of menu icon that is pressed
-     *
-     * @param menuItem Menu item of which to color icon of
-     */
     private fun setMenuItemIconColor(menuItem: MenuItem) {
         val wrappedDrawable = setDrawableTint(menuItem.icon, R.color.colorPrimary)
 
@@ -147,16 +125,8 @@ class MainActivity : DaggerAppCompatActivity() {
         menuItem.icon = wrappedDrawable
     }
 
-    /**
-     * Sets the tint of a drawable and returns the drawable.
-     *
-     * @param drawable Drawable to modify tint of.
-     * @param color Color to modify tint of drawable to.
-     * @return Returns modified drawable.
-     */
     private fun setDrawableTint(drawable: Drawable, color: Int): Drawable? {
         val wrappedDrawable = DrawableCompat.wrap(drawable)
-
         DrawableCompat.setTint(
             wrappedDrawable,
             ContextCompat.getColor(applicationContext, color)
@@ -164,12 +134,6 @@ class MainActivity : DaggerAppCompatActivity() {
         return wrappedDrawable
     }
 
-    /**
-     * Gets a menu item based on its title.
-     *
-     * @param title Title to search MenuItem on.
-     * @return Returns found MenuItem of null if not found.
-     */
     private fun getMenuItemByTitle(title: Int): MenuItem? {
         for (x in 0 until navigationBottomBar.menu.size) {
             if (navigationBottomBar.menu.getItem(x).isEnabled && navigationBottomBar.menu.getItem(x).title == getString(
@@ -182,11 +146,6 @@ class MainActivity : DaggerAppCompatActivity() {
         return null
     }
 
-    /**
-     * Customized navigate up flow. Necessary for passing values on the navigate up flow.
-     *
-     * @return Boolean that represents if the action succeeded.
-     */
     override fun onSupportNavigateUp(): Boolean {
         return when (navController.currentDestination?.id) {
             R.id.scannerFragment, R.id.productInfoFragment -> {
@@ -197,15 +156,10 @@ class MainActivity : DaggerAppCompatActivity() {
         }
     }
 
-    /**
-     * Customized back button flow. Necessary for closing the app on top level destinations
-     * and passing values on the navigate up flow.
-     *
-     */
     override fun onBackPressed() {
         /*
-        If current destination is a top level destination, close the app. Otherwise follow the
-        navigate up flow.
+        If current destination is a top level destination, navigate to list. Otherwise follow the
+        navigate up flow. If the current destination is the list, close the app.
         */
         if (topLevelDestinations.contains(navController.currentDestination?.id)) {
             // Closes the app (returns to home screen) instead of quitting it with finish()
@@ -222,21 +176,11 @@ class MainActivity : DaggerAppCompatActivity() {
         }
     }
 
-    /**
-     * Navigate to the SettingsFragment.
-     *
-     * @return Boolean value that represents if the navigation has succeeded.
-     */
     private fun onNavigateSettingsButtonClick(): Boolean {
         findNavController(fragmentHost).navigate(NavigationGraphDirections.actionGlobalSettingsFragment())
         return true
     }
 
-    /**
-     * Navigate to the ProductListFragment with the search bar opened.
-     *
-     * @return Boolean value that represents if the navigation has succeeded.
-     */
     private fun onNavigateSearchButtonClick(): Boolean {
         findNavController(fragmentHost).navigate(
             NavigationGraphDirections.actionGlobalProductListFragment(
@@ -247,11 +191,6 @@ class MainActivity : DaggerAppCompatActivity() {
         return true
     }
 
-    /**
-     * Navigate to the ProductListFragment.
-     *
-     * @return Boolean value that represents if the navigation has succeeded.
-     */
     private fun onNavigateHomeButtonClick(): Boolean {
         return if (navController.currentDestination?.id != R.id.productListFragment) {
             findNavController(fragmentHost).navigate(NavigationGraphDirections.actionGlobalProductListFragment())
@@ -261,11 +200,6 @@ class MainActivity : DaggerAppCompatActivity() {
         }
     }
 
-    /**
-     * Called when the add button is clicked.
-     * It starts the addProduct activity.
-     *
-     */
     private fun onAddButtonClick() {
         val currentFragment =
             supportFragmentManager.primaryNavigationFragment!!.childFragmentManager.fragments.first()
@@ -281,11 +215,6 @@ class MainActivity : DaggerAppCompatActivity() {
         )
     }
 
-    /**
-     * Navigate to the ReportsFragment.
-     *
-     * @return Boolean value that represents if the navigation has succeeded.
-     */
     private fun onNavigateReportsButtonClick(): Boolean {
         return if (navController.currentDestination?.id != R.id.wasteReportFragment) {
             findNavController(fragmentHost).navigate(NavigationGraphDirections.actionGlobalReportsFragment())

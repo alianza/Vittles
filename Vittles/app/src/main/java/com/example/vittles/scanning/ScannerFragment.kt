@@ -25,7 +25,7 @@ import androidx.navigation.fragment.navArgs
 import com.example.domain.barcode.ProductDictionary
 import com.example.domain.consts.DAYS_REMAINING_EXPIRED
 import com.example.domain.product.ProductDictionaryStatus
-import com.example.domain.product.Product
+import com.example.domain.product.model.Product
 import com.example.vittles.NavigationGraphDirections
 import com.example.vittles.R
 import com.example.vittles.app.VittlesApp.PermissionProperties.REQUEST_CODE_PERMISSIONS
@@ -100,7 +100,6 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
     override fun onDestroy() {
         super.onDestroy()
         CameraX.unbindAll()
-        textureView.surfaceTexture.detachFromGLContext()
         presenter.destroy()
     }
 
@@ -404,7 +403,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
             context?.let {
                 getDrawable(
                     it,
-                    R.drawable.ic_circle_darkened
+                    R.drawable.ic_circle
                 )
             }
         )
@@ -424,7 +423,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
             context?.let {
                 getDrawable(
                     it,
-                    R.drawable.ic_circle_darkened
+                    R.drawable.ic_circle
                 )
             }
         )

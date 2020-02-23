@@ -1,5 +1,6 @@
 package com.example.vittles.dashboard.productlist
 
+import com.example.domain.product.model.ProductSortingType
 import com.example.vittles.dashboard.model.ProductViewModel
 import com.example.vittles.enums.DeleteType
 
@@ -15,6 +16,7 @@ interface ProductListContract {
     }
 
     interface Presenter {
+        fun onListInitializeOrChange(sortingType: ProductSortingType, query: String = "")
         fun onProductDelete(product: ProductViewModel, deleteType: DeleteType)
         fun onProductInsert(product: ProductViewModel)
     }

@@ -1,4 +1,4 @@
-package com.example.vittles
+package com.example.vittles.services.popups
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import com.example.vittles.R
 
 class SingleChoiceMenuAdapter(
     private val mContext: Context,

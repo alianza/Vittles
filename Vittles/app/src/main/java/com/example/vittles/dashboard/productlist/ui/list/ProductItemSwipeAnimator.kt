@@ -14,7 +14,7 @@ import java.lang.UnsupportedOperationException
 
 class ProductItemSwipeAnimator {
 
-    lateinit var rv: RecyclerView
+    private lateinit var rv: RecyclerView
 
     fun swipe(context: Context, c: Canvas, vh: RecyclerView.ViewHolder, recyclerView: RecyclerView, direction: Int, dX: Float) {
         if (!::rv.isInitialized) {
@@ -32,21 +32,11 @@ class ProductItemSwipeAnimator {
     }
 
     private fun addSwipeStyle(vh: RecyclerView.ViewHolder) {
-        if (vh.layoutPosition > 0) {
-            val viewHolderAbove =
-                rv.findViewHolderForLayoutPosition(vh.layoutPosition - 1)!!
-            viewHolderAbove.itemView.borderDecorator.visibility = View.INVISIBLE
-        }
         vh.itemView.borderDecorator.visibility = View.INVISIBLE
         vh.itemView.ivSwipeBorders.visibility = View.VISIBLE
     }
 
     private fun clearSwipeStyle(vh: RecyclerView.ViewHolder) {
-        if (vh.layoutPosition > 0) {
-            val viewHolderAbove =
-                rv.findViewHolderForLayoutPosition(vh.layoutPosition - 1)!!
-            viewHolderAbove.itemView.borderDecorator.visibility = View.VISIBLE
-        }
         vh.itemView.borderDecorator.visibility = View.VISIBLE
         vh.itemView.ivSwipeBorders.visibility = View.INVISIBLE
     }

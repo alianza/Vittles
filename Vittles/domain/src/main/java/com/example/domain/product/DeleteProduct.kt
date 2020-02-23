@@ -1,5 +1,6 @@
 package com.example.domain.product
 
+import com.example.domain.product.model.Product
 import io.reactivex.Completable
 import javax.inject.Inject
 
@@ -19,6 +20,4 @@ class DeleteProduct @Inject constructor(private val repository: ProductsReposito
      * @return The compatibility status of deleting product from the database.
      */
     operator fun invoke(product: Product): Completable = repository.delete(product)
-
-
 }

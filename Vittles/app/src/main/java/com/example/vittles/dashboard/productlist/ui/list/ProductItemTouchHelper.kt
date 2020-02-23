@@ -12,14 +12,8 @@ import java.lang.UnsupportedOperationException
 import kotlin.math.sign
 
 class ProductItemTouchHelper(
-    private val callback: ProductItemTouchCallback
+    val callback: ProductItemTouchCallback
 ) : ItemTouchHelper(callback) {
-
-    var products: List<ProductViewModel> = listOf()
-        set(value) {
-            field = value
-            callback.products = value
-        }
 
     class ProductItemTouchCallback(
         private val context: Context,
@@ -34,7 +28,7 @@ class ProductItemTouchHelper(
             viewHolder: RecyclerView.ViewHolder,
             target: RecyclerView.ViewHolder
         ): Boolean {
-            /*not allowed to change order of items*/
+            /* not allowed to change order of items */
             return false
         }
 

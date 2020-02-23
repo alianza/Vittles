@@ -15,7 +15,7 @@ data class ProductViewModel(
     var expirationDate: DateTime,
     val creationDate: DateTime,
     val daysRemaining: Int,
-    val deleteType: DeleteType?
+    var deleteType: DeleteType?
 ) : Parcelable {
 
     fun getIndicationColor(): IndicationColor {

@@ -11,7 +11,7 @@ import com.example.domain.barcode.GetProductByBarcode
 import com.example.domain.barcode.ProductDictionary
 import com.example.domain.barcode.UpdateProductDictionary
 import com.example.domain.product.AddProduct
-import com.example.domain.product.Product
+import com.example.domain.product.model.Product
 import com.example.domain.settings.GetPerformanceSetting
 import com.example.domain.settings.GetVibrationEnabled
 import com.example.domain.settings.SetPerformanceSetting

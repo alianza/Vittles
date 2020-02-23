@@ -1,6 +1,6 @@
 package com.example.data.room.product
 
-import com.example.domain.product.Product
+import com.example.domain.product.model.Product
 import javax.inject.Inject
 
 /**

@@ -2,16 +2,13 @@ package com.example.vittles.extension
 
 import io.reactivex.Completable
 import io.reactivex.Observable
-import io.reactivex.ObservableSource
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.disposables.SerialDisposable
-import io.reactivex.functions.Consumer
-import io.reactivex.schedulers.Schedulers
 import io.reactivex.functions.Function
-
+import io.reactivex.schedulers.Schedulers
 
 fun <T> Observable<T>.subscribeOnIoObserveOnMain(): Observable<T> =
     subscribeOn(Schedulers.io())
@@ -39,7 +36,7 @@ inline fun <T, R> Observable<List<T>>.mapListItems(crossinline transform: (T) ->
 /**
  * Function to map list items in a reactive stream
  */
-inline fun <T, R> mapList(crossinline transform: (T) -> R): io.reactivex.functions.Function<List<T>, List<R>> =
+inline fun <T, R> mapList(crossinline transform: (T) -> R): Function<List<T>, List<R>> =
     Function { list ->
         list.map { item -> transform(item) }
     }

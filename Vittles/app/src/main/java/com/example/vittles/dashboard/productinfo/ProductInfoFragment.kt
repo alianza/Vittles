@@ -14,6 +14,7 @@ import com.example.vittles.NavigationGraphDirections
 import com.example.vittles.R
 import com.example.vittles.dashboard.model.ProductViewModel
 import com.example.vittles.dashboard.productlist.ProductListFragmentDirections
+import com.example.vittles.enums.DeleteType
 import com.example.vittles.scanning.ScannerFragment
 import com.example.vittles.scanning.productaddmanual.ProductNameEditView
 import com.google.android.material.snackbar.Snackbar
@@ -174,6 +175,7 @@ class ProductInfoFragment : DaggerFragment(),
      *
      */
     override fun onEatenButtonClicked() {
+        product.deleteType = DeleteType.EATEN
         NavHostFragment.findNavController(fragmentHost).navigate(
             ProductListFragmentDirections.actionGlobalProductListFragment(
                 product
@@ -186,6 +188,7 @@ class ProductInfoFragment : DaggerFragment(),
      *
      */
     override fun onDeleteButtonClicked() {
+        product.deleteType = DeleteType.THROWN_AWAY
         NavHostFragment.findNavController(fragmentHost).navigate(
             ProductListFragmentDirections.actionGlobalProductListFragment(
                 product

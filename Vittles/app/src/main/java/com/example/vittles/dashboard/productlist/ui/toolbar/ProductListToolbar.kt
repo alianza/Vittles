@@ -5,26 +5,24 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
+import com.example.domain.product.model.ProductSortingType
 import com.example.vittles.R
-import com.example.vittles.dashboard.model.ProductSortingType
 import com.example.vittles.dashboard.productlist.SortingTypeTextProvider
-import com.example.vittles.dashboard.productlist.ui.list.ProductAdapter
 import com.example.vittles.extension.setGone
 import com.example.vittles.extension.setVisible
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.toolbar_productlist.view.*
 
-class ProductListToolbar (context: Context, attrs: AttributeSet) : AppBarLayout(context, attrs),
+class ProductListToolbar(context: Context, attrs: AttributeSet) : AppBarLayout(context, attrs),
     SearchView.OnQueryTextListener {
 
-    private var provider: SortingTypeTextProvider? = null
-    private var sortingType = ProductSortingType.DAYS_REMAINING_ASC
+    var productListToolbarListener: ProductListToolbarListener? = null
 
-    var adapter: ProductAdapter? = null
-        set(value) {
-            if (value != null) {
-                field = value
-            }
+    private var provider: SortingTypeTextProvider? = null
+
+    var sortingType = ProductSortingType.DAYS_REMAINING_ASC
+        private set(value) {
+            field = value; productListToolbarListener?.onSortingTypeChanged(value)
         }
 
     var parent: Fragment? = null
@@ -48,41 +46,29 @@ class ProductListToolbar (context: Context, attrs: AttributeSet) : AppBarLayout(
                     this::onSortingTypeSelected,
                     sortingType
                 )
-                .show(it.requireFragmentManager(), TAG)
+                    .show(it.requireFragmentManager(), TAG)
             }
         }
     }
 
     fun openSearchInput(): Boolean {
-        return if (adapter == null) {
-            false
-        } else {
-            plToolbar.setGone()
-            searchLayout.setVisible()
-            svSearch.isIconified = false
-            svSearch.setQuery("", true)
-            true
-        }
+        plToolbar.setGone()
+        searchLayout.setVisible()
+        svSearch.isIconified = false
+        svSearch.setQuery("", true)
+        return true
     }
 
-    fun closeSearchInput(): Boolean {
-        return if (adapter == null) {
-            false
-        } else {
-            svSearch.setQuery("", true)
-            searchLayout.setGone()
-            plToolbar.setVisible()
-            true
-        }
+    private fun closeSearchInput(): Boolean {
+        svSearch.setQuery("", true)
+        searchLayout.setGone()
+        plToolbar.setVisible()
+        return true
     }
 
     override fun onQueryTextSubmit(p0: String?): Boolean {
-        return if (adapter == null) {
-            false
-        } else {
-            adapter?.filter?.filter(p0)
-            true
-        }
+        productListToolbarListener?.onQueryTextChanged(p0)
+        return true
     }
 
     override fun onQueryTextChange(p0: String?): Boolean {
@@ -90,16 +76,19 @@ class ProductListToolbar (context: Context, attrs: AttributeSet) : AppBarLayout(
     }
 
     private fun onSortingTypeSelected(sortingType: ProductSortingType) {
-        adapter?.let { adapter ->
-            provider?.let {
-                this.sortingType = sortingType
-                adapter.sort(sortingType)
-                btnSort.tvSortType.text = it.getSortingTypeText(sortingType)
-            }
+        provider?.let {
+            this.sortingType = sortingType
+            btnSort.tvSortType.text = it.getSortingTypeText(sortingType)
         }
     }
 
+    interface ProductListToolbarListener {
+        fun onSortingTypeChanged(sortingType: ProductSortingType)
+        fun onQueryTextChanged(query: String?)
+    }
+
     companion object {
+
         const val TAG = "PRODUCT_LIST_TOOLBAR"
     }
 }

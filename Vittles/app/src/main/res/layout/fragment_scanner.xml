@@ -50,7 +50,7 @@
                     android:layout_gravity="center"
                     android:layout_marginStart="18dp"
                     android:contentDescription="@string/cd_checklist_image"
-                    app:srcCompat="@drawable/ic_circle_darkened" />
+                    app:srcCompat="@drawable/ic_circle" />
 
                 <LinearLayout
                     android:layout_width="200dp"
@@ -131,7 +131,7 @@
                     app:layout_constraintBottom_toBottomOf="@+id/tvExpirationDate"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/textView5"
-                    app:srcCompat="@drawable/ic_circle_darkened" />
+                    app:srcCompat="@drawable/ic_circle" />
 
                 <LinearLayout
                     android:layout_width="200dp"

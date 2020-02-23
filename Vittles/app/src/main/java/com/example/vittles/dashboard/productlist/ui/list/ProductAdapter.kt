@@ -5,14 +5,11 @@ import android.graphics.PorterDuff
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Filter
-import android.widget.Filterable
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vittles.R
-import com.example.vittles.dashboard.model.ProductSortingType
 import com.example.vittles.dashboard.model.ProductViewModel
 import kotlinx.android.synthetic.main.item_product.view.*
 import javax.inject.Inject
@@ -21,31 +18,20 @@ class ProductAdapter @Inject constructor(
     private val onItemClicked: (ProductViewModel) -> Unit,
     private val onRemoveItemClicked: (ProductViewModel) -> Unit,
     private val itemTouchHelper: ProductItemTouchHelper
-) :
-    ListAdapter<ProductViewModel, ProductAdapter.ViewHolder>(
-        itemDiff
-    ), Filterable {
+) : ListAdapter<ProductViewModel, ProductAdapter.ViewHolder>(itemDiff) {
 
     lateinit var context: Context
-    private val filter = ProductListFilter(this)
-
-    var products: ArrayList<ProductViewModel> = arrayListOf()
-        set(value) {
-            field = value
-            itemTouchHelper.products = value
-        }
-
-    private var filteredProducts: ArrayList<ProductViewModel> = arrayListOf()
-        set(value) {
-            field = value
-            itemTouchHelper.products = value
-        }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         context = parent.context
         return ViewHolder(
             LayoutInflater.from(context).inflate(R.layout.item_product, parent, false)
         )
+    }
+
+    override fun onCurrentListChanged(previousList: MutableList<ProductViewModel>, currentList: MutableList<ProductViewModel>) {
+        itemTouchHelper.callback.products = currentList
+        super.onCurrentListChanged(previousList, currentList)
     }
 
     override fun getItemCount(): Int {
@@ -58,44 +44,6 @@ class ProductAdapter @Inject constructor(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(currentList[position])
-    }
-
-    override fun getFilter(): Filter = filter
-
-    override fun submitList(list: List<ProductViewModel>?) {
-        list?.let { products = ArrayList(list) }
-        super.submitList(list)
-    }
-
-    override fun submitList(list: MutableList<ProductViewModel>?, commitCallback: Runnable?) {
-        list?.let { products = ArrayList(list) }
-        super.submitList(list, commitCallback)
-    }
-
-    fun submitFilteredList(list: List<ProductViewModel>) {
-        filteredProducts = ArrayList(list)
-        super.submitList(list)
-    }
-
-    fun sort(sortingType: ProductSortingType) {
-        var index: Int? = null
-        submitList(products.apply {
-            val last = this.lastOrNull()
-            when(sortingType) {
-                ProductSortingType.DAYS_REMAINING_ASC -> sortBy { it.daysRemaining }
-                ProductSortingType.DAYS_REMAINING_DESC -> sortByDescending { it.daysRemaining }
-                ProductSortingType.ALPHABETIC_AZ -> sortBy { it.productName }
-                ProductSortingType.ALPHABETIC_ZA -> sortByDescending { it.productName }
-                ProductSortingType.NEWEST -> sortBy { it.creationDate }
-                ProductSortingType.OLDEST -> sortByDescending { it.creationDate }
-            }
-            index = last?.let{ indexOf(it) }
-        }) {
-            index?.let {
-                notifyItemChanged(it)
-                notifyItemChanged(currentList.lastIndex)
-            }
-        }
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -115,13 +63,6 @@ class ProductAdapter @Inject constructor(
                     R.string.maxDaysRemaining
                 ) + "-"
                 else -> product.daysRemaining.toString()
-            }
-
-            // Last product in list, remove decorator and add extra bottom-margin
-            if (currentList.lastOrNull() == product) {
-                itemView.borderDecorator.visibility = View.INVISIBLE
-            } else {
-                itemView.borderDecorator.visibility = View.VISIBLE
             }
 
             // Set values in layout
@@ -155,6 +96,7 @@ class ProductAdapter @Inject constructor(
     companion object {
 
         private val itemDiff = object : DiffUtil.ItemCallback<ProductViewModel>() {
+
             override fun areItemsTheSame(oldItem: ProductViewModel, newItem: ProductViewModel): Boolean {
                 return oldItem.uid == newItem.uid
             }

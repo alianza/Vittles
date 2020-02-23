@@ -4,13 +4,8 @@ import android.view.MotionEvent
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.Preview
 import com.example.domain.barcode.ProductDictionary
-import com.example.domain.product.Product
+import com.example.domain.product.model.Product
 
-/**
- * MVP Contract for scanning products.
- *
- * @author Jeroen Flietstra
- */
 interface ScannerContract {
 
     interface View {

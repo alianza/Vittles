@@ -1,5 +1,6 @@
 package com.example.domain.product
 
+import com.example.domain.product.model.Product
 import io.reactivex.Completable
 import javax.inject.Inject
 

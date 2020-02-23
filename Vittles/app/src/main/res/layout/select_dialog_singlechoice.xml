@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:background="@android:color/white"
+    android:background="?selectableItemBackground"
+    android:backgroundTint="@android:color/white"
     android:layout_weight="6">
 
     <TextView
@@ -15,7 +16,7 @@
         android:checkMark="?android:attr/listChoiceIndicatorSingle"
         android:ellipsize="marquee"
         android:gravity="center_vertical"
-        android:minHeight="?android:attr/listPreferredItemHeight"
+        android:minHeight="?android:attr/listPreferredItemHeightSmall"
         android:paddingStart="12dip"
         android:paddingEnd="7dip"
         android:layout_weight="5"
