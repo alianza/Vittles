@@ -22,6 +22,8 @@ import com.example.vittles.dashboard.productlist.ui.list.ProductAdapter
 import com.example.vittles.dashboard.productlist.ui.list.ProductItemTouchHelper
 import com.example.vittles.dashboard.productlist.ui.toolbar.ProductListToolbar
 import com.example.vittles.enums.DeleteType
+import com.example.vittles.extension.setGone
+import com.example.vittles.extension.setVisible
 import com.example.vittles.services.popups.PopupBase
 import com.example.vittles.services.popups.PopupButton
 import com.example.vittles.services.popups.PopupManager
@@ -119,6 +121,20 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View, ProductL
                     productArgs.productToDelete?.deleteType?.let { onProductSwiped(product, it) }
                 }
             }
+            if (products.isEmpty()) {
+                setEmptyView()
+            } else {
+                tvNoResults.setGone()
+                tvAddNewVittle.setGone()
+            }
+        }
+    }
+
+    private fun setEmptyView() {
+        if (productListToolbar.isSearching()) {
+            tvNoResults.setVisible()
+        } else {
+            tvAddNewVittle.setVisible()
         }
     }
 

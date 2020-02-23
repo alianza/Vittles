@@ -11,6 +11,7 @@ import com.example.vittles.dashboard.ProductMapper
 import com.example.vittles.dashboard.model.ProductViewModel
 import com.example.vittles.enums.DeleteType
 import com.example.vittles.extension.addTo
+import com.example.vittles.extension.mapListItems
 import com.example.vittles.extension.subscribeOnIoObserveOnMain
 import com.example.vittles.main.MainActivity
 import com.example.vittles.mvp.BasePresenter
@@ -36,7 +37,7 @@ class ProductListPresenter @Inject internal constructor(
 
     override fun onListInitializeOrChange(sortingType: ProductSortingType, query: String) {
         getProductsDisposable = getProducts(sortingType, query)
-            .map { it.map(mapper::toParcelable) }
+            .mapListItems { mapper.toParcelable(it) }
             .subscribeOnIoObserveOnMain()
             .subscribe({ view?.onProductsUpdated(it) }, { TODO() })
             .addTo(disposables)

@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.SearchView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.example.domain.product.model.ProductSortingType
 import com.example.vittles.R
@@ -50,6 +51,8 @@ class ProductListToolbar(context: Context, attrs: AttributeSet) : AppBarLayout(c
             }
         }
     }
+
+    fun isSearching(): Boolean = searchLayout.isVisible
 
     fun openSearchInput(): Boolean {
         plToolbar.setGone()
