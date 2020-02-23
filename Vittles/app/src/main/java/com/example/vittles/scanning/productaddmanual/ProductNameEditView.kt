@@ -50,6 +50,15 @@ class ProductNameEditView(
             AlertDialog.Builder(context).setView(view)
         dialog = mBuilder.show()
 
+        dialog.setCancelable(false)
+        
+        dialog.setOnKeyListener { _, keyCode, _ ->
+            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                onCancelButtonClicked()
+            }
+            return@setOnKeyListener true
+        }
+
         if (!productName.isNullOrBlank()
             && productName != context.getString(R.string.product_name_scanner)
             && productName != ProductDictionaryStatus.NOT_FOUND()
