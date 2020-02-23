@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -12,6 +13,8 @@ import android.widget.Toast
 import com.example.domain.product.ProductDictionaryStatus
 import com.example.vittles.R
 import kotlinx.android.synthetic.main.dialog_productname_edit.view.*
+import java.util.*
+import kotlin.concurrent.schedule
 
 /**
  * Dialog for editing the product name.
@@ -58,6 +61,11 @@ class ProductNameEditView(
             if (productName == ProductDictionaryStatus.NOT_FOUND()) TextView.VISIBLE else TextView.GONE
         insertLocal = productName == ProductDictionaryStatus.NOT_FOUND()
 
+        view.etProductName.requestFocus()
+
+        // Show keyboard after delay because of new activity
+        Timer("showKeyboard", false).schedule(500) { showKeyboard() }
+
         view.btnConfirm.setOnClickListener { onConfirmButtonClicked() }
         view.btnCancel.setOnClickListener { onCancelButtonClicked() }
     }
@@ -75,6 +83,15 @@ class ProductNameEditView(
             Toast.makeText(context, context.getString(R.string.empty_fields), Toast.LENGTH_SHORT)
                 .show()
         }
+    }
+
+    /**
+     * Forces the keyboard to display
+     *
+     */
+    private fun showKeyboard() {
+        val imm = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.toggleSoftInputFromWindow(view.windowToken, InputMethodManager.SHOW_FORCED, 0)
     }
 
     /**
