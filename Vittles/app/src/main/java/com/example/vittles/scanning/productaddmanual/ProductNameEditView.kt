@@ -9,8 +9,9 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import com.example.domain.product.ProductDictionaryStatus
-import com.example.vittles.KeyboardExtensions
 import com.example.vittles.R
+import com.example.vittles.extensions.dismissKeyboard
+import com.example.vittles.extensions.showKeyboard
 import kotlinx.android.synthetic.main.dialog_productname_edit.view.*
 import java.util.*
 import kotlin.concurrent.schedule
@@ -34,8 +35,6 @@ class ProductNameEditView(
     private lateinit var context: Context
     /** @suppress */
     private var insertLocal: Boolean = false
-    /** @suppress */
-    private var keyboardExtensions = KeyboardExtensions()
 
     /**
      * Opens the dialog.
@@ -74,7 +73,12 @@ class ProductNameEditView(
         view.etProductName.requestFocus()
 
         // Show keyboard after delay because of new activity
-        Timer("showKeyboard", false).schedule(500) { keyboardExtensions.showKeyboard(context, view) }
+        Timer("showKeyboard", false).schedule(500) {
+            showKeyboard(
+                context,
+                view
+            )
+        }
 
         view.btnConfirm.setOnClickListener { onConfirmButtonClicked() }
         view.btnCancel.setOnClickListener { onCancelButtonClicked() }
@@ -87,7 +91,7 @@ class ProductNameEditView(
     private fun onConfirmButtonClicked() {
         if (!view.etProductName.text.isNullOrBlank()) {
             onFinished(view.etProductName.text.toString(), insertLocal)
-            keyboardExtensions.dismissKeyboard(context ,view)
+            dismissKeyboard(context, view)
             dialog.dismiss()
         } else {
             Toast.makeText(context, context.getString(R.string.empty_fields), Toast.LENGTH_SHORT)
@@ -100,7 +104,7 @@ class ProductNameEditView(
      *
      */
     private fun onCancelButtonClicked() {
-        keyboardExtensions.dismissKeyboard(context, view)
+        dismissKeyboard(context, view)
         dialog.dismiss()
     }
 }
