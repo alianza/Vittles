@@ -1,16 +1,15 @@
 package com.example.vittles.scanning.productaddmanual
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
-import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import android.widget.Toast
 import com.example.domain.product.ProductDictionaryStatus
+import com.example.vittles.KeyboardExtensions
 import com.example.vittles.R
 import kotlinx.android.synthetic.main.dialog_productname_edit.view.*
 import java.util.*
@@ -35,6 +34,8 @@ class ProductNameEditView(
     private lateinit var context: Context
     /** @suppress */
     private var insertLocal: Boolean = false
+    /** @suppress */
+    private var keyboardExtensions = KeyboardExtensions()
 
     /**
      * Opens the dialog.
@@ -73,7 +74,7 @@ class ProductNameEditView(
         view.etProductName.requestFocus()
 
         // Show keyboard after delay because of new activity
-        Timer("showKeyboard", false).schedule(500) { showKeyboard() }
+        Timer("showKeyboard", false).schedule(500) { keyboardExtensions.showKeyboard(context, view) }
 
         view.btnConfirm.setOnClickListener { onConfirmButtonClicked() }
         view.btnCancel.setOnClickListener { onCancelButtonClicked() }
@@ -86,7 +87,7 @@ class ProductNameEditView(
     private fun onConfirmButtonClicked() {
         if (!view.etProductName.text.isNullOrBlank()) {
             onFinished(view.etProductName.text.toString(), insertLocal)
-            dismissKeyboard()
+            keyboardExtensions.dismissKeyboard(context ,view)
             dialog.dismiss()
         } else {
             Toast.makeText(context, context.getString(R.string.empty_fields), Toast.LENGTH_SHORT)
@@ -95,29 +96,11 @@ class ProductNameEditView(
     }
 
     /**
-     * Forces the keyboard to display
-     *
-     */
-    private fun showKeyboard() {
-        val imm = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.toggleSoftInputFromWindow(view.windowToken, InputMethodManager.SHOW_FORCED, 0)
-    }
-
-    /**
-     * Dismisses the keyboard.
-     *
-     */
-    private fun dismissKeyboard() {
-        val imm = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(view.windowToken, 0)
-    }
-
-    /**
      * Dismisses the dialog.
      *
      */
     private fun onCancelButtonClicked() {
-        dismissKeyboard()
+        keyboardExtensions.dismissKeyboard(context, view)
         dialog.dismiss()
     }
 }
