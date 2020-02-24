@@ -1,4 +1,4 @@
-package com.example.vittles.extensions
+package com.example.vittles.extension
 
 import android.app.Activity
 import android.content.Context

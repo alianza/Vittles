@@ -10,8 +10,8 @@ import android.widget.TextView
 import android.widget.Toast
 import com.example.domain.product.ProductDictionaryStatus
 import com.example.vittles.R
-import com.example.vittles.extensions.dismissKeyboard
-import com.example.vittles.extensions.showKeyboard
+import com.example.vittles.extension.dismissKeyboard
+import com.example.vittles.extension.showKeyboard
 import kotlinx.android.synthetic.main.dialog_productname_edit.view.*
 import java.util.*
 import kotlin.concurrent.schedule
