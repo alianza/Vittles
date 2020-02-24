@@ -110,7 +110,7 @@ class WasteReportFragment : DaggerFragment(), WasteReportContract.View {
      *
      */
     override fun showTimeRangeSelector() {
-        context?.let { timeRangeMenu.openMenu(it, btnSort) }
+        context?.let { timeRangeMenu.openMenu(it, tvSortType) }
     }
 
     /**

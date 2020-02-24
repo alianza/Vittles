@@ -25,11 +25,11 @@ import androidx.navigation.fragment.navArgs
 import com.example.domain.barcode.ProductDictionary
 import com.example.domain.consts.DAYS_REMAINING_EXPIRED
 import com.example.domain.product.ProductDictionaryStatus
-import com.example.domain.product.Product
+import com.example.domain.product.model.Product
 import com.example.vittles.NavigationGraphDirections
 import com.example.vittles.R
-import com.example.vittles.VittlesApp.PermissionProperties.REQUEST_CODE_PERMISSIONS
-import com.example.vittles.VittlesApp.PermissionProperties.REQUIRED_PERMISSIONS
+import com.example.vittles.app.VittlesApp.PermissionProperties.REQUEST_CODE_PERMISSIONS
+import com.example.vittles.app.VittlesApp.PermissionProperties.REQUIRED_PERMISSIONS
 import com.example.vittles.enums.PreviousFragmentIndex
 import com.example.vittles.scanning.productaddmanual.ProductNameEditView
 import com.example.vittles.services.popups.PopupBase
@@ -100,7 +100,6 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
     override fun onDestroy() {
         super.onDestroy()
         CameraX.unbindAll()
-        textureView.surfaceTexture.detachFromGLContext()
         presenter.destroy()
     }
 
@@ -190,11 +189,10 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
      */
     override fun onAddVittleButtonClick() {
         val product = Product(
-            null,
+            0,
             tvProductName.text.toString(),
             expirationDate!!,
-            DateTime(),
-            null
+            DateTime()
         )
         presenter.addProductToList(product, true)
         if (!barcodeDictionary.containsNotReady() && !barcodeDictionary.containsNotFound()) {
@@ -405,7 +403,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
             context?.let {
                 getDrawable(
                     it,
-                    R.drawable.ic_circle_darkened
+                    R.drawable.ic_circle
                 )
             }
         )
@@ -425,7 +423,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
             context?.let {
                 getDrawable(
                     it,
-                    R.drawable.ic_circle_darkened
+                    R.drawable.ic_circle
                 )
             }
         )

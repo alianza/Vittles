@@ -24,7 +24,7 @@
     <string name="product_name_invalid">Product name should not be empty!</string>
     <string name="product_deleted">Product deleted!</string>
     <string name="product_deleted_failed">Could not delete product!</string>
-    <string name="empty_state_Add_New_Vittle">\n\nClick on button at the bottom to add vittles</string>
+    <string name="empty_state_Add_New_Vittle">\n\nClick on the add button at the bottom to add vittles</string>
 
     <!--    Search-->
     <string name="no_search_results">Nothing to show :(</string>
@@ -62,10 +62,10 @@
     <!--    Sorting-->
     <string name="sort_by">Sort by</string>
     <string name="sorting">Sorting </string>
-    <string name="days_remaining_lh">Days Remaining (Asc)</string>
-    <string name="days_remaining_hl">Days Remaining (Desc)</string>
-    <string name="alphabetic_az">Alphabetic (A-Z)</string>
-    <string name="alphabetic_za">Alphabetic (Z-A)</string>
+    <string name="days_remaining_lh">Days remaining (asc)</string>
+    <string name="days_remaining_hl">Days remaining (desc)</string>
+    <string name="alphabetic_az">Alphabetic (asc)</string>
+    <string name="alphabetic_za">Alphabetic (desc)</string>
     <string name="newest">Newest</string>
     <string name="oldest">Oldest</string>
 

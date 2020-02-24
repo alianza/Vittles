@@ -1,6 +1,6 @@
 package com.example.data.room.product
 
-import com.example.domain.product.Product
+import com.example.domain.product.model.Product
 import javax.inject.Inject
 
 /**
@@ -20,8 +20,8 @@ class ProductModelMapper @Inject constructor() {
         from.uid,
         from.productName,
         from.expirationDate,
-        from.creationDate,
-        null)
+        from.creationDate
+    )
 
     /**
      * Maps product model to product entity.

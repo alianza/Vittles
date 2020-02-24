@@ -25,7 +25,7 @@ abstract class BasePresenter<V : Any> : MvpPresenter {
      *
      * @param view The activity (V: View) of the presenter.
      */
-    fun start(view: V) {
+    open fun start(view: V) {
         this.view = view
     }
 
