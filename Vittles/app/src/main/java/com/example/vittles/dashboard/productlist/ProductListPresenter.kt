@@ -46,7 +46,6 @@ class ProductListPresenter @Inject internal constructor(
     override fun onProductDelete(product: ProductViewModel, deleteType: DeleteType) {
         deleteProduct(mapper.fromParcelable(product))
             .subscribeOnIoObserveOnMain()
-            .doOnComplete { addWasteReportProduct(deleteType) }
             .doOnError {
                 val activity = view?.requireActivity() as MainActivity
                 activity.createErrorToast()
@@ -62,7 +61,7 @@ class ProductListPresenter @Inject internal constructor(
             .addTo(disposables)
     }
 
-    private fun addWasteReportProduct(deleteType: DeleteType) {
+    override fun onProductDeleted(deleteType: DeleteType) {
         disposables.add(
             addWasteReportProduct.invoke(
                 WasteReportProduct(

@@ -19,5 +19,6 @@ interface ProductListContract {
         fun onListInitializeOrChange(sortingType: ProductSortingType, query: String = "")
         fun onProductDelete(product: ProductViewModel, deleteType: DeleteType)
         fun onProductInsert(product: ProductViewModel)
+        fun onProductDeleted(deleteType: DeleteType)
     }
 }

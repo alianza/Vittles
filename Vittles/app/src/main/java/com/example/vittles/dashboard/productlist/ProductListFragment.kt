@@ -211,7 +211,7 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View, ProductL
             if (event == Snackbar.Callback.DISMISS_EVENT_ACTION) {
                 presenter.onProductInsert(product)
             } else {
-                presenter.onProductDelete(product, deleteType)
+                presenter.onProductDeleted(deleteType)
             }
             super.onDismissed(transientBottomBar, event)
         }
