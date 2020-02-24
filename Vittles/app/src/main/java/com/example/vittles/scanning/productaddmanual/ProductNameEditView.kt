@@ -1,17 +1,20 @@
 package com.example.vittles.scanning.productaddmanual
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
-import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import android.widget.Toast
 import com.example.domain.product.ProductDictionaryStatus
 import com.example.vittles.R
+import com.example.vittles.extension.dismissKeyboard
+import com.example.vittles.extension.showKeyboard
 import kotlinx.android.synthetic.main.dialog_productname_edit.view.*
+import java.util.*
+import kotlin.concurrent.schedule
 
 /**
  * Dialog for editing the product name.
@@ -47,6 +50,15 @@ class ProductNameEditView(
             AlertDialog.Builder(context).setView(view)
         dialog = mBuilder.show()
 
+        dialog.setCancelable(false)
+        
+        dialog.setOnKeyListener { _, keyCode, _ ->
+            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                onCancelButtonClicked()
+            }
+            return@setOnKeyListener true
+        }
+
         if (!productName.isNullOrBlank()
             && productName != context.getString(R.string.product_name_scanner)
             && productName != ProductDictionaryStatus.NOT_FOUND()
@@ -57,6 +69,16 @@ class ProductNameEditView(
         view.tvMessage.visibility =
             if (productName == ProductDictionaryStatus.NOT_FOUND()) TextView.VISIBLE else TextView.GONE
         insertLocal = productName == ProductDictionaryStatus.NOT_FOUND()
+
+        view.etProductName.requestFocus()
+
+        // Show keyboard after delay because of new activity
+        Timer("showKeyboard", false).schedule(500) {
+            showKeyboard(
+                context,
+                view
+            )
+        }
 
         view.btnConfirm.setOnClickListener { onConfirmButtonClicked() }
         view.btnCancel.setOnClickListener { onCancelButtonClicked() }
@@ -69,7 +91,7 @@ class ProductNameEditView(
     private fun onConfirmButtonClicked() {
         if (!view.etProductName.text.isNullOrBlank()) {
             onFinished(view.etProductName.text.toString(), insertLocal)
-            dismissKeyboard()
+            dismissKeyboard(context, view)
             dialog.dismiss()
         } else {
             Toast.makeText(context, context.getString(R.string.empty_fields), Toast.LENGTH_SHORT)
@@ -78,20 +100,11 @@ class ProductNameEditView(
     }
 
     /**
-     * Dismisses the keyboard.
-     *
-     */
-    private fun dismissKeyboard() {
-        val imm = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(view.windowToken, 0)
-    }
-
-    /**
      * Dismisses the dialog.
      *
      */
     private fun onCancelButtonClicked() {
-        dismissKeyboard()
+        dismissKeyboard(context, view)
         dialog.dismiss()
     }
 }
