@@ -14,6 +14,10 @@ import com.example.vittles.extension.setVisible
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.toolbar_productlist.view.*
 
+/**
+ * @author Jeroen Flietstra
+ *
+ */
 class ProductListToolbar(context: Context, attrs: AttributeSet) : AppBarLayout(context, attrs),
     SearchView.OnQueryTextListener {
 
@@ -62,7 +66,7 @@ class ProductListToolbar(context: Context, attrs: AttributeSet) : AppBarLayout(c
         return true
     }
 
-    private fun closeSearchInput(): Boolean {
+    fun closeSearchInput(): Boolean {
         svSearch.setQuery("", true)
         searchLayout.setGone()
         plToolbar.setVisible()

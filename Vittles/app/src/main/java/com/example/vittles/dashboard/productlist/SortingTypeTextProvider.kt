@@ -5,6 +5,11 @@ import com.example.vittles.R
 import com.example.domain.product.model.ProductSortingType
 import javax.inject.Inject
 
+/**
+ * @author Jeroen Flietstra
+ *
+ * @property context
+ */
 class SortingTypeTextProvider @Inject internal constructor(
     private val context: Context
 ) {

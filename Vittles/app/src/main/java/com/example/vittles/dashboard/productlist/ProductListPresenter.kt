@@ -19,6 +19,10 @@ import io.reactivex.disposables.Disposable
 import org.joda.time.DateTime
 import javax.inject.Inject
 
+/**
+ * @author Jeroen Flietstra
+ *
+ */
 class ProductListPresenter @Inject internal constructor(
     private val mapper: ProductMapper,
     private val addProduct: AddProduct,

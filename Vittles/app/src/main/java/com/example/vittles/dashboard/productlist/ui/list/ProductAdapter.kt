@@ -14,6 +14,9 @@ import com.example.vittles.dashboard.model.ProductViewModel
 import kotlinx.android.synthetic.main.item_product.view.*
 import javax.inject.Inject
 
+/**
+ * @author Jeroen Flietstra
+ */
 class ProductAdapter @Inject constructor(
     private val onItemClicked: (ProductViewModel) -> Unit,
     private val onRemoveItemClicked: (ProductViewModel) -> Unit,

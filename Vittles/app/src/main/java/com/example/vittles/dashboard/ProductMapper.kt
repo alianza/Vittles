@@ -4,6 +4,10 @@ import com.example.domain.product.model.Product
 import com.example.vittles.dashboard.model.ProductViewModel
 import javax.inject.Inject
 
+/**
+ * @author Jeroen Flietstra
+ *
+ */
 class ProductMapper @Inject constructor() {
 
     fun fromParcelable(from: ProductViewModel) = Product(

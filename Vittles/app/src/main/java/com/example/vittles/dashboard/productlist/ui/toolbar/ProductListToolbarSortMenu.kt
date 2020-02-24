@@ -16,6 +16,10 @@ import com.example.domain.product.model.ProductSortingType
 import com.example.vittles.dashboard.productlist.SortingTypeTextProvider
 import dagger.android.support.DaggerDialogFragment
 
+/**
+ * @author Jeroen Flietstra
+ *
+ */
 class ProductListToolbarSortMenu(
     private val provider: SortingTypeTextProvider,
     private val onItemSelected: (sortingType: ProductSortingType) -> Unit,

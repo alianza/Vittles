@@ -3,6 +3,7 @@
 package com.example.vittles.dashboard.productlist
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Vibrator
@@ -24,6 +25,7 @@ import com.example.vittles.dashboard.productlist.ui.toolbar.ProductListToolbar
 import com.example.vittles.enums.DeleteType
 import com.example.vittles.extension.setGone
 import com.example.vittles.extension.setVisible
+import com.example.vittles.main.MainActivity
 import com.example.vittles.services.popups.PopupBase
 import com.example.vittles.services.popups.PopupButton
 import com.example.vittles.services.popups.PopupManager
@@ -35,7 +37,12 @@ import kotlinx.android.synthetic.main.fragment_productlist.*
 import java.util.*
 import javax.inject.Inject
 
-class ProductListFragment : DaggerFragment(), ProductListContract.View, ProductListToolbar.ProductListToolbarListener {
+/**
+ * @author Jeroen Flietstra
+ *
+ */
+class ProductListFragment : DaggerFragment(), ProductListContract.View, ProductListToolbar.ProductListToolbarListener,
+    MainActivity.OnBackPressedListener {
 
     @Inject
     lateinit var presenter: ProductListPresenter
@@ -185,6 +192,19 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View, ProductL
             lp.gravity = Gravity.CENTER_HORIZONTAL
             lp.width = (content.width * 0.9).toInt()
             view.layoutParams = lp
+        }
+    }
+
+    override fun handleBackPress(): Boolean {
+        return if (productListToolbar.isSearching()) {
+            productListToolbar.closeSearchInput()
+        } else {
+            // Closes the app (returns to home screen) instead of quitting it with finish()
+            val intent = Intent(Intent.ACTION_MAIN)
+            intent.addCategory(Intent.CATEGORY_HOME)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
+            true
         }
     }
 
