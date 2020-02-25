@@ -290,4 +290,15 @@
             tools:ignore="PrivateResource" />
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/tvTermsAndConditions"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fab_margin"
+        android:text="@string/settings_terms_and_conditions"
+        android:textColor="@color/colorPrimary"
+        app:layout_constraintTop_toBottomOf="@id/llAdvanced"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

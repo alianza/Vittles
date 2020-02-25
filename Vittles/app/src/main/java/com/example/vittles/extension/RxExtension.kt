@@ -1,6 +1,7 @@
 package com.example.vittles.extension
 
 import io.reactivex.Completable
+import io.reactivex.Maybe
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -19,6 +20,10 @@ fun Completable.subscribeOnIoObserveOnMain(): Completable =
         .observeOn(AndroidSchedulers.mainThread())
 
 fun <T> Single<T>.subscribeOnIoObserveOnMain(): Single<T> =
+    subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+
+fun <T> Maybe<T>.subscribeOnIoObserveOnMain(): Maybe<T> =
     subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
 

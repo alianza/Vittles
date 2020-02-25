@@ -1,7 +1,6 @@
-package com.example.domain.wasteReport
+package com.example.domain.wastereport
 
 import org.joda.time.DateTime
-import org.joda.time.Days
 import org.joda.time.format.DateTimeFormat
 
 /**

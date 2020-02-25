@@ -27,6 +27,9 @@ android {
 
     buildTypes.each {
         it.buildConfigField("String", "TescoAPIKey", TescoAPIKey)
+        it.buildConfigField("String", "ContentfulAPIKey", ContentfulAPIKey)
+        it.buildConfigField("String", "ContentfulSpaceKey", ContentfulSpaceKey)
+        it.buildConfigField("String", "ContentfulEnvironmentKey", ContentfulEnvironmentKey)
     }
 
     dokka {
@@ -78,4 +81,10 @@ dependencies {
     
     // Gson
     implementation 'com.google.code.gson:gson:2.8.6'
+
+    // Contentful
+    def vault_version = "3.2.1"
+    kapt "com.contentful.vault:compiler:$vault_version"
+    kapt "com.contentful.vault:core:$vault_version"
+    implementation "com.contentful.vault:core:$vault_version"
 }

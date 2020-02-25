@@ -160,6 +160,7 @@
     <string name="cd_refresh_button">Refresh</string>
     <string name="cd_torch">Torch</string>
     <string name="cd_expand">Expand</string>
+    <string name="settings_terms_and_conditions">Terms and Conditions</string>
 
     <!-- Notification options -->
     <string-array name="notification_time">
