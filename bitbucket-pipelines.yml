@@ -11,7 +11,8 @@ pipelines:
         caches:
           - gradle
         script:
-          - cd vittles bash ./gradlew build
+          - chmod +x gradlew
+          - bash ./gradlew build
           
           - pipe: atlassian/firebase-deploy:0.3.6
             variables:
