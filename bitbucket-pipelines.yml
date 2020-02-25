@@ -12,7 +12,7 @@ pipelines:
           - gradle
         script:
           - chmod +x gradlew
-          - bash ./gradlew build
+          - cd vittles; bash ./gradlew build
           
           - pipe: atlassian/firebase-deploy:0.3.6
             variables:
