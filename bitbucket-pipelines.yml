@@ -12,9 +12,3 @@ pipelines:
           - gradle
         script:
           - bash ~/gradlew build
-          
-          - pipe: atlassian/firebase-deploy:0.3.6
-            variables:
-              FIREBASE_TOKEN: '1//09Mn5enO60JRPCgYIARAAGAkSNwF-L9IriSjfTm3eC2Z3C3QEk_aymxJNGyIK7jegzFPgw9DvpuTt2--Ua6biD_BwBUpmMi7v_ms'
-              PROJECT_ID: 'VITTLES_ALPHA01'
-
