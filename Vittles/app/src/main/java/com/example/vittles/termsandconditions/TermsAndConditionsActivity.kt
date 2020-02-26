@@ -31,8 +31,6 @@ class TermsAndConditionsActivity : DaggerAppCompatActivity(), TermsAndConditions
         }
     }
 
-
-
     override fun showTermsAndConditions(termsAndConditions: TermsAndConditions) {
         termsAndConditionsTextContainer.removeAllViews()
         markyMark.parseMarkdown(termsAndConditions.content).forEach {
@@ -58,6 +56,4 @@ class TermsAndConditionsActivity : DaggerAppCompatActivity(), TermsAndConditions
         finish()
         return super.onOptionsItemSelected(item)
     }
-
-
 }

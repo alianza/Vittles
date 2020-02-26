@@ -17,7 +17,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".termsandconditions.TermsAndConditionsActivity"></activity>
+        <activity
+            android:name=".termsandconditions.TermsAndConditionsActivity"
+            android:screenOrientation="portrait"
+            />
         <activity
             android:name=".main.MainActivity"
             android:label="@string/app_name"
