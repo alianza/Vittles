@@ -82,5 +82,5 @@ class DataModule {
 
     @Singleton
     @Provides
-    fun provideContentfulRepository(context: Context): TermsAndConditionsRepository = RemoteContentfulRepository(context)
+    fun provideContentfulRepository(): TermsAndConditionsRepository = RemoteContentfulRepository()
 }

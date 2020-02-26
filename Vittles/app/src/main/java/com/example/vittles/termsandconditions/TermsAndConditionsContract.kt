@@ -7,6 +7,8 @@ interface TermsAndConditionsContract {
     interface View {
 
         fun showTermsAndConditions(termsAndConditions: TermsAndConditions)
+        fun showLoadingView()
+        fun hideLoadingView()
     }
 
     interface Presenter {

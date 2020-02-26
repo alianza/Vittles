@@ -12,8 +12,12 @@ class TermsAndConditionsPresenter @Inject constructor(
 
     override fun onInitialize() {
         getTermsAndConditions()
+            .doOnSubscribe { view?.showLoadingView() }
             .subscribeOnIoObserveOnMain()
-            .subscribe( { view?.showTermsAndConditions(it) }, { it.printStackTrace() })
+            .subscribe( {
+                view?.hideLoadingView()
+                view?.showTermsAndConditions(it)
+            }, { it.printStackTrace() })
             .addTo(disposables)
     }
 }

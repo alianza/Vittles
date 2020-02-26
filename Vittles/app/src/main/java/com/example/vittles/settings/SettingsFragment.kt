@@ -1,6 +1,7 @@
 package com.example.vittles.settings
 
 import android.content.Intent
+import android.graphics.Paint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -67,6 +68,7 @@ class SettingsFragment : DaggerFragment(), SettingsContract.View {
      *
      */
     override fun initViews() {
+        tvTermsAndConditions.paintFlags = Paint.UNDERLINE_TEXT_FLAG
 
         setListeners()
 
