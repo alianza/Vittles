@@ -11,4 +11,4 @@ pipelines:
         caches:
           - gradle
         script:
-          - build.sh
+          - bash ~/gradlew
