@@ -42,8 +42,5 @@ interface BindingsModule {
     fun bindCircleChartFragment(): CircleChartFragment
 
     @ContributesAndroidInjector
-    fun bindProductListSortMenu(): ProductListToolbarSortMenu
-
-    @ContributesAndroidInjector
     fun bindTermsAndConditionsActivity(): TermsAndConditionsActivity
 }
