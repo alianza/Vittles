@@ -39,7 +39,14 @@ class ProductListPresenter @Inject internal constructor(
         getProductsDisposable = getProducts(sortingType, query)
             .mapListItems { mapper.toParcelable(it) }
             .subscribeOnIoObserveOnMain()
-            .subscribe({ view?.onProductsUpdated(it) }, { TODO() })
+            .doOnSubscribe { view?.onShowLoadingView()}
+            .subscribe({
+                view?.onHideLoadingView()
+                view?.onProductsUpdated(it)
+            }, {
+                val activity = view?.requireActivity() as MainActivity
+                activity.createErrorToast()
+            })
             .addTo(disposables)
     }
 
