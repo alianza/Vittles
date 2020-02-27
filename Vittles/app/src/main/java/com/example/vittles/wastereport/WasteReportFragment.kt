@@ -95,7 +95,7 @@ class WasteReportFragment : DaggerFragment(), WasteReportContract.View {
                 },
                 currentTimeRange,
                 TimeRange.values(),
-                R.layout.popup_report_time_range
+                R.string.time_range
             ).show(requireFragmentManager(), TAG)
         }
     }

@@ -52,7 +52,7 @@ class ProductListToolbar(context: Context, attrs: AttributeSet) : AppBarLayout(c
                     this::onSortingTypeSelected,
                     sortingType,
                     ProductSortingType.values(),
-                    R.layout.dialog_sort
+                    R.string.sort_by
                 )
                     .show(it.requireFragmentManager(), TAG)
             }
