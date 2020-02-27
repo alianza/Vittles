@@ -129,6 +129,8 @@
     <string name="already_expired_subText">The scanned product is already past it’s expiration date. \n Do you still want to add it?</string>
     <string name="remove_product_header">Remove Product</string>
     <string name="remove_product_subText">Do you want to remove this product? \n It won\'t be used for the food waste report.</string>
+    <string name="leave_scanner_header">Are you sure?</string>
+    <string name="leave_scanner_subText">This product has not been completed yet, are you sure you want to leave? \n The product data will be lost.</string>
 
     <!-- Praises for delighter -->
     <string-array name="praises">

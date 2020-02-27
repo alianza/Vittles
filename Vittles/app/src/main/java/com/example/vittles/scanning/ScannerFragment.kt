@@ -40,6 +40,7 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_scanner.*
 import org.joda.time.DateTime
+import java.util.*
 import javax.inject.Inject
 
 /**
@@ -49,30 +50,22 @@ import javax.inject.Inject
  */
 class ScannerFragment @Inject internal constructor() : DaggerFragment(), ScannerContract.View {
 
-    /**
-     * The presenter of the fragment
-     */
     @Inject
     lateinit var presenter: ScannerPresenter
 
-    /** @suppress */
     private val args: ScannerFragmentArgs by navArgs()
 
-    /** The vibration manager used for vibration when a product is scanned. */
     private lateinit var vibrator: Vibrator
 
-    /** @suppress */
     private var barcodeDictionary =
         ProductDictionary(
             ProductDictionaryStatus.NOT_READY() as String,
             ProductDictionaryStatus.NOT_READY() as String
         )
 
-    /** @suppress */
     private var expirationDate: DateTime? = null
 
 
-    /** {@inheritDoc} */
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -82,7 +75,6 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         return inflater.inflate(R.layout.fragment_scanner, container, false)
     }
 
-    /** {@inheritDoc} */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val onBackPressedCallback = object : OnBackPressedCallback(true) {
@@ -96,28 +88,18 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         presenter.checkPermissions()
     }
 
-    /** {@inheritDoc} */
     override fun onDestroy() {
         super.onDestroy()
         CameraX.unbindAll()
         presenter.destroy()
     }
 
-    /**
-     * Initializes view elements.
-     *
-     */
     override fun initViews(view: View) {
         ibRefreshDate.visibility = View.INVISIBLE
         ibRefreshProductName.visibility = View.INVISIBLE
         toggleAddVittleButton()
     }
 
-    /**
-     * Initializes the on click listeners.
-     *
-     */
-    @SuppressLint("ClickableViewAccessibility")
     override fun initListeners() {
         btnScanVittle.setOnClickListener { onAddVittleButtonClick() }
 
@@ -136,10 +118,6 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         btnUseCamera.setOnClickListener { presenter.checkPermissions() }
     }
 
-    /**
-     * Initializes the actual torch state.
-     *
-     */
     private fun initTorchState() {
         if (presenter.torchEnabled()) {
             btnTorch.setImageDrawable(
@@ -162,10 +140,6 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         }
     }
 
-    /**
-     * Set up the tap to focus listener.
-     *
-     */
     override fun onTapToFocus(event: MotionEvent): Boolean {
         if (event.action != MotionEvent.ACTION_DOWN) {
             return false
@@ -183,10 +157,6 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         return true
     }
 
-    /**
-     * Return the scanned barcode and expiration date.
-     *
-     */
     override fun onAddVittleButtonClick() {
         val product = Product(
             0,
@@ -200,19 +170,11 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         }
     }
 
-    /**
-     * Calls presenter to toggle torch and sets drawable of the torch status.
-     *
-     */
     override fun onTorchButtonClicked() {
         presenter.toggleTorch()
         initTorchState()
     }
 
-    /**
-     * Toggle's the status of the add Vittle button based on retrieved properties
-     *
-     */
     private fun toggleAddVittleButton() {
         if (expirationDate != null && tvProductName.text != getString(R.string.product_name_scanner)) {
             enableAddVittleButton()
@@ -221,30 +183,16 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         }
     }
 
-    /**
-     * Disables the add Vittle button
-     *
-     */
     private fun disableAddVittleButton() {
         btnScanVittle.isEnabled = false
         btnScanVittle.alpha = 0.5F
     }
 
-    /**
-     * Enables the add Vittle button
-     *
-     */
     private fun enableAddVittleButton() {
         btnScanVittle.isEnabled = true
         btnScanVittle.alpha = 1F
     }
 
-    /**
-     * Handles interface actions once the productName has been successfully scanned.
-     *
-     * @param productDictionary The product name with barcode that
-     *                          has been retrieved from the remote databases.
-     */
     override fun onBarcodeScanned(productDictionary: ProductDictionary) {
         if (!PreviewAnalyzer.hasBarCode) {
             this.barcodeDictionary = productDictionary
@@ -260,11 +208,6 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         }
     }
 
-    /**
-     * Handles interface actions once the expirationDate has been successfully scanned
-     *
-     * @param text The text that has been retrieved from the camera
-     */
     override fun onTextScanned(text: String) {
         if (!PreviewAnalyzer.hasExpirationDate) {
             onExpirationDateCheckboxChecked(text)
@@ -274,10 +217,6 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         }
     }
 
-    /**
-     * When error occurs with barcode show toast with error message.
-     *
-     */
     override fun onBarcodeNotFound() {
         Toast.makeText(
             context,
@@ -286,10 +225,6 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         ).show()
     }
 
-    /**
-     * When error occurs with text recognition show toast with error message.
-     *
-     */
     override fun onTextNotFound() {
         Toast.makeText(
             context,
@@ -298,11 +233,6 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         ).show()
     }
 
-    /**
-     * Checks if vibration is enabled on the settings.
-     * Lets the phone vibrate and colors the scanning plane.
-     *
-     */
     // Deprecation suppressed because we use an old API version
     @Suppress("DEPRECATION")
     fun onScanSuccessful() {
@@ -326,11 +256,6 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         toggleAddVittleButton()
     }
 
-    /**
-     * Puts the necessary values on the right place after edit.
-     *
-     * @param productDictionary The new product name with the barcode.
-     */
     override fun onProductNameEdited(productDictionary: ProductDictionary, insertLocal: Boolean) {
         productDictionary.productName?.let { onProductNameCheckboxChecked(it) }
         this.barcodeDictionary = productDictionary
@@ -342,11 +267,6 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         }
     }
 
-    /**
-     * Puts the necessary values on the right place after edit.
-     *
-     * @param text The new expiration date.
-     */
     override fun onExpirationDateEdited(text: String) {
         onExpirationDateCheckboxChecked(text)
         PreviewAnalyzer.hasExpirationDate = true
@@ -354,11 +274,6 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         toggleAddVittleButton()
     }
 
-    /**
-     * Checks the checkbox and fills in the text view.
-     *
-     * @param productName The new product name.
-     */
     override fun onProductNameCheckboxChecked(productName: String) {
         if (productName.isNotEmpty()) {
             tvProductName.text = productName
@@ -373,11 +288,6 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         }
     }
 
-    /**
-     * Checks the checkbox and fills in the text view.
-     *
-     * @param text The new expiration date.
-     */
     override fun onExpirationDateCheckboxChecked(text: String) {
         tvExpirationDate.text = DateFormatterService.numberFormat.print(
             DateFormatterService.expirationDateFormatter(text)
@@ -393,10 +303,6 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         )
     }
 
-    /**
-     * Resets the necessary date properties.
-     *
-     */
     override fun onResetDate() {
         tvExpirationDate.text = getString(R.string.date_format_scanner)
         ivCheckboxExpirationDate.setImageDrawable(
@@ -413,10 +319,6 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         toggleAddVittleButton()
     }
 
-    /**
-     * Resets the necessary product name properties.
-     *
-     */
     override fun onResetProductName() {
         tvProductName.text = getString(R.string.product_name_scanner)
         ivCheckboxBarcode.setImageDrawable(
@@ -432,10 +334,6 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         toggleAddVittleButton()
     }
 
-    /**
-     * Process result from permission request dialog box, has the request
-     * been granted? If yes, start Camera. Otherwise display a toast.
-     */
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<String>, grantResults: IntArray
     ) {
@@ -450,35 +348,19 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         }
     }
 
-    /**
-     * Asks for the needed permissions, called if the user did not grant any permissions.
-     *
-     */
     override fun onRequestPermissionsFromFragment() {
         requestPermissions(REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
     }
 
-    /**
-     * If no permissions granted, show toast with error message and redirect to dashboard.
-     *
-     */
     override fun onNoPermissionGranted() {
         btnUseCamera.visibility = View.VISIBLE
         btnTorch.visibility = View.GONE
     }
 
-    /**
-     * Opens the dialog to edit the product name.
-     *
-     */
     override fun onEditNameButtonClick() {
         onShowEditNameDialog(barcodeDictionary)
     }
 
-    /**
-     * Opens the date picker dialog to edit the expiration date.
-     *
-     */
     override fun onEditExpirationButtonClick() {
         val currentDate = DateTime.now()
 
@@ -517,11 +399,6 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         }
     }
 
-    /**
-     * Opens the edit product name dialog.
-     *
-     * @param productDictionary The current barcode dictionary.
-     */
     override fun onShowEditNameDialog(productDictionary: ProductDictionary) {
         val dialog = ProductNameEditView(onFinished = { productName: String, insertLocal: Boolean ->
             onProductNameEdited(
@@ -532,38 +409,20 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         context?.let { dialog.openDialog(it, productDictionary.productName) }
     }
 
-    /**
-     * If product has been added, this method will reset all the necessary properties.
-     *
-     */
     override fun onResetView() {
         onResetDate()
         onResetProductName()
     }
 
-    /**
-     * If product could not be added, this method will create a feedback snack bar for the error.
-     *
-     */
     override fun onShowAddProductError() {
         Snackbar.make(layout, getString(R.string.product_name_invalid), Snackbar.LENGTH_LONG)
             .show()
     }
 
-    /**
-     * If product is added successfully, this method will show a toast displaying a success state.
-     *
-     */
     override fun onShowAddProductSucceed() {
         Snackbar.make(layout, getString(R.string.product_added), Snackbar.LENGTH_SHORT).show()
     }
 
-    /**
-     * Calls either the close to expiration date or already expired pop-ups
-     *
-     * @param product Product to decide of if CloseToExpirationPopup or AlreadyExpiredPopup should be shown
-     */
-    @SuppressLint("DefaultLocale")
     override fun onShowExpirationPopup(product: Product) {
         if (product.getDaysRemaining() > DAYS_REMAINING_EXPIRED) {
             onShowCloseToExpirationPopup(product)
@@ -572,12 +431,6 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         }
     }
 
-    /**
-     * Shows the CloseToExpiring popup.
-     *
-     * @param product Product to show CloseToExpirationPopup of
-     */
-    @SuppressLint("DefaultLocale", "StringFormatInvalid")
     override fun onShowCloseToExpirationPopup(product: Product) {
         val multipleDaysChar = if (product.getDaysRemaining() == 1) {
             ""
@@ -596,8 +449,8 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
                         multipleDaysChar
                     )
                 ),
-                PopupButton(getString(R.string.btn_no).toUpperCase()),
-                PopupButton(getString(R.string.btn_yes).toUpperCase()) {
+                PopupButton(getString(R.string.btn_no).toUpperCase(Locale.getDefault())),
+                PopupButton(getString(R.string.btn_yes).toUpperCase(Locale.getDefault())) {
                     presenter.addProductToList(
                         product,
                         false
@@ -607,14 +460,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         }
     }
 
-    /**
-     * Shows the AlreadyExpired popup.
-     *
-     * @param product Product to show AlreadyExpiredPopup of.
-     */
-    @SuppressLint("DefaultLocale")
     override fun onShowAlreadyExpiredPopup(product: Product) {
-
         context?.let {
             PopupManager.instance.showPopup(
                 it,
@@ -622,8 +468,8 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
                     getString(R.string.already_expired_header),
                     getString(R.string.already_expired_subText)
                 ),
-                PopupButton(getString(R.string.btn_no).toUpperCase()),
-                PopupButton(getString(R.string.btn_yes).toUpperCase()) {
+                PopupButton(getString(R.string.btn_no).toUpperCase(Locale.getDefault())),
+                PopupButton(getString(R.string.btn_yes).toUpperCase(Locale.getDefault())) {
                     presenter.addProductToList(
                         product,
                         false
@@ -633,26 +479,41 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
         }
     }
 
-    /**
-     * Handles the back button pressed.
-     *
-     */
     private fun onBackPressed() {
-        when (args.previousFragment) {
-            PreviousFragmentIndex.PRODUCT_LIST() -> findNavController().navigate(
-                NavigationGraphDirections.actionGlobalProductListFragment(null, false)
-            )
-            PreviousFragmentIndex.SETTINGS() -> findNavController().navigate(
-                NavigationGraphDirections.actionGlobalSettingsFragment()
-            )
-            else -> findNavController().navigateUp()
+        val action = Runnable {
+            when (args.previousFragment) {
+                PreviousFragmentIndex.PRODUCT_LIST() -> findNavController().navigate(
+                    NavigationGraphDirections.actionGlobalProductListFragment(null, false)
+                )
+                PreviousFragmentIndex.SETTINGS() -> findNavController().navigate(
+                    NavigationGraphDirections.actionGlobalSettingsFragment()
+                )
+                else -> findNavController().navigateUp()
+            }
+        }
+        if ((PreviewAnalyzer.hasBarCode != PreviewAnalyzer.hasExpirationDate)) {
+            showLeaveWarning {
+                action.run()
+            }
+        } else {
+            action.run()
         }
     }
 
-    /**
-     * Will create a dialog to warn the user about memory usage. Action can be taken from this dialog.
-     *
-     */
+    private fun showLeaveWarning(onLeave: () -> Unit) {
+        PopupManager.instance.showPopup(
+            requireContext(),
+            PopupBase(
+                getString(R.string.leave_scanner_header),
+                getString(R.string.leave_scanner_subText)
+            ),
+            PopupButton(getString(R.string.btn_no).toUpperCase(Locale.getDefault())),
+            PopupButton(getString(R.string.btn_yes).toUpperCase(Locale.getDefault())) {
+                onLeave.invoke()
+            }
+        )
+    }
+
     override fun onAnalyzerError() {
         Handler(Looper.getMainLooper()).post {
             PopupManager.instance.showPopup(this.context!!, PopupBase(
@@ -677,10 +538,8 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
     }
 
     companion object {
-        /**
-         * This offset is used to counter the default values from the Date object.
-         *
-         */
+
+    /* This offset is used to counter the default values from the Date object. */
         const val MONTHS_OFFSET = 1
     }
 }
