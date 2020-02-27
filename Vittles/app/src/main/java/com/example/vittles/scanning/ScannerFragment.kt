@@ -491,7 +491,7 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
                 else -> findNavController().navigateUp()
             }
         }
-        if ((PreviewAnalyzer.hasBarCode != PreviewAnalyzer.hasExpirationDate)) {
+        if ((PreviewAnalyzer.hasBarCode || PreviewAnalyzer.hasExpirationDate)) {
             showLeaveWarning {
                 action.run()
             }
