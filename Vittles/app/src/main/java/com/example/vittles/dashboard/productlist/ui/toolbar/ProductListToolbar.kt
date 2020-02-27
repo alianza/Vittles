@@ -11,6 +11,7 @@ import com.example.vittles.R
 import com.example.vittles.dashboard.productlist.SortingTypeTextProvider
 import com.example.vittles.extension.setGone
 import com.example.vittles.extension.setVisible
+import com.example.vittles.services.popups.SingleChoiceMenu
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.toolbar_productlist.view.*
 
@@ -46,10 +47,12 @@ class ProductListToolbar(context: Context, attrs: AttributeSet) : AppBarLayout(c
         btnSort.setOnClickListener {
             parent?.let {
                 provider = SortingTypeTextProvider(it.requireContext())
-                ProductListToolbarSortMenu(
+                SingleChoiceMenu(
                     provider!!,
                     this::onSortingTypeSelected,
-                    sortingType
+                    sortingType,
+                    ProductSortingType.values(),
+                    R.layout.dialog_sort
                 )
                     .show(it.requireFragmentManager(), TAG)
             }
@@ -85,7 +88,7 @@ class ProductListToolbar(context: Context, attrs: AttributeSet) : AppBarLayout(c
     private fun onSortingTypeSelected(sortingType: ProductSortingType) {
         provider?.let {
             this.sortingType = sortingType
-            btnSort.tvSortType.text = it.getSortingTypeText(sortingType)
+            btnSort.tvSortType.text = it.getText(sortingType)
         }
     }
 

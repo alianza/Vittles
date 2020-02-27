@@ -3,6 +3,7 @@ package com.example.vittles.dashboard.productlist
 import android.content.Context
 import com.example.vittles.R
 import com.example.domain.product.model.ProductSortingType
+import com.example.vittles.services.popups.OptionTextProvider
 import javax.inject.Inject
 
 /**
@@ -10,12 +11,12 @@ import javax.inject.Inject
  *
  * @property context
  */
-class SortingTypeTextProvider @Inject internal constructor(
+class SortingTypeTextProvider(
     private val context: Context
-) {
+) : OptionTextProvider<ProductSortingType> {
 
-    fun getSortingTypeText(sortingType: ProductSortingType): String {
-        return when (sortingType) {
+    override fun getText(option: ProductSortingType): String {
+        return when (option) {
             ProductSortingType.DAYS_REMAINING_ASC -> context.getString(R.string.days_remaining_lh)
             ProductSortingType.DAYS_REMAINING_DESC -> context.getString(R.string.days_remaining_hl)
             ProductSortingType.ALPHABETIC_ASC -> context.getString(R.string.alphabetic_az)
@@ -23,6 +24,5 @@ class SortingTypeTextProvider @Inject internal constructor(
             ProductSortingType.CREATION_DATE_DESC -> context.getString(R.string.newest)
             ProductSortingType.CREATION_DATE_ASC -> context.getString(R.string.oldest)
         }
-
     }
 }
