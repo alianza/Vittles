@@ -27,6 +27,9 @@ android {
 
     buildTypes.each {
         it.buildConfigField("String", "TescoAPIKey", TescoAPIKey)
+        it.buildConfigField("String", "ContentfulAPIKey", ContentfulAPIKey)
+        it.buildConfigField("String", "ContentfulSpaceKey", ContentfulSpaceKey)
+        it.buildConfigField("String", "ContentfulEnvironmentKey", ContentfulEnvironmentKey)
     }
 
     dokka {
@@ -78,4 +81,8 @@ dependencies {
     
     // Gson
     implementation 'com.google.code.gson:gson:2.8.6'
+
+    // Contentful
+    implementation 'com.contentful.java:java-sdk:9.0.1'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
 }

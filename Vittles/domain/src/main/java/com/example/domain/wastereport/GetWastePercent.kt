@@ -1,4 +1,4 @@
-package com.example.domain.wasteReport
+package com.example.domain.wastereport
 
 import io.reactivex.Single
 import javax.inject.Inject

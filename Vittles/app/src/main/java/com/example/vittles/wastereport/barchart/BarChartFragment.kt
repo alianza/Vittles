@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.example.domain.wasteReport.BarChartEntry
+import com.example.domain.wastereport.BarChartEntry
 import com.example.vittles.R
 import com.example.vittles.enums.TimeRangeSteps
 import com.example.vittles.wastereport.circlechart.RefreshData

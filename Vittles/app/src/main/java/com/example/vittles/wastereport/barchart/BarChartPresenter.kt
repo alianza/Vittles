@@ -1,6 +1,6 @@
 package com.example.vittles.wastereport.barchart
 
-import com.example.domain.wasteReport.GetWasteReportProducts
+import com.example.domain.wastereport.GetWasteReportProducts
 import com.example.vittles.mvp.BasePresenter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
