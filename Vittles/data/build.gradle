@@ -35,6 +35,10 @@ android {
         outputDirectory = "E:\\Video's\\Software Engineering\\Mobile Development\\M2mobi\\VittlesDocumentation"
     }
 
+    lintOptions {
+        abortOnError false
+    }
+
 }
 
 dependencies {
