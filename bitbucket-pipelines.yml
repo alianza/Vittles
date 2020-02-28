@@ -1,0 +1,20 @@
+# This is a sample build configuration for Java (Gradle).
+# Check our guides at https://confluence.atlassian.com/x/zd-5Mw for more examples.
+# Only use spaces to indent your .yml configuration.
+# -----
+# You can specify a custom docker image from Docker Hub as your build environment.
+image: openjdk:8
+
+pipelines:
+  default:
+    - step:
+        caches:
+          - gradle
+        script: 
+          - echo "The current folder is: $PWD"
+          - echo "The git repo root folder is: $BITBUCKET_CLONE_DIR"
+          - echo "The files in the git root directory are: $(ls -la)"
+          - echo "The folders in the git root directory are: $(echo */)"
+          - echo "The gradlew file is at location: $( find . -name "gradlew" -type f -print0 | xargs )"
+
+          - echo "Setting current working directory to subfolder"
