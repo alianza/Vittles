@@ -11,5 +11,4 @@ pipelines:
         caches:
           - gradle
         script: 
-          - cd vittles
-          - bash ./gradlew build
+          - bash gradlew build
