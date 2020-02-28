@@ -24,12 +24,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-
-    dokka {
-        includeNonPublic = true
-        outputFormat = 'html'
-        outputDirectory = "E:\\Video's\\Software Engineering\\Mobile Development\\M2mobi\\VittlesDocumentation"
-    }
 }
 
 dependencies {
