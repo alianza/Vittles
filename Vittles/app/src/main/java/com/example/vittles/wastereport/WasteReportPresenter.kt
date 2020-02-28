@@ -1,10 +1,8 @@
 package com.example.vittles.wastereport
 
-import com.example.domain.wasteReport.GetCountEatenProducts
-import com.example.domain.wasteReport.GetCountExpiredProducts
-import com.example.domain.wasteReport.GetWastePercent
+import com.example.domain.wastereport.GetCountEatenProducts
+import com.example.domain.wastereport.GetCountExpiredProducts
 import com.example.vittles.mvp.BasePresenter
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.joda.time.DateTime
 import javax.inject.Inject

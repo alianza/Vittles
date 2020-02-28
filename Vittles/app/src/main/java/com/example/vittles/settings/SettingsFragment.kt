@@ -1,5 +1,7 @@
 package com.example.vittles.settings
 
+import android.content.Intent
+import android.graphics.Paint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +19,7 @@ import com.example.vittles.R
 import com.example.vittles.services.popups.PopupBase
 import com.example.vittles.services.popups.PopupButton
 import com.example.vittles.services.popups.PopupManager
+import com.example.vittles.termsandconditions.TermsAndConditionsActivity
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_settings.*
 import javax.inject.Inject
@@ -65,6 +68,7 @@ class SettingsFragment : DaggerFragment(), SettingsContract.View {
      *
      */
     override fun initViews() {
+        tvTermsAndConditions.paintFlags = Paint.UNDERLINE_TEXT_FLAG
 
         setListeners()
 
@@ -144,6 +148,8 @@ class SettingsFragment : DaggerFragment(), SettingsContract.View {
         llAdvanced.setOnClickListener { onAdvancedClick() }
 
         ibRemoveSavedProducts.setOnClickListener { onRemoveSavedProductsClick() }
+
+        tvTermsAndConditions.setOnClickListener { startActivity(Intent(requireContext(), TermsAndConditionsActivity::class.java)) }
     }
 
     /**

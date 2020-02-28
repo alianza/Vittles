@@ -12,10 +12,14 @@ import com.example.vittles.enums.DeleteType
 interface ProductListContract {
 
     interface View {
+
         fun onProductsUpdated(products: List<ProductViewModel>)
+        fun onShowLoadingView()
+        fun onHideLoadingView()
     }
 
     interface Presenter {
+
         fun onListInitializeOrChange(sortingType: ProductSortingType, query: String = "")
         fun onProductDelete(product: ProductViewModel, deleteType: DeleteType)
         fun onProductInsert(product: ProductViewModel)

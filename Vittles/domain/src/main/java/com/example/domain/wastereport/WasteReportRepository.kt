@@ -1,6 +1,5 @@
-package com.example.domain.wasteReport
+package com.example.domain.wastereport
 
-import com.example.domain.wasteReport.WasteReportProduct
 import io.reactivex.Completable
 import io.reactivex.Single
 

@@ -5,8 +5,8 @@ import com.example.domain.product.DeleteProduct
 import com.example.domain.product.GetProductsSortedWithQuery
 import com.example.domain.product.model.ProductSortingType
 import com.example.domain.settings.GetVibrationEnabled
-import com.example.domain.wasteReport.AddWasteReportProduct
-import com.example.domain.wasteReport.WasteReportProduct
+import com.example.domain.wastereport.AddWasteReportProduct
+import com.example.domain.wastereport.WasteReportProduct
 import com.example.vittles.dashboard.ProductMapper
 import com.example.vittles.dashboard.model.ProductViewModel
 import com.example.vittles.enums.DeleteType
@@ -39,7 +39,14 @@ class ProductListPresenter @Inject internal constructor(
         getProductsDisposable = getProducts(sortingType, query)
             .mapListItems { mapper.toParcelable(it) }
             .subscribeOnIoObserveOnMain()
-            .subscribe({ view?.onProductsUpdated(it) }, { TODO() })
+            .doOnSubscribe { view?.onShowLoadingView()}
+            .subscribe({
+                view?.onHideLoadingView()
+                view?.onProductsUpdated(it)
+            }, {
+                val activity = view?.requireActivity() as MainActivity
+                activity.createErrorToast()
+            })
             .addTo(disposables)
     }
 

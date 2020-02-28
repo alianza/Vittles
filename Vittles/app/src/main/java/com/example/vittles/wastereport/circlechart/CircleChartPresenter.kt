@@ -1,6 +1,6 @@
 package com.example.vittles.wastereport.circlechart
 
-import com.example.domain.wasteReport.GetWastePercent
+import com.example.domain.wastereport.GetWastePercent
 import com.example.vittles.mvp.BasePresenter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers

@@ -130,6 +130,14 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View, ProductL
         }
     }
 
+    override fun onShowLoadingView() {
+        productListProgressBar.setVisible()
+    }
+
+    override fun onHideLoadingView() {
+        productListProgressBar.setGone()
+    }
+
     private fun setEmptyView() {
         if (productListToolbar.isSearching()) {
             tvNoResults.setVisible()

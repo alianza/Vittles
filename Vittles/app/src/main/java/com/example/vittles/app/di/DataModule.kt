@@ -1,6 +1,7 @@
 package com.example.vittles.app.di
 
 import android.content.Context
+import com.example.data.contentful.RemoteContentfulRepository
 import com.example.data.retrofit.off.OffApi
 import com.example.data.retrofit.off.OffApiService
 import com.example.data.retrofit.tsco.TscoApi
@@ -19,7 +20,8 @@ import com.example.data.room.product.ProductsRepositoryImpl
 import com.example.data.room.wastereport.WasteReportRepositoryImpl
 import com.example.domain.barcode.BarcodesRepository
 import com.example.domain.product.ProductsRepository
-import com.example.domain.wasteReport.WasteReportRepository
+import com.example.domain.termsandconditions.TermsAndConditionsRepository
+import com.example.domain.wastereport.WasteReportRepository
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -77,4 +79,8 @@ class DataModule {
     @Provides
     fun provideWasteReportRepository(productDao: ProductDao, mapper: WasteReportModelMapper): WasteReportRepository =
         WasteReportRepositoryImpl(productDao, mapper)
+
+    @Singleton
+    @Provides
+    fun provideContentfulRepository(): TermsAndConditionsRepository = RemoteContentfulRepository()
 }
