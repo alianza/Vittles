@@ -7,8 +7,8 @@ buildscript {
         rxAndroidVersion = "2.0.1"
 
         libs = [
-                rxJava          : ("io.reactivex.rxjava2:rxjava: $rxJavaVersion"),
-                rxAndroid       : ("io.reactivex.rxjava2:rxandroid: $rxAndroidVersion"),
+                rxJava          : ('io.reactivex.rxjava2:rxjava:' + rxJavaVersion),
+                rxAndroid       : ('io.reactivex.rxjava2:rxandroid:' + rxAndroidVersion),
         ]
     }
 

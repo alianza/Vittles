@@ -6,6 +6,7 @@ apply plugin: 'kotlin-kapt'
 apply plugin: "androidx.navigation.safeargs.kotlin"
 
 repositories {
+    google()
     maven { url 'https://maven.fabric.io/public' }
     maven { url "https://jitpack.io" }
 }
