@@ -8,13 +8,15 @@ image: openjdk:8
 pipelines:
   default:
     - step:
-        caches:
-          - gradle
-        script: 
-          - echo "The current folder is: $PWD"
-          - echo "The git repo root folder is: $BITBUCKET_CLONE_DIR"
-          - echo "The files in the git root directory are: $(ls -la)"
-          - echo "The folders in the git root directory are: $(echo */)"
-          - echo "The gradlew file is at location: $( find . -name "gradlew" -type f -print0 | xargs )"
+        script:
+          - echo "The current folder is $PWD"
+          - echo "The git repo root folder is $BITBUCKET_CLONE_DIR"
+          - echo "The files in the git root directory are $(ls -la)"
+          - echo "The folders in the git root directory are $(echo */)"
+          - echo "The gradlew file is at location $( find . -name "gradlew" -type f -print0 | xargs )"
 
           - echo "Setting current working directory to subfolder"
+          - cd Vittles # This should contain your 'gradlew' file
+
+          - chmod +x ./gradlew
+          - ./gradlew assembleDebug
