@@ -10,7 +10,8 @@ class ProductMapper @Inject constructor() {
         from.uid,
         from.productName,
         from.expirationDate,
-        from.creationDate
+        from.creationDate,
+        from.barcode
     )
     
     fun toParcelable(from: Product) =
@@ -20,6 +21,7 @@ class ProductMapper @Inject constructor() {
             from.expirationDate,
             from.creationDate,
             from.getDaysRemaining(),
+            from.barcode,
             null
         )
 }

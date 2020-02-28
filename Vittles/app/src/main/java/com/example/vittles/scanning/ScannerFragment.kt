@@ -162,7 +162,8 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
             0,
             tvProductName.text.toString(),
             expirationDate!!,
-            DateTime()
+            DateTime(),
+            barcodeDictionary.barcode
         )
         presenter.addProductToList(product, true)
         if (!barcodeDictionary.containsNotReady() && !barcodeDictionary.containsNotFound()) {
