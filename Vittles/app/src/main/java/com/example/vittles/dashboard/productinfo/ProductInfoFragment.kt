@@ -27,27 +27,18 @@ import org.joda.time.DateTime
 import javax.inject.Inject
 
 /**
- * Class for the product info component.
- *
  * @author Arjen Simons
  */
 class ProductInfoFragment : DaggerFragment(),
     ProductInfoContract.View {
 
-    /**
-     * The presenter of the Fragment.
-     */
     @Inject
     lateinit var presenter: ProductInfoPresenter
 
-    /** @suppress */
     private val productArgs: ProductInfoFragmentArgs by navArgs()
-    /** @suppress */
     private lateinit var product: ProductViewModel
-    /** @suppress */
     private lateinit var updatedProduct: ProductViewModel
 
-    /** {@inheritDoc} */
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -57,7 +48,6 @@ class ProductInfoFragment : DaggerFragment(),
         return inflater.inflate(R.layout.fragment_product_info, container, false)
     }
 
-    /** {@inheritDoc} */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val callback = object : OnBackPressedCallback(true) {
@@ -69,10 +59,6 @@ class ProductInfoFragment : DaggerFragment(),
         initViews()
     }
 
-    /**
-     * Initializes the views.
-     *
-     */
     override fun initViews() {
         product = productArgs.product
         updatedProduct = product
@@ -87,10 +73,6 @@ class ProductInfoFragment : DaggerFragment(),
         setListeners()
     }
 
-    /**
-     * Sets the listeners.
-     *
-     */
     override fun setListeners() {
         ibEaten.setOnClickListener { onEatenButtonClicked() }
         ibDeleted.setOnClickListener { onDeleteButtonClicked() }
@@ -98,10 +80,6 @@ class ProductInfoFragment : DaggerFragment(),
         ibEditExpDate.setOnClickListener { onEditExpirationDateClicked() }
     }
 
-    /**
-     * Updates the views.
-     *
-     */
     override fun updateViews() {
         tvProductName.text = this.product.productName
         tvExpirationDate.text = context!!.resources.getString(
@@ -112,10 +90,6 @@ class ProductInfoFragment : DaggerFragment(),
         )
     }
 
-    /**
-     * Handles the editName button being clicked.
-     *
-     */
     override fun onEditNameClicked() {
         val dialog = ProductNameEditView(onFinished = { productName: String, _: Boolean ->
             onNameChanged(productName)
@@ -123,10 +97,6 @@ class ProductInfoFragment : DaggerFragment(),
         context?.let { dialog.openDialog(it, tvProductName.text.toString()) }
     }
 
-    /**
-     * Handles the edit expiration date button being clicked.
-     *
-     */
     override fun onEditExpirationDateClicked() {
         val currentDate = DateTime.now()
 
@@ -170,10 +140,6 @@ class ProductInfoFragment : DaggerFragment(),
         }
     }
 
-    /**
-     * Handles the eaten button being clicked.
-     *
-     */
     override fun onEatenButtonClicked() {
         product.deleteType = DeleteType.EATEN
         NavHostFragment.findNavController(fragmentHost).navigate(
@@ -183,10 +149,6 @@ class ProductInfoFragment : DaggerFragment(),
         )
     }
 
-    /**
-     * Handles the thrown away button being clicked.
-     *
-     */
     override fun onDeleteButtonClicked() {
         product.deleteType = DeleteType.THROWN_AWAY
         NavHostFragment.findNavController(fragmentHost).navigate(
@@ -196,10 +158,6 @@ class ProductInfoFragment : DaggerFragment(),
         )
     }
 
-    /**
-     * Called when the product name is changed.
-     *
-     */
     override fun onNameChanged(productName: String) {
         updatedProduct = product.apply {
             this.productName = productName
@@ -207,10 +165,6 @@ class ProductInfoFragment : DaggerFragment(),
         presenter.onProductUpdate(updatedProduct)
     }
 
-    /**
-     * Called when the product expiration date has changed.
-     *
-     */
     override fun onExpirationDateChanged(expirationDate: DateTime) {
         updatedProduct = product.apply {
             this.expirationDate = expirationDate
@@ -218,10 +172,6 @@ class ProductInfoFragment : DaggerFragment(),
         presenter.onProductUpdate(updatedProduct)
     }
 
-    /**
-     * Handles the product update success state.
-     *
-     */
     override fun onProductUpdateSuccess() {
         product = updatedProduct
         updateViews()
@@ -230,10 +180,6 @@ class ProductInfoFragment : DaggerFragment(),
             .show()
     }
 
-    /**
-     * Handles the product updating fail state.
-     *
-     */
     override fun onProductUpdateFail() {
         updatedProduct = product
 
@@ -241,10 +187,6 @@ class ProductInfoFragment : DaggerFragment(),
             .show()
     }
 
-    /**
-     * Handles the back button clicked.
-     *
-     */
     fun onBackPressed() {
         findNavController().navigate(NavigationGraphDirections.actionGlobalProductListFragment(null))
     }

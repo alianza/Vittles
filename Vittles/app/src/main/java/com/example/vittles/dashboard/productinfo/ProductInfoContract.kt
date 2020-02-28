@@ -4,8 +4,6 @@ import com.example.vittles.dashboard.model.ProductViewModel
 import org.joda.time.DateTime
 
 /**
- * MVP Contract for products info page.
- *
  * @author Arjen Simons
  */
 interface ProductInfoContract {
