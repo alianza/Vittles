@@ -12,4 +12,4 @@ pipelines:
           - cd Vittles
 
           - chmod +x ./gradlew
-          - ./gradlew build
+          - ./gradlew clean build --debug
