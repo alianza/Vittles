@@ -10,6 +10,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.example.domain.barcode.ProductDictionary
 import com.example.vittles.NavigationGraphDirections
 import com.example.vittles.R
 import com.example.vittles.dashboard.model.ProductViewModel
@@ -174,6 +175,11 @@ class ProductInfoFragment : DaggerFragment(),
 
     override fun onProductUpdateSuccess() {
         product = updatedProduct
+
+        if (product.barcode != null) {
+            presenter.patchProductDictionary(ProductDictionary(product.barcode!!, product.productName))
+        }
+
         updateViews()
 
         Snackbar.make(layout, getString(R.string.product_updated), Snackbar.LENGTH_LONG)
