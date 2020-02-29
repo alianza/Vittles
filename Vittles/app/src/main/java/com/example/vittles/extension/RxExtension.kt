@@ -11,6 +11,11 @@ import io.reactivex.disposables.SerialDisposable
 import io.reactivex.functions.Function
 import io.reactivex.schedulers.Schedulers
 
+/**
+ * @author Jeroen Flietstra
+ *
+ */
+
 fun <T> Observable<T>.subscribeOnIoObserveOnMain(): Observable<T> =
     subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())

@@ -6,6 +6,11 @@ import com.example.domain.product.model.ProductSortingType
 import com.example.vittles.services.popups.OptionTextProvider
 import javax.inject.Inject
 
+/**
+ * @author Jeroen Flietstra
+ *
+ * @property context
+ */
 class SortingTypeTextProvider(
     private val context: Context
 ) : OptionTextProvider<ProductSortingType> {

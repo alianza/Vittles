@@ -161,16 +161,12 @@ class MainActivity : DaggerAppCompatActivity() {
         If current destination is a top level destination, navigate to list. Otherwise follow the
         navigate up flow. If the current destination is the list, close the app.
         */
+        val currentFragment = fragmentHost.childFragmentManager.fragments.first()
+        if (currentFragment is OnBackPressedListener && currentFragment.handleBackPress()) {
+            return
+        }
         if (topLevelDestinations.contains(navController.currentDestination?.id)) {
-            // Closes the app (returns to home screen) instead of quitting it with finish()
-            if (navController.currentDestination?.id == R.id.productListFragment) {
-                val intent = Intent(Intent.ACTION_MAIN)
-                intent.addCategory(Intent.CATEGORY_HOME)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                startActivity(intent)
-            } else {
-                navController.navigate(R.id.productListFragment)
-            }
+            navController.navigate(R.id.productListFragment)
         } else {
             onSupportNavigateUp()
         }
@@ -222,5 +218,10 @@ class MainActivity : DaggerAppCompatActivity() {
         } else {
             false
         }
+    }
+
+    interface OnBackPressedListener {
+
+        fun handleBackPress(): Boolean
     }
 }

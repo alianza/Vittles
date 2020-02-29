@@ -69,7 +69,7 @@ class ProductListToolbar(context: Context, attrs: AttributeSet) : AppBarLayout(c
         return true
     }
 
-    private fun closeSearchInput(): Boolean {
+    fun closeSearchInput(): Boolean {
         svSearch.setQuery("", true)
         searchLayout.setGone()
         plToolbar.setVisible()

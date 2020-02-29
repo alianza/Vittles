@@ -17,6 +17,10 @@ import androidx.fragment.app.DialogFragment
 import com.example.vittles.R
 import kotlinx.android.synthetic.main.dialog_title.view.*
 
+/**
+ * @author Jeroen Flietstra
+ *
+ */
 class SingleChoiceMenu<T>(
     private val provider: OptionTextProvider<T>,
     private val onItemSelected: (option: T) -> Unit,

@@ -2,6 +2,11 @@ package com.example.vittles.extension
 
 import android.view.View
 
+/**
+ * @author Jeroen Flietstra
+ *
+ */
+
 fun View.setVisible() {
     visibility = View.VISIBLE
 }
