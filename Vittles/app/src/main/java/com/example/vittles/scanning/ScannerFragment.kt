@@ -4,20 +4,20 @@ import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Context
 import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.Vibrator
-import android.view.LayoutInflater
-import android.view.MotionEvent
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.camera.core.CameraX
 import androidx.camera.core.DisplayOrientedMeteringPointFactory
 import androidx.camera.core.FocusMeteringAction
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.widget.ImageViewCompat
 import androidx.navigation.fragment.findNavController
@@ -31,6 +31,7 @@ import com.example.vittles.R
 import com.example.vittles.app.VittlesApp.PermissionProperties.REQUEST_CODE_PERMISSIONS
 import com.example.vittles.app.VittlesApp.PermissionProperties.REQUIRED_PERMISSIONS
 import com.example.vittles.enums.PreviousFragmentIndex
+import com.example.vittles.extension.createSnackbar
 import com.example.vittles.scanning.productaddmanual.ProductNameEditView
 import com.example.vittles.services.popups.PopupBase
 import com.example.vittles.services.popups.PopupButton
@@ -415,13 +416,23 @@ class ScannerFragment @Inject internal constructor() : DaggerFragment(), Scanner
     }
 
     override fun onShowAddProductError() {
-        Snackbar.make(layout, getString(R.string.product_name_invalid), Snackbar.LENGTH_LONG)
-            .show()
+        createSnackbar(
+            requireContext(),
+            layout,
+            getString(R.string.product_name_invalid),
+            Gravity.CENTER_HORIZONTAL,
+            Snackbar.LENGTH_SHORT
+        ).show()
     }
 
     override fun onShowAddProductSucceed() {
-        Snackbar.make(layout, getString(R.string.product_added), Snackbar.LENGTH_SHORT).show()
-    }
+        createSnackbar(
+            requireContext(),
+            layout,
+            getString(R.string.product_added),
+            Gravity.CENTER_HORIZONTAL,
+            Snackbar.LENGTH_SHORT
+        ).show()    }
 
     override fun onShowExpirationPopup(product: Product) {
         if (product.getDaysRemaining() > DAYS_REMAINING_EXPIRED) {
