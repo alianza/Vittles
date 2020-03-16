@@ -4,7 +4,6 @@ package com.example.vittles.app.di
 
 import com.example.vittles.dashboard.productinfo.ProductInfoFragment
 import com.example.vittles.dashboard.productlist.ProductListFragment
-import com.example.vittles.dashboard.productlist.ui.toolbar.ProductListToolbarSortMenu
 import com.example.vittles.scanning.ScannerFragment
 import com.example.vittles.services.notification.NotificationScheduleService
 import com.example.vittles.settings.SettingsFragment
