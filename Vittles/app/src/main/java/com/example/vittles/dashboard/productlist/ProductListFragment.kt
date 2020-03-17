@@ -23,6 +23,7 @@ import com.example.vittles.dashboard.productlist.ui.list.ProductAdapter
 import com.example.vittles.dashboard.productlist.ui.list.ProductItemTouchHelper
 import com.example.vittles.dashboard.productlist.ui.toolbar.ProductListToolbar
 import com.example.vittles.enums.DeleteType
+import com.example.vittles.extension.createSnackbar
 import com.example.vittles.extension.setGone
 import com.example.vittles.extension.setVisible
 import com.example.vittles.main.MainActivity
@@ -167,7 +168,13 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View, ProductL
             ),
             PopupButton(getString(R.string.btn_no).toUpperCase(Locale.getDefault())),
             PopupButton(getString(R.string.btn_yes).toUpperCase(Locale.getDefault())) {
-                createSnackbar()
+                createSnackbar(
+                    requireContext(),
+                    content,
+                    "",
+                    Gravity.CENTER_HORIZONTAL,
+                    Snackbar.LENGTH_LONG
+                )
                     .addCallback(ProductSnackbarCallback(product, DeleteType.REMOVED))
                     .show()
             })
@@ -177,7 +184,13 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View, ProductL
         if (vibrator.hasVibrator() && presenter.getVibrationSetting()) {
             vibrator.vibrate(50)
         }
-        createSnackbar()
+        createSnackbar(
+            requireContext(),
+            content,
+            "",
+            Gravity.CENTER_HORIZONTAL,
+            Snackbar.LENGTH_LONG
+        )
             .addCallback(ProductSnackbarCallback(product, deleteType))
             .show()
     }
@@ -188,19 +201,6 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View, ProductL
 
     override fun onQueryTextChanged(query: String?) {
         query?.let { presenter.onListInitializeOrChange(productListToolbar.sortingType, it) }
-    }
-
-    private fun createSnackbar(): Snackbar {
-        return Snackbar.make(content, "", Snackbar.LENGTH_LONG).apply {
-            setAction("UNDO") {}
-            setActionTextColor(Color.BLACK)
-            setTextColor(Color.BLACK)
-            view.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_cr)
-            val lp = view.layoutParams as CoordinatorLayout.LayoutParams
-            lp.gravity = Gravity.CENTER_HORIZONTAL
-            lp.width = (content.width * 0.9).toInt()
-            view.layoutParams = lp
-        }
     }
 
     override fun handleBackPress(): Boolean {
@@ -227,12 +227,16 @@ class ProductListFragment : DaggerFragment(), ProductListContract.View, ProductL
 
         override fun onShown(transientBottomBar: Snackbar?) {
             super.onShown(transientBottomBar)
-            transientBottomBar?.setText(
-                "${product.productName} has been ${deleteType
-                    .toString()
-                    .toLowerCase(Locale.getDefault())
-                    .replace("_", " ")}"
-            )
+            transientBottomBar?.run {
+                setAction("UNDO") {}
+                setActionTextColor(Color.BLACK)
+                setText(
+                    "${product.productName} has been ${deleteType
+                        .toString()
+                        .toLowerCase(Locale.getDefault())
+                        .replace("_", " ")}"
+                )
+            }
         }
 
         override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {

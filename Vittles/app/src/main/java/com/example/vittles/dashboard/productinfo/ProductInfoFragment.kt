@@ -2,11 +2,15 @@ package com.example.vittles.dashboard.productinfo
 
 
 import android.app.DatePickerDialog
+import android.graphics.Color
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -15,6 +19,7 @@ import com.example.vittles.R
 import com.example.vittles.dashboard.model.ProductViewModel
 import com.example.vittles.dashboard.productlist.ProductListFragmentDirections
 import com.example.vittles.enums.DeleteType
+import com.example.vittles.extension.createSnackbar
 import com.example.vittles.scanning.ScannerFragment
 import com.example.vittles.scanning.productaddmanual.ProductNameEditView
 import com.google.android.material.snackbar.Snackbar
@@ -226,9 +231,13 @@ class ProductInfoFragment : DaggerFragment(),
         product = updatedProduct
         updateViews()
 
-        Snackbar.make(layout, getString(R.string.product_updated), Snackbar.LENGTH_LONG)
-            .show()
-    }
+        createSnackbar(
+            requireContext(),
+            layout,
+            getString(R.string.product_updated),
+            Gravity.CENTER,
+            Snackbar.LENGTH_SHORT
+        ).show()    }
 
     /**
      * Handles the product updating fail state.
@@ -237,8 +246,13 @@ class ProductInfoFragment : DaggerFragment(),
     override fun onProductUpdateFail() {
         updatedProduct = product
 
-        Snackbar.make(layout, getString(R.string.product_updated_failed), Snackbar.LENGTH_LONG)
-            .show()
+        createSnackbar(
+            requireContext(),
+            layout,
+            getString(R.string.product_updated_failed),
+            Gravity.CENTER,
+            Snackbar.LENGTH_SHORT
+        ).show()
     }
 
     /**
