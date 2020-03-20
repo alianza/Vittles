@@ -6,6 +6,8 @@ import com.example.domain.product.UpdateProduct
 import com.example.vittles.mvp.BasePresenter
 import com.example.vittles.dashboard.ProductMapper
 import com.example.vittles.dashboard.model.ProductViewModel
+import com.example.vittles.extension.addTo
+import com.example.vittles.extension.subscribeOnIoObserveOnMain
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
@@ -29,9 +31,9 @@ class ProductInfoPresenter @Inject internal constructor(
     }
 
     override fun patchProductDictionary(productDictionary: ProductDictionary) {
-        disposables.add(updateProductDictionary(productDictionary)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe())
+        updateProductDictionary(productDictionary)
+            .subscribeOnIoObserveOnMain()
+            .subscribe()
+            .addTo(disposables)
     }
 }
