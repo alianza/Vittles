@@ -1,11 +1,10 @@
 package com.example.vittles.dashboard.productinfo
 
+import com.example.domain.barcode.ProductDictionary
 import com.example.vittles.dashboard.model.ProductViewModel
 import org.joda.time.DateTime
 
 /**
- * MVP Contract for products info page.
- *
  * @author Arjen Simons
  */
 interface ProductInfoContract {
@@ -26,5 +25,6 @@ interface ProductInfoContract {
 
     interface Presenter{
         fun onProductUpdate(product: ProductViewModel)
+        fun patchProductDictionary(productDictionary: ProductDictionary)
     }
 }

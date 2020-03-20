@@ -20,7 +20,8 @@ class ProductModelMapper @Inject constructor() {
         from.uid,
         from.productName,
         from.expirationDate,
-        from.creationDate
+        from.creationDate,
+        from.barcode
     )
 
     /**
@@ -32,6 +33,7 @@ class ProductModelMapper @Inject constructor() {
         from.uid,
         from.productName,
         from.expirationDate,
-        from.creationDate
+        from.creationDate,
+        from.barcode
     )
 }

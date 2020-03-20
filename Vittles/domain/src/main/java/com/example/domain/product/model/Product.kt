@@ -6,7 +6,8 @@ data class Product(
     val uid: Int,
     val productName: String,
     val expirationDate: DateTime,
-    val creationDate: DateTime
+    val creationDate: DateTime,
+    val barcode: String?
 ) {
 
     fun getDaysRemaining(): Int {

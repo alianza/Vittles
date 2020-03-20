@@ -26,18 +26,7 @@ import java.util.concurrent.Executors
 import javax.inject.Inject
 
 /**
- * The presenter for the scanning activity.
- *
  * @author Jeroen Flietstra
- *
- * @property getProductByBarcode The GetProductByBarcode use case from the domain module.
- * @property addProduct The AddProduct use case from the domain module.
- * @property insertProductDictionary The AddBarcodeDictionary use case from the domain module.
- * @property updateProductDictionary The UpdateBarcodeDictionary use case from the domain module.
- * @property getVibrationEnabled The GetVibrationEnabled use case from the domain module.
- * @property addProductDictionary The AddProductDictionary use case from the domain module.
- * @property getPerformanceSetting The GetPerformanceSetting use case from the domain module.
- * @property setPerformanceSetting The SetPerformanceSetting use case from the domain module.
  */
 class ScannerPresenter @Inject internal constructor(
     private val getProductByBarcode: GetProductByBarcode,
@@ -61,12 +50,6 @@ class ScannerPresenter @Inject internal constructor(
     /** observes LiveData objects for changes.**/
     private val performanceSetting = MutableLiveData<PerformanceSetting>()
 
-    /**
-     * Method used to add a product.
-     *
-     * @param product The product to add.
-     * @param checkDate If the date should be checked to show a popup.
-     */
     override fun addProductToList(product: Product, checkDate: Boolean) {
         disposables.add(addProduct(product, checkDate)
             .subscribeOn(Schedulers.io())
@@ -87,11 +70,6 @@ class ScannerPresenter @Inject internal constructor(
         )
     }
 
-    /**
-     * Calls the use case to add a product dictionary.
-     *
-     * @param productDictionary The product dictionary to add.
-     */
     override fun insertProductDictionary(productDictionary: ProductDictionary) {
         if (!productDictionary.containsNotReady()) {
             disposables.add(addProductDictionary(productDictionary)
@@ -101,11 +79,6 @@ class ScannerPresenter @Inject internal constructor(
         }
     }
 
-    /**
-     * Calls the use case to update a barcode dictionary.
-     *
-     * @param productDictionary The barcode dictionary to update.
-     */
     override fun patchProductDictionary(productDictionary: ProductDictionary) {
         disposables.add(updateProductDictionary(productDictionary)
             .subscribeOn(Schedulers.io())
@@ -113,19 +86,10 @@ class ScannerPresenter @Inject internal constructor(
             .subscribe())
     }
 
-    /**
-     * Gets the boolean value of vibration setting.
-     *
-     * @return The boolean value of Vibration setting.
-     */
     override fun getVibrationSetting(): Boolean {
         return getVibrationEnabled()
     }
 
-    /**
-     * Sets up everything for the camera to start.
-     *
-     */
     override fun startCamera() {
         imageAnalysis = getImageAnalysis()
         preview = getPreview()
@@ -193,18 +157,10 @@ class ScannerPresenter @Inject internal constructor(
         }
     }
 
-    /**
-     * Checks for PerformanceSetting settings changes
-     *
-     */
     private fun fetchPerformanceSetting() {
         performanceSetting.value = getPerformanceSetting()
     }
 
-    /**
-     * Checks if the user gave all needed permissions for the activity to work properly.
-     *
-     */
     override fun checkPermissions() {
         // Request camera permissions
         if (allPermissionsGranted()) {
@@ -216,9 +172,6 @@ class ScannerPresenter @Inject internal constructor(
         }
     }
 
-    /**
-     * Check if all permission specified in the manifest have been granted.
-     */
     override fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
         view?.context.let { it1 ->
             ContextCompat.checkSelfPermission(
@@ -227,10 +180,6 @@ class ScannerPresenter @Inject internal constructor(
         } == PackageManager.PERMISSION_GRANTED
     }
 
-    /**
-     * Lowers the performance setting by one level if possible.
-     *
-     */
     override fun onPerformanceSettingLowered() {
         val currentPerformanceSetting = getPerformanceSetting().ordinal
         if (currentPerformanceSetting > 0) {
@@ -255,11 +204,6 @@ class ScannerPresenter @Inject internal constructor(
         }
     }
 
-    /**
-     * Toggles the flash (torch) of the camera.
-     *
-     * @return Boolean value that represents if torch is on or off.
-     */
     fun toggleTorch(): Boolean {
         return if (preview.isTorchOn) {
             disableTorch()
@@ -270,11 +214,6 @@ class ScannerPresenter @Inject internal constructor(
         }
     }
 
-    /**
-     * Returns the value of the current torch state.
-     *
-     * @return The boolean value of the current torch state; enabled or not.
-     */
     fun torchEnabled(): Boolean {
         return if (::preview.isInitialized) {
             preview.isTorchOn
@@ -283,20 +222,12 @@ class ScannerPresenter @Inject internal constructor(
         }
     }
 
-    /**
-     * Enables the torch of the preview.
-     *
-     */
     private fun enableTorch() {
         if (::preview.isInitialized) {
             preview.enableTorch(true)
         }
     }
 
-    /**
-     * Disabled teh torch of the preview.
-     *
-     */
     private fun disableTorch() {
         if (::preview.isInitialized) {
             preview.enableTorch(false)

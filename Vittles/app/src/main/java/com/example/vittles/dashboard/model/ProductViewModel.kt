@@ -15,6 +15,7 @@ data class ProductViewModel(
     var expirationDate: DateTime,
     val creationDate: DateTime,
     val daysRemaining: Int,
+    val barcode: String?,
     var deleteType: DeleteType?
 ) : Parcelable {
 

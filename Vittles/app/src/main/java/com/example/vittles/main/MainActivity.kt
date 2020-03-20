@@ -54,6 +54,7 @@ class MainActivity : DaggerAppCompatActivity() {
         Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG).apply {
             view.setBackgroundColor(ContextCompat.getColor(this@MainActivity, R.color.red))
             view.findViewById<TextView>(android.R.id.message)?.setTextColor(Color.WHITE)
+            view.setPadding(30, 0, 30, 0)
             show()
         }
     }
